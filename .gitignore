@@ -1,0 +1,19 @@
+# exclude files
+*.o
+*.stackump
+build/%.h
+build/%.img
+build/%.o
+%.build
+%.ld
+%.obj
+%.img
+%.dll
+%.lib
+%.exp
+%.pdb
+level.dat
+.vs/
+
+# directories
+build/

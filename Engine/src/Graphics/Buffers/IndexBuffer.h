@@ -1,0 +1,25 @@
+#pragma once
+
+#include <glad/glad.h>
+
+namespace MC {
+	namespace Graphics {
+
+		class IndexBuffer {
+		private:
+			GLuint m_ID, m_Size;
+		public:
+			IndexBuffer();
+			~IndexBuffer();
+		public:
+			void Build(GLuint size, const void* data);
+		public:
+			void Bind() const;
+			void Unbind() const;
+		public:
+			inline GLuint GetId() { return this->m_ID; }
+			inline GLuint GetSize() { return this->m_Size; }
+		};
+
+	}
+}
