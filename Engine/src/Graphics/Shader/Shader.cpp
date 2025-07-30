@@ -1,13 +1,4 @@
-
 #include "Shader.h"
-
-#include "common.h"
-#include "Utils/util.h"
-
-#include <iostream>
-#include <vector>
-#include <fstream>
-#include <sstream>
 
 namespace MC {
 	namespace Graphics {

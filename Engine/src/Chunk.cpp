@@ -2,7 +2,6 @@
 #include "Chunk.h"
 
 #include "Level.h"
-#include "common.h"
 #include "Graphics/Shader/Shaderflags.h"
 
 #include <glad\glad.h>

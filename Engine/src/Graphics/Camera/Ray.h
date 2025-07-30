@@ -1,5 +1,5 @@
 #pragma once
-
+#include "common.h"
 #include "Camera.h"
 
 namespace MC {

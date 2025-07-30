@@ -1,4 +1,3 @@
-
 #include "AABB.h"
 
 /* stoled from rubydung/phys/AABB.java */

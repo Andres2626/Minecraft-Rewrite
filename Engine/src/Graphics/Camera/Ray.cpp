@@ -1,4 +1,3 @@
-
 #include "Ray.h"
 
 namespace MC {

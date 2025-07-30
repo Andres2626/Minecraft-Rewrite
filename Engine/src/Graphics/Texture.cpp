@@ -1,11 +1,10 @@
-
 #include "Texture.h"
-#include "Utils/Util.h"
 
-#include <glad\glad.h>
+#include "Utils/Util.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <glad\glad.h>
 
 namespace MC {
 	namespace Graphics {

@@ -1,4 +1,5 @@
 #pragma once
+#include "common.h"
 
 /* Initialize console subsystem */
 void mc_console_init();

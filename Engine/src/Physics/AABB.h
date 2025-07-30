@@ -1,4 +1,6 @@
 #pragma once
+#include "common.h"
+
 #include <glm/glm.hpp>	
 
 /* stoled from rubydung/phys/AABB.java */

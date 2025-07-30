@@ -2,7 +2,6 @@
 
 #include "Chunk.h"
 #include "Player.h"
-#include "Utils/Util.h"
 
 #include <gzip/compress.hpp>
 #include <gzip/decompress.hpp>

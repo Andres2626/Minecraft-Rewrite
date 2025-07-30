@@ -1,6 +1,6 @@
 #pragma once
+#include "common.h"
 
-#include <vector>
 #include <glad/glad.h>
 
 namespace MC {

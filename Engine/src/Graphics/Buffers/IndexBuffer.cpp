@@ -1,4 +1,3 @@
-
 #include "IndexBuffer.h"
 
 namespace MC {
