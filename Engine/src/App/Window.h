@@ -1,7 +1,8 @@
 #pragma once
+#include "common.h"
+#include "Events/Event.h"
 
 #include <GLFW/glfw3.h>
-#include "Events/Event.h"
 
 /* from GLFW.h */
 
@@ -15,7 +16,6 @@ namespace MC {
 		/* This struct is used when window class is initialized.
 		have some properties of window*/
 		struct WindowProperties {
-			const char* title; /* main title */
 			int x; /* width */
 			int y; /* height */
 
@@ -38,10 +38,11 @@ namespace MC {
 			bool IsInititialized;
 		private:
 			WindowProperties w_pr;
+			const char* m_Title;
 			GLFWwindow* internal_window; /* OpenGL window */
 		public:
 			/* Initializes and create window */
-			Window(const WindowProperties& properties);
+			Window(const char* title, const WindowProperties& properties);
 			~Window();
 		private:
 			/* returns FALSE in case of error */
@@ -50,13 +51,15 @@ namespace MC {
 			bool Close();
 		public:
 			void Clear();
-			void Render();
 			void Update();
 			void Finish();
 		public:
 			int GetEvent(MC::Events::Event& ev);
 			void FreeEvent(MC::Events::Event& ev);
 		public:
+			void SetIcon(GLFWimage* images);
+		public:
+			inline WindowProperties& GetProps() { return this->w_pr; }
 			inline GLFWwindow* GetWindow() { return this->internal_window; };
 		};
 

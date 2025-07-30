@@ -1,8 +1,7 @@
 #include <glad/glad.h>
+#include "window.h"
 
 #include "Events/Event.h"
-#include "window.h"
-#include <stdio.h>
 #include "Utils/Util.h"
 
 namespace MC {
@@ -14,12 +13,10 @@ namespace MC {
 			MC_FATAL("GLFW Error %i. %s", error, msg);
 		}
 
-		Window::Window(const WindowProperties& properties) 
+		Window::Window(const char* title, const WindowProperties& properties)
+			: m_Title(title), w_pr(properties), IsInititialized(false)
 		{
-			this->w_pr = properties;
-			this->IsInititialized = false;
-
-			/* window creation return an error */
+			/* Create window */
 			this->IsInititialized = Create();
 			if (!this->IsInititialized)
 				this->Finish();
@@ -53,7 +50,7 @@ namespace MC {
 				glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 			/* Create window via GLFW */
-			this->internal_window = glfwCreateWindow(this->w_pr.x, this->w_pr.y, this->w_pr.title, 0, 0);
+			this->internal_window = glfwCreateWindow(this->w_pr.x, this->w_pr.y, this->m_Title, 0, 0);
 			MC_FATALCHK(this->internal_window, "Error initializing window");
 			glfwMakeContextCurrent(this->internal_window);
 
@@ -79,11 +76,6 @@ namespace MC {
 		void Window::Finish() 
 		{
 			glfwTerminate();
-		}
-
-		void Window::Render() 
-		{
-
 		}
 
 		bool Window::Close() 
@@ -112,5 +104,9 @@ namespace MC {
 			gleqFreeEvent(&ev);
 		}
 
+		void Window::SetIcon(GLFWimage* images) 
+		{
+			glfwSetWindowIcon(this->internal_window, 1, images);
+		}
 	}
 }
