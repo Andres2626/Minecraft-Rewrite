@@ -1,4 +1,3 @@
-
 #include "Camera.h"
 
 namespace MC {

@@ -1,6 +1,4 @@
-
 #pragma once
-#include <memory>
 
 #define TEXCOORD_SIZE 2 * 4
 #define VERTICES_SIZE 3 * 4

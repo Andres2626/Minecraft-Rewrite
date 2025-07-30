@@ -1,8 +1,8 @@
 #pragma once
+#include "common.h"
+#include "VertexLayout.h"
 
 #include <glad/glad.h>
-
-#include "VertexLayout.h"
 
 namespace MC {
 	namespace Graphics {

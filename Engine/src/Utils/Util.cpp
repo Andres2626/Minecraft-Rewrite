@@ -1,10 +1,4 @@
-
 #include "util.h"
-#include <stdarg.h>
-#include <time.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 
 static bool init = false;
 static FILE *fp = NULL;

@@ -1,4 +1,3 @@
-
 #include "Timer.h"
 
 namespace MC {

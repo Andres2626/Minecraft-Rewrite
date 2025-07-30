@@ -1,4 +1,3 @@
-
 #include "VertexLayout.h"
 
 namespace MC {

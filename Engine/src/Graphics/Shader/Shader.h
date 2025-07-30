@@ -1,10 +1,7 @@
 #pragma once
-
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <fstream>
-#include <vector>
+#include "common.h"
+#include "Utils/Util.h"
+#include "Shaderflags.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>

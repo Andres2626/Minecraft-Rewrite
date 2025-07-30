@@ -1,6 +1,7 @@
 #pragma once
 
-#include "common.h"
+#include "ChunkDef.h"
+
 #include "Tile.h"
 #include "Physics/AABB.h"
 #include "Graphics/Shader/Shader.h"

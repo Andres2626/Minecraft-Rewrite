@@ -2,8 +2,6 @@
 
 /* Shaderflags.h -- definitions for shader */
 
-#define BIT_L(x) 1 << x
-
 // vertex layout
 #define SHADER_VERTEX_BIT 0 // reserved
 

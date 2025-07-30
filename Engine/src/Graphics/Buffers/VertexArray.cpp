@@ -1,4 +1,3 @@
-
 #include "VertexArray.h"
 
 namespace MC {

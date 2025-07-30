@@ -1,17 +1,14 @@
 #pragma once
+#include "Hitresult.h"
 
 #include "Graphics/Shader/Shader.h"
 #include "Graphics/Shader/Shaderflags.h"
-
 #include "Graphics/Buffers/VertexArray.h"
 #include "Graphics/Buffers/VertexBuffer.h"
 #include "Graphics/Buffers/IndexBuffer.h"
 #include "Graphics/Buffers/VertexLayout.h"
 #include "Graphics/Renderer.h"
-
 #include "Graphics/Camera/Camera.h"
-
-#include "Hitresult.h"
 
 class Selector {
 private:

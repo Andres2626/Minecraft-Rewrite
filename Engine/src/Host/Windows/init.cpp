@@ -1,5 +1,6 @@
 #include "..\init.h"
 #include "..\console.h"
+
 #include <string.h>
 #include <locale>
 

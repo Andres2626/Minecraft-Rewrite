@@ -1,6 +1,5 @@
 #pragma once
-
-#include <stdio.h>
+#include "common.h"
 
 /* Logging utils */
 #define UNUSED_MODE 0
@@ -35,7 +34,7 @@ void mc_fatal(const char *file, int line, const char *fmt, ...);
 void mc_debug(const char *file, int line, const char *fmt, ...);
 void mc_trace(const char *file, int line, const char *fmt, ...);
 
-/* Log macros. Use this for log system! */
+/* Log macros. Use this for log! */
 
 #define MC_INFO(fmt, ...) mc_info(__FILE__, __LINE__, fmt, __VA_ARGS__);
 #define MC_WARN(fmt, ...) mc_warn(__FILE__, __LINE__, fmt, __VA_ARGS__);
