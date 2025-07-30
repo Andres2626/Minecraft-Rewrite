@@ -6,11 +6,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{83D5772D-F53F-407E-A444-08AC04336F1E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{535D3100-937E-4354-B476-5E139E2FAC09} = {535D3100-937E-4354-B476-5E139E2FAC09}
+		{AC866730-D2DC-4A01-80A7-335CB494CE18} = {AC866730-D2DC-4A01-80A7-335CB494CE18}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{D86D9D8A-2671-4DC8-B0E8-82F49C7F8752}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{D86D9D8A-2671-4DC8-B0E8-82F49C7F8752}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "External\zlib\zlib.vcxproj", "{535D3100-937E-4354-B476-5E139E2FAC09}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "Dependencies\zlib\zlib.vcxproj", "{535D3100-937E-4354-B476-5E139E2FAC09}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLAD", "Dependencies\GLAD\GLAD.vcxproj", "{AC866730-D2DC-4A01-80A7-335CB494CE18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,12 +39,21 @@ Global
 		{535D3100-937E-4354-B476-5E139E2FAC09}.Release|Win32.Build.0 = Release|Win32
 		{535D3100-937E-4354-B476-5E139E2FAC09}.Release|x64.ActiveCfg = Release|x64
 		{535D3100-937E-4354-B476-5E139E2FAC09}.Release|x64.Build.0 = Release|x64
+		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Debug|Win32.Build.0 = Debug|Win32
+		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Debug|x64.ActiveCfg = Debug|x64
+		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Debug|x64.Build.0 = Debug|x64
+		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Release|Win32.ActiveCfg = Release|Win32
+		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Release|Win32.Build.0 = Release|Win32
+		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Release|x64.ActiveCfg = Release|x64
+		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{535D3100-937E-4354-B476-5E139E2FAC09} = {D86D9D8A-2671-4DC8-B0E8-82F49C7F8752}
+		{AC866730-D2DC-4A01-80A7-335CB494CE18} = {D86D9D8A-2671-4DC8-B0E8-82F49C7F8752}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D944FFEA-272B-4B51-8031-2D941ABE4AE6}

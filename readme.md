@@ -4,7 +4,7 @@
 Launch date: May 13, 2009, 20:11 UTC (according to omniarchive)
 c++ version launch date: Jul 25, 2025 21:07 UTC
 
-![Level](./.assets/preview.jpg)<br>
+![Level](./Resources/preview.jpg)<br>
 Preview image from recreation.
 
 ## Introduction
@@ -77,7 +77,7 @@ version. It's open source and reimplements some features of the original code.
   
 - The FOG process was moved to chunk.shader, this allows avoid calls to prehistoric OpenGL
 
-  ![Level](./.assets/fog.jpg)<br>
+  ![Level](./Resources/fog.jpg)<br>
   Fog demostration.
 
 - Level load process: Regardless of whether a level.dat exists, which didn't 
@@ -95,7 +95,7 @@ version. It's open source and reimplements some features of the original code.
   passes to the shader, which avoids unnecessary calls to the drawing, each time the 
   cursor moves and repositions the selector on the selected block.
   
-  ![Level](./.assets/selector.jpg)<br>
+  ![Level](./Resources/selector.jpg)<br>
   Block selector demostration
   
 - Chunk updates (CUPS): If a block is destroyed or a block on the edge of the chunk is 
@@ -115,7 +115,7 @@ first due to the chunk renderer and the generation of the block array in the lev
 But, this is in my case, test your self and But this is in my case, I highly recommend 
 you try it for yourself and encourage you to report it on github or in the attached email.
 
-![Level](./.assets/benchmark.jpg)<br>
+![Level](./Resources/benchmark.jpg)<br>
 FPS counter from recreation
 
 ## Prerequesites for build
