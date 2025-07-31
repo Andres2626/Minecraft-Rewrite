@@ -8,7 +8,7 @@
 namespace MC {
 	namespace App {
 		
-		class Input {
+		class RD_API Input {
 		private:
 			static bool m_Keys[RD_MAX_KEYS];
 			static bool m_Buttons[RD_MAX_BUTTONS];

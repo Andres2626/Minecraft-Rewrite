@@ -5,9 +5,12 @@
 #define BIT_L(x) 1 << x
 #define BIT_R(x) 1 >> x
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(RD_USE_WINDOWS32)
+#if defined(__CYGWIN__)
+#define RD_USE_CYGWIN
+#endif
 #define RD_PLATFORM_WINDOWS
-#ifdef _WIN64
+#if defined(_WIN64) || defined (RD_MACHINE64)
 #define RD_PLATFORM_WIN32
 #else
 #define RD_PLATFORM_WIN64
@@ -15,6 +18,18 @@
 #else
 #define RD_PLATFORM_UNUSED
 #error "Platform is not supported"
+#endif
+
+#if defined (RD_PLATFORM_WINDOWS)
+#if defined (RD_EXPORT_DLL)
+#define RD_API __declspec(dllexport)
+#else
+#if defined (RD_EXPORT_LIB)
+#define RD_API
+#else 
+#define RD_API __declspec(dllimport)
+#endif
+#endif
 #endif
 
 #define RD_VERSION_MAJOR     0

@@ -17,7 +17,7 @@ namespace MC {
 				delete fr;
 		}
 
-		bool Camera::InFrustum(Physics::AABB& box) 
+		bool Camera::InFrustum(Physics::AABB box) 
 		{
 			return this->fr->CubeInside(box);
 		}

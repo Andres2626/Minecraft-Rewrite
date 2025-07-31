@@ -220,7 +220,7 @@ void Level::SetTile(glm::ivec3 blockpos, int type)
 
 }
 
-std::vector<MC::Physics::AABB> Level::GetCubes(MC::Physics::AABB& aabb) 
+std::vector<MC::Physics::AABB> Level::GetCubes(const MC::Physics::AABB& aabb) 
 {
 	std::vector <MC::Physics::AABB> aabbs;
 	glm::vec3 p0 = aabb.p0;

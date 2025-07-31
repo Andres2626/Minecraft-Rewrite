@@ -10,7 +10,7 @@
 namespace MC {
 	namespace Graphics {
 
-		class Frustum {
+		class RD_API Frustum {
 		protected:
 			/* the frustum array */
 			float ft[6][4];

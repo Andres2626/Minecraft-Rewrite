@@ -31,7 +31,7 @@ public:
 public:
 	void SetTile(glm::ivec3 blockpos, int type);
 public:
-	std::vector<MC::Physics::AABB> GetCubes(MC::Physics::AABB& aabb);
+	std::vector<MC::Physics::AABB> GetCubes(const MC::Physics::AABB& aabb);
 public:
 	int GetChunkIndex(const glm::ivec3& block);
 	int GetBlockIndex(const glm::ivec3& block);
