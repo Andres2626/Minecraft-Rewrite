@@ -7,7 +7,7 @@
 namespace MC {
 	namespace Graphics {
 
-		class Renderer {
+		class RD_API Renderer {
 		public:
 			static void Enable(unsigned int func);
 			static void Disable(unsigned int func);

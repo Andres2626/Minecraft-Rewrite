@@ -21,18 +21,18 @@
 
   returns false if call fails
 */
-bool mc_init_log(int verbose, int mode, const char *file = NULL);
+bool RD_API mc_init_log(int verbose, int mode, const char *file = NULL);
 
 /* finalize log system. */
-void mc_fini_log();
+void RD_API mc_fini_log();
 
 /* This print if verbose > 0 */
-void mc_info(const char *file, int line, const char *fmt, ...);
-void mc_warn(const char *file, int line, const char *fmt, ...);
-void mc_error(const char *file, int line, const char *fmt, ...);
-void mc_fatal(const char *file, int line, const char *fmt, ...);
-void mc_debug(const char *file, int line, const char *fmt, ...);
-void mc_trace(const char *file, int line, const char *fmt, ...);
+void RD_API mc_info(const char *file, int line, const char *fmt, ...);
+void RD_API mc_warn(const char *file, int line, const char *fmt, ...);
+void RD_API mc_error(const char *file, int line, const char *fmt, ...);
+void RD_API mc_fatal(const char *file, int line, const char *fmt, ...);
+void RD_API mc_debug(const char *file, int line, const char *fmt, ...);
+void RD_API mc_trace(const char *file, int line, const char *fmt, ...);
 
 /* Log macros. Use this for log! */
 
