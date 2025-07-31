@@ -25,26 +25,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -71,36 +71,37 @@
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\core\</IntDir>
     <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\i386\;$(SolutionDir)build\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <TargetName>rd-132211</TargetName>
+    <TargetName>rd-core</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\core\</IntDir>
     <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\x64\;$(SolutionDir)build\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <TargetName>rd-132211</TargetName>
+    <TargetName>rd-core</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\core\</IntDir>
     <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\i386\;$(SolutionDir)build\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <TargetName>rd-132211</TargetName>
+    <TargetName>rd-core</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\core\</IntDir>
     <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\x64\;$(SolutionDir)build\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <TargetName>rd-132211</TargetName>
+    <TargetName>rd-core</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RD_EXPORT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Src/MC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -120,8 +121,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RD_EXPORT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Src/MC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -143,8 +145,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RD_EXPORT_DLL;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Src/MC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -168,8 +171,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RD_EXPORT_DLL;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Src/MC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -198,19 +202,12 @@
     <ClCompile Include="src\MC\Layer\DefaultLayer.cpp" />
     <ClCompile Include="src\MC\Physics\AABB.cpp" />
     <ClCompile Include="src\MC\Graphics\Camera\Camera.cpp" />
-    <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\MC\Graphics\Camera\Frustum.cpp" />
     <ClCompile Include="src\MC\Host\Windows\console.cpp" />
     <ClCompile Include="src\MC\Host\Windows\init.cpp" />
-    <ClCompile Include="src\Level.cpp" />
-    <ClCompile Include="src\Rubydung.cpp" />
-    <ClCompile Include="src\Sandbox.cpp" />
-    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\MC\Graphics\Renderer.cpp" />
     <ClCompile Include="src\MC\Graphics\Shader\Shader.cpp" />
     <ClCompile Include="src\MC\Graphics\Texture.cpp" />
-    <ClCompile Include="src\Selector.cpp" />
-    <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\MC\Utils\Timer.cpp" />
     <ClCompile Include="src\MC\Utils\Util.cpp" />
     <ClCompile Include="src\MC\App\Window.cpp" />
@@ -220,7 +217,6 @@
     <ClInclude Include="external\glad\include\KHR\khrplatform.h" />
     <ClInclude Include="src\MC\App\Application.h" />
     <ClInclude Include="src\MC\App\Input.h" />
-    <ClInclude Include="src\ChunkDef.h" />
     <ClInclude Include="src\MC\Graphics\BlendValue.h" />
     <ClInclude Include="src\MC\Graphics\Buffers\IndexBuffer.h" />
     <ClInclude Include="src\MC\Graphics\Buffers\VertexArray.h" />
@@ -229,35 +225,24 @@
     <ClInclude Include="src\MC\Graphics\Camera\Ray.h" />
     <ClInclude Include="src\MC\Graphics\DepthValue.h" />
     <ClInclude Include="src\MC\Graphics\Image.h" />
-    <ClInclude Include="src\Hitresult.h" />
     <ClInclude Include="src\MC\Layer\DefaultLayer.h" />
-    <ClInclude Include="src\MC\mc.h" />
+    <ClInclude Include="src\mc.h" />
     <ClInclude Include="src\MC\Physics\AABB.h" />
     <ClInclude Include="src\MC\Graphics\Camera\Camera.h" />
-    <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\MC\common.h" />
     <ClInclude Include="src\MC\Events\Event.h" />
     <ClInclude Include="src\MC\Graphics\Camera\Frustum.h" />
     <ClInclude Include="src\MC\Host\console.h" />
     <ClInclude Include="src\MC\Host\init.h" />
-    <ClInclude Include="src\Level.h" />
     <ClInclude Include="src\MC\types.h" />
-    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\MC\Graphics\Renderer.h" />
     <ClInclude Include="src\MC\Graphics\Shader\Shader.h" />
     <ClInclude Include="src\MC\Graphics\Shader\Shaderflags.h" />
     <ClInclude Include="src\MC\Graphics\Texture.h" />
-    <ClInclude Include="src\Rubydung.h" />
-    <ClInclude Include="src\Selector.h" />
-    <ClInclude Include="src\Tile.h" />
     <ClInclude Include="src\MC\Utils\Timer.h" />
     <ClInclude Include="src\MC\Utils\Timestep.h" />
     <ClInclude Include="src\MC\Utils\Util.h" />
     <ClInclude Include="src\MC\App\Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\Shaders\chunk.shader" />
-    <None Include="assets\Shaders\selector.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

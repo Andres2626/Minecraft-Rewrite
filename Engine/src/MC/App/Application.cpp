@@ -4,12 +4,12 @@
 namespace MC {
 	namespace App {
 
-		Application *Application::m_Instance = nullptr;
+		static Application* m_Instance;
 
 		Application::Application(const std::string& name, const WindowProperties& pr)
 			: m_FPS(0), m_UPS(0), m_FrameTime(0.0f), m_Name(name), m_Pr(pr), m_Running(false), m_Suspended(false)
 		{
-			this->m_Instance = this;
+			m_Instance = this;
 		} 
 
 		Application::~Application()
@@ -166,6 +166,10 @@ namespace MC {
 				if (m_LayerStack[i]->IsVisible())
 					m_LayerStack[i]->OnSuspended();
 			}
+		}
+
+		Application& Application::GetInstance() {
+			return *m_Instance;
 		}
 	}
 }

@@ -5,7 +5,7 @@
 namespace MC {
 	namespace Graphics {
 
-		class Texture : public Image {
+		class RD_API Texture : public Image {
 		public:
 			unsigned int texture;
 		public:

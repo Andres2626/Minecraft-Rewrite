@@ -7,7 +7,7 @@
 namespace MC {
 	namespace Layer {
 
-		class DefaultLayer {
+		class RD_API DefaultLayer {
 		private:
 			bool m_Visible;
 		public:

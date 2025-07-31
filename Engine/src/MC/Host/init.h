@@ -1,5 +1,5 @@
 #pragma once
 #include "common.h"
 
-void mc_host_init(int argc, char **argv);
-void mc_host_fini();
+void RD_API mc_host_init(int argc, char **argv);
+void RD_API mc_host_fini();
