@@ -24,7 +24,7 @@ public:
 public:
 	void Render(MC::Graphics::Shader* shader);
 	void Update();
-	void tick(GLFWwindow* win);
+	void tick();
 public:
 	void Move(const glm::vec3& pos);
 	void MoveRelative(glm::vec2 a, float speed);

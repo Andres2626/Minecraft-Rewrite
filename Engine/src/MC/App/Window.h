@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#include "Graphics/Image.h"
 #include "Events/Event.h"
 
 #include <GLFW/glfw3.h>
@@ -57,7 +58,7 @@ namespace MC {
 			int GetEvent(MC::Events::Event& ev);
 			void FreeEvent(MC::Events::Event& ev);
 		public:
-			void SetIcon(GLFWimage* images);
+			void SetIcon(const Graphics::Image& img);
 		public:
 			inline WindowProperties& GetProps() { return this->w_pr; }
 			inline GLFWwindow* GetWindow() { return this->internal_window; };

@@ -1,8 +1,8 @@
-
 #include "Chunk.h"
 
 #include "Level.h"
 #include "Graphics/Shader/Shaderflags.h"
+#include "Graphics/Renderer.h"
 
 #include <glad\glad.h>
 
@@ -152,7 +152,7 @@ void Chunk::Render(MC::Graphics::Shader* shader) const
 	 * shader (view assets/Shaders/chunk.shader)
 	 */
 	this->VAO->Bind();
-	glDrawElements(GL_TRIANGLES, IBO->GetSize(), GL_UNSIGNED_INT, 0);
+	MC::Graphics::Renderer::DrawElements(GL_TRIANGLES, IBO->GetSize());
 	this->VAO->Unbind();
 }
 

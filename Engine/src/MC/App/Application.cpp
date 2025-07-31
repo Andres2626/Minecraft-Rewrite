@@ -1,4 +1,5 @@
 #include "App/Application.h"
+#include "Input.h"
 
 namespace MC {
 	namespace App {
@@ -9,7 +10,7 @@ namespace MC {
 			: m_FPS(0), m_UPS(0), m_FrameTime(0.0f), m_Name(name), m_Pr(pr), m_Running(false), m_Suspended(false)
 		{
 			this->m_Instance = this;
-		}
+		} 
 
 		Application::~Application()
 		{
@@ -20,6 +21,7 @@ namespace MC {
 		{
 			MC_INFO("Engine version: %s, code %i", RD_VERSION_STRING, RD_VERSION_NUMBER);
 			this->m_Win = new Window(this->m_Name.c_str(), this->m_Pr);
+			Input::Init();
 		}
 
 		void Application::PushLayer(Layer::DefaultLayer* layer)

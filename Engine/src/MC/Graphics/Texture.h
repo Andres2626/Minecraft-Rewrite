@@ -1,11 +1,11 @@
 #pragma once
-
 #include "..\common.h"
+#include "Image.h"
 
 namespace MC {
 	namespace Graphics {
 
-		class Texture {
+		class Texture : public Image {
 		public:
 			unsigned int texture;
 		public:
