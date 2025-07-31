@@ -1,6 +1,5 @@
 #include "..\console.h"
 
-
 #include <Windows.h>
 
 static void set_default_font() 

@@ -1,6 +1,7 @@
 #include <glad/glad.h>
-#include "window.h"
+#include "Window.h"
 
+#include "Input.h"
 #include "Events/Event.h"
 #include "Utils/Util.h"
 
@@ -104,9 +105,14 @@ namespace MC {
 			gleqFreeEvent(&ev);
 		}
 
-		void Window::SetIcon(GLFWimage* images) 
+		void Window::SetIcon(const Graphics::Image& img)
 		{
-			glfwSetWindowIcon(this->internal_window, 1, images);
+			GLFWimage image[1];
+			image[0].width = img.x;
+			image[0].height = img.y;
+			image[0].pixels = img.pixels;
+
+			glfwSetWindowIcon(this->internal_window, 1, image);
 		}
 	}
 }

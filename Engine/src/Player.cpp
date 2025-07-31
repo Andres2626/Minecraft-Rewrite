@@ -1,6 +1,11 @@
 #include "Player.h"
 
 #include "Level.h"
+#include "App/Input.h"
+
+
+using namespace MC;
+using namespace App;
 
 bool first = true;
 
@@ -88,22 +93,22 @@ void Player::turn(glm::vec2 pos)
 		this->cam.rot.y = -89.0f;
 }
 
-void Player::tick(GLFWwindow* win) 
+void Player::tick() 
 {
 	glm::vec2 a(0.0f, 0.0f);
 
 	/* TODO: Make the window independent of the player */
-	if (glfwGetKey(win, GLFW_KEY_R) == GLFW_PRESS)
-		ResetPos();
-	if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
+	if (Input::IsKeyPressed(GLFW_KEY_R))
+		this->ResetPos();
+	if (Input::IsKeyPressed(GLFW_KEY_W))
 		a.x++;
-	if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
+	if (Input::IsKeyPressed(GLFW_KEY_S))
 		a.x--;
-	if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
+	if (Input::IsKeyPressed(GLFW_KEY_A))
 		a.y--;
-	if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS)
+	if (Input::IsKeyPressed(GLFW_KEY_D))
 		a.y++;
-	if ((glfwGetKey(win, GLFW_KEY_SPACE) == GLFW_PRESS) && this->m_Ground)
+	if (Input::IsKeyPressed(GLFW_KEY_SPACE) && this->m_Ground)
 		this->movdelta.y = 0.12f;
 
 	float hspeed = this->m_Ground ? 0.02f : 0.005f;

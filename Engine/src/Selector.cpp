@@ -87,7 +87,7 @@ void Selector::Render(MC::Graphics::Camera& cam, MC::Graphics::Shader* shader, f
 
 	/* Enable blending for selector */
 	MC::Graphics::Renderer::Enable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	MC::Graphics::Renderer::BlendFunc(MC::Graphics::BlendValue::SRC_ALPHA, MC::Graphics::BlendValue::ONE_MINUS_SRC_ALPHA);
 
 	/* Translate and rotate selector */
 	shader->Set4x4("s_M", model);
@@ -95,7 +95,7 @@ void Selector::Render(MC::Graphics::Camera& cam, MC::Graphics::Shader* shader, f
 
 	/* SELECTOR DRAW PROCESS */
 	this->VAO->Bind();
-	glDrawElements(GL_TRIANGLES, IBO->GetSize(), GL_UNSIGNED_INT, 0);
+	MC::Graphics::Renderer::DrawElements(GL_TRIANGLES, IBO->GetSize());
 	this->VAO->Unbind();
 
 	/* Disable blending */

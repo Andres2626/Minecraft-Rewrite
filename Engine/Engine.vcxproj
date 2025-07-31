@@ -69,28 +69,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\core\</IntDir>
-    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Lib\Include\;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\i386\;$(SolutionDir)build\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <TargetName>rd-132211</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\core\</IntDir>
-    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Lib\Include\;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\x64\;$(SolutionDir)build\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <TargetName>rd-132211</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\core\</IntDir>
-    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Lib\Include\;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\i386\;$(SolutionDir)build\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <TargetName>rd-132211</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\core\</IntDir>
-    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Lib\Include\;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\x64\;$(SolutionDir)build\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <TargetName>rd-132211</TargetName>
   </PropertyGroup>
@@ -100,7 +100,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src/MC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -121,7 +121,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src/MC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -144,7 +144,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src/MC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -169,7 +169,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src/MC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -187,63 +187,73 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\App\Application.cpp" />
-    <ClCompile Include="src\Graphics\Buffers\IndexBuffer.cpp" />
-    <ClCompile Include="src\Graphics\Buffers\VertexArray.cpp" />
-    <ClCompile Include="src\Graphics\Buffers\VertexBuffer.cpp" />
-    <ClCompile Include="src\Graphics\Buffers\VertexLayout.cpp" />
-    <ClCompile Include="src\Graphics\Camera\Ray.cpp" />
-    <ClCompile Include="src\Layer\DefaultLayer.cpp" />
-    <ClCompile Include="src\Physics\AABB.cpp" />
-    <ClCompile Include="src\Graphics\Camera\Camera.cpp" />
+    <ClCompile Include="src\MC\App\Application.cpp" />
+    <ClCompile Include="src\MC\App\Input.cpp" />
+    <ClCompile Include="src\MC\Graphics\Buffers\IndexBuffer.cpp" />
+    <ClCompile Include="src\MC\Graphics\Buffers\VertexArray.cpp" />
+    <ClCompile Include="src\MC\Graphics\Buffers\VertexBuffer.cpp" />
+    <ClCompile Include="src\MC\Graphics\Buffers\VertexLayout.cpp" />
+    <ClCompile Include="src\MC\Graphics\Camera\Ray.cpp" />
+    <ClCompile Include="src\MC\Graphics\Image.cpp" />
+    <ClCompile Include="src\MC\Layer\DefaultLayer.cpp" />
+    <ClCompile Include="src\MC\Physics\AABB.cpp" />
+    <ClCompile Include="src\MC\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
-    <ClCompile Include="src\Graphics\Camera\Frustum.cpp" />
-    <ClCompile Include="src\Host\Windows\console.cpp" />
-    <ClCompile Include="src\Host\Windows\init.cpp" />
+    <ClCompile Include="src\MC\Graphics\Camera\Frustum.cpp" />
+    <ClCompile Include="src\MC\Host\Windows\console.cpp" />
+    <ClCompile Include="src\MC\Host\Windows\init.cpp" />
     <ClCompile Include="src\Level.cpp" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Rubydung.cpp" />
+    <ClCompile Include="src\Sandbox.cpp" />
     <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\Graphics\Renderer.cpp" />
-    <ClCompile Include="src\Graphics\Shader\Shader.cpp" />
-    <ClCompile Include="src\Graphics\Texture.cpp" />
+    <ClCompile Include="src\MC\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\MC\Graphics\Shader\Shader.cpp" />
+    <ClCompile Include="src\MC\Graphics\Texture.cpp" />
     <ClCompile Include="src\Selector.cpp" />
     <ClCompile Include="src\Tile.cpp" />
-    <ClCompile Include="src\Utils\Timer.cpp" />
-    <ClCompile Include="src\Utils\Util.cpp" />
-    <ClCompile Include="src\App\Window.cpp" />
+    <ClCompile Include="src\MC\Utils\Timer.cpp" />
+    <ClCompile Include="src\MC\Utils\Util.cpp" />
+    <ClCompile Include="src\MC\App\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\glad\include\glad\glad.h" />
     <ClInclude Include="external\glad\include\KHR\khrplatform.h" />
-    <ClInclude Include="src\App\Application.h" />
+    <ClInclude Include="src\MC\App\Application.h" />
+    <ClInclude Include="src\MC\App\Input.h" />
     <ClInclude Include="src\ChunkDef.h" />
-    <ClInclude Include="src\Graphics\Buffers\IndexBuffer.h" />
-    <ClInclude Include="src\Graphics\Buffers\VertexArray.h" />
-    <ClInclude Include="src\Graphics\Buffers\VertexBuffer.h" />
-    <ClInclude Include="src\Graphics\Buffers\VertexLayout.h" />
-    <ClInclude Include="src\Graphics\Camera\Ray.h" />
+    <ClInclude Include="src\MC\Graphics\BlendValue.h" />
+    <ClInclude Include="src\MC\Graphics\Buffers\IndexBuffer.h" />
+    <ClInclude Include="src\MC\Graphics\Buffers\VertexArray.h" />
+    <ClInclude Include="src\MC\Graphics\Buffers\VertexBuffer.h" />
+    <ClInclude Include="src\MC\Graphics\Buffers\VertexLayout.h" />
+    <ClInclude Include="src\MC\Graphics\Camera\Ray.h" />
+    <ClInclude Include="src\MC\Graphics\DepthValue.h" />
+    <ClInclude Include="src\MC\Graphics\Image.h" />
     <ClInclude Include="src\Hitresult.h" />
-    <ClInclude Include="src\Layer\DefaultLayer.h" />
-    <ClInclude Include="src\Physics\AABB.h" />
-    <ClInclude Include="src\Graphics\Camera\Camera.h" />
+    <ClInclude Include="src\MC\Layer\DefaultLayer.h" />
+    <ClInclude Include="src\MC\mc.h" />
+    <ClInclude Include="src\MC\Physics\AABB.h" />
+    <ClInclude Include="src\MC\Graphics\Camera\Camera.h" />
     <ClInclude Include="src\Chunk.h" />
-    <ClInclude Include="src\common.h" />
-    <ClInclude Include="src\Events\Event.h" />
-    <ClInclude Include="src\Graphics\Camera\Frustum.h" />
-    <ClInclude Include="src\Host\console.h" />
-    <ClInclude Include="src\Host\init.h" />
+    <ClInclude Include="src\MC\common.h" />
+    <ClInclude Include="src\MC\Events\Event.h" />
+    <ClInclude Include="src\MC\Graphics\Camera\Frustum.h" />
+    <ClInclude Include="src\MC\Host\console.h" />
+    <ClInclude Include="src\MC\Host\init.h" />
     <ClInclude Include="src\Level.h" />
+    <ClInclude Include="src\MC\types.h" />
     <ClInclude Include="src\Player.h" />
-    <ClInclude Include="src\Graphics\Renderer.h" />
-    <ClInclude Include="src\Graphics\Shader\Shader.h" />
-    <ClInclude Include="src\Graphics\Shader\Shaderflags.h" />
-    <ClInclude Include="src\Graphics\Texture.h" />
+    <ClInclude Include="src\MC\Graphics\Renderer.h" />
+    <ClInclude Include="src\MC\Graphics\Shader\Shader.h" />
+    <ClInclude Include="src\MC\Graphics\Shader\Shaderflags.h" />
+    <ClInclude Include="src\MC\Graphics\Texture.h" />
+    <ClInclude Include="src\Rubydung.h" />
     <ClInclude Include="src\Selector.h" />
     <ClInclude Include="src\Tile.h" />
-    <ClInclude Include="src\Utils\Timer.h" />
-    <ClInclude Include="src\Utils\Timestep.h" />
-    <ClInclude Include="src\Utils\Util.h" />
-    <ClInclude Include="src\App\Window.h" />
+    <ClInclude Include="src\MC\Utils\Timer.h" />
+    <ClInclude Include="src\MC\Utils\Timestep.h" />
+    <ClInclude Include="src\MC\Utils\Util.h" />
+    <ClInclude Include="src\MC\App\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\chunk.shader" />
