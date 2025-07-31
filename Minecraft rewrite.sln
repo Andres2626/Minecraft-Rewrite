@@ -20,6 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{4BA50FBE
 		.clang-format = .clang-format
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{A1F314AF-6DA9-49D1-8A84-9989DB5CD00D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{83D5772D-F53F-407E-A444-08AC04336F1E} = {83D5772D-F53F-407E-A444-08AC04336F1E}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -52,6 +57,14 @@ Global
 		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Release|Win32.Build.0 = Release|Win32
 		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Release|x64.ActiveCfg = Release|x64
 		{AC866730-D2DC-4A01-80A7-335CB494CE18}.Release|x64.Build.0 = Release|x64
+		{A1F314AF-6DA9-49D1-8A84-9989DB5CD00D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A1F314AF-6DA9-49D1-8A84-9989DB5CD00D}.Debug|Win32.Build.0 = Debug|Win32
+		{A1F314AF-6DA9-49D1-8A84-9989DB5CD00D}.Debug|x64.ActiveCfg = Debug|x64
+		{A1F314AF-6DA9-49D1-8A84-9989DB5CD00D}.Debug|x64.Build.0 = Debug|x64
+		{A1F314AF-6DA9-49D1-8A84-9989DB5CD00D}.Release|Win32.ActiveCfg = Release|Win32
+		{A1F314AF-6DA9-49D1-8A84-9989DB5CD00D}.Release|Win32.Build.0 = Release|Win32
+		{A1F314AF-6DA9-49D1-8A84-9989DB5CD00D}.Release|x64.ActiveCfg = Release|x64
+		{A1F314AF-6DA9-49D1-8A84-9989DB5CD00D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

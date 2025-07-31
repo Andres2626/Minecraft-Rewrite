@@ -1,5 +1,4 @@
 #pragma once
-
 #include "common.h"
 #include "Window.h"
 #include "Layer/DefaultLayer.h"
@@ -9,9 +8,7 @@
 namespace MC {
 	namespace App {
 
-		class Application {
-		private:
-			static Application* m_Instance;
+		class RD_API Application {
 		protected:
 			Window* m_Win;
 		private:
@@ -19,10 +16,8 @@ namespace MC {
 			Utils::Timer* m_Timer;
 			int m_FPS, m_UPS;
 			float m_FrameTime;
-
 			std::string m_Name;
 			WindowProperties m_Pr;
-
 			std::vector<MC::Layer::DefaultLayer*> m_LayerStack;
 		public:
 			Application(const std::string& name, const WindowProperties& pr);
@@ -50,7 +45,7 @@ namespace MC {
 			void OnTick();
 			void OnSuspended();
 		public:
-			inline static Application& GetInstance() { return *m_Instance; };
+			static Application& GetInstance();
 		public:
 			inline Window& GetWindow() { return *this->m_Win; };
 		};

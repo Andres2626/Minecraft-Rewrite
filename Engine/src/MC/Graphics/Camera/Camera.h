@@ -10,7 +10,7 @@
 namespace MC {
 	namespace Graphics {
 
-		class Camera {
+		class RD_API Camera {
 		protected:
 			Frustum* fr;
 		public:
@@ -26,7 +26,7 @@ namespace MC {
 			~Camera();
 		public:
 			/* Detect if box is in frustum (not fully) */
-			bool InFrustum(Physics::AABB& box);
+			bool InFrustum(Physics::AABB box);
 
 			/* Update vectors and recalculate frustum. */
 			void Update();

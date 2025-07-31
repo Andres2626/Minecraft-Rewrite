@@ -4,8 +4,6 @@
 #include "Graphics/Shader/Shaderflags.h"
 #include "Graphics/Renderer.h"
 
-#include <glad\glad.h>
-
 /* push vertex properties in the array */
 #define PUSH_VERTEX(f, brig, vb, ub) \
 	this->vertices.push_back(t.f[vb] + fpos.x); \

@@ -4,7 +4,7 @@
 namespace MC {
 	namespace Graphics {
 
-		class Image {
+		class RD_API Image {
 		public:
 			const char* path;
 			unsigned char* pixels;
