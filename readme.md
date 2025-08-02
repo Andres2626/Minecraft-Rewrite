@@ -1,44 +1,59 @@
+# Minecraft Rewrite (MC Rewrite)
 
-## Preclassic rd-132211
+This project is an attempt to port Minecraft Java Edition to C++ seeking 
+cross-platform, maximum performance, stability and preserving the Minecraft 
+experience. 
 
-Launch date: May 13, 2009, 20:11 UTC (according to omniarchive)
-c++ version launch date: Jul 25, 2025 21:07 UTC
+This code is based on the compilation of the original .jar versions of 
+Minecraft, but this one is a rewrite from scratch starting from 
+rd-132211 (view limitation of liability)
 
-![Level](./Resources/preview.jpg)<br>
-Preview image from recreation.
+## Goals of this project
 
-## Introduction
+- Recreate in c++ all versions of the Minecraft Java Edition (up to 1.0 at the moment), 
+  Adding the features of each version in the process.  
+- Add support and compatibility for as many platforms as possible. (like Java Edition)
+- Rewrite the main game code in C++, maintaining maximum performance and 
+  stability (unlike the Java version)
+  
+## Things that will not be done
 
-This is the pre-classic Minecraft version RD-132211, rewritten in C++, incorporating 
-some of the original code from the original .jar file. This version has some 
-improvements over the original version, especially performance, stability, and a 
-full port to the newer versions of OpenGL. This version does not change anything 
-from the original version in terms of gameplay. At the moment this is very very simple
-port of the original java version.
+- The rewrite of the Bedrock Edition (includes support in each version).
+- Rewrite beyond 1.0 (for now)
+
+## Contribute
+
+Anyone interested can contribute to the project. I encourage anyone interested to contribute 
+as long as:
+
+- All features that are added must be consistent with the version of Minecraft that is being 
+  recreated.
+- When recreating a version of Minecraft in C++ it doesn't matter whether it's in the main 
+  launcher or not, but:
+	- If the version is in the launcher or marked as "archived", it is recreated as is.
+	- If the version is lost and there is no evidence that it ever existed (IRC, videos, etc.) 
+	  then the version cannot be recreated.
+	- If the version is lost and there is evidence that it existed then, it could be 
+	  recreated but not completely (especially if there is only IRC evidence)
+	- If the version is recompiled, it is recreated as is.
+	- For more info view [Ommniarchive](https://omniarchive.shoutwiki.com/wiki/Main_Page) and [Minecraft Java Versions](https://minecraft.fandom.com/wiki/Java_Edition_version_history) for more info.
+
+I recommend that before contributing to the code, you  should be familiar with the original code for 
+all Java versions or at least have an idea of how the code originally worked (especially early versions) and 
+keep in mind the IRC logs, the original changelogs, videos, etc. of older versions (see [Ommniarchive](https://omniarchive.shoutwiki.com/wiki/Main_Page) for more info).
+
+Below are some links that could be of great help when contributing to the project.
+
+- [Ommniarchive](https://omniarchive.shoutwiki.com/wiki/Main_Page)
+- [Minecraft Java Versions](https://minecraft.fandom.com/wiki/Java_Edition_version_history)
+- [Minecraft 2009 Original logs](https://web.archive.org/web/20140601000000*/https://echelog.com/logs/browse/lwjgl/1242165600)
+- [The word of notch](https://blog.omniarchive.uk/archive/)
+
+Once the above is done and the code is ready, [send a pull request](https://github.com/Andres2626/Minecraft-Rewrite/pulls)
 
 ## Copyright Notice
 
-The copyright notice include all the following elements
-
-- C/C++ code.
-- Shader code.
-- Resources (images, textures and scripts)
-
-The above elements are copyrighted by Andres26 (C) except for the following exceptions:
-
-- External/zlib distributed under the terms of ZLIB license
-- Lib/include/GLFW distrubuted under the terms of GLFW license
-- Lib/include/GLEQ distributed under the terms of GLFW license
-- Engine/External/glad distributed under the terms of BSD 3-Clause license
-- Engine/External/glm distributed under the terms of The Happy Bunny License
-- Engine/External/gzip distributed under the terms of Mapbox inc.
-- Engine/External/stb_image distributed under the terms of unlicence or MIT license
-- Engine/src/physics/AABB taken as-is from original rd-132211 (property of Mojang AB)
-- Engine/assets/terrain.PNG (property of Mojang AB)
-- Engine/assets/Internal/win_icon.PNG (property of lwjgl)
-
-The excluded code/elements are (C) Andres26 2025, but all of part of it may be
-redistributed under the following terms:
+All project code is (C) Andres26 2025, but the code can be redistributed if:
 
 - Full source are available and free.
 
@@ -46,77 +61,14 @@ redistributed under the following terms:
 
 - It is prohibited to distribute this for a fee.
 
+- The above excludes the dependencies/ and assets/ directories.
+
 If you have any question, mail me to minecraftrewrite21@gmail.com
 
 ## Limitation of liability
 
-I, under my name, admit that this project is NOT endorsed by or affiliated with 
-Mojang AB, which means that the above code is MY own as long as the copyright 
-notice is observed.
-
-## Contribute
-
-Anyone is FREE to contribute to the project, if they are interested. I encourage 
-anyone interested in this project to contribute to it.
-
-You can contribute to the project as long as your code implements the original 
-features of Minecraft. I recommend that before contributing to the code, you 
-should be familiar with the original code for all Java versions (especially early versions) 
-and the changelogs for older versions (see Omniarchive for more information). 
-All of the above applies even if it's not a fork of the code.
-
-## Technical summary and features of the game
-
-This version of the game is a complete recreation of the original Java 
-version. It's open source and reimplements some features of the original code.
-
-- Rendering process: Unlike of the original version, this use shaders and 
-  and only 1 draw call per chunk, Unlike the original version that used 2 "layers" 
-  or drawing calls for rendering the "dark" and "light" blocks which affected the game's 
-  performance.
-  
-- The FOG process was moved to chunk.shader, this allows avoid calls to prehistoric OpenGL
-
-  ![Level](./Resources/fog.jpg)<br>
-  Fog demostration.
-
-- Level load process: Regardless of whether a level.dat exists, which didn't 
-  happen in the original version, which generated the array using an indexer 
-  and loaded the level.dat to copy it into the array. Now the game checks if 
-  a level.dat exists to create it and generate the array, or alternatively, it 
-  only generates the array if the level.dat doesn't exist.
-
-- This version no longer features legacy OpenGL.
-
-- VBO indexer: An indexer is used for vertices (uses more memory in exchange for 
-  fewer drawing calls to the GPU)
-  
-- Selector: The selector moves and rotates using the model matrix that the application 
-  passes to the shader, which avoids unnecessary calls to the drawing, each time the 
-  cursor moves and repositions the selector on the selected block.
-  
-  ![Level](./Resources/selector.jpg)<br>
-  Block selector demostration
-  
-- Chunk updates (CUPS): If a block is destroyed or a block on the edge of the chunk is 
-  destroyed, it has to be updated for the above reason.
-  
-- Selector: This works as follows first it calculates the parametric equation of the camera 
-  line f(t) = dir t + pos and then, using a for loop, it sets the value of t 
-  (every 0.1f) and finally the ray collides with the block and returns the normal 
-  of the impacted face.
-
-## Benchmarks and tests
-
-In my case, I managed to get an average of 300 FPS in the debug version, and in 
-the release version, it averaged 400 FPS. The game also takes a while to load at 
-first due to the chunk renderer and the generation of the block array in the level.
-
-But, this is in my case, test your self and But this is in my case, I highly recommend 
-you try it for yourself and encourage you to report it on github or in the attached email.
-
-![Level](./Resources/benchmark.jpg)<br>
-FPS counter from recreation
+This project is not affiliated with Mojang A.B. Furthermore, the project code is not a 
+copy of the code contained in the original code's .jar files.
 
 ## Prerequesites for build
 
@@ -143,47 +95,6 @@ For those curious, the libraries used for this project are:
 
 To run the application you must have a graphics card that supports modern versions of OpenGL (>3.3)
 
-## Have fun!
+## Contact 
 
-Yes! After completing this process, you can now test version RD-133221 just like the 
-original. The following versions will be available soon (if they can be recreated).
-
-## ChangeLog
-
-view - [Minecraft Wiki - Java_Edition_pre-Classic_rd-132211](https://minecraft.gamepedia.com/Java_Edition_pre-Classic_rd-132211) for more info
-
-## TODO list
-
-- Change the chunk render process (separate light and dark blocks in different VAO) for avoid
-  fs_out.brightness < 0.6f in chunk shader
- 
-- More support in different plataforms in the future
-
-- Separate the main engine from the Ruby implementation. Create a dynamic library for the 
-  engine and an executable for the game itself (Modularization of the game part I)
-  
-- Modularization of the game part II (mod system, modules, ...)
-
-- 20 TPS instead of 60 TPS (view engine/main.cpp for more info)
-
-## Contact
-
-Any questions, reports or clarifications, mail me at minecraftrewrite21@gmai.com
-
-## That's all 
-
-Now, you are ready for play and test the original version of rd-132211 in c++.
-
-At the moment the game engine is very very simple. There are many implementations and 
-abstractions missing from the engine, but the code is fully functional and shouldn't 
-give you any problems (I hope).
-
-If you find bugs in the program that are related to the code, initialization, 
-etc. (note: not the original features of the version), feel free to report them via GitHub 
-or email.
-
-That's all, and we'll see each other again.
-
-Andres26
-Jul 25, 2025
-minecraftrewrite21@gmai.com
+Any questions, reports or clarifications, mail me at minecraftrewrite21@gmai.com or in the [discussion page.](https://github.com/Andres2626/Minecraft-Rewrite/discussions)
