@@ -1,7 +1,7 @@
 #include "Level.h"
 
-#include "Chunk.h"
-#include "Player.h"
+#include "Chunk/Chunk.h"
+#include "Player/Player.h"
 
 #include <gzip/compress.hpp>
 #include <gzip/decompress.hpp>

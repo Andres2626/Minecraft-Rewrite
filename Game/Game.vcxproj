@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(SolutionDir)/Engine/Src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(SolutionDir)/Core/Src;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\engine\</IntDir>
     <TargetName>rd-132211</TargetName>
@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(SolutionDir)/Engine/Src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(SolutionDir)/Core/Src;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\engine\</IntDir>
     <TargetName>rd-132211</TargetName>
@@ -88,7 +88,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(SolutionDir)/Engine/Src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(SolutionDir)/Core/Src;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\engine\</IntDir>
     <TargetName>rd-132211</TargetName>
@@ -96,7 +96,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(SolutionDir)/Engine/Src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\zlib;$(SolutionDir)Dependencies\stb_image\;$(SolutionDir)Dependencies\GLAD\Include\;$(SolutionDir)Dependencies\;$(SolutionDir)Dependencies\GLFW\;$(SolutionDir)/Core/Src;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\objs\engine\</IntDir>
     <TargetName>rd-132211</TargetName>
@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>RD_EXPORT_DLL;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Engine/Src/MC</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Core/Src/MC;$(ProjectDir)/src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>RD_EXPORT_DLL;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Engine/Src/MC</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Core/Src/MC;$(ProjectDir)/src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>RD_EXPORT_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Engine/Src/MC</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Core/Src/MC;$(ProjectDir)/src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,7 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>RD_EXPORT_DLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Engine/Src/MC</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Core/Src/MC;$(ProjectDir)/src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,23 +167,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Chunk.cpp" />
-    <ClCompile Include="src\Level.cpp" />
-    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Chunk\Chunk.cpp" />
+    <ClCompile Include="src\Level\Level.cpp" />
+    <ClCompile Include="src\Player\Player.cpp" />
     <ClCompile Include="src\Rubydung.cpp" />
     <ClCompile Include="src\Sandbox.cpp" />
-    <ClCompile Include="src\Selector.cpp" />
-    <ClCompile Include="src\Tile.cpp" />
+    <ClCompile Include="src\Player\Selector.cpp" />
+    <ClCompile Include="src\Block\Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Chunk.h" />
-    <ClInclude Include="src\ChunkDef.h" />
-    <ClInclude Include="src\Hitresult.h" />
-    <ClInclude Include="src\Level.h" />
-    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Chunk\Chunk.h" />
+    <ClInclude Include="src\Chunk\ChunkDef.h" />
+    <ClInclude Include="src\Player\Hitresult.h" />
+    <ClInclude Include="src\Level\Level.h" />
+    <ClInclude Include="src\Player\Player.h" />
     <ClInclude Include="src\Rubydung.h" />
-    <ClInclude Include="src\Selector.h" />
-    <ClInclude Include="src\Tile.h" />
+    <ClInclude Include="src\Player\Selector.h" />
+    <ClInclude Include="src\Block\Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\chunk.shader" />

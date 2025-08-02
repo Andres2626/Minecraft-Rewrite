@@ -1,7 +1,6 @@
 #pragma once
-#include "common.h"
-#include "Graphics/Shader/Shader.h"
-#include "Graphics/Camera/Camera.h"
+#include <Graphics/Shader/Shader.h>
+#include <Graphics/Camera/Camera.h>
 
 #include <GLFW\glfw3.h>
 

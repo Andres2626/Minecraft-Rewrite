@@ -1,7 +1,7 @@
 #pragma once
-#include "common.h"
-#include "Player.h"
-#include "Physics/AABB.h"
+#include "Player/Player.h"
+
+#include <Physics/AABB.h>
 
 class Chunk;
 

@@ -1,8 +1,7 @@
 #include "Player.h"
 
-#include "Level.h"
-#include "App/Input.h"
-
+#include "Level/Level.h"
+#include <App/Input.h>
 
 using namespace MC;
 using namespace App;

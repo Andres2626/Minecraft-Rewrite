@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Chunk.cpp">
+    <ClCompile Include="src\Chunk\Chunk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Level.cpp">
+    <ClCompile Include="src\Level\Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Player.cpp">
+    <ClCompile Include="src\Player\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rubydung.cpp">
@@ -30,36 +30,36 @@
     <ClCompile Include="src\Sandbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Selector.cpp">
+    <ClCompile Include="src\Player\Selector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Tile.cpp">
+    <ClCompile Include="src\Block\Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Chunk.h">
+    <ClInclude Include="src\Chunk\Chunk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ChunkDef.h">
+    <ClInclude Include="src\Chunk\ChunkDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hitresult.h">
+    <ClInclude Include="src\Player\Hitresult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Level.h">
+    <ClInclude Include="src\Level\Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Player.h">
+    <ClInclude Include="src\Player\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rubydung.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Selector.h">
+    <ClInclude Include="src\Player\Selector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Tile.h">
+    <ClInclude Include="src\Block\Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

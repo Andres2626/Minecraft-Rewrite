@@ -1,8 +1,9 @@
 #include "Chunk.h"
 
-#include "Level.h"
-#include "Graphics/Shader/Shaderflags.h"
-#include "Graphics/Renderer.h"
+#include "Level/Level.h"
+
+#include <Graphics/Shader/Shaderflags.h>
+#include <Graphics/Renderer.h>
 
 /* push vertex properties in the array */
 #define PUSH_VERTEX(f, brig, vb, ub) \
