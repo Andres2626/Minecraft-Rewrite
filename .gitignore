@@ -1,6 +1,6 @@
 # exclude files
 *.o
-*.stackump
+*.stackdump
 build/%.h
 build/%.img
 build/%.o
