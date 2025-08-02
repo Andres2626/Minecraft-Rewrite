@@ -1,10 +1,10 @@
 #pragma once
-#include "Hitresult.h"
-#include "Selector.h"
-#include "Player.h"
-#include "Tile.h"
-#include "Level.h"
-#include "Chunk.h"
+#include "Player/Hitresult.h"
+#include "Player/Selector.h"
+#include "Player/Player.h"
+#include "Block/Tile.h"
+#include "Level/Level.h"
+#include "Chunk/Chunk.h"
 
 #include <mc.h>
 

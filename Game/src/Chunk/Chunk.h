@@ -1,13 +1,13 @@
 #pragma once
-
 #include "ChunkDef.h"
 
-#include "Tile.h"
-#include "Physics/AABB.h"
-#include "Graphics/Shader/Shader.h"
-#include "Graphics/Buffers/IndexBuffer.h"
-#include "Graphics/Buffers/VertexArray.h"
-#include "Graphics/Buffers/VertexBuffer.h"
+#include "Block/Tile.h"
+
+#include <Physics/AABB.h>
+#include <Graphics/Shader/Shader.h>
+#include <Graphics/Buffers/IndexBuffer.h>
+#include <Graphics/Buffers/VertexArray.h>
+#include <Graphics/Buffers/VertexBuffer.h>
 
 #include <vector>
 

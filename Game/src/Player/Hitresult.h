@@ -1,6 +1,4 @@
 #pragma once
-#include "common.h"
-
 #include <glm/glm.hpp>
 
 struct Hitresult {
