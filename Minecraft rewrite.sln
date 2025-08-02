@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.35706.149
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{83D5772D-F53F-407E-A444-08AC04336F1E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "Core\Engine.vcxproj", "{83D5772D-F53F-407E-A444-08AC04336F1E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{535D3100-937E-4354-B476-5E139E2FAC09} = {535D3100-937E-4354-B476-5E139E2FAC09}
 		{AC866730-D2DC-4A01-80A7-335CB494CE18} = {AC866730-D2DC-4A01-80A7-335CB494CE18}
