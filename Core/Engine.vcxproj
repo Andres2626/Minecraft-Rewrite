@@ -194,13 +194,19 @@
   <ItemGroup>
     <ClCompile Include="src\MC\App\Application.cpp" />
     <ClCompile Include="src\MC\App\Input.cpp" />
+    <ClCompile Include="src\MC\Events\Event.cpp" />
     <ClCompile Include="src\MC\Graphics\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\MC\Graphics\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\MC\Graphics\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\MC\Graphics\Buffers\VertexLayout.cpp" />
     <ClCompile Include="src\MC\Graphics\Camera\Ray.cpp" />
     <ClCompile Include="src\MC\Graphics\Image.cpp" />
+    <ClCompile Include="src\MC\Host\console.cpp" />
+    <ClCompile Include="src\MC\Host\init.cpp" />
     <ClCompile Include="src\MC\Layer\DefaultLayer.cpp" />
+    <ClCompile Include="src\MC\Log\Logger.cpp" />
+    <ClCompile Include="src\MC\Log\LogMessage.cpp" />
+    <ClCompile Include="src\MC\Math\Math.cpp" />
     <ClCompile Include="src\MC\Physics\AABB.cpp" />
     <ClCompile Include="src\MC\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="src\MC\Graphics\Camera\Frustum.cpp" />
@@ -228,6 +234,11 @@
     <ClInclude Include="src\MC\Graphics\Image.h" />
     <ClInclude Include="src\MC\Layer\DefaultLayer.h" />
     <ClInclude Include="src\mc.h" />
+    <ClInclude Include="src\MC\Log\Log.h" />
+    <ClInclude Include="src\MC\Log\Logger.h" />
+    <ClInclude Include="src\MC\Log\LogLevel.h" />
+    <ClInclude Include="src\MC\Log\LogMessage.h" />
+    <ClInclude Include="src\MC\Math\Math.h" />
     <ClInclude Include="src\MC\Physics\AABB.h" />
     <ClInclude Include="src\MC\Graphics\Camera\Camera.h" />
     <ClInclude Include="src\MC\common.h" />

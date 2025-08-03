@@ -2,7 +2,7 @@
 #include "common.h"
 #include "Window.h"
 #include "Layer/DefaultLayer.h"
-#include "Utils/Util.h"
+#include "Log/Log.h"
 #include "Utils/Timer.h"
 
 namespace MC {

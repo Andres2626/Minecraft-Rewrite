@@ -15,9 +15,9 @@ namespace MC {
             frustum[side][3] /= magnitude;
         }
 
-        void Frustum::Calculate(glm::mat4 proj, glm::mat4 view) 
+        void Frustum::Calculate(Math::mat4 proj, Math::mat4 view) 
         {
-            glm::mat4 _clip = proj * view;
+            Math::mat4 _clip = proj * view;
             float* clip = (float*)&_clip; /* Convert mat4 to float array */
 
             this->ft[0][0] = clip[3] - clip[0];
@@ -57,7 +57,7 @@ namespace MC {
             NormalizePlane(this->ft, 5);
         }
 
-        bool Frustum::PointInside(glm::vec3 pos) 
+        bool Frustum::PointInside(Math::vec3 pos) 
         {
             for (int i = 0; i < 6; i++) {
                 if (this->ft[i][0] * pos.x + this->ft[i][1] * pos.y + this->ft[i][2] * pos.z + this->ft[i][3] <= 0)
@@ -113,7 +113,7 @@ namespace MC {
             return true;
         }
 
-        bool Frustum::SphereInside(glm::vec3 pos, float r) 
+        bool Frustum::SphereInside(Math::vec3 pos, float r) 
         {
             for (int i = 0; i < 6; i++) {
                 if (this->ft[i][0] * pos.x + this->ft[i][1] * pos.y + this->ft[i][2] * pos.z + this->ft[i][3] <= -r) {

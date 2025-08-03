@@ -22,7 +22,7 @@ namespace MC {
 
 			  TODO: improve this!
 			*/
-			glm::vec3 GetRay(float t, glm::vec3 pos, glm::vec3 dir);
+			Math::vec3 GetRay(float t, Math::vec3 pos, Math::vec3 dir);
 		};
 
 

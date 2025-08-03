@@ -1,11 +1,7 @@
 #pragma once
 #include "common.h"
+#include "Math/Math.h"
 #include "Physics/AABB.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 
 namespace MC {
 	namespace Graphics {
@@ -18,12 +14,12 @@ namespace MC {
 			Frustum() = default;
 			~Frustum() = default;
 		public:
-			void Calculate(glm::mat4 proj, glm::mat4 view);
+			void Calculate(Math::mat4 proj, Math::mat4 view);
 		public:
-			bool PointInside(glm::vec3 pos);
+			bool PointInside(Math::vec3 pos);
 			bool CubeInside(Physics::AABB& aabb);
 			bool CubeFullyInside(Physics::AABB& aabb);
-			bool SphereInside(glm::vec3 pos, float r);
+			bool SphereInside(Math::vec3 pos, float r);
 		};
 
 	}

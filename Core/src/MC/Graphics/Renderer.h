@@ -2,7 +2,7 @@
 #include "BlendValue.h"
 #include "DepthValue.h"
 
-#include <glm/glm.hpp>
+#include "Math/Math.h"
 
 namespace MC {
 	namespace Graphics {
@@ -12,8 +12,8 @@ namespace MC {
 			static void Enable(unsigned int func);
 			static void Disable(unsigned int func);
 		public:
-			static void ClearColor(glm::vec3 color);
-			static void Viewport(glm::ivec2 pos, glm::ivec2 size);
+			static void ClearColor(Math::vec3 color);
+			static void Viewport(Math::ivec2 pos, Math::ivec2 size);
 		public:
 			static void DepthFunc(const DepthValue& val);
 			static void BlendFunc(const BlendValue& sfactor, const BlendValue& dfactor);

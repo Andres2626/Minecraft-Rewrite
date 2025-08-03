@@ -5,7 +5,7 @@
 namespace MC {
 	namespace Physics {
 
-		AABB::AABB(const glm::vec3& p0, const glm::vec3& p1) 
+		AABB::AABB(const Math::vec3& p0, const Math::vec3& p1) 
 		{
 			this->p0 = p0;
 			this->p1 = p1;
@@ -17,10 +17,10 @@ namespace MC {
 
 		}
 
-		AABB AABB::Expand(const glm::vec3& pos) 
+		AABB AABB::Expand(const Math::vec3& pos) 
 		{
-			glm::vec3 _p0 = this->p0;
-			glm::vec3 _p1 = this->p1;
+			Math::vec3 _p0 = this->p0;
+			Math::vec3 _p1 = this->p1;
 
 			if (pos.x < 0.0f)
 				_p0.x += pos.x;
@@ -40,10 +40,10 @@ namespace MC {
 			return AABB(_p0, _p1);
 		}
 
-		AABB AABB::Grow(const glm::vec3& pos) 
+		AABB AABB::Grow(const Math::vec3& pos) 
 		{
-			glm::vec3 _p0 = this->p0 - pos;
-			glm::vec3 _p1 = this->p1 + pos;
+			Math::vec3 _p0 = this->p0 - pos;
+			Math::vec3 _p1 = this->p1 + pos;
 			return AABB(_p0, _p1);
 		}
 
@@ -122,7 +122,7 @@ namespace MC {
 			return x0 && x1 && y0 && y1 && z0 && z1;
 		}
 
-		void AABB::Move(const glm::vec3& pos) 
+		void AABB::Move(const Math::vec3& pos) 
 		{
 			this->p0 += pos;
 			this->p1 += pos;

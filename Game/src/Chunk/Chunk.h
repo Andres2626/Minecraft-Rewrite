@@ -8,16 +8,22 @@
 #include <Graphics/Buffers/IndexBuffer.h>
 #include <Graphics/Buffers/VertexArray.h>
 #include <Graphics/Buffers/VertexBuffer.h>
+#include <Math/Math.h>
 
 #include <vector>
+
+using namespace MC;
+using namespace Math;
+using namespace Graphics;
+using namespace Physics;
 
 class Level;
 
 class Chunk {
 protected:
-	std::unique_ptr<MC::Graphics::VertexArray> VAO;
-	std::unique_ptr<MC::Graphics::VertexBuffer> VBO;
-	std::unique_ptr<MC::Graphics::IndexBuffer> IBO;
+	std::unique_ptr<VertexArray> VAO;
+	std::unique_ptr<VertexBuffer> VBO;
+	std::unique_ptr<IndexBuffer> IBO;
 	Level* lev;
 public:
 	/* VBO buffer */
@@ -28,22 +34,22 @@ public:
 private:
 	/* Does the chunk have to be rebuilt? */
 	bool m_Dirty; 
-	glm::ivec3 pos;
-	MC::Physics::AABB box;
+	ivec3 pos;
+	AABB box;
 public:
-	Chunk(Level* level, const glm::ivec3& pos);
+	Chunk(Level* level, const ivec3& pos);
 	~Chunk();
 public:
 	/* calculate mesh */
 	void Build();
 
 	/* draw chunk */
-	void Render(MC::Graphics::Shader* shader) const;
+	void Render(Shader* shader) const;
 private:
-	void AddFace(const glm::vec3& fpos, Face f, Tile t);
+	void AddFace(const vec3& fpos, Face f, Tile t);
 public:
 	inline void SetDirty() { this->m_Dirty = true; }
 	inline bool GetDirty() { return this->m_Dirty; }
-	inline glm::ivec3 GetPosition() { return this->pos; }
-	inline MC::Physics::AABB GetBox() { return this->box; }
+	inline ivec3 GetPosition() { return this->pos; }
+	inline AABB GetBox() { return this->box; }
 };

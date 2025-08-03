@@ -10,16 +10,21 @@
 #include <Graphics/Renderer.h>
 #include <Graphics/Camera/Camera.h>
 
+using namespace MC;
+using namespace Graphics;
+using namespace Math;
+
 class Selector {
 private:
-	std::unique_ptr<MC::Graphics::VertexArray> VAO;
-	std::unique_ptr<MC::Graphics::VertexBuffer> VBO;
-	std::unique_ptr<MC::Graphics::IndexBuffer> IBO;
+	std::unique_ptr<VertexArray> VAO;
+	std::unique_ptr<VertexBuffer> VBO;
+	std::unique_ptr<IndexBuffer> IBO;
 	Hitresult m_Hit;
 public:
 	Selector();
 	~Selector();
 public:
 	void SetHit(const Hitresult& hit);
-	void Render(MC::Graphics::Camera& cam, MC::Graphics::Shader* shader, float millis);
+	void Render(Camera& cam, Shader* shader, float millis);
+	void RenderInternal();
 };

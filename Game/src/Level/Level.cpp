@@ -8,17 +8,17 @@
 
 #include <memory>
 
-Level::Level(const glm::ivec3& size)
+Level::Level(const ivec3& size)
 	: size(size), m_ChunkUpdates(0), m_LevelFile("level.dat")
 {
 	int v = size.x * size.y * size.z;
 
 	/* check valid level size */
-	MC_FATALCHK(v > 0, "Invalid level size.");
+	RD_FATAL_CHK(v > 0) << "Invalid level size.";
 
 	/* create level array */
 	this->blocks = (uint8_t*)malloc(v);
-	MC_FATALCHK(this->blocks, "alloc_blocks() memory error.");
+	RD_FATAL_CHK(this->blocks) << "alloc_blocks() memory error.";
 
 	/* check if level.dat exists in filesystem */
 	if (!this->Levelcheck()) {
@@ -57,26 +57,26 @@ Level::Level(const glm::ivec3& size)
 				this->chunks.emplace(
 					std::piecewise_construct,
 					std::forward_as_tuple(index),
-					std::forward_as_tuple(this, glm::ivec3{ cx, cy, cz })
+					std::forward_as_tuple(this, ivec3{ cx, cy, cz })
 				);
 			}
 		}
 	}
 }
 
-bool Level::IsSolidTile(glm::ivec3 pos)
+bool Level::IsSolidTile(ivec3 pos)
 {
 	return (pos.x >= 0) && (pos.y >= 0) && (pos.z >= 0) &&
 		(pos.x < this->size.x) && (pos.y < this->size.z) && (pos.z < this->size.y) &&
 		(this->blocks[this->GetBlockIndex(pos)]);
 }
 
-bool Level::IsLightBlocker(glm::ivec3 pos)
+bool Level::IsLightBlocker(ivec3 pos)
 {
 	return this->IsSolidTile(pos);
 }
 
-float Level::GetBrigthness(glm::ivec3 pos)
+float Level::GetBrigthness(ivec3 pos)
 {
 	/* if the block is out of bounds, mark the block as light */
 	if (pos.x < 0 || pos.y < 0 || pos.z < 0 ||
@@ -107,7 +107,7 @@ bool Level::Levelcheck()
 
 void Level::Save() 
 {
-	MC_INFO("Saving level.dat...");
+	RD_INFO << "Saving level.dat...";
 
 	int size = this->size.x * this->size.y * this->size.z;
 	std::string buff;
@@ -117,7 +117,7 @@ void Level::Save()
 
 	/* open level.dat for write buff */
 	std::ofstream dis(this->m_LevelFile, std::ios::out | std::ios::binary);
-	MC_FATALCHK(dis.is_open(), "Could not found level file: %s.", this->m_LevelFile);
+	RD_FATAL_CHK(dis.is_open()) <<  "Could not found level file: ", this->m_LevelFile;
 
 	/* write buff to level.dat and close */
 	dis.write(buff.data(), buff.size());
@@ -126,11 +126,11 @@ void Level::Save()
 
 void Level::Load() 
 {
-	MC_INFO("Loading level.dat...");
+	RD_INFO << "Loading level.dat...";
 
 	/* open level.dat */
 	std::ifstream dos(this->m_LevelFile, std::ios::in | std::ios::binary);
-	MC_FATALCHK(dos.is_open(), "Could not read level file: %s.", this->m_LevelFile);
+	RD_FATAL_CHK(dos.is_open()) << "Could not read level file: " << this->m_LevelFile;
 
 	/* read file (compressed) */
 	std::string compressed((std::istreambuf_iterator<char>(dos)), std::istreambuf_iterator<char>());
@@ -144,7 +144,7 @@ void Level::Load()
 	memcpy(this->blocks, decompressed.data(), expectedSize);
 }
 
-void Level::Render(MC::Graphics::Shader* shader, Player* player) 
+void Level::Render(Shader* shader, Player* player) 
 {
 	/* check if chunk is in camera frustum */
 	for (auto& n : this->chunks) {
@@ -154,7 +154,7 @@ void Level::Render(MC::Graphics::Shader* shader, Player* player)
 	}
 }
 
-void Level::SetTile(glm::ivec3 blockpos, int type) 
+void Level::SetTile(ivec3 blockpos, int type) 
 {
 	/* check if the block is out of level */
 	if (blockpos.x < 0 || blockpos.y < 0 || blockpos.z < 0 || 
@@ -171,11 +171,11 @@ void Level::SetTile(glm::ivec3 blockpos, int type)
 	this->blocks[index] = flag;
 
 	/* convert position to chunk position */
-	glm::ivec3 chunk = glm::floor(glm::vec3(blockpos) / (float)CHUNK_XYZ);
+	ivec3 chunk = floor(vec3(blockpos) / (float)CHUNK_XYZ);
 	int chunk_index = this->GetChunkIndex(chunk);
 
 	/* rebuild chunk array */
-	std::vector<glm::ivec3>().swap(this->ChunkUpdates);
+	std::vector<ivec3>().swap(this->ChunkUpdates);
 
 	/*
 	 * For obtain the CUPS (chunks updates per second) push all
@@ -183,17 +183,17 @@ void Level::SetTile(glm::ivec3 blockpos, int type)
 	 */
 	this->ChunkUpdates.push_back(chunk);
 	if (blockpos.x % 16 == 0)
-		this->ChunkUpdates.push_back(chunk + glm::ivec3(-1, 0, 0));
+		this->ChunkUpdates.push_back(chunk + ivec3(-1, 0, 0));
 	if (blockpos.x % 16 == 15)
-		this->ChunkUpdates.push_back(chunk + glm::ivec3(1, 0, 0));
+		this->ChunkUpdates.push_back(chunk + ivec3(1, 0, 0));
 	if (blockpos.y % 16 == 0)
-		this->ChunkUpdates.push_back(chunk + glm::ivec3(0, -1, 0));
+		this->ChunkUpdates.push_back(chunk + ivec3(0, -1, 0));
 	if (blockpos.y % 16 == 15)
-		this->ChunkUpdates.push_back(chunk + glm::ivec3(0, 1, 0));
+		this->ChunkUpdates.push_back(chunk + ivec3(0, 1, 0));
 	if (blockpos.z % 16 == 0)
-		this->ChunkUpdates.push_back(chunk + glm::ivec3(0, 0, -1));
+		this->ChunkUpdates.push_back(chunk + ivec3(0, 0, -1));
 	if (blockpos.z % 16 == 15)
-		this->ChunkUpdates.push_back(chunk + glm::ivec3(0, 0, 1));
+		this->ChunkUpdates.push_back(chunk + ivec3(0, 0, 1));
 
 	/* count chunk updates */
 	this->m_ChunkUpdates = this->ChunkUpdates.size();
@@ -220,11 +220,11 @@ void Level::SetTile(glm::ivec3 blockpos, int type)
 
 }
 
-std::vector<MC::Physics::AABB> Level::GetCubes(const MC::Physics::AABB& aabb) 
+std::vector<AABB> Level::GetCubes(const AABB& aabb) 
 {
-	std::vector <MC::Physics::AABB> aabbs;
-	glm::vec3 p0 = aabb.p0;
-	glm::vec3 p1 = aabb.p1 + 1.0f;
+	std::vector <AABB> aabbs;
+	vec3 p0 = aabb.p0;
+	vec3 p1 = aabb.p1 + 1.0f;
 	
 	if (p0.x < 0.0f)
 		p0.x = 0.0f;
@@ -249,7 +249,7 @@ std::vector<MC::Physics::AABB> Level::GetCubes(const MC::Physics::AABB& aabb)
 		for (int y3 = (int)p0.y; y3 < p1.y; ++y3) {
 			for (int z3 = (int)p0.z; z3 < p1.z; ++z3) {
 				if (this->IsSolidTile({ x3, y3, z3 })) {
-					aabbs.push_back(MC::Physics::AABB({ (float)x3, (float)y3, (float)z3 }, { (float)(x3 + 1), (float)(y3 + 1), (float)(z3 + 1) }));
+					aabbs.push_back(AABB({ (float)x3, (float)y3, (float)z3 }, { (float)(x3 + 1), (float)(y3 + 1), (float)(z3 + 1) }));
 				}
 			}
 		}
@@ -258,13 +258,13 @@ std::vector<MC::Physics::AABB> Level::GetCubes(const MC::Physics::AABB& aabb)
 	return aabbs;
 }
 
-int Level::GetChunkIndex(const glm::ivec3& chunk) 
+int Level::GetChunkIndex(const ivec3& chunk) 
 {
 	/* convert chunk position to chunk array */
 	return (chunk.y * CHUNK_XYZ + chunk.z) * CHUNK_XYZ + chunk.x;
 }
 
-int Level::GetBlockIndex(const glm::ivec3& block) 
+int Level::GetBlockIndex(const ivec3& block) 
 {
 	/* convert block position to position in level array */
 	return (block.y * this->size.y + block.z) * this->size.x + block.x;
