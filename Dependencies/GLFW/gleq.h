@@ -28,10 +28,12 @@
 
 #include <GLFW/glfw3.h>
 
+#if 0
 #ifdef GLEQ_STATIC
 #define GLEQDEF static
 #else
 #define GLEQDEF extern
+#endif
 #endif
 
 #ifdef __cplusplus
