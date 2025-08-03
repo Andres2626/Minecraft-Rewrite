@@ -2,33 +2,48 @@
 
 #include <Windows.h>
 
-static void set_default_font() 
-{
-	CONSOLE_FONT_INFOEX cfi;
-	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-	cfi.cbSize = sizeof(cfi);
-	cfi.nFont = 12;
-	cfi.dwFontSize.X = 7;
-	cfi.dwFontSize.Y = 12;
-	cfi.FontFamily = FF_DONTCARE;
-	cfi.FontWeight = FW_NORMAL;
-	wcscpy(cfi.FaceName, L"Lucida Console");
-	SetCurrentConsoleFontEx(h, FALSE, &cfi);
-}
+namespace MC {
 
-void mc_console_init() 
-{
-	SetConsoleOutputCP(CP_UTF8);
-	SetConsoleCP(CP_UTF8);
-	set_default_font();
-}
+	void Console::Init() 
+	{
+		SetConsoleOutputCP(CP_UTF8);
+		SetConsoleCP(CP_UTF8);
+		SetDefaultFont();
+	}
 
-void mc_console_fini() 
-{
-	/* not implemented */
-}
+	void Console::End()
+	{
+		/* not implemented */
+	}
 
-void mc_console_set_title(const char *title) 
-{
-	SetConsoleTitle((LPCSTR)title);
+	void Console::SetTitle(const char* title)
+	{
+		SetConsoleTitle((LPCSTR)title);
+	}
+
+	void Console::SetTextColor(int bG, int fG)
+	{
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, (bG << 4) | fG);
+	}
+
+	void Console::ResetTextColor()
+	{
+		SetTextColor(RD_CONSOLE_BLACK, RD_CONSOLE_INTENSITY);
+	}
+
+	void Console::SetDefaultFont()
+	{
+		CONSOLE_FONT_INFOEX cfi;
+		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+		cfi.cbSize = sizeof(cfi);
+		cfi.nFont = 12;
+		cfi.dwFontSize.X = 7;
+		cfi.dwFontSize.Y = 12;
+		cfi.FontFamily = FF_DONTCARE;
+		cfi.FontWeight = FW_NORMAL;
+		wcscpy(cfi.FaceName, L"Lucida Console");
+		SetCurrentConsoleFontEx(h, FALSE, &cfi);
+	}
+
 }
