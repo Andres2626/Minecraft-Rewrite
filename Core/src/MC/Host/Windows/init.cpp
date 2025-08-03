@@ -4,14 +4,16 @@
 #include <string.h>
 #include <locale>
 
-void mc_host_init(int argc, char **argv) 
-{
-	mc_console_init();
+namespace MC {
 
-	setlocale(LC_ALL, "");
-}
+	void Host::Init(int argc, char** argv) 
+	{
+		Console::Init();
+		setlocale(LC_ALL, "");
+	}
 
-void mc_host_fini() 
-{
-	mc_console_fini();
+	void Host::End()
+	{
+
+	}
 }

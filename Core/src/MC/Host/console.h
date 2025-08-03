@@ -1,10 +1,25 @@
 #pragma once
 #include "common.h"
 
-/* Initialize console subsystem */
-void RD_API mc_console_init();
+#define RD_CONSOLE_BLACK 0
+#define RD_CONSOLE_BLUE 1
+#define RD_CONSOLE_GREEN 2
+#define RD_CONSOLE_CYAN 3
+#define RD_CONSOLE_RED 4
+#define RD_CONSOLE_MAG 5
+#define RD_CONSOLE_YELLOW 6
+#define RD_CONSOLE_INTENSITY 7
 
-/* Finalize console subsystem */
-void RD_API mc_console_fini();
+namespace MC {
 
-void RD_API mc_console_set_title(const char* title);
+	class RD_API Console {
+	public:
+		static void Init();
+		static void End();
+		static void SetTitle(const char* title);
+		static void SetDefaultFont();
+		static void SetTextColor(int bG, int fG);
+		static void ResetTextColor();
+	};
+
+}
