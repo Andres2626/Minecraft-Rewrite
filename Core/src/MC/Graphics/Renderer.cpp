@@ -16,12 +16,12 @@ namespace MC {
 			glDisable(func);
 		}
 
-		void Renderer::ClearColor(glm::vec3 color) 
+		void Renderer::ClearColor(Math::vec3 color) 
 		{
 			glClearColor(color.x, color.y, color.z, 1.0f);
 		}
 
-		void Renderer::Viewport(glm::ivec2 pos, glm::ivec2 size) 
+		void Renderer::Viewport(Math::ivec2 pos, Math::ivec2 size) 
 		{
 			glViewport(pos.x, pos.y, size.x, size.y);
 		}

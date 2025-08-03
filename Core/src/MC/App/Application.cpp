@@ -19,7 +19,7 @@ namespace MC {
 
 		void Application::Init()
 		{
-			MC_INFO("Engine version: %s, code %i", RD_VERSION_STRING, RD_VERSION_NUMBER);
+			RD_INFO << "Engine version: " << RD_VERSION_STRING << ", code", RD_VERSION_NUMBER;
 			this->m_Win = new Window(this->m_Name.c_str(), this->m_Pr);
 			Input::Init();
 		}
@@ -38,7 +38,7 @@ namespace MC {
 
 		Layer::DefaultLayer* Application::PopLayer(Layer::DefaultLayer* layer)
 		{
-			for (int i = 0; i < this->m_LayerStack.size(); i++) {
+			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
 				if (this->m_LayerStack[i] == layer) {
 					this->m_LayerStack.erase(this->m_LayerStack.begin() + i);
 					break;
@@ -55,7 +55,7 @@ namespace MC {
 			this->Init();
 
 			/* Init layers */
-			for (int i = 0; i < this->m_LayerStack.size(); i++) {
+			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
 				if (m_LayerStack[i]->IsVisible())
 					m_LayerStack[i]->Init();
 			}
@@ -131,7 +131,7 @@ namespace MC {
 
 		void Application::OnUpdate(Utils::Timestep& ts)
 		{
-			for (int i = 0; i < this->m_LayerStack.size(); i++) {
+			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
 				if (m_LayerStack[i]->IsVisible())
 					m_LayerStack[i]->OnUpdate(ts);
 			}
@@ -139,7 +139,7 @@ namespace MC {
 
 		void Application::OnEvent(Events::Event& ev)
 		{
-			for (int i = 0; i < this->m_LayerStack.size(); i++) {
+			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
 				if (m_LayerStack[i]->IsVisible())
 					m_LayerStack[i]->OnEvent(ev);
 			}
@@ -147,7 +147,7 @@ namespace MC {
 
 		void Application::OnRender()
 		{
-			for (int i = 0; i < this->m_LayerStack.size(); i++) {
+			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
 				if (m_LayerStack[i]->IsVisible())
 					m_LayerStack[i]->OnRender();
 			}
@@ -155,14 +155,14 @@ namespace MC {
 
 		void Application::OnTick()
 		{
-			for (int i = 0; i < this->m_LayerStack.size(); i++) {
+			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
 				if (m_LayerStack[i]->IsVisible())
 					m_LayerStack[i]->OnTick();
 			}
 		}
 		void Application::OnSuspended()
 		{
-			for (int i = 0; i < this->m_LayerStack.size(); i++) {
+			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
 				if (m_LayerStack[i]->IsVisible())
 					m_LayerStack[i]->OnSuspended();
 			}

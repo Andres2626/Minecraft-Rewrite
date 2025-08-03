@@ -15,10 +15,11 @@ using namespace Physics;
 using namespace App;
 using namespace Events;
 using namespace Layer;
+using namespace Math;
 
 class Rubydung : public DefaultLayer {
 private:
-	glm::vec2 last;
+	vec2 last;
 	Shader* sh_chunk, * sh_sel;
 	Selector* py_sel;
 	Level* lev;
@@ -34,14 +35,14 @@ public:
 	~Rubydung();
 public:
 	void Init() override;
-	void OnUpdate(Utils::Timestep& ts) override;
+	void OnUpdate(Timestep& ts) override;
 	void OnKeyPressed(int key);
 	void OnCursorMoved(int& x, int& y);
-	void OnEvent(Events::Event& ev) override;
+	void OnEvent(Event& ev) override;
 	void OnRender() override;
 	void OnTick() override;
 	void OnSuspended() override;
 private:
-	bool Raycast(const glm::vec3& org, const glm::vec3 dir, Hitresult& ret);
+	bool Raycast(const vec3& org, const vec3& dir, Hitresult& ret);
 	void PlayerPick();
 };

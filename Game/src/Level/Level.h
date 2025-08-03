@@ -3,38 +3,43 @@
 
 #include <Physics/AABB.h>
 
+using namespace MC;
+using namespace Math;
+using namespace Physics;
+using namespace Graphics;
+
 class Chunk;
 
 class Level {
 public:
-	std::vector<glm::ivec3> ChunkUpdates;
+	std::vector<ivec3> ChunkUpdates;
 	std::unordered_map<int, Chunk> chunks;
 	std::string m_LevelFile;
 private:
 	int m_ChunkUpdates;
 public:
 	uint8_t* blocks;
-	glm::ivec3 size;
+	ivec3 size;
 public:
-	Level(const glm::ivec3& size);
+	Level(const ivec3& size);
 	~Level();
 public:
 	bool Levelcheck();
 	void Save();
 	void Load();
 public:
-	bool IsSolidTile(glm::ivec3 pos);
-	bool IsLightBlocker(glm::ivec3 pos);
-	float GetBrigthness(glm::ivec3 pos);
+	bool IsSolidTile(ivec3 pos);
+	bool IsLightBlocker(ivec3 pos);
+	float GetBrigthness(ivec3 pos);
 public:
-	void Render(MC::Graphics::Shader* shader, Player* player);
+	void Render(Shader* shader, Player* player);
 public:
-	void SetTile(glm::ivec3 blockpos, int type);
+	void SetTile(ivec3 blockpos, int type);
 public:
-	std::vector<MC::Physics::AABB> GetCubes(const MC::Physics::AABB& aabb);
+	std::vector<AABB> GetCubes(const AABB& aabb);
 public:
-	int GetChunkIndex(const glm::ivec3& block);
-	int GetBlockIndex(const glm::ivec3& block);
+	int GetChunkIndex(const ivec3& block);
+	int GetBlockIndex(const ivec3& block);
 public:
 	inline void RestartUpdates() { this->m_ChunkUpdates = 0; }
 	inline int GetUpdates() const { return this->m_ChunkUpdates; }

@@ -23,7 +23,7 @@ void Rubydung::Init()
 	DefaultLayer::Init();
 
 	if (!icon.LoadFromFile("assets/Internal/win_icon.png")) {
-		MC_FATAL("Error loading window icon.");
+		RD_FATAL << "Error loading window icon.";
 	}
 	this->InternalWindow.SetIcon(icon);
 	icon.Free();
@@ -48,10 +48,11 @@ void Rubydung::Init()
 	steve->cam.aspect = (float)props.x / (float)props.y;
 
 	/* load texture */
-	tex.LoadFromFile("assets/terrain.png", GL_NEAREST);
+	if (!tex.LoadFromFile("assets/terrain.png", GL_NEAREST)) 
+		RD_FATAL << "Error loading " << tex.path;
 }
 
-void Rubydung::OnUpdate(Utils::Timestep& ts) 
+void Rubydung::OnUpdate(Timestep& ts) 
 {
 	DefaultLayer::OnUpdate(ts);
 
@@ -80,15 +81,15 @@ void Rubydung::OnKeyPressed(int key)
 
 void Rubydung::OnCursorMoved(int& x, int& y) 
 {
-	glm::vec2 pos(x, y);
-	glm::vec2 offset(pos.x - last.x, last.y - pos.y);
+	vec2 pos(x, y);
+	vec2 offset(pos.x - last.x, last.y - pos.y);
 	last = pos;
 
 	/* player mouse handler */
 	steve->turn(offset);
 }
 
-void Rubydung::OnEvent(Events::Event& ev) 
+void Rubydung::OnEvent(Event& ev) 
 {
 	DefaultLayer::OnEvent(ev);
 
@@ -146,7 +147,7 @@ void Rubydung::OnTick()
 	DefaultLayer::OnTick();
 
 #if _DEBUG
-	MC_INFO("fps: %i ups: %i cups: %i", Application::GetInstance().GetFPS(), Application::GetInstance().GetUPS(), lev->GetUpdates());
+	RD_INFO << "fps: " << Application::GetInstance().GetFPS() << " ups: " << Application::GetInstance().GetUPS() << " cups: " << lev->GetUpdates();
 #else
 	printf("%i fps, %i\n", Application::GetInstance().GetFPS(), lev->GetUpdates());
 #endif
@@ -156,33 +157,33 @@ void Rubydung::OnSuspended() {
 	DefaultLayer::OnSuspended();
 }
 
-bool Rubydung::Raycast(const glm::vec3& org, const glm::vec3 dir, Hitresult& ret) 
+bool Rubydung::Raycast(const vec3& org, const vec3& dir, Hitresult& ret) 
 {
-	glm::vec3 d = dir;
-	glm::vec3 lpoint = org;
-	glm::ivec3 lblock = glm::floor(org);
+	vec3 d = dir;
+	vec3 lpoint = org;
+	ivec3 lblock = floor(org);
 	Ray camray;
 
 	for (float t = 0.0f; t < 5.0f; t += 0.1f) {
 		/* get point by parametric equation f(t) = dir * t + pos */
-		glm::vec3 equation = camray.GetRay(t, org, d);
+		vec3 equation = camray.GetRay(t, org, d);
 
 		/* impact block */
-		glm::ivec3 blockpos = glm::floor(equation);
+		ivec3 blockpos = floor(equation);
 
 		if (blockpos != lblock && lev->IsSolidTile(blockpos)) {
-			glm::ivec3 normal = lblock - blockpos;
+			ivec3 normal = lblock - blockpos;
 
 			/* obtain block face normal */
-			if (normal == glm::ivec3(0)) {
-				glm::vec3 ad = abs(d);
+			if (normal == ivec3(0)) {
+				vec3 ad = abs(d);
 
 				if (ad.x >= ad.y && ad.x >= ad.z)
-					normal = glm::ivec3((dir.x > 0) ? -1 : 1, 0, 0);
+					normal = ivec3((dir.x > 0) ? -1 : 1, 0, 0);
 				else if (ad.y >= ad.x && ad.y >= ad.z)
-					normal = glm::ivec3(0, (dir.y > 0) ? -1 : 1, 0);
+					normal = ivec3(0, (dir.y > 0) ? -1 : 1, 0);
 				else
-					normal = glm::ivec3(0, 0, (dir.z > 0) ? -1 : 1);
+					normal = ivec3(0, 0, (dir.z > 0) ? -1 : 1);
 			}
 
 			ret.block = blockpos;
@@ -204,8 +205,8 @@ bool Rubydung::Raycast(const glm::vec3& org, const glm::vec3 dir, Hitresult& ret
 void Rubydung::PlayerPick() 
 {
 	/* Obtain the vectors of parametric equation f(t) = ray * d + pos */
-	glm::vec3 ray = steve->cam.front;
-	glm::vec3 org = steve->cam.pos;
+	vec3 ray = steve->cam.front;
+	vec3 org = steve->cam.pos;
 
 	/* Result of the hit */
 	Hitresult ret;
@@ -222,7 +223,7 @@ void Rubydung::PlayerPick()
 		bool left = Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_1);
 		bool right = Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_2);
 
-		/* Avoid block spam */
+		/* Avoid click spam */
 		if (left && !last_mouse_left)
 			lev->SetTile(ret.block, 0); /* delete tile */
 

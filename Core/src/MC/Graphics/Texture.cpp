@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-#include "Utils/Util.h"
+#include "Log/Log.h"
 
 #include <stb_image.h>
 #include <glad\glad.h>
@@ -12,10 +12,8 @@ namespace MC {
 		{
 			this->SetFlip(true);
 
-			if (!Image::LoadFromFile(file)) {
-				MC_ERROR("Error loading texture file. %s", file);
+			if (!Image::LoadFromFile(file)) 
 				return false;
-			}
 
 			glGenTextures(1, &this->texture);
 			glBindTexture(GL_TEXTURE_2D, this->texture);

@@ -27,21 +27,21 @@
 Tile rock = Tile(ROCK);
 Tile grass = Tile(GRASS);
 
-Chunk::Chunk(Level* level, const glm::ivec3& pos)
+Chunk::Chunk(Level* level, const MC::Math::ivec3& pos)
    : lev(level), pos(pos), m_Dirty(true)
 {
 	this->lev = level;
 	this->m_Dirty = true;
 
 	/* build chunk box */
-	box = MC::Physics::AABB({ pos.x * CHUNK_XYZ, pos.y * CHUNK_XYZ, pos.z * CHUNK_XYZ }, 
-		                   { (pos.x * CHUNK_XYZ) + CHUNK_XYZ, (pos.y * CHUNK_XYZ) + CHUNK_XYZ, 
-		                     (pos.z * CHUNK_XYZ) + CHUNK_XYZ });
+	box = AABB({ pos.x * CHUNK_XYZ, pos.y * CHUNK_XYZ, pos.z * CHUNK_XYZ }, 
+		       { (pos.x * CHUNK_XYZ) + CHUNK_XYZ, (pos.y * CHUNK_XYZ) + CHUNK_XYZ, 
+		       (pos.z * CHUNK_XYZ) + CHUNK_XYZ });
 
 	/* create mesh buffers */
-	this->VAO = std::make_unique<MC::Graphics::VertexArray>();
-	this->VBO = std::make_unique<MC::Graphics::VertexBuffer>();
-	this->IBO = std::make_unique<MC::Graphics::IndexBuffer>();
+	this->VAO = std::make_unique<VertexArray>();
+	this->VBO = std::make_unique<VertexBuffer>();
+	this->IBO = std::make_unique<IndexBuffer>();
 
 	/* build buffer mesh */
 	this->Build();
@@ -71,8 +71,8 @@ void Chunk::Build()
 			for (int cz = 0;cz <= CHUNK_XYZ; cz++) {
 
 				/* convert chunk position to global position */
-				glm::ivec3 p((pos.x * CHUNK_XYZ) + cx, (pos.y * CHUNK_XYZ) + cy, 
-					         (pos.z * CHUNK_XYZ) + cz);
+				ivec3 p((pos.x * CHUNK_XYZ) + cx, (pos.y * CHUNK_XYZ) + cy, 
+					   (pos.z * CHUNK_XYZ) + cz);
 
 				
 				/* The top blocks of the chunk will always be grass (for now) */
@@ -124,9 +124,9 @@ void Chunk::Build()
 	 */
 	MC::Graphics::VertexLayout VL;
 
-	this->VAO.reset(new MC::Graphics::VertexArray());
-	this->VBO.reset(new MC::Graphics::VertexBuffer());
-	this->IBO.reset(new MC::Graphics::IndexBuffer());
+	this->VAO.reset(new VertexArray());
+	this->VBO.reset(new VertexBuffer());
+	this->IBO.reset(new IndexBuffer());
 	this->VBO->Build(vertices.size() * sizeof(float), vertices.data());
 	this->IBO->Build(indices.size() * sizeof(unsigned int), indices.data());
 	VL.AddAttribute(SHADER_VERTEX_BIT, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
@@ -139,10 +139,10 @@ void Chunk::Build()
 	this->m_Dirty = false;
 }
 
-void Chunk::Render(MC::Graphics::Shader* shader) const
+void Chunk::Render(Shader* shader) const
 {
 	/* push model matrix */
-	shader->Set4x4("s_M", glm::mat4(1.0f));
+	shader->Set4x4("s_M", mat4(1.0f));
 
 	/* 
 	 * DRAW PROCESS
@@ -151,11 +151,11 @@ void Chunk::Render(MC::Graphics::Shader* shader) const
 	 * shader (view assets/Shaders/chunk.shader)
 	 */
 	this->VAO->Bind();
-	MC::Graphics::Renderer::DrawElements(GL_TRIANGLES, IBO->GetSize());
+	Renderer::DrawElements(GL_TRIANGLES, IBO->GetSize());
 	this->VAO->Unbind();
 }
 
-void Chunk::AddFace(const glm::vec3& fpos, Face f, Tile t) 
+void Chunk::AddFace(const vec3& fpos, Face f, Tile t) 
 {
 	int count = this->vertices.size() / 6;
 

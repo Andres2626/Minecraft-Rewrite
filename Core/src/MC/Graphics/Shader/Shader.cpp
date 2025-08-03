@@ -49,7 +49,7 @@ namespace MC {
 			}
 		}
 
-		void Shader::SetVec2(const std::string& name, const glm::vec2& value) 
+		void Shader::SetVec2(const std::string& name, const Math::vec2& value) 
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -57,7 +57,7 @@ namespace MC {
 			}
 		}
 
-		void Shader::SetVec3(const std::string& name, const glm::vec3& value) 
+		void Shader::SetVec3(const std::string& name, const Math::vec3& value) 
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -65,7 +65,7 @@ namespace MC {
 			}
 		}
 
-		void Shader::SetVec4(const std::string& name, const glm::vec4& value) 
+		void Shader::SetVec4(const std::string& name, const Math::vec4& value) 
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -73,19 +73,19 @@ namespace MC {
 			}
 		}
 
-		void Shader::Set2x2(const std::string& name, const glm::mat2& value) 
+		void Shader::Set2x2(const std::string& name, const Math::mat2& value) 
 		{
 			int location = GetUniformLocation(name);
 			glUniformMatrix2fv(location, 1, GL_FALSE, (const float*)&value);
 		}
 
-		void Shader::Set3x3(const std::string& name, const glm::mat3& value) 
+		void Shader::Set3x3(const std::string& name, const Math::mat3& value) 
 		{
 			int location = GetUniformLocation(name);
 			glUniformMatrix3fv(location, 1, GL_FALSE, (const float*)&value);
 		}
 
-		void Shader::Set4x4(const std::string& name, const glm::mat4& value) 
+		void Shader::Set4x4(const std::string& name, const Math::mat4& value) 
 		{
 			int location = GetUniformLocation(name);
 			glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)&value);
@@ -97,9 +97,9 @@ namespace MC {
 			std::stringstream ss[2];
 			std::ifstream stream(path);
 
-			MC_ERRORCHK(stream, "Error opening Shader file. %s", path)
+			RD_FATAL_CHK(stream) << "Error opening Shader file. ", path;
 
-				enum class ShaderType {
+			enum class ShaderType {
 				UNKNOUN = -1, VERTEX = 0, FRAGMENT = 1
 			};
 
@@ -141,13 +141,13 @@ namespace MC {
 				glGetShaderInfoLog(id, len, &len, &error[0]);
 
 				if (type == GL_VERTEX_SHADER) {
-					MC_ERROR("Error to compile Vertex shader! deleting...\n");
+					RD_ERROR << "Error to compile Vertex shader! deleting...\n";
 				}
 				else if (type == GL_FRAGMENT_SHADER) {
-					MC_ERROR("Error to compile Fragment shader! deleting...\n");
+					RD_ERROR << "Error to compile Fragment shader! deleting...\n";
 				}
 				else {
-					MC_ERROR("Error to compile Unknoun shader! deleting...\n");
+					RD_ERROR << "Error to compile Unknoun shader! deleting...\n";
 				}
 
 				printf("%s", &error[0]);
@@ -180,7 +180,7 @@ namespace MC {
 			int location = glGetUniformLocation(m_ShaderID, name.c_str());
 #ifdef _DEBUG
 			if (location == -1) {
-				MC_DEBUG("Shader Location of: %s not found!, Skipping...\n", name.c_str());
+				RD_DEBUG << "Shader Location of: " << name.c_str() << " not found!, Skipping...\n";
 			}
 #endif
 			return location;

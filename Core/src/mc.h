@@ -25,6 +25,12 @@
 
 #include "Layer/DefaultLayer.h"
 
+#include "Log/Logger.h"
+#include "Log/LogLevel.h"
+#include "Log/LogMessage.h"
+
+#include "Math/Math.h"
+
 #include "Physics/AABB.h"
 
 #include "Utils/Timer.h"

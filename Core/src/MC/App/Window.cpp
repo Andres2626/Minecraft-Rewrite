@@ -3,7 +3,7 @@
 
 #include "Input.h"
 #include "Events/Event.h"
-#include "Utils/Util.h"
+#include "Log/Log.h"
 
 namespace MC {
 	namespace App {
@@ -11,7 +11,7 @@ namespace MC {
 		/* GLFW Error handler */
 		void ErrorCallback(int error, const char* msg) 
 		{
-			MC_FATAL("GLFW Error %i. %s", error, msg);
+			RD_FATAL << "GLFW Error" << error << ":"  << msg;
 		}
 
 		Window::Window(const char* title, const WindowProperties& properties)
@@ -52,14 +52,14 @@ namespace MC {
 
 			/* Create window via GLFW */
 			this->internal_window = glfwCreateWindow(this->w_pr.x, this->w_pr.y, this->m_Title, 0, 0);
-			MC_FATALCHK(this->internal_window, "Error initializing window");
+			RD_FATAL_CHK(this->internal_window) << "Error initializing window";
 			glfwMakeContextCurrent(this->internal_window);
 
 			/* Initialze event system */
 			gleqInit();
 			gleqTrackWindow(this->internal_window);
 
-			MC_FATALCHK(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Error initializing OpenGL");
+			RD_FATAL_CHK(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) << "Error initializing OpenGL";
 
 			if (this->w_pr.cursor.enable)
 				glfwSetInputMode(this->internal_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -67,9 +67,9 @@ namespace MC {
 				glfwSetInputMode(this->internal_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			}
 
-			MC_WARN("OpenGL Version: %s", glGetString(GL_VERSION));
-			MC_WARN("GPU type: %s", glGetString(GL_VENDOR));
-			MC_WARN("GPU name: %s", glGetString(GL_RENDERER));
+			RD_WARN << "OpenGL Version: " <<  glGetString(GL_VERSION);
+			RD_WARN << "GPU type: " << glGetString(GL_VENDOR);
+			RD_WARN << "GPU name: " << glGetString(GL_RENDERER);
 
 			return true;
 		}

@@ -3,7 +3,7 @@
 namespace MC {
 	namespace Utils {
 
-		Timer::Timer() 
+		Timer::Timer()
 		{
 			this->Reset();
 		}

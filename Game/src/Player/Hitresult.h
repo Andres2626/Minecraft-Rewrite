@@ -1,15 +1,18 @@
 #pragma once
-#include <glm/glm.hpp>
+#include <Math/Math.h>
+
+using namespace MC;
+using namespace Math;
 
 struct Hitresult {
 	/* impact block */
-	glm::ivec3 block;
+	ivec3 block;
 
 	/* normal of the face (impacted block) */
-	glm::ivec3 face;
+	ivec3 face;
 
 	/* point of ray collition */
-	glm::vec3 point;
+	vec3 point;
 
 	/* distance block to camera position */
 	float dis;
