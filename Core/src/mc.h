@@ -1,6 +1,7 @@
 #pragma once
 #include "App/Application.h"
 #include "App/Input.h"
+#include "App/InputDefs.h"
 #include "App/Window.h"
 
 #include "Events/Event.h"
@@ -23,7 +24,9 @@
 #include "Host/console.h"
 #include "Host/init.h"
 
-#include "Layer/DefaultLayer.h"
+#include "Layer/ILayer.h"
+#include "Layer/Stack.h"
+#include "Layer/Default.h"
 
 #include "Log/Logger.h"
 #include "Log/LogLevel.h"

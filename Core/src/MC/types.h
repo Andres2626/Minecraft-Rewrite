@@ -6,15 +6,15 @@
 #define NULL (void*)0
 #endif
 
-typedef int8_t int8;
-typedef int16_t int16;
-typedef int32_t int32;
-typedef int64_t int64;
+typedef int8_t rd_int8_t;
+typedef int16_t rd_int16_t;
+typedef int32_t rd_int32_t;
+typedef int64_t rd_int64_t;
 
-typedef uint8_t uint8;
-typedef uint16_t uint16;
-typedef uint32_t uint32;
-typedef uint64_t uint64;
+typedef uint8_t rd_uint8_t;
+typedef uint16_t rd_uint16_t;
+typedef uint32_t rd_uint32_t;
+typedef uint64_t rd_uint64_t;
 
-typedef std::string String;
-typedef size_t size;
+typedef std::string rd_str_t;
+typedef size_t rd_size_t;

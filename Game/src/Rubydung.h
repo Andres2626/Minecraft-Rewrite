@@ -17,7 +17,7 @@ using namespace Events;
 using namespace Layer;
 using namespace Math;
 
-class Rubydung : public DefaultLayer {
+class Rubydung : public Default {
 private:
 	vec2 last;
 	Shader* sh_chunk, * sh_sel;

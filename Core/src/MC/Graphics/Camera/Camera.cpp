@@ -3,7 +3,7 @@
 namespace MC {
 	namespace Graphics {
 
-		Camera::Camera(Math::vec3 pos)
+		Camera::Camera(const Math::vec3& pos)
 			: pos(pos), aspect(0.0f), near(0.0f), far(0.0f), fov(0.0f), rot(0.0f), front(0.0f)
 		{
 			right = Math::vec3(0.0f);

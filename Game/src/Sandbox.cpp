@@ -32,8 +32,9 @@ public:
 	}
 };
 
-int main(int argc, char** argv) {
-	Host::Init(argc, argv);
+int main(int argc, char** argv) 
+{
+	Host::Init(&argc, &argv);
 	Logger::SetLogLevel(LogLevel::MAX);
 
 #if defined (COUNTER_INTERFACE)
@@ -45,6 +46,7 @@ int main(int argc, char** argv) {
 
 	Game game;
 	game.Start();
+
 	Host::End();
 	return 0;
 }

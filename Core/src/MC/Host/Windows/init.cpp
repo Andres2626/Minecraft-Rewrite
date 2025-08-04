@@ -6,7 +6,7 @@
 
 namespace MC {
 
-	void Host::Init(int argc, char** argv) 
+	void Host::Init(int* argc, char*** argv) 
 	{
 		Console::Init();
 		setlocale(LC_ALL, "");

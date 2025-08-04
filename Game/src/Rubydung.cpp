@@ -20,7 +20,7 @@ Rubydung::~Rubydung()
 
 void Rubydung::Init() 
 {
-	DefaultLayer::Init();
+	Default::Init();
 
 	if (!icon.LoadFromFile("assets/Internal/win_icon.png")) {
 		RD_FATAL << "Error loading window icon.";
@@ -54,9 +54,9 @@ void Rubydung::Init()
 
 void Rubydung::OnUpdate(Timestep& ts) 
 {
-	DefaultLayer::OnUpdate(ts);
+	Default::OnUpdate(ts);
 
-	if (Input::IsKeyPressed(GLFW_KEY_ESCAPE)) {
+	if (Input::IsKeyPressed(RD_KEY_ESCAPE)) {
 		lev->Save();
 		Application::GetInstance().Stop();
 	}
@@ -67,11 +67,11 @@ void Rubydung::OnUpdate(Timestep& ts)
 void Rubydung::OnKeyPressed(int key) 
 {
 	switch (key) {
-	case GLFW_KEY_ESCAPE:
+	case RD_KEY_ESCAPE:
 		lev->Save();
 		Application::GetInstance().Stop();
 		break;
-	case GLFW_KEY_ENTER:
+	case RD_KEY_ENTER:
 		lev->Save();
 		break;
 	default:
@@ -91,7 +91,7 @@ void Rubydung::OnCursorMoved(int& x, int& y)
 
 void Rubydung::OnEvent(Event& ev) 
 {
-	DefaultLayer::OnEvent(ev);
+	Default::OnEvent(ev);
 
 	while (InternalWindow.GetEvent(ev)) {
 		Input::ProcessEvent(ev);
@@ -114,7 +114,7 @@ void Rubydung::OnEvent(Event& ev)
 
 void Rubydung::OnRender() 
 {
-	DefaultLayer::OnRender();
+	Default::OnRender();
 
 	/* GAME RENDER MAIN PROCESS:
 	 * -- Enable chunk shader
@@ -144,7 +144,7 @@ void Rubydung::OnRender()
 
 void Rubydung::OnTick() 
 {
-	DefaultLayer::OnTick();
+	Default::OnTick();
 
 #if _DEBUG
 	RD_INFO << "fps: " << Application::GetInstance().GetFPS() << " ups: " << Application::GetInstance().GetUPS() << " cups: " << lev->GetUpdates();
@@ -154,7 +154,7 @@ void Rubydung::OnTick()
 }
 
 void Rubydung::OnSuspended() {
-	DefaultLayer::OnSuspended();
+	Default::OnSuspended();
 }
 
 bool Rubydung::Raycast(const vec3& org, const vec3& dir, Hitresult& ret) 
@@ -220,8 +220,8 @@ void Rubydung::PlayerPick()
 		py_sel->Render(steve->cam, sh_sel, tm->ElapsedMillis());
 
 		/* Get mouse button status */
-		bool left = Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_1);
-		bool right = Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_2);
+		bool left = Input::IsMouseButtonPressed(RD_MOUSE_BUTTON_1);
+		bool right = Input::IsMouseButtonPressed(RD_MOUSE_BUTTON_2);
 
 		/* Avoid click spam */
 		if (left && !last_mouse_left)

@@ -98,18 +98,18 @@ void Player::tick()
 {
 	vec2 a(0.0f, 0.0f);
 
-	/* TODO: Make the window independent of the player */
-	if (Input::IsKeyPressed(GLFW_KEY_R))
+	/* DONE: Make the window independent of the player */
+	if (Input::IsKeyPressed(RD_KEY_R))
 		this->ResetPos();
-	if (Input::IsKeyPressed(GLFW_KEY_W))
+	if (Input::IsKeyPressed(RD_KEY_W))
 		a.x++;
-	if (Input::IsKeyPressed(GLFW_KEY_S))
+	if (Input::IsKeyPressed(RD_KEY_S))
 		a.x--;
-	if (Input::IsKeyPressed(GLFW_KEY_A))
+	if (Input::IsKeyPressed(RD_KEY_A))
 		a.y--;
-	if (Input::IsKeyPressed(GLFW_KEY_D))
+	if (Input::IsKeyPressed(RD_KEY_D))
 		a.y++;
-	if (Input::IsKeyPressed(GLFW_KEY_SPACE) && this->m_Ground)
+	if (Input::IsKeyPressed(RD_KEY_SPACE) && this->m_Ground)
 		this->movdelta.y = 0.12f;
 
 	float hspeed = this->m_Ground ? 0.02f : 0.005f;
