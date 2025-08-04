@@ -36,6 +36,7 @@ TODO LIST
 - Geometry shader support.
 - Create engine manual.
 - Performace and stability
-  * Engine and game
-  * There will always be this
-- Improve Camera Ray Algorithm
+  * Engine and game.
+  * There will always be this.
+- Improve Camera Ray Algorithm.
+- Insert argument parser in the engine.
