@@ -1,5 +1,8 @@
 #pragma once
 #include "common.h"
+
+#include "InputDefs.h"
+
 #include "Events/Event.h"
 
 #define RD_MAX_KEYS 349

@@ -103,6 +103,7 @@ namespace MC {
 				if (max < z)
 					z = max;
 			}
+
 			if (z < 0.0f && other.p0.z >= this->p1.z) {
 				float max = this->p1.z - other.p0.z + this->epsilon;
 				if (max > z)

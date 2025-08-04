@@ -4,9 +4,9 @@
 namespace MC {
 	namespace App {
 
-		static Application* m_Instance;
+		static Application* m_Instance = nullptr;
 
-		Application::Application(const std::string& name, const WindowProperties& pr)
+		Application::Application(const rd_str_t& name, const WindowProperties& pr)
 			: m_FPS(0), m_UPS(0), m_FrameTime(0.0f), m_Name(name), m_Pr(pr), m_Running(false), m_Suspended(false)
 		{
 			m_Instance = this;
@@ -20,31 +20,24 @@ namespace MC {
 		void Application::Init()
 		{
 			RD_INFO << "Engine version: " << RD_VERSION_STRING << ", code", RD_VERSION_NUMBER;
+
 			this->m_Win = new Window(this->m_Name.c_str(), this->m_Pr);
 			Input::Init();
 		}
 
-		void Application::PushLayer(Layer::DefaultLayer* layer)
+		void Application::PushLayer(Layer::ILayer* layer)
 		{
-			this->m_LayerStack.push_back(layer);
+			this->m_LayerStack.PushLayer(layer);
 		}
 
-		Layer::DefaultLayer* Application::PopLayer()
+		Layer::ILayer* Application::PopLayer()
 		{
-			Layer::DefaultLayer* layer = this->m_LayerStack.back();
-			m_LayerStack.pop_back();
-			return layer;
+			return this->m_LayerStack.PopLayer();
 		}
 
-		Layer::DefaultLayer* Application::PopLayer(Layer::DefaultLayer* layer)
+		Layer::ILayer* Application::PopLayer(Layer::ILayer* layer)
 		{
-			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
-				if (this->m_LayerStack[i] == layer) {
-					this->m_LayerStack.erase(this->m_LayerStack.begin() + i);
-					break;
-				}
-			}
-			return layer;
+			return this->m_LayerStack.PopLayer(layer);
 		}
 
 		void Application::Start()
@@ -53,13 +46,7 @@ namespace MC {
 			this->m_Suspended = false;
 
 			this->Init();
-
-			/* Init layers */
-			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
-				if (m_LayerStack[i]->IsVisible())
-					m_LayerStack[i]->Init();
-			}
-
+			this->m_LayerStack.Init();
 			this->Run();
 		}
 
@@ -131,44 +118,31 @@ namespace MC {
 
 		void Application::OnUpdate(Utils::Timestep& ts)
 		{
-			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
-				if (m_LayerStack[i]->IsVisible())
-					m_LayerStack[i]->OnUpdate(ts);
-			}
+			this->m_LayerStack.OnUpdate(ts);
 		}
 
 		void Application::OnEvent(Events::Event& ev)
 		{
-			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
-				if (m_LayerStack[i]->IsVisible())
-					m_LayerStack[i]->OnEvent(ev);
-			}
+			this->m_LayerStack.OnEvent(ev);
 		}
 
 		void Application::OnRender()
 		{
-			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
-				if (m_LayerStack[i]->IsVisible())
-					m_LayerStack[i]->OnRender();
-			}
+			this->m_LayerStack.OnRender();
 		}
 
 		void Application::OnTick()
 		{
-			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
-				if (m_LayerStack[i]->IsVisible())
-					m_LayerStack[i]->OnTick();
-			}
-		}
-		void Application::OnSuspended()
-		{
-			for (size_t i = 0; i < this->m_LayerStack.size(); i++) {
-				if (m_LayerStack[i]->IsVisible())
-					m_LayerStack[i]->OnSuspended();
-			}
+			this->m_LayerStack.OnTick();
 		}
 
-		Application& Application::GetInstance() {
+		void Application::OnSuspended()
+		{
+			this->m_LayerStack.OnSuspended();
+		}
+
+		Application& Application::GetInstance() 
+		{
 			return *m_Instance;
 		}
 	}
