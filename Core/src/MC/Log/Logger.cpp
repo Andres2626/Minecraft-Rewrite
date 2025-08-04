@@ -62,22 +62,22 @@ namespace MC {
 		switch (m_LineLevel)
 		{
 		case LogLevel::INFO:
-			Print(RD_CONSOLE_BLACK, RD_CONSOLE_BLUE, "Info");
+			Print(MC_CONSOLE_BLACK, MC_CONSOLE_BLUE, "Info");
 			break;
 		case LogLevel::WARN:
-			Print(RD_CONSOLE_BLACK, RD_CONSOLE_YELLOW, "WARN");
+			Print(MC_CONSOLE_BLACK, MC_CONSOLE_YELLOW, "WARN");
 			break;
 		case LogLevel::ERROR:
-			Print(RD_CONSOLE_BLACK, RD_CONSOLE_RED, "ERROR");
+			Print(MC_CONSOLE_BLACK, MC_CONSOLE_RED, "ERROR");
 			break;
 		case LogLevel::FATAL:
-			Print(RD_CONSOLE_RED, RD_CONSOLE_INTENSITY, "FATAL");
+			Print(MC_CONSOLE_RED, MC_CONSOLE_INTENSITY, "FATAL");
 			break;
 		case LogLevel::DEBUG:
-			Print(RD_CONSOLE_BLACK, RD_CONSOLE_GREEN, "Debug");
+			Print(MC_CONSOLE_BLACK, MC_CONSOLE_GREEN, "Debug");
 			break;
 		case LogLevel::TRACE:
-			Print(RD_CONSOLE_CYAN + 8, RD_CONSOLE_INTENSITY, "TRACE");
+			Print(MC_CONSOLE_CYAN + 8, MC_CONSOLE_INTENSITY, "TRACE");
 			break;
 		}
 

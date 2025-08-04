@@ -8,7 +8,7 @@ namespace MC {
 
 	namespace Layer {
 
-		class RD_API ILayer {
+		class MC_API ILayer {
 		private:
 			bool m_Visible;
 		public:

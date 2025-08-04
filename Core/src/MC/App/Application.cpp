@@ -19,7 +19,7 @@ namespace MC {
 
 		void Application::Init()
 		{
-			RD_INFO << "Engine version: " << RD_VERSION_STRING << ", code", RD_VERSION_NUMBER;
+			MC_INFO << "Engine version: " << MC_VERSION_STRING << ", code", MC_VERSION_NUMBER;
 
 			this->m_Win = new Window(this->m_Name.c_str(), this->m_Pr);
 			Input::Init();

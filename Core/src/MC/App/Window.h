@@ -16,7 +16,7 @@ namespace MC {
 
 		/* This struct is used when window class is initialized.
 		have some properties of window*/
-		struct RD_API WindowProperties {
+		struct MC_API WindowProperties {
 			int x; /* width */
 			int y; /* height */
 
@@ -34,7 +34,7 @@ namespace MC {
 			} context;
 		};
 
-		class RD_API Window {
+		class MC_API Window {
 		public:
 			bool IsInititialized;
 		private:

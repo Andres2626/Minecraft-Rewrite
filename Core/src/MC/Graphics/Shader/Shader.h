@@ -10,12 +10,12 @@
 namespace MC {
 	namespace Graphics {
 
-		struct RD_API ShaderSources {
+		struct MC_API ShaderSources {
 			std::string Vertex;
 			std::string Fragment;
 		};
 
-		class RD_API Shader {
+		class MC_API Shader {
 		private:
 			GLuint m_ShaderID;
 			std::string m_Path;

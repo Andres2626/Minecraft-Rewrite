@@ -5,7 +5,7 @@
 namespace MC {
 	namespace Graphics {
 
-		class RD_API Ray {
+		class MC_API Ray {
 		public:
 			Ray() = default;
 			~Ray() = default;

@@ -29,7 +29,7 @@ namespace MC {
 
 	void Console::ResetTextColor()
 	{
-		SetTextColor(RD_CONSOLE_BLACK, RD_CONSOLE_INTENSITY);
+		SetTextColor(MC_CONSOLE_BLACK, MC_CONSOLE_INTENSITY);
 	}
 
 	void Console::SetDefaultFont()

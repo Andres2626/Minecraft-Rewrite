@@ -20,7 +20,7 @@ namespace MC {
 
 	void internal_breakpoint()
 	{
-		RD_INTERNAL_BREAK_POINT;
+		MC_INTERNAL_BREAK_POINT;
 	}
 
 }

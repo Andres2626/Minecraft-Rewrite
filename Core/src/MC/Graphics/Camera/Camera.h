@@ -7,7 +7,7 @@
 namespace MC {
 	namespace Graphics {
 
-		class RD_API Camera {
+		class MC_API Camera {
 		protected:
 			Frustum* fr;
 		public:

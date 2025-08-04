@@ -6,7 +6,7 @@
 namespace MC {
 	namespace Graphics {
 
-		struct RD_API VertexAttrib {
+		struct MC_API VertexAttrib {
 			GLuint index; // shader bit (view Shaderflags.h)
 			GLint size; // dimension of data
 			GLenum type; // type of data
@@ -15,7 +15,7 @@ namespace MC {
 			GLboolean normalized;
 		};
 
-		class RD_API VertexLayout {
+		class MC_API VertexLayout {
 		private:
 			std::vector<VertexAttrib> m_Attribs;
 		public:

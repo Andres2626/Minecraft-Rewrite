@@ -6,7 +6,7 @@
 namespace MC {
 	namespace Layer {
 
-		class RD_API Default : public ILayer {
+		class MC_API Default : public ILayer {
 		public:
 			Default();
 			~Default();

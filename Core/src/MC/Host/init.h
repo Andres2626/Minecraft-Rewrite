@@ -3,7 +3,7 @@
 
 namespace MC {
 
-	class RD_API Host {
+	class MC_API Host {
 	public:
 		static void Init(int* argc, char*** argv);
 		static void End();
