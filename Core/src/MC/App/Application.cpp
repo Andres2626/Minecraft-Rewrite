@@ -1,8 +1,10 @@
 #include "App/Application.h"
 #include "Input.h"
 
-namespace MC {
-	namespace App {
+namespace MC 
+{
+	namespace App 
+	{
 
 		static Application* m_Instance = nullptr;
 

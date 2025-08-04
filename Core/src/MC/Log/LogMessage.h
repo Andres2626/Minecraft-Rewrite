@@ -4,9 +4,11 @@
 
 #include "common.h"
 
-namespace MC {
+namespace MC 
+{
 
-	class MC_API LogMessage {
+	class MC_API LogMessage 
+	{
 	public:
 		LogLevel m_Lev;
 		const char *m_File, *m_Func;

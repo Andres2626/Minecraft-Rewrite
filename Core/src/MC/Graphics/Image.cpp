@@ -4,16 +4,20 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-namespace MC {
-	namespace Graphics {
+namespace MC 
+{
+	namespace Graphics 
+	{
 
 		Image::Image()
 			: x(0), y(0), nr_channels(0), pixels(0), path(0)
 		{
+
 		}
 
 		Image::~Image()
 		{
+
 		}
 
 		void Image::SetFlip(bool flip)
@@ -23,15 +27,15 @@ namespace MC {
 
 		bool Image::LoadFromFile(const char* path)
 		{
-			this->pixels = stbi_load(path, &this->x, &this->y, &this->nr_channels, 0);
-			if (!this->pixels)
+			pixels = stbi_load(path, &x, &y, &nr_channels, 0);
+			if (!pixels)
 				return false;
 			return true;
 		}
 
 		void Image::Free()
 		{
-			stbi_image_free(this->pixels);
+			stbi_image_free(pixels);
 		}
 	}
 }

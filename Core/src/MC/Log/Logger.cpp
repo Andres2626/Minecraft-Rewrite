@@ -3,7 +3,8 @@
 
 #include <ctime>
 
-namespace MC {
+namespace MC 
+{
 	
 	LogLevel Logger::m_Level;
 	LogLevel Logger::m_LineLevel;

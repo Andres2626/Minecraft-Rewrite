@@ -2,9 +2,10 @@
 
 #define CHECK_KEY(x, max) x >= 0 && x <= max
 
-namespace MC {
-	namespace App {
-
+namespace MC 
+{
+	namespace App 
+	{
 		bool Input::m_Keys[MC_MAX_KEYS];
 		bool Input::m_Buttons[MC_MAX_BUTTONS];
 		double Input::m_X = 0.0;

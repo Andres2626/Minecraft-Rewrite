@@ -4,7 +4,8 @@
 
 #include <stdarg.h>
 
-namespace MC {
+namespace MC 
+{
 
 	int internal_printf(const char* fmt, ...)
 	{

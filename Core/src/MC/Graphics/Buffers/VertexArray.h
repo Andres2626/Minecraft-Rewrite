@@ -2,14 +2,15 @@
 #include "common.h"
 #include "VertexLayout.h"
 
-#include <glad/glad.h>
-
-namespace MC {
-	namespace Graphics {
+namespace MC 
+{
+	namespace Graphics 
+	{
 		
-		class MC_API VertexArray {
+		class MC_API VertexArray 
+		{
 		private:
-			GLuint m_ID;
+			rd_uint8_t m_ID;
 		public:
 			VertexArray();
 			~VertexArray();
@@ -19,7 +20,7 @@ namespace MC {
 		public:
 			void Link(const VertexLayout& layout) const;
 		public:
-			inline GLuint GetId() { return this->m_ID; }
+			inline rd_int8_t GetId() { return this->m_ID; }
 		};
 
 	}

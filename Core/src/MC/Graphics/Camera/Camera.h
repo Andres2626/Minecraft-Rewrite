@@ -4,8 +4,10 @@
 #include "Math/Math.h"
 #include "Physics/AABB.h"
 
-namespace MC {
-	namespace Graphics {
+namespace MC 
+{
+	namespace Graphics 
+	{
 
 		class MC_API Camera {
 		protected:
@@ -13,9 +15,12 @@ namespace MC {
 		public:
 			Math::vec3 pos;
 			Math::vec2 rot;
-			Math::vec3 front, up, right;
+			Math::vec3 front;
+			Math::vec3 up;
+			Math::vec3 right;
 			float aspect;
-			float near, far;
+			float near;
+			float far;
 			float fov;
 		public:
 			/* build camera */

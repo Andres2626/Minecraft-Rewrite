@@ -1,13 +1,16 @@
 #pragma once
-#include "..\common.h"
+#include "common.h"
+
 #include "Image.h"
 
-namespace MC {
-	namespace Graphics {
+namespace MC 
+{
+	namespace Graphics 
+	{
 
 		class MC_API Texture : public Image {
 		public:
-			unsigned int texture;
+			rd_uint8_t m_ID;
 		public:
 			Texture() = default;
 			~Texture() = default;

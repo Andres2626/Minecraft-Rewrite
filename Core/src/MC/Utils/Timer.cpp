@@ -1,7 +1,9 @@
 #include "Timer.h"
 
-namespace MC {
-	namespace Utils {
+namespace MC 
+{
+	namespace Utils 
+	{
 
 		Timer::Timer()
 		{

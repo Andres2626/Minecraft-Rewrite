@@ -3,10 +3,13 @@
 
 #include "ILayer.h"
 
-namespace MC {
-	namespace Layer {
+namespace MC 
+{
+	namespace Layer 
+	{
 
-		class MC_API Default : public ILayer {
+		class MC_API Default : public ILayer 
+		{
 		public:
 			Default();
 			~Default();

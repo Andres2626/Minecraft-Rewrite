@@ -6,10 +6,12 @@
 #include "Log/Log.h"
 #include "Utils/Timer.h"
 
-namespace MC {
-	namespace App {
-
-		class MC_API Application : public Layer::ILayer {
+namespace MC 
+{
+	namespace App 
+	{
+		class MC_API Application : public Layer::ILayer 
+		{
 		protected:
 			Window* m_Win;
 		private:

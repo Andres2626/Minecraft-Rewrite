@@ -2,7 +2,8 @@
 
 #include <Windows.h>
 
-namespace MC {
+namespace MC 
+{
 
 	void Console::Init() 
 	{

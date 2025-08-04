@@ -6,27 +6,31 @@
 #include <GLFW/glfw3.h>
 
 /* from GLFW.h */
-
 #define CONTEXT_ANY_PROFILE 0 /* supported in any GL version */
 #define CONTEXT_CORE_PROFILE 0x00032001 /* supported in GL versions >=3.2 */
 #define CONTEXT_COMPAT_PROFILE 0x00032002 /* supported in GL versions >=3.2 */
 
-namespace MC {
-	namespace App {
+namespace MC 
+{
+	namespace App 
+	{
 
 		/* This struct is used when window class is initialized.
 		have some properties of window*/
-		struct MC_API WindowProperties {
+		struct MC_API WindowProperties 
+		{
 			int x; /* width */
 			int y; /* height */
 
 			/* Cursor properties */
-			struct {
+			struct 
+			{
 				bool enable;
 			} cursor;
 
 			/* OpenGL context */
-			struct {
+			struct 
+			{
 				int profile;
 				int ver_major;
 				int ver_minor;
@@ -34,16 +38,16 @@ namespace MC {
 			} context;
 		};
 
-		class MC_API Window {
-		public:
-			bool IsInititialized;
+		class MC_API Window 
+		{
 		private:
-			WindowProperties w_pr;
-			const char* m_Title;
-			GLFWwindow* internal_window; /* OpenGL window */
+			bool m_Init;
+			WindowProperties m_Pr;
+			rd_str_t m_Title;
+			GLFWwindow* m_Win; /* OpenGL window */
 		public:
 			/* Initializes and create window */
-			Window(const char* title, const WindowProperties& properties);
+			Window(const rd_str_t& title, const WindowProperties& properties);
 			~Window();
 		private:
 			/* returns FALSE in case of error */
@@ -60,8 +64,8 @@ namespace MC {
 		public:
 			void SetIcon(const Graphics::Image& img);
 		public:
-			inline WindowProperties& GetProps() { return this->w_pr; }
-			inline GLFWwindow* GetWindow() { return this->internal_window; };
+			inline WindowProperties& GetProps() { return this->m_Pr; }
+			inline GLFWwindow* GetWindow() { return this->m_Win; };
 		};
 
 	}

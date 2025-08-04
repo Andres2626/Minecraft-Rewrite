@@ -8,10 +8,13 @@
 #define MC_MAX_KEYS 349
 #define MC_MAX_BUTTONS 9
 
-namespace MC {
-	namespace App {
+namespace MC 
+{
+	namespace App 
+	{
 		
-		class MC_API Input {
+		class MC_API Input 
+		{
 		private:
 			static bool m_Keys[MC_MAX_KEYS];
 			static bool m_Buttons[MC_MAX_BUTTONS];

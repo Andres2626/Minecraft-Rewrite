@@ -1,9 +1,13 @@
 #include "Shader.h"
 
-namespace MC {
-	namespace Graphics {
+#include <glad/glad.h>
 
-		Shader::Shader(std::string filepath)
+namespace MC 
+{
+	namespace Graphics 
+	{
+
+		Shader::Shader(const rd_str_t& filepath)
 			: m_Path(filepath) 
 		{
 			ShaderSources shaders = ParseFromFile(filepath);
@@ -25,7 +29,7 @@ namespace MC {
 			glUseProgram(0);
 		}
 
-		void Shader::SetBool(const std::string& name, bool value) 
+		void Shader::SetBool(const rd_str_t& name, bool value) 
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -33,7 +37,7 @@ namespace MC {
 			}
 		}
 
-		void Shader::SetInt(const std::string& name, int value) 
+		void Shader::SetInt(const rd_str_t& name, int value) 
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -41,7 +45,7 @@ namespace MC {
 			}
 		}
 
-		void Shader::SetFloat(const std::string& name, float value) 
+		void Shader::SetFloat(const rd_str_t& name, float value) 
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -49,7 +53,7 @@ namespace MC {
 			}
 		}
 
-		void Shader::SetVec2(const std::string& name, const Math::vec2& value) 
+		void Shader::SetVec2(const rd_str_t& name, const Math::vec2& value) 
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -57,7 +61,7 @@ namespace MC {
 			}
 		}
 
-		void Shader::SetVec3(const std::string& name, const Math::vec3& value) 
+		void Shader::SetVec3(const rd_str_t& name, const Math::vec3& value) 
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -65,7 +69,7 @@ namespace MC {
 			}
 		}
 
-		void Shader::SetVec4(const std::string& name, const Math::vec4& value) 
+		void Shader::SetVec4(const rd_str_t& name, const Math::vec4& value) 
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -73,46 +77,46 @@ namespace MC {
 			}
 		}
 
-		void Shader::Set2x2(const std::string& name, const Math::mat2& value) 
+		void Shader::Set2x2(const rd_str_t& name, const Math::mat2& value) 
 		{
 			int location = GetUniformLocation(name);
 			glUniformMatrix2fv(location, 1, GL_FALSE, (const float*)&value);
 		}
 
-		void Shader::Set3x3(const std::string& name, const Math::mat3& value) 
+		void Shader::Set3x3(const rd_str_t& name, const Math::mat3& value) 
 		{
 			int location = GetUniformLocation(name);
 			glUniformMatrix3fv(location, 1, GL_FALSE, (const float*)&value);
 		}
 
-		void Shader::Set4x4(const std::string& name, const Math::mat4& value) 
+		void Shader::Set4x4(const rd_str_t& name, const Math::mat4& value) 
 		{
 			int location = GetUniformLocation(name);
 			glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)&value);
 		}
 
-		ShaderSources Shader::ParseFromFile(const std::string& path) 
+		ShaderSources Shader::ParseFromFile(const rd_str_t& path) 
 		{
-			std::string line;
+			rd_str_t line;
 			std::stringstream ss[2];
 			std::ifstream stream(path);
 
-			MC_FATAL_CHK(stream) << "Error opening Shader file. ", path;
+			if (!stream) 
+				MC_FATAL << "Failed to open shader file \"" << path << "\"";
 
-			enum class ShaderType {
+			enum class ShaderType 
+			{
 				UNKNOUN = -1, VERTEX = 0, FRAGMENT = 1
 			};
 
 			ShaderType type = ShaderType::UNKNOUN;
 
 			while (getline(stream, line)) {
-				if (line.find("#shader") != std::string::npos) {
-					if (line.find("vertex") != std::string::npos) {
+				if (line.find("#shader") != rd_str_t::npos) {
+					if (line.find("vertex") != rd_str_t::npos)
 						type = ShaderType::VERTEX;
-					}
-					else if (line.find("fragment") != std::string::npos) {
+					else if (line.find("fragment") != rd_str_t::npos)
 						type = ShaderType::FRAGMENT;
-					}
 				}
 				else {
 					ss[(int)type] << line << "\n";
@@ -125,7 +129,7 @@ namespace MC {
 			};
 		}
 
-		GLuint Shader::Load(GLuint type, const std::string& source) 
+		rd_uint8_t Shader::Load(rd_uint8_t type, const rd_str_t& source)
 		{
 			int result = GL_FALSE;
 			unsigned int id = glCreateShader(type);
@@ -140,14 +144,16 @@ namespace MC {
 				std::vector<char> error(len);
 				glGetShaderInfoLog(id, len, &len, &error[0]);
 
-				if (type == GL_VERTEX_SHADER) {
-					MC_ERROR << "Error to compile Vertex shader! deleting...\n";
-				}
-				else if (type == GL_FRAGMENT_SHADER) {
-					MC_ERROR << "Error to compile Fragment shader! deleting...\n";
-				}
-				else {
-					MC_ERROR << "Error to compile Unknoun shader! deleting...\n";
+				switch (type) {
+				case GL_VERTEX_SHADER:
+					MC_ERROR << "Vertex shader error! deleting...\n";
+					break;
+				case GL_FRAGMENT_SHADER:
+					MC_ERROR << "Fragment shader error! deleting...\n";
+					break;
+				default:
+					MC_ERROR << "Unknoun shader error! deleting...\n";
+					break;
 				}
 
 				printf("%s", &error[0]);
@@ -159,11 +165,11 @@ namespace MC {
 			return id;
 		}
 
-		GLuint Shader::Create(const std::string& vertex_source, const std::string& fragmement_source) 
+		GLuint Shader::Create(const rd_str_t& vertex_source, const rd_str_t& fragmement_source) 
 		{
-			unsigned int program = glCreateProgram();
-			unsigned int vs = Load(GL_VERTEX_SHADER, vertex_source);
-			unsigned int fs = Load(GL_FRAGMENT_SHADER, fragmement_source);
+			rd_uint8_t program = glCreateProgram();
+			rd_uint8_t vs = Load(GL_VERTEX_SHADER, vertex_source);
+			rd_uint8_t fs = Load(GL_FRAGMENT_SHADER, fragmement_source);
 
 			glAttachShader(program, vs);
 			glAttachShader(program, fs);
@@ -175,7 +181,7 @@ namespace MC {
 			return program;
 		}
 
-		GLint Shader::GetUniformLocation(std::string name) 
+		GLint Shader::GetUniformLocation(rd_str_t name) 
 		{
 			int location = glGetUniformLocation(m_ShaderID, name.c_str());
 #ifdef _DEBUG

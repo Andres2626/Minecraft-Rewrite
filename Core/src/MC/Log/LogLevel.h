@@ -2,7 +2,8 @@
 
 namespace MC {
 
-	enum class LogLevel {
+	enum class LogLevel 
+	{
 		NONE,
 		INFO,
 		WARN,

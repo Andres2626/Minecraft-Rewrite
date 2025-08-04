@@ -1,16 +1,21 @@
 #pragma once
+#include "common.h"
+
 #include "BlendValue.h"
 #include "DepthValue.h"
 
 #include "Math/Math.h"
 
-namespace MC {
-	namespace Graphics {
+namespace MC 
+{
+	namespace Graphics 
+	{
 
-		class MC_API Renderer {
+		class MC_API Renderer 
+		{
 		public:
-			static void Enable(unsigned int func);
-			static void Disable(unsigned int func);
+			static void Enable(rd_uint8_t func);
+			static void Disable(rd_uint8_t func);
 		public:
 			static void ClearColor(Math::vec3 color);
 			static void Viewport(Math::ivec2 pos, Math::ivec2 size);
@@ -18,8 +23,8 @@ namespace MC {
 			static void DepthFunc(const DepthValue& val);
 			static void BlendFunc(const BlendValue& sfactor, const BlendValue& dfactor);
 		public:
-			static void DrawArrays(unsigned int mode, unsigned int size);
-			static void DrawElements(unsigned int mode, unsigned int size);
+			static void DrawArrays(rd_uint8_t mode, rd_uint8_t size);
+			static void DrawElements(rd_uint8_t mode, rd_uint8_t size);
 		};
 
 	}

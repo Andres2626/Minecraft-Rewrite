@@ -1,9 +1,11 @@
 #pragma once
 #include "common.h"
 
-namespace MC {
+namespace MC 
+{
 
-	class MC_API Host {
+	class MC_API Host 
+	{
 	public:
 		static void Init(int* argc, char*** argv);
 		static void End();
