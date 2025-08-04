@@ -7,7 +7,7 @@
 namespace MC {
 	namespace Graphics {
 		
-		class RD_API VertexArray {
+		class MC_API VertexArray {
 		private:
 			GLuint m_ID;
 		public:

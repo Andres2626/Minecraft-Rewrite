@@ -9,7 +9,7 @@
 namespace MC {
 	namespace App {
 
-		class RD_API Application : public Layer::ILayer {
+		class MC_API Application : public Layer::ILayer {
 		protected:
 			Window* m_Win;
 		private:

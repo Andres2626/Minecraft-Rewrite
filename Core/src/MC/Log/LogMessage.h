@@ -6,7 +6,7 @@
 
 namespace MC {
 
-	class RD_API LogMessage {
+	class MC_API LogMessage {
 	public:
 		LogLevel m_Lev;
 		const char *m_File, *m_Func;

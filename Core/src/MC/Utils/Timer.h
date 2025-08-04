@@ -6,7 +6,7 @@
 namespace MC {
 	namespace Utils {
 
-		class RD_API Timer {
+		class MC_API Timer {
 		protected:
 			std::chrono::high_resolution_clock::time_point m_Start;
 		public:

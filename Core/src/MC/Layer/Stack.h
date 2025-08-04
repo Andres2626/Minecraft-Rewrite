@@ -6,7 +6,7 @@
 namespace MC {
 	namespace Layer {
 
-		class RD_API Stack : public ILayer {
+		class MC_API Stack : public ILayer {
 		private:
 			std::vector<ILayer*> m_Layers;
 		public:

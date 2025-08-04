@@ -1,9 +1,9 @@
 #pragma once
 
-#define TEXCOORD_SIZE 2 * 4
+#define TEXCOOMC_SIZE 2 * 4
 #define VERTICES_SIZE 3 * 4
 #define LIGHTS_SIZE 4
-#define FACE_SIZE TEXCOORD_SIZE + VERTICES_SIZE + LIGHTS_SIZE
+#define FACE_SIZE TEXCOOMC_SIZE + VERTICES_SIZE + LIGHTS_SIZE
 
 enum class Face {
 	FRONT = 1,
@@ -30,7 +30,7 @@ public:
 	float vright[VERTICES_SIZE];
 	float vbottom[VERTICES_SIZE];
 	float vtop[VERTICES_SIZE];
-	float texcoords[TEXCOORD_SIZE];
+	float texcoords[TEXCOOMC_SIZE];
 public:
 	Tile(TileType type);
 	~Tile();

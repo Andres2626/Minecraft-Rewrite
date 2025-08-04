@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 	Logger::SetLogLevel(LogLevel::MAX);
 
 #if defined (COUNTER_INTERFACE)
-	RD_WARN << "RubyDung rd-133221 build: " <<  BUILD_COUNT;
+	MC_WARN << "RubyDung rd-133221 build: " <<  BUILD_COUNT;
 #endif
 
 	/* initialize random number generator */

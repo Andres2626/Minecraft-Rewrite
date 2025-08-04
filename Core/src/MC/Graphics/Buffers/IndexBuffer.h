@@ -6,7 +6,7 @@
 namespace MC {
 	namespace Graphics {
 
-		class RD_API IndexBuffer {
+		class MC_API IndexBuffer {
 		private:
 			GLuint m_ID, m_Size;
 		public:

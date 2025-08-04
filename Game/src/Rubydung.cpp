@@ -23,7 +23,7 @@ void Rubydung::Init()
 	Default::Init();
 
 	if (!icon.LoadFromFile("assets/Internal/win_icon.png")) {
-		RD_FATAL << "Error loading window icon.";
+		MC_FATAL << "Error loading window icon.";
 	}
 	this->InternalWindow.SetIcon(icon);
 	icon.Free();
@@ -49,14 +49,14 @@ void Rubydung::Init()
 
 	/* load texture */
 	if (!tex.LoadFromFile("assets/terrain.png", GL_NEAREST)) 
-		RD_FATAL << "Error loading " << tex.path;
+		MC_FATAL << "Error loading " << tex.path;
 }
 
 void Rubydung::OnUpdate(Timestep& ts) 
 {
 	Default::OnUpdate(ts);
 
-	if (Input::IsKeyPressed(RD_KEY_ESCAPE)) {
+	if (Input::IsKeyPressed(MC_KEY_ESCAPE)) {
 		lev->Save();
 		Application::GetInstance().Stop();
 	}
@@ -67,11 +67,11 @@ void Rubydung::OnUpdate(Timestep& ts)
 void Rubydung::OnKeyPressed(int key) 
 {
 	switch (key) {
-	case RD_KEY_ESCAPE:
+	case MC_KEY_ESCAPE:
 		lev->Save();
 		Application::GetInstance().Stop();
 		break;
-	case RD_KEY_ENTER:
+	case MC_KEY_ENTER:
 		lev->Save();
 		break;
 	default:
@@ -147,7 +147,7 @@ void Rubydung::OnTick()
 	Default::OnTick();
 
 #if _DEBUG
-	RD_INFO << "fps: " << Application::GetInstance().GetFPS() << " ups: " << Application::GetInstance().GetUPS() << " cups: " << lev->GetUpdates();
+	MC_INFO << "fps: " << Application::GetInstance().GetFPS() << " ups: " << Application::GetInstance().GetUPS() << " cups: " << lev->GetUpdates();
 #else
 	printf("%i fps, %i\n", Application::GetInstance().GetFPS(), lev->GetUpdates());
 #endif
@@ -220,8 +220,8 @@ void Rubydung::PlayerPick()
 		py_sel->Render(steve->cam, sh_sel, tm->ElapsedMillis());
 
 		/* Get mouse button status */
-		bool left = Input::IsMouseButtonPressed(RD_MOUSE_BUTTON_1);
-		bool right = Input::IsMouseButtonPressed(RD_MOUSE_BUTTON_2);
+		bool left = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_1);
+		bool right = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_2);
 
 		/* Avoid click spam */
 		if (left && !last_mouse_left)

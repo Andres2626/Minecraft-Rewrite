@@ -97,7 +97,7 @@ namespace MC {
 			std::stringstream ss[2];
 			std::ifstream stream(path);
 
-			RD_FATAL_CHK(stream) << "Error opening Shader file. ", path;
+			MC_FATAL_CHK(stream) << "Error opening Shader file. ", path;
 
 			enum class ShaderType {
 				UNKNOUN = -1, VERTEX = 0, FRAGMENT = 1
@@ -141,13 +141,13 @@ namespace MC {
 				glGetShaderInfoLog(id, len, &len, &error[0]);
 
 				if (type == GL_VERTEX_SHADER) {
-					RD_ERROR << "Error to compile Vertex shader! deleting...\n";
+					MC_ERROR << "Error to compile Vertex shader! deleting...\n";
 				}
 				else if (type == GL_FRAGMENT_SHADER) {
-					RD_ERROR << "Error to compile Fragment shader! deleting...\n";
+					MC_ERROR << "Error to compile Fragment shader! deleting...\n";
 				}
 				else {
-					RD_ERROR << "Error to compile Unknoun shader! deleting...\n";
+					MC_ERROR << "Error to compile Unknoun shader! deleting...\n";
 				}
 
 				printf("%s", &error[0]);
@@ -180,7 +180,7 @@ namespace MC {
 			int location = glGetUniformLocation(m_ShaderID, name.c_str());
 #ifdef _DEBUG
 			if (location == -1) {
-				RD_DEBUG << "Shader Location of: " << name.c_str() << " not found!, Skipping...\n";
+				MC_DEBUG << "Shader Location of: " << name.c_str() << " not found!, Skipping...\n";
 			}
 #endif
 			return location;

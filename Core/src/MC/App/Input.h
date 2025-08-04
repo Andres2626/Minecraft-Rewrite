@@ -5,16 +5,16 @@
 
 #include "Events/Event.h"
 
-#define RD_MAX_KEYS 349
-#define RD_MAX_BUTTONS 9
+#define MC_MAX_KEYS 349
+#define MC_MAX_BUTTONS 9
 
 namespace MC {
 	namespace App {
 		
-		class RD_API Input {
+		class MC_API Input {
 		private:
-			static bool m_Keys[RD_MAX_KEYS];
-			static bool m_Buttons[RD_MAX_BUTTONS];
+			static bool m_Keys[MC_MAX_KEYS];
+			static bool m_Buttons[MC_MAX_BUTTONS];
 			static double m_X;
 			static double m_Y;
 		public:

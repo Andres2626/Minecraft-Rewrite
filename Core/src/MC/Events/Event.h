@@ -1,7 +1,7 @@
 #pragma once
 #include "common.h"
 
-#define GLEQDEF RD_API
+#define GLEQDEF MC_API
 #include <gleq.h>
 
 namespace MC {

@@ -1,5 +1,5 @@
 #include "common.h"
 
-#if defined (RD_PLATFORM_WINDOWS)
+#if defined (MC_PLATFORM_WINDOWS)
 #include "Windows/init.cpp"
 #endif

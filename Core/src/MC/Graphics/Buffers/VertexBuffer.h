@@ -6,7 +6,7 @@
 namespace MC {
 	namespace Graphics {
 
-		class RD_API VertexBuffer {
+		class MC_API VertexBuffer {
 		private:
 			GLuint m_ID, m_Size;
 		public:

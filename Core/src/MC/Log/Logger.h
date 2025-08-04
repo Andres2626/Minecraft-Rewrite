@@ -11,7 +11,7 @@
 
 namespace MC {
 
-	class RD_API Logger {
+	class MC_API Logger {
 	private:
 		static LogLevel m_Level; /* global level */
 		static LogLevel m_LineLevel; /* on line level */

@@ -8,7 +8,7 @@
 namespace MC {
 	namespace Physics {
 
-		class RD_API AABB {
+		class MC_API AABB {
 		public:
 			Math::vec3 p0;
 			Math::vec3 p1;
