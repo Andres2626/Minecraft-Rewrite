@@ -21,7 +21,8 @@
 #define MC_ASSERT(...)
 #endif
 
-namespace MC {
+namespace MC 
+{
 	int MC_API internal_printf(const char* fmt, ...);
 	void MC_API internal_breakpoint();
 }

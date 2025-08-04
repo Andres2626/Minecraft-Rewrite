@@ -5,8 +5,10 @@
 
 /* stoled from rubydung/phys/AABB.java */
 
-namespace MC {
-	namespace Physics {
+namespace MC 
+{
+	namespace Physics 
+	{
 
 		class MC_API AABB {
 		public:

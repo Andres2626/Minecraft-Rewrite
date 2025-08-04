@@ -41,9 +41,6 @@ int main(int argc, char** argv)
 	MC_WARN << "RubyDung rd-133221 build: " <<  BUILD_COUNT;
 #endif
 
-	/* initialize random number generator */
-	srand(time(NULL));
-
 	Game game;
 	game.Start();
 

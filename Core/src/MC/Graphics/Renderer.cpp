@@ -3,15 +3,17 @@
 
 #include <glad/glad.h>
 
-namespace MC {
-	namespace Graphics {
+namespace MC 
+{
+	namespace Graphics 
+	{
 
-		void Renderer::Enable(unsigned int func) 
+		void Renderer::Enable(rd_uint8_t func) 
 		{
 			glEnable(func);
 		}
 
-		void Renderer::Disable(unsigned int func) 
+		void Renderer::Disable(rd_uint8_t func) 
 		{
 			glDisable(func);
 		}
@@ -36,12 +38,12 @@ namespace MC {
 			glBlendFunc((GLenum)sfactor, (GLenum)dfactor);
 		}
 
-		void Renderer::DrawArrays(unsigned int mode, unsigned int size)
+		void Renderer::DrawArrays(rd_uint8_t mode, rd_uint8_t size)
 		{
 			glDrawArrays(mode, 0, size);
 		}
 
-		void Renderer::DrawElements(unsigned int mode, unsigned int size)
+		void Renderer::DrawElements(rd_uint8_t mode, rd_uint8_t size)
 		{
 			glDrawElements(mode, size, GL_UNSIGNED_INT, 0);
 		}

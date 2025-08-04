@@ -1,6 +1,7 @@
 #include "LogMessage.h"
 
-namespace MC {
+namespace MC 
+{
 
 	LogMessage::LogMessage(const LogLevel& lev, const char* file, int line, const char* function)
 		: m_Lev(lev), m_File(file), m_Line(line), m_Func(function)

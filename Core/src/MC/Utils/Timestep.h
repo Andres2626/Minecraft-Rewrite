@@ -1,10 +1,13 @@
 #pragma once
 #include "common.h"
 
-namespace MC {
-	namespace Utils {
+namespace MC 
+{
+	namespace Utils 
+	{
 
-		class Timestep {
+		class Timestep 
+		{
 		private:
 			float m_Delta;
 			float m_LastTime;

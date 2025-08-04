@@ -4,7 +4,8 @@
 #include <string.h>
 #include <locale>
 
-namespace MC {
+namespace MC 
+{
 
 	void Host::Init(int* argc, char*** argv) 
 	{
@@ -16,4 +17,5 @@ namespace MC {
 	{
 
 	}
+
 }

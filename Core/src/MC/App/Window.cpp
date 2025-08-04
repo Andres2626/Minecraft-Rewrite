@@ -5,99 +5,109 @@
 #include "Events/Event.h"
 #include "Log/Log.h"
 
-namespace MC {
-	namespace App {
+namespace MC 
+{
+	namespace App 
+	{
 
 		/* GLFW Error handler */
-		void ErrorCallback(int error, const char* msg) 
+		void ErrorCallback(int error, const char* msg)
 		{
-			MC_FATAL << "GLFW Error" << error << ":"  << msg;
+			MC_FATAL << "GLFW Error " << error << ":" << msg;
 		}
 
-		Window::Window(const char* title, const WindowProperties& properties)
-			: m_Title(title), w_pr(properties), IsInititialized(false)
+		Window::Window(const rd_str_t& title, const WindowProperties& properties)
+			: m_Title(title), m_Pr(properties), m_Init(false)
 		{
 			/* Create window */
-			this->IsInititialized = Create();
-			if (!this->IsInititialized)
-				this->Finish();
+			m_Init = Create();
+			if (!m_Init)
+				Finish();
 		}
 
-		Window::~Window() 
+		Window::~Window()
 		{
 			glfwTerminate();
 		}
 
-		bool Window::Create() 
+		bool Window::Create()
 		{
 			glfwSetErrorCallback(ErrorCallback);
 
 			if (!glfwInit()) {
-				printf("GLFW Error. Init()\n");
+				MC_FATAL << "GLFW not initialized";
 				return false;
 			}
 
 			/* Initailze context */
-			if (this->w_pr.context.ver_major)
-				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, this->w_pr.context.ver_major);
+			if (m_Pr.context.ver_major)
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_Pr.context.ver_major);
 
-			if (this->w_pr.context.ver_minor)
-				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, this->w_pr.context.ver_minor);
+			if (m_Pr.context.ver_minor)
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_Pr.context.ver_minor);
 
-			if (this->w_pr.context.profile)
-				glfwWindowHint(GLFW_OPENGL_PROFILE, this->w_pr.context.profile);
+			if (m_Pr.context.profile)
+				glfwWindowHint(GLFW_OPENGL_PROFILE, m_Pr.context.profile);
 
-			if (this->w_pr.context.compat)
+			if (m_Pr.context.compat)
 				glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 			/* Create window via GLFW */
-			this->internal_window = glfwCreateWindow(this->w_pr.x, this->w_pr.y, this->m_Title, 0, 0);
-			MC_FATAL_CHK(this->internal_window) << "Error initializing window";
-			glfwMakeContextCurrent(this->internal_window);
+			m_Win = glfwCreateWindow(m_Pr.x, m_Pr.y, m_Title.c_str(), 0, 0);
+			if (!m_Win) {
+				MC_FATAL << "Error initializing window (" << m_Pr.x << "x" << m_Pr.y << "," << "title:\"" << m_Title << "\"" << ")";
+				return false;
+			}
+
+			glfwMakeContextCurrent(m_Win);
 
 			/* Initialze event system */
 			gleqInit();
-			gleqTrackWindow(this->internal_window);
+			gleqTrackWindow(m_Win);
 
-			MC_FATAL_CHK(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) << "Error initializing OpenGL";
+			bool glad = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+			if (!glad) {
+				MC_FATAL << "GL context not initialized";
+				return false;
+			}
 
-			if (!this->w_pr.cursor.enable)
-				glfwSetInputMode(this->internal_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			if (!m_Pr.cursor.enable)
+				glfwSetInputMode(m_Win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-			MC_WARN << "OpenGL Version: " <<  glGetString(GL_VERSION);
-			MC_WARN << "GPU type: " << glGetString(GL_VENDOR);
+			MC_WARN << "OpenGL Version: " << glGetString(GL_VERSION);
+			MC_WARN << "GPU vendor: " << glGetString(GL_VENDOR);
 			MC_WARN << "GPU name: " << glGetString(GL_RENDERER);
 
 			return true;
 		}
 
-		void Window::Finish() 
+		void Window::Finish()
 		{
 			glfwTerminate();
 		}
 
-		bool Window::Close() 
+		bool Window::Close()
 		{
-			return glfwWindowShouldClose(this->internal_window);
+			return glfwWindowShouldClose(m_Win);
 		}
 
-		void Window::Clear() 
+		void Window::Clear()
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 
-		void Window::Update() 
+		void Window::Update()
 		{
 			glfwPollEvents();
-			glfwSwapBuffers(this->internal_window);
+			glfwSwapBuffers(m_Win);
 		}
 
-		int Window::GetEvent(MC::Events::Event& ev) 
+		int Window::GetEvent(MC::Events::Event& ev)
 		{
 			return gleqNextEvent(&ev);
 		}
 
-		void Window::FreeEvent(MC::Events::Event& ev) 
+		void Window::FreeEvent(MC::Events::Event& ev)
 		{
 			gleqFreeEvent(&ev);
 		}
@@ -109,7 +119,8 @@ namespace MC {
 			image[0].height = img.y;
 			image[0].pixels = img.pixels;
 
-			glfwSetWindowIcon(this->internal_window, 1, image);
+			glfwSetWindowIcon(m_Win, 1, image);
 		}
+
 	}
 }

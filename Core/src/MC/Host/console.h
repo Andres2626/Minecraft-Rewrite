@@ -10,9 +10,11 @@
 #define MC_CONSOLE_YELLOW 6
 #define MC_CONSOLE_INTENSITY 7
 
-namespace MC {
+namespace MC 
+{
 
-	class MC_API Console {
+	class MC_API Console 
+	{
 	public:
 		static void Init();
 		static void End();

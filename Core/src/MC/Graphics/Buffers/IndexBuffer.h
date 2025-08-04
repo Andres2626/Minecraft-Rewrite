@@ -1,25 +1,27 @@
 #pragma once
 #include "common.h"
 
-#include <glad/glad.h>
+namespace MC 
+{
+	namespace Graphics 
+	{
 
-namespace MC {
-	namespace Graphics {
-
-		class MC_API IndexBuffer {
+		class MC_API IndexBuffer 
+		{
 		private:
-			GLuint m_ID, m_Size;
+			rd_uint8_t m_ID;
+			rd_uint8_t m_Size;
 		public:
 			IndexBuffer();
 			~IndexBuffer();
 		public:
-			void Build(GLuint size, const void* data);
+			void Build(rd_uint8_t size, const void* data);
 		public:
 			void Bind() const;
 			void Unbind() const;
 		public:
-			inline GLuint GetId() { return this->m_ID; }
-			inline GLuint GetSize() { return this->m_Size; }
+			inline rd_uint8_t GetId() { return this->m_ID; }
+			inline rd_uint8_t GetSize() { return this->m_Size; }
 		};
 
 	}

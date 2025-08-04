@@ -1,7 +1,9 @@
 #include "Default.h"
 
-namespace MC {
-	namespace Layer {
+namespace MC 
+{
+	namespace Layer 
+	{
 
 		Default::Default()
 		{

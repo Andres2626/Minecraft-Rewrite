@@ -11,50 +11,55 @@
 Level::Level(const ivec3& size)
 	: size(size), m_ChunkUpdates(0), m_LevelFile("level.dat")
 {
+	/* initialize random number generator */
+	srand(time(NULL));
+
 	int v = size.x * size.y * size.z;
 
 	/* check valid level size */
-	MC_FATAL_CHK(v > 0) << "Invalid level size.";
+	if (v < 0)
+		MC_FATAL << "Level invalid size (" << size.x << "," << size.y << "," << size.z << ")";
 
 	/* create level array */
-	this->blocks = (uint8_t*)malloc(v);
-	MC_FATAL_CHK(this->blocks) << "alloc_blocks() memory error.";
+	blocks = (uint8_t*)malloc(v);
+	if (!blocks)
+		MC_FATAL << "alloc_blocks() failed: out of memory (size=" << v << ")";
 
 	/* check if level.dat exists in filesystem */
-	if (!this->Levelcheck()) {
-		for (int x = 0; x < this->size.x; x++) {
-			for (int y = 0; y < this->size.z; y++) {
-				for (int z = 0; z < this->size.y; z++) {
-					int index = this->GetBlockIndex({ x, y, z });
-					int solid = (uint8_t)(y <= (this->size.z * 2 / 3));
-					this->blocks[index] = solid ? 1 : 0;
+	if (!Levelcheck()) {
+		for (int x = 0; x < size.x; x++) {
+			for (int y = 0; y < size.z; y++) {
+				for (int z = 0; z < size.y; z++) {
+					int index = GetBlockIndex({ x, y, z });
+					int solid = (uint8_t)(y <= (size.z * 2 / 3));
+					blocks[index] = solid ? 1 : 0;
 				}
 			}
 		}
 
 		/* create level.dat */
-		this->Save();
+		Save();
 	}
 	else {
 		/* 
-		* if the level.dat is found, load direcly instead of build the this->blocks, 
-		* load the file and copy buffer to this->blocks, as was done in the original 
+		* if the level.dat is found, load direcly instead of build the blocks, 
+		* load the file and copy buffer to blocks, as was done in the original 
 		* version of Java.
 		*/
-		this->Load();
+		Load();
 	}
 
 	/* create chunk renderer */
-	for (int cx = 0; cx < this->size.x / CHUNK_XYZ; cx++) {
-		for (int cy = 0; cy < this->size.z / CHUNK_XYZ; cy++) {
-			for (int cz = 0; cz < this->size.y / CHUNK_XYZ; cz++) {
+	for (int cx = 0; cx < size.x / CHUNK_XYZ; cx++) {
+		for (int cy = 0; cy < size.z / CHUNK_XYZ; cy++) {
+			for (int cz = 0; cz < size.y / CHUNK_XYZ; cz++) {
 				int index = GetChunkIndex({ cx, cy, cz });
 
 				/*
 				 * for avoid call to destructor when chunk inserting in the
 				 * map use this instead of map::emplace(index chunk{...})
 				 */
-				this->chunks.emplace(
+				chunks.emplace(
 					std::piecewise_construct,
 					std::forward_as_tuple(index),
 					std::forward_as_tuple(this, ivec3{ cx, cy, cz })
@@ -67,25 +72,25 @@ Level::Level(const ivec3& size)
 bool Level::IsSolidTile(ivec3 pos)
 {
 	return (pos.x >= 0) && (pos.y >= 0) && (pos.z >= 0) &&
-		(pos.x < this->size.x) && (pos.y < this->size.z) && (pos.z < this->size.y) &&
-		(this->blocks[this->GetBlockIndex(pos)]);
+		(pos.x < size.x) && (pos.y < size.z) && (pos.z < size.y) &&
+		(blocks[GetBlockIndex(pos)]);
 }
 
 bool Level::IsLightBlocker(ivec3 pos)
 {
-	return this->IsSolidTile(pos);
+	return IsSolidTile(pos);
 }
 
 float Level::GetBrigthness(ivec3 pos)
 {
 	/* if the block is out of bounds, mark the block as light */
 	if (pos.x < 0 || pos.y < 0 || pos.z < 0 ||
-		pos.x >= this->size.x || pos.y >= this->size.z || pos.z >= this->size.y) {
+		pos.x >= size.x || pos.y >= size.z || pos.z >= size.y) {
 		return 1.0f; /* light block */
 	}
 
-	for (int i = pos.y; i < this->size.z; i++) {
-		if (this->IsLightBlocker({ pos.x, i, pos.z })) {
+	for (int i = pos.y; i < size.z; i++) {
+		if (IsLightBlocker({ pos.x, i, pos.z })) {
 			return 0.5f; /* dark block */
 		}
 	}
@@ -96,28 +101,29 @@ float Level::GetBrigthness(ivec3 pos)
 Level::~Level() 
 {
 	/* delete block array */
-	free(this->blocks);
+	free(blocks);
 }
 
 bool Level::Levelcheck() 
 {
-	std::ifstream file(this->m_LevelFile);
+	std::ifstream file(m_LevelFile);
 	return file.good(); /* if file exists? */
 }
 
 void Level::Save() 
 {
-	MC_INFO << "Saving level.dat...";
+	MC_INFO << "Saving level";
 
-	int size = this->size.x * this->size.y * this->size.z;
+	int bufflen = size.x * size.y * size.z;
 	std::string buff;
 
 	/* compress file using gzip */
-	buff = gzip::compress(reinterpret_cast<const char*>(this->blocks), size);
+	buff = gzip::compress(reinterpret_cast<const char*>(blocks), bufflen);
 
 	/* open level.dat for write buff */
-	std::ofstream dis(this->m_LevelFile, std::ios::out | std::ios::binary);
-	MC_FATAL_CHK(dis.is_open()) <<  "Could not found level file: ", this->m_LevelFile;
+	std::ofstream dis(m_LevelFile, std::ios::out | std::ios::binary);
+	if (!dis.is_open())
+		MC_FATAL <<  "Failed to open level file: \"" <<  m_LevelFile << "\"";
 
 	/* write buff to level.dat and close */
 	dis.write(buff.data(), buff.size());
@@ -126,11 +132,12 @@ void Level::Save()
 
 void Level::Load() 
 {
-	MC_INFO << "Loading level.dat...";
+	MC_INFO << "Loading level";
 
 	/* open level.dat */
-	std::ifstream dos(this->m_LevelFile, std::ios::in | std::ios::binary);
-	MC_FATAL_CHK(dos.is_open()) << "Could not read level file: " << this->m_LevelFile;
+	std::ifstream dos(m_LevelFile, std::ios::in | std::ios::binary);
+	if (!dos.is_open())
+		MC_FATAL << "Failed to open level file: \"" << m_LevelFile << "\"";
 
 	/* read file (compressed) */
 	std::string compressed((std::istreambuf_iterator<char>(dos)), std::istreambuf_iterator<char>());
@@ -138,16 +145,16 @@ void Level::Load()
 
 	/* decompress file using gzip */
 	std::string decompressed = gzip::decompress(compressed.c_str(), compressed.size());
-	int expectedSize = this->size.x * this->size.y * this->size.z;
+	int expectedSize = size.x * size.y * size.z;
 
 	/* copy decompressed file to block array */
-	memcpy(this->blocks, decompressed.data(), expectedSize);
+	memcpy(blocks, decompressed.data(), expectedSize);
 }
 
 void Level::Render(Shader* shader, Player* player) 
 {
 	/* check if chunk is in camera frustum */
-	for (auto& n : this->chunks) {
+	for (auto& n : chunks) {
 		if (player->cam.InFrustum(n.second.GetBox())) {
 			n.second.Render(shader);
 		}
@@ -158,8 +165,8 @@ void Level::SetTile(ivec3 blockpos, int type)
 {
 	/* check if the block is out of level */
 	if (blockpos.x < 0 || blockpos.y < 0 || blockpos.z < 0 || 
-		blockpos.x >= this->size.x || blockpos.y >= this->size.z || 
-		blockpos.z >= this->size.y) {
+		blockpos.x >= size.x || blockpos.y >= size.z || 
+		blockpos.z >= size.y) {
 		return; /* block out of bounds */
 	}
 
@@ -168,42 +175,42 @@ void Level::SetTile(ivec3 blockpos, int type)
 
 	/* set block type in the array */
 	int index = GetBlockIndex(blockpos);
-	this->blocks[index] = flag;
+	blocks[index] = flag;
 
 	/* convert position to chunk position */
 	ivec3 chunk = floor(vec3(blockpos) / (float)CHUNK_XYZ);
-	int chunk_index = this->GetChunkIndex(chunk);
+	int chunk_index = GetChunkIndex(chunk);
 
 	/* rebuild chunk array */
-	std::vector<ivec3>().swap(this->ChunkUpdates);
+	std::vector<ivec3>().swap(ChunkUpdates);
 
 	/*
 	 * For obtain the CUPS (chunks updates per second) push all
 	 * changed chunks in array and update block adjacent blocks
 	 */
-	this->ChunkUpdates.push_back(chunk);
+	ChunkUpdates.push_back(chunk);
 	if (blockpos.x % 16 == 0)
-		this->ChunkUpdates.push_back(chunk + ivec3(-1, 0, 0));
+		ChunkUpdates.push_back(chunk + ivec3(-1, 0, 0));
 	if (blockpos.x % 16 == 15)
-		this->ChunkUpdates.push_back(chunk + ivec3(1, 0, 0));
+		ChunkUpdates.push_back(chunk + ivec3(1, 0, 0));
 	if (blockpos.y % 16 == 0)
-		this->ChunkUpdates.push_back(chunk + ivec3(0, -1, 0));
+		ChunkUpdates.push_back(chunk + ivec3(0, -1, 0));
 	if (blockpos.y % 16 == 15)
-		this->ChunkUpdates.push_back(chunk + ivec3(0, 1, 0));
+		ChunkUpdates.push_back(chunk + ivec3(0, 1, 0));
 	if (blockpos.z % 16 == 0)
-		this->ChunkUpdates.push_back(chunk + ivec3(0, 0, -1));
+		ChunkUpdates.push_back(chunk + ivec3(0, 0, -1));
 	if (blockpos.z % 16 == 15)
-		this->ChunkUpdates.push_back(chunk + ivec3(0, 0, 1));
+		ChunkUpdates.push_back(chunk + ivec3(0, 0, 1));
 
 	/* count chunk updates */
-	this->m_ChunkUpdates = this->ChunkUpdates.size();
+	m_ChunkUpdates = ChunkUpdates.size();
 
 
 	/* find chunk position in the map */
-	for (const auto& ch : this->ChunkUpdates) {
-		chunk_index = this->GetChunkIndex(ch);
-		auto it = this->chunks.find(chunk_index);
-		if (it != this->chunks.end()) {
+	for (const auto& ch : ChunkUpdates) {
+		chunk_index = GetChunkIndex(ch);
+		auto it = chunks.find(chunk_index);
+		if (it != chunks.end()) {
 			/*
 			 * yes! the chunk position is found in the level, now the
 			 * program check if the chunk is out of level and call to 
@@ -235,20 +242,20 @@ std::vector<AABB> Level::GetCubes(const AABB& aabb)
 	if (p0.z < 0.0f)
 		p0.z = 0.0f;
 
-	if (p1.x > this->size.x)
-		p1.x = (float)this->size.x;
+	if (p1.x > size.x)
+		p1.x = (float)size.x;
 
-	if (p1.y > this->size.z)
-		p1.y = (float)this->size.z;
+	if (p1.y > size.z)
+		p1.y = (float)size.z;
 
-	if (p1.z > this->size.y)
-		p1.z = (float)this->size.y;
+	if (p1.z > size.y)
+		p1.z = (float)size.y;
 
 	/* check all player adjacent blocks */
 	for (int x3 = (int)p0.x; x3 < p1.x; ++x3) {
 		for (int y3 = (int)p0.y; y3 < p1.y; ++y3) {
 			for (int z3 = (int)p0.z; z3 < p1.z; ++z3) {
-				if (this->IsSolidTile({ x3, y3, z3 })) {
+				if (IsSolidTile({ x3, y3, z3 })) {
 					aabbs.push_back(AABB({ (float)x3, (float)y3, (float)z3 }, { (float)(x3 + 1), (float)(y3 + 1), (float)(z3 + 1) }));
 				}
 			}
@@ -267,5 +274,5 @@ int Level::GetChunkIndex(const ivec3& chunk)
 int Level::GetBlockIndex(const ivec3& block) 
 {
 	/* convert block position to position in level array */
-	return (block.y * this->size.y + block.z) * this->size.x + block.x;
+	return (block.y * size.y + block.z) * size.x + block.x;
 }

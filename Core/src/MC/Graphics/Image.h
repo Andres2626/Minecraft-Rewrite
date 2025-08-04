@@ -1,10 +1,13 @@
 #pragma once
 #include "common.h"
 
-namespace MC {
-	namespace Graphics {
+namespace MC 
+{
+	namespace Graphics 
+	{
 
-		class MC_API Image {
+		class MC_API Image 
+		{
 		public:
 			const char* path;
 			unsigned char* pixels;

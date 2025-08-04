@@ -1,23 +1,27 @@
 #include "VertexArray.h"
 
-namespace MC {
-	namespace Graphics {
+#include <glad/glad.h>
+
+namespace MC 
+{
+	namespace Graphics 
+	{
 
 		VertexArray::VertexArray() 
 			: m_ID(0)
 		{ 
-			glGenVertexArrays(1, &this->m_ID);
+			glGenVertexArrays(1, &m_ID);
 			this->Bind();
 		}
 
 		VertexArray::~VertexArray() 
 		{
-			glDeleteVertexArrays(1, &this->m_ID);
+			glDeleteVertexArrays(1, &m_ID);
 		}
 
 		void VertexArray::Bind() const 
 		{
-			glBindVertexArray(this->m_ID);
+			glBindVertexArray(m_ID);
 		}
 
 		void VertexArray::Unbind() const 
@@ -25,7 +29,8 @@ namespace MC {
 			glBindVertexArray(0);
 		}
 
-		void VertexArray::Link(const VertexLayout& layout) const {
+		void VertexArray::Link(const VertexLayout& layout) const 
+		{
 			layout.Init();
 		}
 

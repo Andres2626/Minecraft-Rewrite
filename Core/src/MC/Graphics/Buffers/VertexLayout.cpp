@@ -1,25 +1,30 @@
 #include "VertexLayout.h"
 
-namespace MC {
-	namespace Graphics {
-	
-		void VertexLayout::AddAttribute(GLuint index, GLint size, GLenum type, GLsizei stride, const void* offset, GLboolean normalized) 
+#include <glad/glad.h>
+
+namespace MC 
+{
+	namespace Graphics
+	{
+
+		void VertexLayout::AddAttribute(rd_uint8_t index, rd_int_t size, rd_uint8_t type, rd_int8_t stride, const void* offset, rd_uchar8_t normalized)
 		{
-			this->m_Attribs.push_back({ index, size, type, stride, offset, normalized });
+			m_Attribs.push_back({ index, size, type, stride, offset, normalized });
 		}
 
-		void VertexLayout::Init() const 
+		void VertexLayout::Init() const
 		{
-			for (int i = 0; i < this->m_Attribs.size(); i++) {
-				glVertexAttribPointer(this->m_Attribs[i].index, 
-					this->m_Attribs[i].size, 
-					this->m_Attribs[i].type, 
-					this->m_Attribs[i].normalized, 
-					this->m_Attribs[i].stride, 
-					this->m_Attribs[i].offset);
+			for (int i = 0; i < m_Attribs.size(); i++) {
+				glVertexAttribPointer(m_Attribs[i].index,
+					                  m_Attribs[i].size,
+					                  m_Attribs[i].type,
+					                  m_Attribs[i].normalized,
+					                  m_Attribs[i].stride,
+					                  m_Attribs[i].offset);
 
-				glEnableVertexAttribArray(this->m_Attribs[i].index);
+				glEnableVertexAttribArray(m_Attribs[i].index);
 			}
 		}
+
 	}
 }

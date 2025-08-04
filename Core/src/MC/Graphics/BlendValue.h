@@ -1,23 +1,25 @@
 #pragma once
 #include "common.h"
-#include <glad/glad.h>
 
-namespace MC {
-	namespace Graphics {
-
-		enum class BlendValue {
-			ZERO = GL_ZERO,
-			ONE = GL_ONE,
-			SRC_COLOR = GL_SRC_COLOR,
-			ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
-			DST_COLOR = GL_DST_COLOR,
-			ONE_MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
-			SRC_ALPHA = GL_SRC_ALPHA,
-			ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA,
-			CONSTANT_COLOR = GL_CONSTANT_COLOR,
-			ONE_MINUS_CONSTANT_COLOR = GL_ONE_MINUS_CONSTANT_COLOR,
-			CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
-			ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA
+namespace MC 
+{
+	namespace Graphics 
+	{
+		/* Values stoled from glad/glad.h */
+		enum class BlendValue 
+		{
+			ZERO = 0,
+			ONE = 1,
+			SRC_COLOR = 0x300,
+			ONE_MINUS_SRC_COLOR,
+			SRC_ALPHA,
+			ONE_MINUS_SRC_ALPHA,
+			DST_COLOR = 0x306,
+			ONE_MINUS_DST_COLOR,
+			CONSTANT_COLOR = 0x8001,
+			ONE_MINUS_CONSTANT_COLOR,
+			CONSTANT_ALPHA,
+			ONE_MINUS_CONSTANT_ALPHA
 		};
 
 	}

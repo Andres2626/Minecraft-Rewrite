@@ -2,8 +2,10 @@
 
 /* stoled from rubydung/phys/AABB.java */
 
-namespace MC {
-	namespace Physics {
+namespace MC 
+{
+	namespace Physics 
+	{
 
 		AABB::AABB(const Math::vec3& p0, const Math::vec3& p1) 
 		{

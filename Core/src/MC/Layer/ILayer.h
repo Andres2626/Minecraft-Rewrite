@@ -4,11 +4,14 @@
 #include "Events/Event.h"
 #include "Utils/Timestep.h"
 
-namespace MC {
+namespace MC 
+{
 
-	namespace Layer {
+	namespace Layer 
+	{
 
-		class MC_API ILayer {
+		class MC_API ILayer 
+		{
 		private:
 			bool m_Visible;
 		public:
