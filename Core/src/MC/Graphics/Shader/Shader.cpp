@@ -184,7 +184,7 @@ namespace MC
 		GLint Shader::GetUniformLocation(rd_str_t name) 
 		{
 			int location = glGetUniformLocation(m_ShaderID, name.c_str());
-#ifdef _DEBUG
+#if defined (MC_USE_DEBUG)
 			if (location == -1)
 				mc_debug("shader location of \"%s\" not found", name.c_str());
 #endif

@@ -1,4 +1,7 @@
 #pragma once
+#include "Hitresult.h"
+#include "Selector.h"
+
 #include <Graphics/Shader/Shader.h>
 #include <Graphics/Camera/Camera.h>
 
@@ -14,8 +17,11 @@ class Level;
 class Player 
 {
 protected:
-	Level* m_Lev;
+	Level* m_Level;
 private:
+	Selector* m_Sel;
+	bool m_MouseLeft;
+	bool m_MouseRight;
 	bool m_Ground;
 	vec2 m_Size;
 	AABB m_Box;
@@ -29,13 +35,16 @@ public:
 public:
 	void Render();
 	void Update();
-public:
+private:
 	void Move(const vec3& pos);
 	void MoveRelative(vec2 a, float speed);
-	void MouseMove(vec2 pos);
+	bool Raycast(const vec3& org, const vec3& dir, Hitresult& ret);
 public:
+	void MouseMove(vec2 pos);
 	void ResetPos();
 	void SetPos(const vec3& newPos);
+public:
+	void Pick(float time, Shader* shader);
 public:
 	inline bool GetGround() { return m_Ground; }
 };

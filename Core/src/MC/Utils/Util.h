@@ -1,20 +1,25 @@
 #pragma once
 #include "common.h"
 
-#ifndef NDEBUG
-#define MC_ASSERT(x, fmt, ...) \
+#ifndef MC_USE_RELEASE
+#define mc_assert(x, ...) \
 	if (!(x)) { \
-		MC::internal_printf("An assertion has ocurred in %s:%i\n", __FILE__, __LINE__); \
-		MC::internal_printf("%s\n", #x); \
-		MC::internal_printf(fmt, __VA_ARGS__); \
- 		MC::internal_breakpoint(); \
+		MC::Internal::mc_printf("An assertion has ocurred in %s:%i\n", __FILE__, __LINE__); \
+		MC::Internal::mc_printf("%s\n", #x); \
+		MC::Internal::mc_printf(__VA_ARGS__); \
+ 		MC::Internal::mc_breakpoint(); \
 	}
 #else
-#define MC_ASSERT(...)
+#define mc_assert(...)
 #endif
 
 namespace MC 
 {
-	int MC_API internal_printf(const char* fmt, ...);
-	void MC_API internal_breakpoint();
+	namespace Internal 
+	{
+
+		int MC_API mc_printf(const char* fmt, ...);
+		void MC_API mc_breakpoint();
+
+	}
 }

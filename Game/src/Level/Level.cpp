@@ -203,9 +203,6 @@ void Level::SetTile(ivec3 blockpos, int type)
 	if (blockpos.z % 16 == 15)
 		m_Updates.push_back(chunk + ivec3(0, 0, 1));
 
-	/* count chunk updates */
-	m_ChunkUpdates = m_Updates.size();
-
 
 	/* find chunk position in the map */
 	for (const auto& ch : m_Updates) {
@@ -268,12 +265,10 @@ std::vector<AABB> Level::GetCubes(const AABB& aabb)
 
 int Level::GetChunkIndex(const ivec3& chunk) 
 {
-	/* convert chunk position to chunk array */
 	return (chunk.y * CHUNK_XYZ + chunk.z) * CHUNK_XYZ + chunk.x;
 }
 
 int Level::GetBlockIndex(const ivec3& block) 
 {
-	/* convert block position to position in level array */
 	return (block.y * m_Size.y + block.z) * m_Size.x + block.x;
 }

@@ -1,51 +1,56 @@
 #include "Rubydung.h"
 
+#define CAM_ASPECT (float)m_Props.x / (float)m_Props.y
+
 Rubydung::Rubydung()
-	: m_InternalWindow(Application::GetInstance().GetWindow()),
-	m_Props(m_InternalWindow.GetProps())
+	: m_InternalWindow(Application::Get().GetWindow()),
+	  m_Props(m_InternalWindow.GetProps()), m_GProperties()
 {
 	m_Timer = new Timer();
 	m_Last = { m_Props.x / 2, m_Props.y / 2 };
+
+	/* Set window icon */
+	Image icon;
+	bool load = icon.LoadFromFile("assets/Internal/win_icon.png");
+	if (!load)
+		mc_fatal("failed to open image file: \"%s\"\n", icon.path);
+	m_InternalWindow.SetIcon(icon);
+	icon.Free();
+
+	Renderer::DepthFunc(DepthValue::LEQUAL);
+	Renderer::Enable(GL_DEPTH_TEST);
+	Renderer::ClearColor(m_GProperties.SkyColor);
 }
 
 Rubydung::~Rubydung() 
 {
-	delete m_Player;
-	delete m_Level;
-	delete m_Selector;
-	delete m_SShader;
-	delete m_CShader;
-	delete m_Timer;
+	if (m_Player)
+		delete m_Player;
+
+	if (m_Level)
+		delete m_Level;
+
+	if (m_SShader)
+		delete m_SShader;
+
+	if (m_CShader)
+		delete m_CShader;
+
+	if (m_Timer)
+		delete m_Timer;
 }
 
 void Rubydung::Init() 
 {
 	Default::Init();
 
-	if (!m_Icon.LoadFromFile("assets/Internal/win_icon.png")) 
-		mc_fatal("failed to open image file: \"%s\"\n", m_Icon.path);
-
-	m_InternalWindow.SetIcon(m_Icon);
-	m_Icon.Free();
-
-	/* load shader programs */
+	/* load shaders */
 	m_CShader = new Shader("assets/Shaders/chunk.shader");
 	m_SShader = new Shader("assets/Shaders/selector.shader");
 
-	/* initialize chunk renderer */
-	Renderer::DepthFunc(DepthValue::LEQUAL);
-	Renderer::Enable(GL_DEPTH_TEST);
-	Renderer::ClearColor({ 0.5f, 0.8f, 1.0f });
-
-	/* create player selector */
-	m_Selector = new Selector();
-
-	/* create level */
-	m_Level = new Level({ 256, 256, 64 });
-
-	/* setup steve */
+	/* Create player and level */
+	m_Level = new Level(m_GProperties.LevelSize);
 	m_Player = new Player(m_Level);
-	m_Player->Cam.aspect = (float)m_Props.x / (float)m_Props.y;
 
 	/* load texture */
 	if (!m_TerrainTexture.LoadFromFile("assets/terrain.png", GL_NEAREST))
@@ -60,7 +65,7 @@ void Rubydung::OnUpdate(Timestep& ts)
 
 	if (Input::IsKeyPressed(MC_KEY_ESCAPE)) {
 		m_Level->Save();
-		Application::GetInstance().Stop();
+		Application::Get().Stop();
 	}
 }
 
@@ -69,7 +74,7 @@ void Rubydung::OnKeyPressed(int key)
 	switch (key) {
 	case MC_KEY_ESCAPE:
 		m_Level->Save();
-		Application::GetInstance().Stop();
+		Application::Get().Stop();
 		break;
 	case MC_KEY_ENTER:
 		m_Level->Save();
@@ -81,9 +86,8 @@ void Rubydung::OnKeyPressed(int key)
 
 void Rubydung::OnCursorMoved(int& x, int& y) 
 {
-	vec2 pos(x, y);
-	vec2 offset(pos.x - m_Last.x, m_Last.y - pos.y);
-	m_Last = pos;
+	vec2 offset(x - m_Last.x, m_Last.y - y);
+	m_Last = vec2(x, y);
 
 	m_Player->MouseMove(offset);
 }
@@ -114,12 +118,13 @@ void Rubydung::OnEvent(Event& ev)
 void Rubydung::OnRender() 
 {
 	Default::OnRender();
+	mat4 VP = m_Player->Cam.GetProj() * m_Player->Cam.GetView();
 
 	/* 
 	 * GAME RENDER MAIN PROCESS:
 	 * -- Enable chunk shader
 	 * -- Render player (Update Camera vectors)
-	 * -- Set VP matrix in chunk shader
+	 * -- Get VP and set it in the chunk shader
 	 * -- Update player
 	 * -- Set fog uniforms in the chunk shader
 	 * -- Render level
@@ -129,113 +134,37 @@ void Rubydung::OnRender()
 	m_CShader->Bind();
 	m_Player->Render();
 
-	mat4 VP = m_Player->Cam.GetProj() * m_Player->Cam.GetView();
 	m_CShader->Set4x4("s_VP", VP);
 
 	m_CShader->SetVec3("s_cpos", m_Player->Cam.pos);
-	m_CShader->SetVec4("s_fcolor", { 14 / 255.0f, 11 / 255.0f, 10 / 255.0f, 1.0f });
-	m_CShader->SetFloat("s_fstart", -10.0f);
-	m_CShader->SetFloat("s_fend", 20.0f);
+	m_CShader->SetVec4("s_fcolor", m_GProperties.FogColor);
+	m_CShader->SetFloat("s_fstart", m_GProperties.FogStart);
+	m_CShader->SetFloat("s_fend", m_GProperties.FogEnd);
 
 	m_Level->Render(m_CShader, m_Player);
 
 	m_SShader->Bind();
-	m_SShader->Set4x4("s_VP", m_Player->Cam.GetProj() * m_Player->Cam.GetView());
+	m_SShader->Set4x4("s_VP", VP);
 
-	PlayerPick();
+	m_Player->Pick(m_Timer->ElapsedMillis(), m_SShader);
 }
 
 void Rubydung::OnTick() 
 {
 	Default::OnTick();
 
-#ifndef NDEBUG
-	mc_info("fps: %i, ups: %i, cups: %i\n", Application::GetInstance().GetFPS(), Application::GetInstance().GetUPS(), m_Level->GetUpdates());
+#ifndef MC_USE_RELEASE
+	mc_debug("fps: %i, ups: %i, cups: %i\n", Application::Get().GetFPS(), Application::Get().GetUPS(), m_Level->GetUpdates());
+	mc_debug("Rendered chunks: %i / total chunks: %i\n", m_Level->GetDrawCalls(), m_Level->GetChunksCount());
+	m_Level->RestartDrawCalls();
+	m_Level->RestartUpdates();
 #else
-	printf("%i fps, %i\n", Application::GetInstance().GetFPS(), lev->GetUpdates());
+	printf("%i fps, %i\n", Application::Get().GetFPS(), lev->GetUpdates());
 #endif
 }
 
-void Rubydung::OnSuspended() {
+void Rubydung::OnSuspended() 
+{
 	Default::OnSuspended();
 }
 
-bool Rubydung::Raycast(const vec3& org, const vec3& dir, Hitresult& ret) 
-{
-	vec3 d = dir;
-	vec3 lpoint = org;
-	ivec3 lblock = floor(org);
-	Ray camray;
-
-	for (float t = 0.0f; t < 5.0f; t += 0.1f) {
-		/* get point by parametric equation f(t) = dir * t + pos */
-		vec3 equation = camray.GetRay(t, org, d);
-
-		/* impact block */
-		ivec3 blockpos = floor(equation);
-
-		if (blockpos != lblock && m_Level->IsSolidTile(blockpos)) {
-			ivec3 normal = lblock - blockpos;
-
-			/* obtain block face normal */
-			if (normal == ivec3(0)) {
-				vec3 ad = abs(d);
-
-				if (ad.x >= ad.y && ad.x >= ad.z)
-					normal = ivec3((dir.x > 0) ? -1 : 1, 0, 0);
-				else if (ad.y >= ad.x && ad.y >= ad.z)
-					normal = ivec3(0, (dir.y > 0) ? -1 : 1, 0);
-				else
-					normal = ivec3(0, 0, (dir.z > 0) ? -1 : 1);
-			}
-
-			ret.block = blockpos;
-			ret.dis = t;
-			ret.face = normal;
-			ret.point = equation;
-
-			return true;
-		}
-
-		lpoint = equation;
-		lblock = blockpos;
-	}
-
-	return false;
-
-}
-
-void Rubydung::PlayerPick() 
-{
-	/* Obtain the vectors of parametric equation f(t) = ray * d + pos */
-	vec3 ray = m_Player->Cam.front;
-	vec3 org = m_Player->Cam.pos;
-
-	/* Result of the hit */
-	Hitresult ret;
-
-	/* The camera hit solid block? */
-	bool hit = Raycast(org, ray, ret);
-
-	if (hit) {
-		/* Render player selector */
-		m_Selector->SetHit(ret);
-		m_Selector->Render(m_Player->Cam, m_SShader, m_Timer->ElapsedMillis());
-
-		/* Get mouse button status */
-		bool left = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_1);
-		bool right = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_2);
-
-		/* Avoid click spam */
-		if (left && !m_MouseLeft)
-			m_Level->SetTile(ret.block, 0); /* delete tile */
-
-		if (right && !m_MouseRight)
-			m_Level->SetTile(ret.block + ret.face, 1); /* set tile */
-
-		/* Update mouse state */
-		m_MouseLeft = left;
-		m_MouseRight = right;
-	}
-}
-	

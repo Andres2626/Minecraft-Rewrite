@@ -49,8 +49,8 @@ private:
 	void AddFace(const vec3& fpos, Face f, Tile t);
 	void PushIndices(int count);
 public:
-	inline void SetDirty() { this->m_Dirty = true; }
-	inline bool GetDirty() { return this->m_Dirty; }
-	inline ivec3 GetPosition() { return this->m_Pos; }
-	inline AABB GetBox() { return this->m_Box; }
+	inline void SetDirty() { m_Dirty = true; }
+	inline bool GetDirty() { return m_Dirty; }
+	inline ivec3 GetPosition() { return m_Pos; }
+	inline AABB GetBox() { return m_Box; }
 };

@@ -14,7 +14,7 @@ build/%.o
 %.pdb
 level.dat
 .vs/
-%.log
+Game/%.log
 
 # directories
 build/

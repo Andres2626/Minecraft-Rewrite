@@ -1,17 +1,13 @@
 #shader vertex
 #version 330 core
 
-/*
- * NOTE: For use this shader you must have enabled
- * GL_BLEND before drawing vertex
- */
-
 layout(location = 0) in vec3 aPos;
 
 uniform mat4 s_VP;
 uniform mat4 s_M;
 
-void main() {
+void main() 
+{
 	gl_Position = s_VP * s_M * vec4(aPos, 1.0f);
 }
 
@@ -20,11 +16,9 @@ void main() {
 
 out vec4 FragColor;
 
-/* In milliseconds */
 uniform float s_Timer;
 
 void main() {
-	/* transparency (GL_BLEND) */
 	float a = sin(s_Timer / 100.0f) * 0.2f + 0.4f;
 	FragColor = vec4(1.0f, 1.0f, 1.0f, a);
 }

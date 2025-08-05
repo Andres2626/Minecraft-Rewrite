@@ -36,6 +36,12 @@
 #define mc_debug(fmt, ...) mc_print(MC_LEVEL_DEBUG, fmt, ##__VA_ARGS__)
 #define mc_trace(fmt, ...) mc_print(MC_LEVEL_TRACE, fmt, ##__VA_ARGS__)
 
+#if defined MC_USE_DEBUG
+#define mc_debug(fmt, ...) mc_print(MC_LEVEL_DEBUG, fmt, ##__VA_ARGS__)
+#else
+#define mc_debug(...)
+#endif
+
 namespace MC {
 
 	/*
