@@ -1,11 +1,12 @@
 #pragma once
 
-#define TEXCOOMC_SIZE 2 * 4
+#define TEXTCOORD_SIZE 2 * 4
 #define VERTICES_SIZE 3 * 4
 #define LIGHTS_SIZE 4
-#define FACE_SIZE TEXCOOMC_SIZE + VERTICES_SIZE + LIGHTS_SIZE
+#define FACE_SIZE TEXTCOORD_SIZE + VERTICES_SIZE + LIGHTS_SIZE
 
-enum class Face {
+enum class Face 
+{
 	FRONT = 1,
 	BACK,
 	LEFT,
@@ -14,13 +15,15 @@ enum class Face {
 	TOP
 };
 
-enum TileType {
+enum TileType 
+{
 	AIR = -1,
 	GRASS = 0,
 	ROCK = 1
 };
 
-class Tile {
+class Tile 
+{
 public:
 	TileType type;
 
@@ -30,7 +33,7 @@ public:
 	float vright[VERTICES_SIZE];
 	float vbottom[VERTICES_SIZE];
 	float vtop[VERTICES_SIZE];
-	float texcoords[TEXCOOMC_SIZE];
+	float texcoords[TEXTCOORD_SIZE];
 public:
 	Tile(TileType type);
 	~Tile();

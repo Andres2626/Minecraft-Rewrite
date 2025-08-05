@@ -1,6 +1,7 @@
 ﻿#include "Selector.h"
 
-Selector::Selector() {
+Selector::Selector() 
+{
 	/* Predefined selector face vertices and indices */
 	float vertices[12] = {
 		0.0f, 0.0f, 0.0f,
@@ -34,19 +35,22 @@ Selector::Selector() {
 	this->VAO->Unbind();
 }
 
-Selector::~Selector() {
+Selector::~Selector() 
+{
 	/* delete selector mesh */
 	this->VAO.reset();
 	this->VBO.reset();
 	this->IBO.reset();
 }
 
-void Selector::SetHit(const Hitresult& hit) {
+void Selector::SetHit(const Hitresult& hit) 
+{
 	/* set hit info */
 	this->m_Hit = hit;
 }
 
-void Selector::Render(Camera& cam, Shader* shader, float millis) {
+void Selector::Render(Camera& cam, Shader* shader, float millis) 
+{
 	mat4 model = mat4(1.0f);
 	mat4 rot = mat4(1.0f);
 
@@ -100,7 +104,8 @@ void Selector::Render(Camera& cam, Shader* shader, float millis) {
 	Renderer::Disable(GL_BLEND);
 }
 
-void Selector::RenderInternal() {
+void Selector::RenderInternal() 
+{
 	this->VAO->Bind();
 	Renderer::DrawElements(GL_TRIANGLES, IBO->GetSize());
 	this->VAO->Unbind();

@@ -10,16 +10,16 @@ using namespace Graphics;
 
 class Chunk;
 
-class Level {
+class Level 
+{
 public:
-	std::vector<ivec3> ChunkUpdates;
-	std::unordered_map<int, Chunk> chunks;
+	std::vector<ivec3> m_Updates;
+	std::unordered_map<int, Chunk> m_ChunkRenderer;
 	std::string m_LevelFile;
 private:
 	int m_ChunkUpdates;
-public:
-	uint8_t* blocks;
-	ivec3 size;
+	uint8_t* m_Blocks;
+	ivec3 m_Size;
 public:
 	Level(const ivec3& size);
 	~Level();
@@ -43,4 +43,5 @@ public:
 public:
 	inline void RestartUpdates() { this->m_ChunkUpdates = 0; }
 	inline int GetUpdates() const { return this->m_ChunkUpdates; }
+	inline ivec3 GetSize() const { return this->m_Size; }
 };

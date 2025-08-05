@@ -14,7 +14,8 @@ using namespace MC;
 using namespace Graphics;
 using namespace Math;
 
-class Selector {
+class Selector 
+{
 private:
 	std::unique_ptr<VertexArray> VAO;
 	std::unique_ptr<VertexBuffer> VBO;

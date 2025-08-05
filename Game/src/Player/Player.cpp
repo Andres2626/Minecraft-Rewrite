@@ -3,8 +3,6 @@
 #include "Level/Level.h"
 #include <App/Input.h>
 
-#include <math.h>
-
 using namespace MC;
 using namespace App;
 
@@ -13,13 +11,13 @@ bool first = true;
 static const double PI = 3.14159265358979323846;
 
 Player::Player(Level* level)
-	: m_Ground(false), m_Size({ 0.3f, 0.9f }), lev(level), cam(vec3(0.0f))
+	: m_Ground(false), m_Size({ 0.3f, 0.9f }), m_Lev(level), Cam(vec3(0.0f))
 {
 	/* create camera */
-	this->cam.fov = 70.0f;
-	this->cam.near = 0.05f;
-	this->cam.far = 100.0f;
-	this->cam.Update();
+	Cam.fov = 70.0f;
+	Cam.near = 0.05f;
+	Cam.far = 100.0f;
+	Cam.Update();
 
 	ResetPos();
 }
@@ -29,76 +27,73 @@ Player::~Player()
 
 }
 
-void Player::Render(Shader* shader) 
+void Player::Render() 
 {
-	mat4 clip = this->cam.GetProj() * this->cam.GetView();
-	shader->Set4x4("s_VP", clip);
-}
-	
-void Player::Update() 
-{
-	this->cam.pos = this->pos;
-	this->cam.Update();
+	Cam.pos = m_Pos;
+	Cam.Update();
 }
 
 void Player::Move(const vec3& pos) 
 {
 	vec3 org = pos;
 	vec3 a = pos;
-	std::vector<AABB> aabbs = this->lev->GetCubes(this->aabb.Expand(pos));
+	std::vector<AABB> aabbs = m_Lev->GetCubes(m_Box.Expand(pos));
 
 	for (AABB& aabb : aabbs) {
-		a.x = aabb.ClipXCollide(this->aabb, a.x);
-		a.y = aabb.ClipYCollide(this->aabb, a.y);
-		a.z = aabb.ClipZCollide(this->aabb, a.z);
+		a.x = aabb.ClipXCollide(m_Box, a.x);
+		a.y = aabb.ClipYCollide(m_Box, a.y);
+		a.z = aabb.ClipZCollide(m_Box, a.z);
 	}
 
-	this->aabb.Move({ a.x, a.y, a.z });
-	this->m_Ground = org.y != a.y && org.y < 0.0f;
+	m_Box.Move({ a.x, a.y, a.z });
+	this->m_Ground = (org.y != a.y) && (org.y < 0.0f);
 
 	if (org.x != a.x)
-		this->movdelta.x = 0.0f;
+		m_DMov.x = 0.0f;
 
 	if (org.y != a.y)
-		this->movdelta.y = 0.0f;
+		m_DMov.y = 0.0f;
 
 	if (org.z != a.z)
-		this->movdelta.z = 0.0f;
+		m_DMov.z = 0.0f;
 
-	this->pos.x = (this->aabb.p0.x + this->aabb.p1.x) / 2.0f;
-	this->pos.y = this->aabb.p0.y + 1.62f;
-	this->pos.z = (this->aabb.p0.z + this->aabb.p1.z) / 2.0f;
+	m_Pos.x = (m_Box.p0.x + m_Box.p1.x) / 2.0f;
+	m_Pos.y = m_Box.p0.y + 1.62f;
+	m_Pos.z = (m_Box.p0.z + m_Box.p1.z) / 2.0f;
 }
 
 void Player::MoveRelative(vec2 a, float speed) 
 {
 	float dis = length(a);
-	float s, c;
+	float s = sin(radians(Cam.rot.x));
+	float c = cos(radians(Cam.rot.x));
 	if (dis >= 0.01f) {
 		dis = speed / sqrt(dis);
 		a *= dis;
-		s = (float)sin(this->cam.rot.x * PI / 180);
-		c = (float)cos(this->cam.rot.x * PI / 180);
-		this->movdelta.x += a.x * c - a.y * s;
-		this->movdelta.z += a.y * c + a.x * s;
+		m_DMov.x += a.x * c - a.y * s;
+		m_DMov.z += a.y * c + a.x * s;
 	}
 }
 
-void Player::turn(vec2 pos) 
+void Player::MouseMove(vec2 pos) 
 {
+	/* set mouse sensibility */
 	pos *= 0.2f;
-	this->cam.rot += pos;
-	if (this->cam.rot.y > 89.0f)
-		this->cam.rot.y = 89.0f;
-	if (this->cam.rot.y < -89.0f)
-		this->cam.rot.y = -89.0f;
+	Cam.rot += pos;
+
+	/* Block camera rotation */
+	if (Cam.rot.y > 89.0f)
+		Cam.rot.y = 89.0f;
+	if (Cam.rot.y < -89.0f)
+		Cam.rot.y = -89.0f;
 }
 
-void Player::tick() 
+void Player::Update() 
 {
 	vec2 a(0.0f, 0.0f);
+	float hspeed;
 
-	/* DONE: Make the window independent of the player */
+	/* DONE: Window independent of the Player */
 	if (Input::IsKeyPressed(MC_KEY_R))
 		this->ResetPos();
 	if (Input::IsKeyPressed(MC_KEY_W))
@@ -110,35 +105,48 @@ void Player::tick()
 	if (Input::IsKeyPressed(MC_KEY_D))
 		a.y++;
 	if (Input::IsKeyPressed(MC_KEY_SPACE) && this->m_Ground)
-		this->movdelta.y = 0.12f;
+		m_DMov.y = 0.12f;
 
-	float hspeed = this->m_Ground ? 0.02f : 0.005f;
+	/* calculate player horizontal speed */
+	hspeed = this->m_Ground ? 0.02f : 0.005f;
 	MoveRelative(a, hspeed);
-	this->movdelta.y -= 0.005f;
-	Move(this->movdelta);
-	this->movdelta.x *= 0.91f;
-	this->movdelta.y *= 0.98f;
-	this->movdelta.z *= 0.91f;
+
+	m_DMov.y -= 0.005f; /* gravity speed */
+
+	Move(m_DMov);
+
+	m_DMov.x *= 0.91f;
+	m_DMov.y *= 0.98f;
+	m_DMov.z *= 0.91f;
+
 	if (this->m_Ground) {
-		this->movdelta.x *= 0.8f;
-		this->movdelta.z *= 0.8f;
+		m_DMov.x *= 0.8f;
+		m_DMov.z *= 0.8f;
 	}
 }
 
 void Player::ResetPos() 
 {
-	vec3 newpos;
-	newpos.x = (float)(rand() % this->lev->size.x + 1);
-	newpos.y = (float)(this->lev->size.z + 10);
-	newpos.z = (float)(rand() % this->lev->size.y + 1);
-	SetPos(newpos);
+	vec3 newPos;
+	ivec3 Size = m_Lev->GetSize();
+
+	/* Calculate new player position */
+	newPos.x = (float)(rand() % Size.x + 1);
+	newPos.y = (float)(Size.z + 10);
+	newPos.z = (float)(rand() % Size.y + 1);
+
+	/* Restore player position */
+	SetPos(newPos);
 }
 
 void Player::SetPos(const vec3& newPos) 
 {
-	this->pos = newPos;
-	this->cam.pos = newPos;
-	this->aabb = AABB({ newPos.x - this->m_Size.x, newPos.y - this->m_Size.y, newPos.z - this->m_Size.x },
-		              { newPos.x + this->m_Size.x, newPos.y + this->m_Size.y, newPos.z + this->m_Size.x });
-	cam.Update();
+	/* Set player vectors */
+	m_Pos = newPos;
+	Cam.pos = newPos;
+
+	/* Calculate new AABB */
+	m_Box = AABB({ newPos.x - this->m_Size.x, newPos.y - this->m_Size.y, newPos.z - this->m_Size.x },
+		         { newPos.x + this->m_Size.x, newPos.y + this->m_Size.y, newPos.z + this->m_Size.x });
+	Cam.Update();
 }

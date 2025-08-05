@@ -1,36 +1,36 @@
 #include "Rubydung.h"
 
 Rubydung::Rubydung()
-	: InternalWindow(Application::GetInstance().GetWindow()),
-	props(InternalWindow.GetProps())
+	: m_InternalWindow(Application::GetInstance().GetWindow()),
+	m_Props(m_InternalWindow.GetProps())
 {
-	this->tm = new Timer();
-	this->last = { props.x / 2, props.y / 2 };
+	m_Timer = new Timer();
+	m_Last = { m_Props.x / 2, m_Props.y / 2 };
 }
 
 Rubydung::~Rubydung() 
 {
-	delete this->steve;
-	delete this->lev;
-	delete this->py_sel;
-	delete this->sh_sel;
-	delete this->sh_chunk;
-	delete this->tm;
+	delete m_Player;
+	delete m_Level;
+	delete m_Selector;
+	delete m_SShader;
+	delete m_CShader;
+	delete m_Timer;
 }
 
 void Rubydung::Init() 
 {
 	Default::Init();
 
-	if (!icon.LoadFromFile("assets/Internal/win_icon.png")) {
+	if (!m_Icon.LoadFromFile("assets/Internal/win_icon.png")) {
 		MC_FATAL << "Error loading window icon.";
 	}
-	this->InternalWindow.SetIcon(icon);
-	icon.Free();
+	m_InternalWindow.SetIcon(m_Icon);
+	m_Icon.Free();
 
 	/* load shader programs */
-	sh_chunk = new Shader("assets/Shaders/chunk.shader");
-	sh_sel = new Shader("assets/Shaders/selector.shader");
+	m_CShader = new Shader("assets/Shaders/chunk.shader");
+	m_SShader = new Shader("assets/Shaders/selector.shader");
 
 	/* initialize chunk renderer */
 	Renderer::DepthFunc(DepthValue::LEQUAL);
@@ -38,41 +38,41 @@ void Rubydung::Init()
 	Renderer::ClearColor({ 0.5f, 0.8f, 1.0f });
 
 	/* create player selector */
-	py_sel = new Selector();
+	m_Selector = new Selector();
 
 	/* create level */
-	lev = new Level({ 256, 256, 64 });
+	m_Level = new Level({ 256, 256, 64 });
 
-	/* setup player */
-	steve = new Player(lev);
-	steve->cam.aspect = (float)props.x / (float)props.y;
+	/* setup steve */
+	m_Player = new Player(m_Level);
+	m_Player->Cam.aspect = (float)m_Props.x / (float)m_Props.y;
 
 	/* load texture */
-	if (!tex.LoadFromFile("assets/terrain.png", GL_NEAREST)) 
-		MC_FATAL << "Error loading " << tex.path;
+	if (!m_TerrainTexture.LoadFromFile("assets/terrain.png", GL_NEAREST))
+		MC_FATAL << "Error loading " << m_TerrainTexture.path;
 }
 
 void Rubydung::OnUpdate(Timestep& ts) 
 {
 	Default::OnUpdate(ts);
 
+	m_Player->Update();
+
 	if (Input::IsKeyPressed(MC_KEY_ESCAPE)) {
-		lev->Save();
+		m_Level->Save();
 		Application::GetInstance().Stop();
 	}
-
-	steve->tick();
 }
 
 void Rubydung::OnKeyPressed(int key) 
 {
 	switch (key) {
 	case MC_KEY_ESCAPE:
-		lev->Save();
+		m_Level->Save();
 		Application::GetInstance().Stop();
 		break;
 	case MC_KEY_ENTER:
-		lev->Save();
+		m_Level->Save();
 		break;
 	default:
 		break;
@@ -82,18 +82,17 @@ void Rubydung::OnKeyPressed(int key)
 void Rubydung::OnCursorMoved(int& x, int& y) 
 {
 	vec2 pos(x, y);
-	vec2 offset(pos.x - last.x, last.y - pos.y);
-	last = pos;
+	vec2 offset(pos.x - m_Last.x, m_Last.y - pos.y);
+	m_Last = pos;
 
-	/* player mouse handler */
-	steve->turn(offset);
+	m_Player->MouseMove(offset);
 }
 
 void Rubydung::OnEvent(Event& ev) 
 {
 	Default::OnEvent(ev);
 
-	while (InternalWindow.GetEvent(ev)) {
+	while (m_InternalWindow.GetEvent(ev)) {
 		Input::ProcessEvent(ev);
 
 		switch (ev.type) {
@@ -102,13 +101,13 @@ void Rubydung::OnEvent(Event& ev)
 			break;
 		case GLEQ_WINDOW_RESIZED:
 			Renderer::Viewport({ 0, 0 }, { ev.size.width, ev.size.height });
-			steve->cam.aspect = (float)ev.size.width / (float)ev.size.height;
+			m_Player->Cam.aspect = (float)ev.size.width / (float)ev.size.height;
 			break;
 		case GLEQ_CURSOR_MOVED:
 			OnCursorMoved(ev.pos.x, ev.pos.y);
 			break;
 		}
-		InternalWindow.FreeEvent(ev);
+		m_InternalWindow.FreeEvent(ev);
 	}
 }
 
@@ -116,28 +115,32 @@ void Rubydung::OnRender()
 {
 	Default::OnRender();
 
-	/* GAME RENDER MAIN PROCESS:
+	/* 
+	 * GAME RENDER MAIN PROCESS:
 	 * -- Enable chunk shader
-	 * -- Render player (get clip matrix view player.cpp)
+	 * -- Render player (Update Camera vectors)
+	 * -- Set VP matrix in chunk shader
 	 * -- Update player
 	 * -- Set fog uniforms in the chunk shader
 	 * -- Render level
 	 * -- Enable selector shader
 	 * -- PlayerPick process
 	 */
-	sh_chunk->Bind();
-	steve->Render(sh_chunk);
-	steve->Update();
+	m_CShader->Bind();
+	m_Player->Render();
 
-	sh_chunk->SetVec3("s_cpos", steve->cam.pos);
-	sh_chunk->SetVec4("s_fcolor", { 14 / 255.0f, 11 / 255.0f, 10 / 255.0f, 1.0f });
-	sh_chunk->SetFloat("s_fstart", -10.0f);
-	sh_chunk->SetFloat("s_fend", 20.0f);
+	mat4 VP = m_Player->Cam.GetProj() * m_Player->Cam.GetView();
+	m_CShader->Set4x4("s_VP", VP);
 
-	lev->Render(sh_chunk, steve);
+	m_CShader->SetVec3("s_cpos", m_Player->Cam.pos);
+	m_CShader->SetVec4("s_fcolor", { 14 / 255.0f, 11 / 255.0f, 10 / 255.0f, 1.0f });
+	m_CShader->SetFloat("s_fstart", -10.0f);
+	m_CShader->SetFloat("s_fend", 20.0f);
 
-	sh_sel->Bind();
-	sh_sel->Set4x4("s_VP", steve->cam.GetProj() * steve->cam.GetView());
+	m_Level->Render(m_CShader, m_Player);
+
+	m_SShader->Bind();
+	m_SShader->Set4x4("s_VP", m_Player->Cam.GetProj() * m_Player->Cam.GetView());
 
 	PlayerPick();
 }
@@ -147,7 +150,7 @@ void Rubydung::OnTick()
 	Default::OnTick();
 
 #if _DEBUG
-	MC_INFO << "fps: " << Application::GetInstance().GetFPS() << " ups: " << Application::GetInstance().GetUPS() << " cups: " << lev->GetUpdates();
+	MC_INFO << "fps: " << Application::GetInstance().GetFPS() << " ups: " << Application::GetInstance().GetUPS() << " cups: " << m_Level->GetUpdates();
 #else
 	printf("%i fps, %i\n", Application::GetInstance().GetFPS(), lev->GetUpdates());
 #endif
@@ -171,7 +174,7 @@ bool Rubydung::Raycast(const vec3& org, const vec3& dir, Hitresult& ret)
 		/* impact block */
 		ivec3 blockpos = floor(equation);
 
-		if (blockpos != lblock && lev->IsSolidTile(blockpos)) {
+		if (blockpos != lblock && m_Level->IsSolidTile(blockpos)) {
 			ivec3 normal = lblock - blockpos;
 
 			/* obtain block face normal */
@@ -205,8 +208,8 @@ bool Rubydung::Raycast(const vec3& org, const vec3& dir, Hitresult& ret)
 void Rubydung::PlayerPick() 
 {
 	/* Obtain the vectors of parametric equation f(t) = ray * d + pos */
-	vec3 ray = steve->cam.front;
-	vec3 org = steve->cam.pos;
+	vec3 ray = m_Player->Cam.front;
+	vec3 org = m_Player->Cam.pos;
 
 	/* Result of the hit */
 	Hitresult ret;
@@ -216,23 +219,23 @@ void Rubydung::PlayerPick()
 
 	if (hit) {
 		/* Render player selector */
-		py_sel->SetHit(ret);
-		py_sel->Render(steve->cam, sh_sel, tm->ElapsedMillis());
+		m_Selector->SetHit(ret);
+		m_Selector->Render(m_Player->Cam, m_SShader, m_Timer->ElapsedMillis());
 
 		/* Get mouse button status */
 		bool left = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_1);
 		bool right = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_2);
 
 		/* Avoid click spam */
-		if (left && !last_mouse_left)
-			lev->SetTile(ret.block, 0); /* delete tile */
+		if (left && !m_MouseLeft)
+			m_Level->SetTile(ret.block, 0); /* delete tile */
 
-		if (right && !last_mouse_right)
-			lev->SetTile(ret.block + ret.face, 1); /* set tile */
+		if (right && !m_MouseRight)
+			m_Level->SetTile(ret.block + ret.face, 1); /* set tile */
 
 		/* Update mouse state */
-		last_mouse_left = left;
-		last_mouse_right = right;
+		m_MouseLeft = left;
+		m_MouseRight = right;
 	}
 }
 	
