@@ -22,9 +22,9 @@ void Rubydung::Init()
 {
 	Default::Init();
 
-	if (!m_Icon.LoadFromFile("assets/Internal/win_icon.png")) {
-		MC_FATAL << "Error loading window icon.";
-	}
+	if (!m_Icon.LoadFromFile("assets/Internal/win_icon.png")) 
+		mc_fatal("failed to open image file: \"%s\"\n", m_Icon.path);
+
 	m_InternalWindow.SetIcon(m_Icon);
 	m_Icon.Free();
 
@@ -49,7 +49,7 @@ void Rubydung::Init()
 
 	/* load texture */
 	if (!m_TerrainTexture.LoadFromFile("assets/terrain.png", GL_NEAREST))
-		MC_FATAL << "Error loading " << m_TerrainTexture.path;
+		mc_fatal("failed to open texture file: \"%s\"\n", m_TerrainTexture.path);
 }
 
 void Rubydung::OnUpdate(Timestep& ts) 
@@ -149,8 +149,8 @@ void Rubydung::OnTick()
 {
 	Default::OnTick();
 
-#if _DEBUG
-	MC_INFO << "fps: " << Application::GetInstance().GetFPS() << " ups: " << Application::GetInstance().GetUPS() << " cups: " << m_Level->GetUpdates();
+#ifndef NDEBUG
+	mc_info("fps: %i, ups: %i, cups: %i\n", Application::GetInstance().GetFPS(), Application::GetInstance().GetUPS(), m_Level->GetUpdates());
 #else
 	printf("%i fps, %i\n", Application::GetInstance().GetFPS(), lev->GetUpdates());
 #endif

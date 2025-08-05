@@ -5,20 +5,18 @@
 
 namespace MC 
 {
-	namespace Layer 
+	namespace Layers 
 	{
 
-		class MC_API Stack : public ILayer 
+		class MC_API Stack : public Layer 
 		{
 		private:
-			std::vector<ILayer*> m_Layers;
+			std::vector<Layer*> m_Layers;
 		public:
 			Stack();
 			~Stack();
 		public:
-			void PushLayer(ILayer* layer);
-			ILayer* PopLayer();
-			ILayer* PopLayer(ILayer* layer);
+			void PushLayer(Layer* layer);
 		public:
 			void Init() override;
 		public:

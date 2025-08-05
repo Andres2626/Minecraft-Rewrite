@@ -1,5 +1,10 @@
 #include "App/Application.h"
+
 #include "Input.h"
+
+#include "Utils/Util.h"
+
+#include <thread>
 
 namespace MC 
 {
@@ -16,40 +21,31 @@ namespace MC
 
 		Application::~Application()
 		{
-			delete this->m_Win;
+			if (m_Win)
+			delete m_Win;
 		}
 
 		void Application::Init()
 		{
-			MC_INFO << "Engine version: " << MC_VERSION_STRING << ", code", MC_VERSION_NUMBER;
-
-			this->m_Win = new Window(this->m_Name.c_str(), this->m_Pr);
+			mc_info("MC Engine version: %s\n", MC_VERSION_STRING);
+	
+			m_Win = new Window(m_Name.c_str(), m_Pr);
 			Input::Init();
 		}
 
-		void Application::PushLayer(Layer::ILayer* layer)
+		void Application::PushLayer(Layers::Layer* layer)
 		{
 			this->m_LayerStack.PushLayer(layer);
 		}
 
-		Layer::ILayer* Application::PopLayer()
-		{
-			return this->m_LayerStack.PopLayer();
-		}
-
-		Layer::ILayer* Application::PopLayer(Layer::ILayer* layer)
-		{
-			return this->m_LayerStack.PopLayer(layer);
-		}
-
 		void Application::Start()
 		{
-			this->m_Running = true;
-			this->m_Suspended = false;
+			m_Running = true;
+			m_Suspended = false;
 
-			this->Init();
-			this->m_LayerStack.Init();
-			this->Run();
+			Init();
+			m_LayerStack.Init();
+			Run();
 		}
 
 		void Application::Suspend()
@@ -67,84 +63,102 @@ namespace MC
 			this->m_Running = false;
 		}
 
+		inline void Application::SetFPSGoal(int fps)
+		{
+			if (fps > 0) {
+				m_FPSGoal = fps;
+				m_Delay = 1000.0f / static_cast<float>(fps); // 1000ms / fps
+			}
+			else {
+				m_FPSGoal = 0;
+				m_Delay = 0.0f;
+			}
+		}
+
 		void Application::Run()
 		{
 			Events::Event ev;
 			this->m_Timer = new Utils::Timer();
 			float ti = 0.0f;
-			float update_timer = this->m_Timer->ElapsedMillis();
+			float update_timer = m_Timer->ElapsedMillis();
 			float update_tick = 1000.0f / 60.0f;
-			Utils::Timestep step(this->m_Timer->ElapsedMillis());
-			while (this->m_Running) {
-				this->m_Win->Clear();
-				float now = this->m_Timer->ElapsedMillis();
+			Utils::Timestep step(m_Timer->ElapsedMillis());
+			while (m_Running) {
+				Utils::Timer frametime;
+
+				m_Win->Clear();
+				float now = m_Timer->ElapsedMillis();
 				while (now - update_timer >= update_tick) {
 					step.Update(now);
 
-					/* Update game*/
-					this->OnUpdate(step);
+					OnUpdate(step);
 
-					this->m_UPS++;
+					m_UPS++;
 					update_timer += update_tick;
 				}
 
-				this->m_FPS++;
+				OnRender();
+				m_Win->Update();
 
-				Utils::Timer frametime;
-				this->m_FrameTime = frametime.ElapsedMillis();
-
-				this->OnRender();
-				this->m_Win->Update();
+				m_FPS++;
+				m_FrameTime = frametime.ElapsedMillis();
 
 				if (now - ti > 1000.0f) {
 					ti += 1000.0f;
 
-					/* OnTick process */
-					this->OnTick();
+					OnTick();
 
-					/* reset FPS and UPS */
-					this->m_FPS = 0;
-					this->m_UPS = 0;
+					m_FPS = 0;
+					m_UPS = 0;
 				}
 
-				while (this->m_Suspended) {
+				while (m_Suspended) {
 					this->OnSuspended();
 				}
 
-				if (this->m_Win->Close())
-					this->m_Running = false;
+				if (m_Win->Close())
+					m_Running = false;
 
 				this->OnEvent(ev);
+
+				/* TODO: Improve this! */
+				if (m_FPSGoal > 0) {
+					float remaining = m_Delay - m_FrameTime;
+					if (remaining > 0.0f)
+						std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(remaining));
+				}
 			}
 		}
 
 		void Application::OnUpdate(Utils::Timestep& ts)
 		{
-			this->m_LayerStack.OnUpdate(ts);
+			m_LayerStack.OnUpdate(ts);
 		}
 
 		void Application::OnEvent(Events::Event& ev)
 		{
-			this->m_LayerStack.OnEvent(ev);
+			m_LayerStack.OnEvent(ev);
 		}
 
 		void Application::OnRender()
 		{
-			this->m_LayerStack.OnRender();
+
+			m_LayerStack.OnRender();
 		}
 
 		void Application::OnTick()
 		{
-			this->m_LayerStack.OnTick();
+			m_LayerStack.OnTick();
 		}
 
 		void Application::OnSuspended()
 		{
-			this->m_LayerStack.OnSuspended();
+			m_LayerStack.OnSuspended();
 		}
 
 		Application& Application::GetInstance() 
 		{
+			MC_ASSERT(m_Instance, "application instance is null pointer");
 			return *m_Instance;
 		}
 	}

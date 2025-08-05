@@ -32,6 +32,7 @@ public:
 	void Init() override
 	{
 		Application::Init();
+		SetFPSGoal(60);
 
 		PushLayer(new Rubydung());
 	}
@@ -40,10 +41,12 @@ public:
 int main(int argc, char** argv) 
 {
 	Host::Init(&argc, &argv);
-	Logger::SetLogLevel(LogLevel::MAX);
+
+	log_init(MC_LOG_STDOUT | MC_LOG_FILE);
+	log_set_level(MC_LEVEL_TRACE);
 
 #if defined (COUNTER_INTERFACE)
-	MC_WARN << "RubyDung rd-133221 build: " <<  BUILD_COUNT;
+	mc_warn("RubyDung rd-133221 build: %i\n", BUILD_COUNT);
 #endif
 
 	Game game;

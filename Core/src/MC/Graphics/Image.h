@@ -6,7 +6,7 @@ namespace MC
 	namespace Graphics 
 	{
 
-		class MC_API Image 
+		struct MC_API Image 
 		{
 		public:
 			const char* path;

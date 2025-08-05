@@ -64,8 +64,8 @@ namespace MC
 		public:
 			void SetIcon(const Graphics::Image& img);
 		public:
-			inline WindowProperties& GetProps() { return this->m_Pr; }
-			inline GLFWwindow* GetWindow() { return this->m_Win; };
+			inline WindowProperties& GetProps() { return m_Pr; }
+			inline GLFWwindow* GetWindow() { return m_Win; };
 		};
 
 	}
