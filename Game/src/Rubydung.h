@@ -17,19 +17,20 @@ using namespace Events;
 using namespace Layer;
 using namespace Math;
 
-class Rubydung : public Default {
+class Rubydung : public Default 
+{
 private:
-	vec2 last;
-	Shader* sh_chunk, * sh_sel;
-	Selector* py_sel;
-	Level* lev;
-	Player* steve;
-	Texture tex;
-	Window InternalWindow;
-	WindowProperties props;
-	Timer* tm;
-	Image icon;
-	bool last_mouse_left, last_mouse_right;
+	vec2 m_Last;
+	Shader* m_CShader, *m_SShader;
+	Selector* m_Selector;
+	Level* m_Level;
+	Player* m_Player;
+	Texture m_TerrainTexture;
+	Window m_InternalWindow;
+	WindowProperties m_Props;
+	Timer* m_Timer;
+	Image m_Icon;
+	bool m_MouseLeft, m_MouseRight;
 public:
 	Rubydung();
 	~Rubydung();

@@ -7,34 +7,25 @@
 
 /* push vertex properties in the array */
 #define PUSH_VERTEX(f, brig, vb, ub) \
-	this->vertices.push_back(t.f[vb] + fpos.x); \
-	this->vertices.push_back(t.f[vb + 1] + fpos.y); \
-	this->vertices.push_back(t.f[vb + 2] + fpos.z); \
-	this->vertices.push_back(t.texcoords[ub]); \
-	this->vertices.push_back(t.texcoords[ub + 1]); \
-	this->vertices.push_back(brig)
-
-/* push indices in the array */
-#define PUSH_INDICES(c) \
-	this->indices.push_back(c); \
-	this->indices.push_back(c + 1); \
-	this->indices.push_back(c + 2); \
-	this->indices.push_back(c + 2); \
-	this->indices.push_back(c + 3); \
-	this->indices.push_back(c)
+	vertices.push_back(t.f[vb] + fpos.x); \
+	vertices.push_back(t.f[vb + 1] + fpos.y); \
+	vertices.push_back(t.f[vb + 2] + fpos.z); \
+	vertices.push_back(t.texcoords[ub]); \
+	vertices.push_back(t.texcoords[ub + 1]); \
+	vertices.push_back(brig)
 
 /* create block */
 Tile rock = Tile(ROCK);
 Tile grass = Tile(GRASS);
 
-Chunk::Chunk(Level* level, const MC::Math::ivec3& pos)
-   : lev(level), pos(pos), m_Dirty(true)
+Chunk::Chunk(Level* level, const ivec3& pos)
+   : m_Level(level), m_Pos(pos), m_Dirty(true)
 {
-	this->lev = level;
-	this->m_Dirty = true;
+	m_Level = level;
+	m_Dirty = true;
 
 	/* build chunk box */
-	box = AABB({ pos.x * CHUNK_XYZ, pos.y * CHUNK_XYZ, pos.z * CHUNK_XYZ }, 
+	m_Box = AABB({ pos.x * CHUNK_XYZ, pos.y * CHUNK_XYZ, pos.z * CHUNK_XYZ }, 
 		       { (pos.x * CHUNK_XYZ) + CHUNK_XYZ, (pos.y * CHUNK_XYZ) + CHUNK_XYZ, 
 		       (pos.z * CHUNK_XYZ) + CHUNK_XYZ });
 
@@ -58,8 +49,8 @@ Chunk::~Chunk()
 void Chunk::Build() 
 {
 	/* if the chunk is marked as dirty, rebuild the vertices and indices */
-	if (!this->m_Dirty)
-		return; /* the chunk has not marked as dirty */
+	if (!m_Dirty)
+		return; /* if the chunk is not marked at dirty, advoid chunk rebuilding */
 
 	/* reset indices and vertices vector */
 	std::vector<float>().swap(this->vertices);
@@ -71,40 +62,39 @@ void Chunk::Build()
 			for (int cz = 0;cz <= CHUNK_XYZ; cz++) {
 
 				/* convert chunk position to global position */
-				ivec3 p((pos.x * CHUNK_XYZ) + cx, (pos.y * CHUNK_XYZ) + cy, 
-					   (pos.z * CHUNK_XYZ) + cz);
+				ivec3 p((m_Pos.x * CHUNK_XYZ) + cx, (m_Pos.y * CHUNK_XYZ) + cy,
+					   (m_Pos.z * CHUNK_XYZ) + cz);
 
-				
 				/* The top blocks of the chunk will always be grass (for now) */
-				if (p.y == (this->lev->size.z * 2 / 3))
+				if (p.y == (m_Level->GetSize().z * 2 / 3))
 					tl = grass;
-				else if (p.y < (this->lev->size.z * 2 / 3) || p.y >= 0)
+				else if (p.y < (m_Level->GetSize().z * 2 / 3) || p.y >= 0)
 					tl = rock;
 
 				/*
-				* Push all the vertices in the buffer.
-				* if the block have adjacent solid blocks ignore this
-				* block (render optimization)
-				*/
-				if (lev->IsSolidTile(p)) {
-					if (!lev->IsSolidTile({ p.x + 1, p.y, p.z })) {
+				 * Push all the vertices in the buffer.
+				 * if the block have adjacent solid blocks ignore this
+				 * block (render optimization)
+				 */
+				if (m_Level->IsSolidTile(p)) {
+					if (!m_Level->IsSolidTile({ p.x + 1, p.y, p.z })) {
 						AddFace(p, Face::RIGHT, tl);
 					}
-					if (!lev->IsSolidTile({ p.x - 1, p.y, p.z })) {
+					if (!m_Level->IsSolidTile({ p.x - 1, p.y, p.z })) {
 						AddFace(p, Face::LEFT, tl);
 					}
-					if (!lev->IsSolidTile({ p.x, p.y + 1, p.z })) {
+					if (!m_Level->IsSolidTile({ p.x, p.y + 1, p.z })) {
 						AddFace(p, Face::TOP, tl);
 					}
 
-					if (!lev->IsSolidTile({ p.x, p.y - 1, p.z })) {
+					if (!m_Level->IsSolidTile({ p.x, p.y - 1, p.z })) {
 						AddFace(p, Face::BOTTOM, tl);
 					}
-					if (!lev->IsSolidTile({ p.x, p.y, p.z + 1 })) {
+					if (!m_Level->IsSolidTile({ p.x, p.y, p.z + 1 })) {
 						AddFace(p, Face::BACK, tl);
 					}
 
-					if (!lev->IsSolidTile({ p.x, p.y, p.z - 1 })) {
+					if (!m_Level->IsSolidTile({ p.x, p.y, p.z - 1 })) {
 						AddFace(p, Face::FRONT, tl);
 					}
 				}
@@ -124,11 +114,11 @@ void Chunk::Build()
 	 */
 	MC::Graphics::VertexLayout VL;
 
-	this->VAO.reset(new VertexArray());
-	this->VBO.reset(new VertexBuffer());
-	this->IBO.reset(new IndexBuffer());
-	this->VBO->Build(vertices.size() * sizeof(float), vertices.data());
-	this->IBO->Build(indices.size() * sizeof(unsigned int), indices.data());
+	VAO.reset(new VertexArray());
+	VBO.reset(new VertexBuffer());
+	IBO.reset(new IndexBuffer());
+	VBO->Build(vertices.size() * sizeof(float), vertices.data());
+	IBO->Build(indices.size() * sizeof(unsigned int), indices.data());
 	VL.AddAttribute(SHADER_VERTEX_BIT, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
 	VL.AddAttribute(SHADER_TEX_BIT, 2, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	VL.AddAttribute(SHADER_BRIG_BIT, 1, GL_FLOAT, 6 * sizeof(float), (void*)(5 * sizeof(float)));
@@ -150,67 +140,78 @@ void Chunk::Render(Shader* shader) const
 	 * black (oclussion blocks) for avoid fs_in.brightness < 0.6f in fragment 
 	 * shader (view assets/Shaders/chunk.shader)
 	 */
-	this->VAO->Bind();
+	VAO->Bind();
 	Renderer::DrawElements(GL_TRIANGLES, IBO->GetSize());
-	this->VAO->Unbind();
+	VAO->Unbind();
 }
 
 void Chunk::AddFace(const vec3& fpos, Face f, Tile t) 
 {
-	int count = this->vertices.size() / 6;
+	int count = vertices.size() / 6;
 
 	/* brigthness face values */
 	float c1 = 1.0f;
 	float c2 = 0.8f;
 	float c3 = 0.6f;
+	float br = 0.0f;
 
 	/* 
-	* Push all specified FACE block in main array. 
+	* Push FACES in main vertex and indices. 
 	* TODO: Separate buffers.
 	*/
 	if (f == Face::FRONT) {
-		float br = this->lev->GetBrigthness({ fpos.x, fpos.y, fpos.z - 1 }) * c2;
+		br = m_Level->GetBrigthness({ fpos.x, fpos.y, fpos.z - 1 }) * c2;
 		PUSH_VERTEX(vfront, br, 0, 0);
 		PUSH_VERTEX(vfront, br, 3, 2);
 		PUSH_VERTEX(vfront, br, 6, 4);
 		PUSH_VERTEX(vfront, br, 9, 6);
 	}
 	else if (f == Face::BACK) {
-		float br = this->lev->GetBrigthness({ fpos.x, fpos.y, fpos.z + 1 }) * c2;
+		br = m_Level->GetBrigthness({ fpos.x, fpos.y, fpos.z + 1 }) * c2;
 		PUSH_VERTEX(vback, br, 0, 0);
 		PUSH_VERTEX(vback, br, 3, 2);
 		PUSH_VERTEX(vback, br, 6, 4);
 		PUSH_VERTEX(vback, br, 9, 6);
 	}
 	else if (f == Face::LEFT) {
-		float br = this->lev->GetBrigthness({ fpos.x - 1, fpos.y, fpos.z }) * c3;
+		br = m_Level->GetBrigthness({ fpos.x - 1, fpos.y, fpos.z }) * c3;
 		PUSH_VERTEX(vleft, br, 0, 0);
 		PUSH_VERTEX(vleft, br, 3, 2);
 		PUSH_VERTEX(vleft, br, 6, 4);
 		PUSH_VERTEX(vleft, br, 9, 6);
 	}
 	else if (f == Face::RIGHT) {
-		float br = this->lev->GetBrigthness({ fpos.x + 1, fpos.y, fpos.z }) * c3;
+		br = m_Level->GetBrigthness({ fpos.x + 1, fpos.y, fpos.z }) * c3;
 		PUSH_VERTEX(vright, br, 0, 0);
 		PUSH_VERTEX(vright, br, 3, 2);
 		PUSH_VERTEX(vright, br, 6, 4);
 		PUSH_VERTEX(vright, br, 9, 6);
 	}
 	else if (f == Face::BOTTOM) {
-		float br = this->lev->GetBrigthness({ fpos.x, fpos.y - 1, fpos.z }) * c1;
+		br = m_Level->GetBrigthness({ fpos.x, fpos.y - 1, fpos.z }) * c1;
 		PUSH_VERTEX(vbottom, br, 0, 0);
 		PUSH_VERTEX(vbottom, br, 3, 2);
 		PUSH_VERTEX(vbottom, br, 6, 4);
 		PUSH_VERTEX(vbottom, br, 9, 6);
 	}
 	else if (f == Face::TOP) {
-		float br = this->lev->GetBrigthness({ fpos.x, fpos.y + 1, fpos.z }) * c1;
+		br = m_Level->GetBrigthness({ fpos.x, fpos.y + 1, fpos.z }) * c1;
 		PUSH_VERTEX(vtop, br, 0, 0);
 		PUSH_VERTEX(vtop, br, 3, 2);
 		PUSH_VERTEX(vtop, br, 6, 4);
 		PUSH_VERTEX(vtop, br, 9, 6);
 	}
 
-	PUSH_INDICES(count);
+	PushIndices(count);
+}
+
+void Chunk::PushIndices(int count)
+{
+	indices.push_back(count);
+	indices.push_back(count + 1);
+	indices.push_back(count + 2);
+	indices.push_back(count + 2);
+	indices.push_back(count + 3);
+	indices.push_back(count);
 }
 

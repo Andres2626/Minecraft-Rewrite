@@ -11,31 +11,31 @@ using namespace Physics;
 
 class Level;
 
-class Player {
+class Player 
+{
 protected:
-	Level* lev;
+	Level* m_Lev;
 private:
 	bool m_Ground;
 	vec2 m_Size;
+	AABB m_Box;
+	vec3 m_Pos;
+	vec3 m_DMov;
 public:
-	Camera cam;
-	AABB aabb;
-	vec3 pos;
-	vec3 movdelta;
+	Camera Cam;
 public:
 	Player(Level* level);
 	~Player();
 public:
-	void Render(Shader* shader);
+	void Render();
 	void Update();
-	void tick();
 public:
 	void Move(const vec3& pos);
 	void MoveRelative(vec2 a, float speed);
-	void turn(vec2 mouse);
+	void MouseMove(vec2 pos);
 public:
 	void ResetPos();
 	void SetPos(const vec3& newPos);
 public:
-	inline bool GetGround() { return this->m_Ground; }
+	inline bool GetGround() { return m_Ground; }
 };

@@ -37,18 +37,20 @@
 #define MC_VERSION_PATH      1
 #define MC_VERSION_NUMBER    ((MC_VERSION_MAJOR * 10000) + (MC_VERSION_MINOR * 100) + MC_VERSION_PATH)
 #define MC_VERSION_STRING    "pa.0.0.1"
+#define _USE_MATH_DEFINES 1
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-#include <stdarg.h>
 #include <fstream>
 #include <iostream>
 #include <locale>
+#include <math.h>
 #include <map>
 #include <sstream>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string>
+#include <string.h>
+#include <stdarg.h>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>

@@ -15,14 +15,19 @@
 using namespace MC;
 using namespace App;
 
-class Game : public Application {
+class Game : public Application 
+{
 public:
 	Game()
 		: Application(WIN_TITLE, { WIN_X, WIN_Y, { false } })
-	{ }
+	{ 
+	
+	}
 
 	~Game()
-	{ }
+	{ 
+	
+	}
 
 	void Init() override
 	{

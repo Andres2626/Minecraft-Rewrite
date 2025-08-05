@@ -4,7 +4,8 @@
 using namespace MC;
 using namespace Math;
 
-struct Hitresult {
+struct Hitresult 
+{
 	/* impact block */
 	ivec3 block;
 
