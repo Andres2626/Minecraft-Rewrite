@@ -1,14 +1,14 @@
 #pragma once
 #include "common.h"
 
-#include "ILayer.h"
+#include "Layer.h"
 
 namespace MC 
 {
-	namespace Layer 
+	namespace Layers 
 	{
 
-		class MC_API Default : public ILayer 
+		class MC_API Default : public Layer 
 		{
 		public:
 			Default();

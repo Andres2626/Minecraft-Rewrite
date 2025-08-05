@@ -6,11 +6,10 @@
 
 namespace MC 
 {
-
-	namespace Layer 
+	namespace Layers 
 	{
 
-		class MC_API ILayer 
+		class MC_API Layer 
 		{
 		private:
 			bool m_Visible;
@@ -22,8 +21,8 @@ namespace MC
 			virtual void OnTick() = 0;
 			virtual void OnSuspended() = 0;
 		public:
-			inline bool IsVisible() { return this->m_Visible; }
-			inline void SetVisible(bool visible) { this->m_Visible = visible; }
+			inline bool IsVisible() { return m_Visible; }
+			inline void SetVisible(bool visible) { m_Visible = visible; }
 		};
 
 	}

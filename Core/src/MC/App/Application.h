@@ -2,7 +2,7 @@
 #include "common.h"
 #include "Window.h"
 
-#include "Layer/Stack.h"
+#include "Layers/Stack.h"
 #include "Log/Log.h"
 #include "Utils/Timer.h"
 
@@ -10,13 +10,15 @@ namespace MC
 {
 	namespace App 
 	{
-		class MC_API Application : public Layer::ILayer 
+		class MC_API Application : public Layers::Layer 
 		{
 		protected:
 			Window* m_Win;
 		private:
 			bool m_Running;
 			bool m_Suspended;
+			int m_FPSGoal;
+			float m_Delay;
 			int m_FPS;
 			int m_UPS;
 			float m_FrameTime;
@@ -24,25 +26,24 @@ namespace MC
 			WindowProperties m_Pr;
 		private:
 			Utils::Timer* m_Timer;
-			Layer::Stack m_LayerStack;
+			Layers::Stack m_LayerStack;
 		public:
 			Application(const rd_str_t& name, const WindowProperties& pr);
 			~Application();
 		public:
 			virtual void Init();
 		public:
-			void PushLayer(Layer::ILayer* layer);
-			Layer::ILayer* PopLayer();
-			Layer::ILayer* PopLayer(Layer::ILayer* layer);
+			void PushLayer(Layers::Layer* layer);
 		public:
 			void Start();
 			void Suspend();
 			void Resume();
 			void Stop();
 		public:
-			inline int GetFPS() { return this->m_FPS; }
-			inline int GetUPS() { return this->m_UPS; }
-			inline float GetFrameTime() { return this->m_FrameTime; }
+			inline void SetFPSGoal(int fps);
+			inline int GetFPS() { return m_FPS; }
+			inline int GetUPS() { return m_UPS; }
+			inline float GetFrameTime() { return m_FrameTime; }
 		private:
 			void Run();
 			void OnUpdate(Utils::Timestep& ts) override;
@@ -53,7 +54,7 @@ namespace MC
 		public:
 			static Application& GetInstance();
 		public:
-			inline Window& GetWindow() { return *this->m_Win; };
+			inline Window& GetWindow() { return *m_Win; };
 		};
 
 	}

@@ -24,13 +24,12 @@
 #include "Host/console.h"
 #include "Host/init.h"
 
-#include "Layer/ILayer.h"
-#include "Layer/Stack.h"
-#include "Layer/Default.h"
+#include "Layers/Layer.h"
+#include "Layers/Stack.h"
+#include "Layers/Default.h"
 
-#include "Log/Logger.h"
+#include "Log/Log.h"
 #include "Log/LogLevel.h"
-#include "Log/LogMessage.h"
 
 #include "Math/Math.h"
 

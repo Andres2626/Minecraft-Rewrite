@@ -1,14 +1,6 @@
 #pragma once
 #include "common.h"
 
-#define MC_ABORT (x, fmt, ...) \
-	if (!(x)) { \
-		MC::rd_internal_printf("Abort called in %s:%i\n", __FILE__, __LINE__); \
-		MC::internal_printf("%s\n", #x); \
-		MC::internal_printf(fmt, __VA_ARGS__); \
- 		abort(); \
-	}
-
 #ifndef NDEBUG
 #define MC_ASSERT(x, fmt, ...) \
 	if (!(x)) { \

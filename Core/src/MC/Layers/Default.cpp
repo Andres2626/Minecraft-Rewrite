@@ -2,7 +2,7 @@
 
 namespace MC 
 {
-	namespace Layer 
+	namespace Layers 
 	{
 
 		Default::Default()

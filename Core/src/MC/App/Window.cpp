@@ -13,7 +13,7 @@ namespace MC
 		/* GLFW Error handler */
 		void ErrorCallback(int error, const char* msg)
 		{
-			MC_FATAL << "GLFW Error " << error << ":" << msg;
+			mc_fatal("glfw error %i: %s\n", error, msg);
 		}
 
 		Window::Window(const rd_str_t& title, const WindowProperties& properties)
@@ -35,7 +35,7 @@ namespace MC
 			glfwSetErrorCallback(ErrorCallback);
 
 			if (!glfwInit()) {
-				MC_FATAL << "GLFW not initialized";
+				mc_fatal("glfwInit() return 0\n");
 				return false;
 			}
 
@@ -55,7 +55,7 @@ namespace MC
 			/* Create window via GLFW */
 			m_Win = glfwCreateWindow(m_Pr.x, m_Pr.y, m_Title.c_str(), 0, 0);
 			if (!m_Win) {
-				MC_FATAL << "Error initializing window (" << m_Pr.x << "x" << m_Pr.y << "," << "title:\"" << m_Title << "\"" << ")";
+				mc_fatal("error initializing window (%ix%i title:%s)\n", m_Pr.x, m_Pr.y, m_Title);
 				return false;
 			}
 
@@ -67,16 +67,16 @@ namespace MC
 
 			bool glad = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 			if (!glad) {
-				MC_FATAL << "GL context not initialized";
+				mc_fatal("GL context not initialized.\n");
 				return false;
 			}
 
 			if (!m_Pr.cursor.enable)
 				glfwSetInputMode(m_Win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-			MC_WARN << "OpenGL Version: " << glGetString(GL_VERSION);
-			MC_WARN << "GPU vendor: " << glGetString(GL_VENDOR);
-			MC_WARN << "GPU name: " << glGetString(GL_RENDERER);
+			mc_warn("GL version: %s\n", glGetString(GL_VERSION));
+			mc_warn("GPU vendor: %s\n", glGetString(GL_VENDOR));
+			mc_warn("GPU name: %s\n", glGetString(GL_RENDERER));
 
 			return true;
 		}

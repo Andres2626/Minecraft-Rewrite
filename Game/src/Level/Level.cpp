@@ -18,12 +18,12 @@ Level::Level(const ivec3& size)
 
 	/* check valid level size */
 	if (v < 0)
-		MC_FATAL << "Level invalid size (" << size.x << "," << size.y << "," << size.z << ")";
+		mc_fatal("level invalid size (x=%i, y=%i, z=%i)\n", size.x, size.y, size.z);
 
 	/* create level array */
 	m_Blocks = (uint8_t*)malloc(v);
 	if (!m_Blocks)
-		MC_FATAL << "alloc_blocks() failed: out of memory (size=" << v << ")";
+		mc_fatal("alloc_blocks() failed: out of memory (size=%i)\n", v);
 
 	/* check if level.dat exists in filesystem */
 	if (!Levelcheck()) {
@@ -113,7 +113,7 @@ bool Level::Levelcheck()
 
 void Level::Save() 
 {
-	MC_INFO << "Saving level";
+	mc_info("saving level\n");
 
 	int bufflen = m_Size.x * m_Size.y * m_Size.z;
 	std::string buff;
@@ -124,7 +124,7 @@ void Level::Save()
 	/* open level.dat for write buff */
 	std::ofstream dis(m_LevelFile, std::ios::out | std::ios::binary);
 	if (!dis.is_open())
-		MC_FATAL <<  "Failed to open level file: \"" <<  m_LevelFile << "\"";
+		mc_fatal("failed to open level file: \"%s\"\n", m_LevelFile);
 
 	/* write buff to level.dat and close */
 	dis.write(buff.data(), buff.size());
@@ -133,12 +133,12 @@ void Level::Save()
 
 void Level::Load() 
 {
-	MC_INFO << "Loading level";
+	mc_info("loading level\n");
 
 	/* open level.dat */
 	std::ifstream dos(m_LevelFile, std::ios::in | std::ios::binary);
 	if (!dos.is_open())
-		MC_FATAL << "Failed to open level file: \"" << m_LevelFile << "\"";
+		mc_fatal("failed to open level file: \"%s\"\n", m_LevelFile);
 
 	/* read file (compressed) */
 	std::string compressed((std::istreambuf_iterator<char>(dos)), std::istreambuf_iterator<char>());

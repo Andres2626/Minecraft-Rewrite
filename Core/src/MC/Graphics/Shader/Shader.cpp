@@ -101,8 +101,8 @@ namespace MC
 			std::stringstream ss[2];
 			std::ifstream stream(path);
 
-			if (!stream) 
-				MC_FATAL << "Failed to open shader file \"" << path << "\"";
+			if (!stream)
+				mc_fatal("failed to open shader file \"%s\"\n", path);
 
 			enum class ShaderType 
 			{
@@ -146,13 +146,13 @@ namespace MC
 
 				switch (type) {
 				case GL_VERTEX_SHADER:
-					MC_ERROR << "Vertex shader error! deleting...\n";
+					mc_error("vertex shader error\n");
 					break;
 				case GL_FRAGMENT_SHADER:
-					MC_ERROR << "Fragment shader error! deleting...\n";
+					mc_error("fragment shader error\n");
 					break;
 				default:
-					MC_ERROR << "Unknoun shader error! deleting...\n";
+					mc_error("unknoun shader (%i)\n", type);
 					break;
 				}
 
@@ -185,9 +185,8 @@ namespace MC
 		{
 			int location = glGetUniformLocation(m_ShaderID, name.c_str());
 #ifdef _DEBUG
-			if (location == -1) {
-				MC_DEBUG << "Shader Location of: " << name.c_str() << " not found!, Skipping...\n";
-			}
+			if (location == -1)
+				mc_debug("shader location of \"%s\" not found", name.c_str());
 #endif
 			return location;
 		}
