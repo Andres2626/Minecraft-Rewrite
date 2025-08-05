@@ -6,24 +6,27 @@
 
 namespace MC 
 {
-
-	int internal_printf(const char* fmt, ...)
+	namespace Internal
 	{
-		va_list args;
-		va_start(args, fmt);
 
-		int ret = vprintf(fmt, args);
+		int mc_printf(const char* fmt, ...)
+		{
+			va_list args;
+			va_start(args, fmt);
 
-		va_end(args);
+			int ret = vprintf(fmt, args);
 
-		return ret;
+			va_end(args);
+
+			return ret;
+		}
+
+		void mc_breakpoint()
+		{
+			MC_INTERNAL_BREAK_POINT;
+		}
+
 	}
-
-	void internal_breakpoint()
-	{
-		MC_INTERNAL_BREAK_POINT;
-	}
-
 }
 
 

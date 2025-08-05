@@ -14,6 +14,7 @@ namespace MC
 		{
 		protected:
 			Window* m_Win;
+			WindowProperties m_Pr;
 		private:
 			bool m_Running;
 			bool m_Suspended;
@@ -23,7 +24,6 @@ namespace MC
 			int m_UPS;
 			float m_FrameTime;
 			rd_str_t m_Name;
-			WindowProperties m_Pr;
 		private:
 			Utils::Timer* m_Timer;
 			Layers::Stack m_LayerStack;
@@ -39,11 +39,6 @@ namespace MC
 			void Suspend();
 			void Resume();
 			void Stop();
-		public:
-			inline void SetFPSGoal(int fps);
-			inline int GetFPS() { return m_FPS; }
-			inline int GetUPS() { return m_UPS; }
-			inline float GetFrameTime() { return m_FrameTime; }
 		private:
 			void Run();
 			void OnUpdate(Utils::Timestep& ts) override;
@@ -52,8 +47,13 @@ namespace MC
 			void OnTick() override;
 			void OnSuspended() override;
 		public:
-			static Application& GetInstance();
+			inline void SetFPSGoal(int fps);
+			inline int GetFPS() { return m_FPS; }
+			inline int GetUPS() { return m_UPS; }
+			inline float GetFrameTime() { return m_FrameTime; }
 		public:
+			static Application& Get();
+			static inline WindowProperties& GetProperties() { return Get().m_Pr; };
 			inline Window& GetWindow() { return *m_Win; };
 		};
 

@@ -51,6 +51,9 @@ void Chunk::Build()
 	/* if the chunk is marked as dirty, rebuild the vertices and indices */
 	if (!m_Dirty)
 		return; /* if the chunk is not marked at dirty, advoid chunk rebuilding */
+	
+	/* Increment CUPS by 1 */
+	m_Level->IncrementUpdates();
 
 	/* reset indices and vertices vector */
 	std::vector<float>().swap(this->vertices);
@@ -141,6 +144,7 @@ void Chunk::Render(Shader* shader) const
 	 * shader (view assets/Shaders/chunk.shader)
 	 */
 	VAO->Bind();
+	m_Level->IncrementDrawCalls();
 	Renderer::DrawElements(GL_TRIANGLES, IBO->GetSize());
 	VAO->Unbind();
 }

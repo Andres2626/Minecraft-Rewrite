@@ -1,4 +1,5 @@
 #pragma once
+#include "GameProperties.h"
 #include "Player/Hitresult.h"
 #include "Player/Selector.h"
 #include "Player/Player.h"
@@ -20,17 +21,18 @@ using namespace Math;
 class Rubydung : public Default 
 {
 private:
+	GameProperties m_GProperties;
 	vec2 m_Last;
-	Shader* m_CShader, *m_SShader;
-	Selector* m_Selector;
+	Shader* m_CShader;
+	Shader* m_SShader;
 	Level* m_Level;
 	Player* m_Player;
 	Texture m_TerrainTexture;
 	Window m_InternalWindow;
 	WindowProperties m_Props;
 	Timer* m_Timer;
-	Image m_Icon;
-	bool m_MouseLeft, m_MouseRight;
+	bool m_MouseLeft;
+	bool m_MouseRight;
 public:
 	Rubydung();
 	~Rubydung();
@@ -43,7 +45,4 @@ public:
 	void OnRender() override;
 	void OnTick() override;
 	void OnSuspended() override;
-private:
-	bool Raycast(const vec3& org, const vec3& dir, Hitresult& ret);
-	void PlayerPick();
 };

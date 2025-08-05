@@ -11,18 +11,18 @@ namespace MC
 	namespace App 
 	{
 
-		static Application* m_Instance = nullptr;
+		static Application* s_Instance = nullptr;
 
 		Application::Application(const rd_str_t& name, const WindowProperties& pr)
 			: m_FPS(0), m_UPS(0), m_FrameTime(0.0f), m_Name(name), m_Pr(pr), m_Running(false), m_Suspended(false)
 		{
-			m_Instance = this;
+			s_Instance = this;
 		} 
 
 		Application::~Application()
 		{
 			if (m_Win)
-			delete m_Win;
+				delete m_Win;
 		}
 
 		void Application::Init()
@@ -112,9 +112,8 @@ namespace MC
 					m_UPS = 0;
 				}
 
-				while (m_Suspended) {
+				while (m_Suspended)
 					this->OnSuspended();
-				}
 
 				if (m_Win->Close())
 					m_Running = false;
@@ -156,10 +155,10 @@ namespace MC
 			m_LayerStack.OnSuspended();
 		}
 
-		Application& Application::GetInstance() 
+		Application& Application::Get() 
 		{
-			MC_ASSERT(m_Instance, "application instance is null pointer");
-			return *m_Instance;
+			mc_assert(s_Instance, "application instance is null pointer\n");
+			return *s_Instance;
 		}
 	}
 }

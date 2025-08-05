@@ -5,6 +5,12 @@
 #define BIT_L(x) 1 << x
 #define BIT_R(x) 1 >> x
 
+#if defined (DEBUG)
+#define MC_USE_DEBUG
+#else
+#define MC_USE_RELEASE
+#endif
+
 #if defined(_WIN32) || defined(MC_USE_WINDOWS32)
 #if defined(__CYGWIN__)
 #define MC_USE_CYGWIN
@@ -16,7 +22,7 @@
 #define MC_PLATFORM_WIN64
 #endif
 #else
-#define MC_PLATFORM_UNUSED
+#define MC_PLATFORM_UNSUPPORTED
 #error "Platform is not supported"
 #endif
 
