@@ -1,36 +1,61 @@
-TODO LIST
-================================
 
+At the moment these are the list of things to do in the MC Rewrite project.
+
+Please note that marking any of the items in this file as 'DONE' requires 
+that item to be moved to the end of this 'DONE List' file.
+
+For bug tracking, please write to:
+
+	https://github.com/Andres2626/Minecraft-Rewrite/issues
+	
+or
+
+	minecraftrewrite21@gmail.com
+	
+To mark one of these items as 'DONE' and once changes have been made 
+to the project, submit a pull request to:
+
+	https://github.com/Andres2626/Minecraft-Rewrite/pulls
+
+							* Andres26 *
+
+==========================================================================
+
+- Create simple documentation.
+    - Rewrite some parts of the comments and readme documents.
+- Create ChangeLog and NEWS File.
 - Delete GLM from engine
   * Create Math subsystem from scratch.
-- Solve compiler warnings
+- Solve compiler warnings.
   * DLL warnings in vs compiler (C4251)
 - Change license 
-  * Current license is very ambiguous and simple 
+  * Current license is very ambiguous and simple.
   * Create separate LISCENSE file.
-- DL
-  * Dynamic Loading protocol for modules (dlcfn.h and LoadLibrary)
-  * Low level modding system.
-- LUA scripting
-  * High level modding system
+- Modding system
+  * DL
+	- Dynamic Loading protocol for modules (dlcfn.h and LoadLibrary)
+	- Low level modding system.
+  * LUA scripting
+	- High level modding system
 - Change build system
-  * Makefile instead of .vs files
-  * config/ directory 
-  * Include .mak file in the main makefile for each platform supported (x86_64-*-***).
-  * Enable support for cross compiling
+  * Reorganization of all files.
+  * Makefile instead of .vs files.
+  * config/ directory.
+  * Include .mk file in the main makefile for each platform supported (x86_64-*-***).
+  * Enable support for cross compiling.
 - More platform support in the future
   * Windows older versions (since 2000 edition)
-  * Linux
+  * Linux.
   * Android (very important)
-  * Apple
+  * Apple.
   * Xbox (read next)
-  * Wii
+  * Wii.
   * ...
-- Graphic platform support
-  * DirectX
-  * Vulkan
+- Graphic platform support:
+  * DirectX.
+  * Vulkan.
 - Core engine independent of Main repository (I'm not very sure)
-- Refractoring
+- Refractoring.
   * Current game code is hard to read.
   * Some compiler warnings are quite silly (vs code at the moment).
 - Event subsystem from scratch.
@@ -43,4 +68,14 @@ TODO LIST
 - Implement argument parser in the engine.
 - Separate chunk buffers (light and dark blocks)
 - Implement better FPS limit procedure in the future.
-- Create simple documentation.
+- Improve this file!
+  * Procedure for report things in TODO file
+
+DONE List
+
+The following items are the list of things already completed from 
+the previous list.
+
+=======================================================================
+
+- TODO: Insert things here!
