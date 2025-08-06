@@ -21,6 +21,9 @@ rd-132211 (view limitation of liability)
 - The rewrite of the Bedrock Edition (includes support in each version).
 - Rewrite beyond 1.0 (for now)
 
+## Versions currenly recreated
+- *FULL* rd-132211. [Release notes](./Documentation/changes/rd-132211-1/relnotes.md) 
+
 ## Contribute
 
 Anyone interested can contribute to the project. I encourage anyone interested to contribute 
