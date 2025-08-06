@@ -3,6 +3,7 @@ TODO LIST
 
 - Delete GLM from engine
   * Create Math subsystem from scratch.
+- Solve compiler warnings
   * DLL warnings in vs compiler (C4251)
 - Change license 
   * Current license is very ambiguous and simple 
@@ -40,3 +41,5 @@ TODO LIST
   * There will always be this.
 - Improve Camera Ray Algorithm.
 - Insert argument parser in the engine.
+- Separate chunk buffers (light and dark blocks)
+- Implement better FPS limit procedure in the future
