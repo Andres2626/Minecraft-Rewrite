@@ -40,6 +40,7 @@ TODO LIST
   * Engine and game.
   * There will always be this.
 - Improve Camera Ray Algorithm.
-- Insert argument parser in the engine.
+- Implement argument parser in the engine.
 - Separate chunk buffers (light and dark blocks)
-- Implement better FPS limit procedure in the future
+- Implement better FPS limit procedure in the future.
+- Create simple documentation.
