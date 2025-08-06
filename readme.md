@@ -22,7 +22,7 @@ rd-132211 (view limitation of liability)
 - Rewrite beyond 1.0 (for now)
 
 ## Versions currenly recreated
-- *FULL* rd-132211. [Release notes](./Documentation/changes/rd-132211-1/relnotes.md) 
+- ***FULL*** rd-132211. [Release notes](./Documentation/changes/rd-132211-1/relnotes.md) 
 
 ## Contribute
 
