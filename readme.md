@@ -22,7 +22,7 @@ rd-132211 (view limitation of liability)
 - Rewrite beyond 1.0 (for now)
 
 ## Versions currenly recreated
-- ***PARTIALLY*** rd-132211. [Release notes](./Documentation/changes/rd-132211-1/relnotes.md)
+- ***PARTIALLY*** rd-132211. [Release notes](./Documentation/versions/rd-132211-1/relnotes.md)
   The version is 100% written, but some important changes to the MC Engine are missing:
   - Implement Makefile build system.
   - *Final refractoring!*
