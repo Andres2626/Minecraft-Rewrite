@@ -1,12 +1,10 @@
 #include "Block/Tile.h"
 
-
-int index = 0;
+static int index = 0;
 
 Tile::Tile(TileType type) 
+	: type(type)
 {
-	this->type = type;
-
 	/* if the block is air, is not nesesary calculate vertices */
 	if (type == AIR)
 		return;
@@ -81,8 +79,8 @@ void Tile::calculate_tex_coords(TileType type)
 void Tile::push_uv(float u, float v) 
 {
 	/* push texcoords in texture array */
-	this->texcoords[index] = u;
-	this->texcoords[index + 1] = v;
+	texcoords[index] = u;
+	texcoords[index + 1] = v;
 	index += 2;
 }
 
@@ -90,34 +88,34 @@ void Tile::push_vertices(Face f, float x, float y, float z)
 {
 	/* push vertices in vertices array */
 	if (f == Face::FRONT) {
-		this->vfront[index] = x;
-		this->vfront[index + 1] = y;
-		this->vfront[index + 2] = z;
+		vfront[index] = x;
+		vfront[index + 1] = y;
+		vfront[index + 2] = z;
 	}
 	else if (f == Face::BACK) {
-		this->vback[index] = x;
-		this->vback[index + 1] = y;
-		this->vback[index + 2] = z;
+		vback[index] = x;
+		vback[index + 1] = y;
+		vback[index + 2] = z;
 	}
 	else if (f == Face::LEFT) {
-		this->vleft[index] = x;
-		this->vleft[index + 1] = y;
-		this->vleft[index + 2] = z;
+		vleft[index] = x;
+		vleft[index + 1] = y;
+		vleft[index + 2] = z;
 	}
 	else if (f == Face::RIGHT) {
-		this->vright[index] = x;
-		this->vright[index + 1] = y;
-		this->vright[index + 2] = z;
+		vright[index] = x;
+		vright[index + 1] = y;
+		vright[index + 2] = z;
 	}
 	else if (f == Face::BOTTOM) {
-		this->vbottom[index] = x;
-		this->vbottom[index + 1] = y;
-		this->vbottom[index + 2] = z;
+		vbottom[index] = x;
+		vbottom[index + 1] = y;
+		vbottom[index + 2] = z;
 	}
 	else if (f == Face::TOP) {
-		this->vtop[index] = x;
-		this->vtop[index + 1] = y;
-		this->vtop[index + 2] = z;
+		vtop[index] = x;
+		vtop[index + 1] = y;
+		vtop[index + 2] = z;
 	}
 	index += 3;
 }
