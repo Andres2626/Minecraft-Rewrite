@@ -55,7 +55,6 @@ to the project, submit a pull request to:
 - Geometry shader support.
 - Improve Camera Ray Algorithm.
 - Implement argument parser in the engine.
-- Separate chunk buffers (light and dark blocks)
 - Implement better FPS limit procedure in the future.
 - Implement support for windows toolchains
   * Cygwin (X11)
