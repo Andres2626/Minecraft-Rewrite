@@ -1,5 +1,5 @@
-build/*
-Dependencies/*
+build/
+Dependencies/
 
 !Dependencies/**
 !Dependencies/**/Makefile
