@@ -52,26 +52,28 @@ compilation errors)
 
 *The following is documented in scripts/help_target.mk*
 
-Cleaning Targets:<br />
-clean              - Remove contents of build/ directory<br />
-distclean          - Remove build/ directory<br />
-clean-core         - Remove MC core build files<br />
-clean-sandbox      - Remove game build files<br />
-clean-deps-install - Remove all INSTALLED files in Dependencies/ directory<br />
-clean-deps-build   - Remove all BUILDED files in Dependencies/ directory<br />
-<br />
+```
+Cleaning Targets:
+clean              - Remove contents of build/ directory
+distclean          - Remove build/ directory
+clean-core         - Remove MC core build files
+clean-sandbox      - Remove game build files
+clean-deps-install - Remove all INSTALLED files in Dependencies/ directory
+clean-deps-build   - Remove all BUILDED files in Dependencies/ directory
+
 Building Targets:
-all                - Build all MC project files. this doesn't include Dependencies/ directory<br />
-                     Before you build MC project you MUST install dependencies yourself or using<br />
-                     make build-deps<br />
-core               - Build MC engine<br />
-sandbox            - Build Game<br />
-build-deps         - Build and install all in the Dependencies/ directory<br />
-<br />
-Install Targets:<br />
-install-deps       - Install Dependencies/ from local repositories (not build)<br />
-<br />
-Misc Targets:<br />
-help               - View help message<br />
-run                - Run game<br />
-make DEBUG=1       - Enable debug mode<br />
+all                - Build all MC project files. this doesn't include Dependencies/ directory
+                     Before you build MC project you MUST install dependencies yourself or using
+                     make build-deps
+core               - Build MC engine
+sandbox            - Build Game
+build-deps         - Build and install all in the Dependencies/ directory
+
+Install Targets:
+install-deps       - Install Dependencies/ from local repositories (not build)
+
+Misc Targets:
+help               - View help message
+run                - Run game
+make DEBUG=1       - Enable debug mode
+```
