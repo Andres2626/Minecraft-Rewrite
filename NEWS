@@ -1,0 +1,37 @@
+NEWS - list of all major game and engine changes
+
+NEW in rd132211-2 - 14-08-25:
+* Recreated version rd-132211
+* Engine version PreAlpha 0.0.1
+* All original game assets belonging to Mojang A.B are removed from the main repository.
+* Final refractoring.
+* Deleted patch 0 and patch 1.
+* Changed build system to Makefiles.
+* Deleted all VS files.
+* Create very simple documentation.
+* Log system (printf() function)
+* Main engine independent of game.
+* Deleted Dependencies code -- now makefile install and build this with install-deps and build-deps rule
+* Very very simple documentation.
+* Deleted VS support (TODO: Implement this)
+* MINGW support.
+* GLAD code is stored in libgfx
+* Moved assets to main directory
+* Fixed some bugs
+
+NEW in rd132211-1 - 31-07-25:
+* MISSING PATCH
+* Recreated version rd-132211
+* Engine version pre-0.0.1
+* Main engine independent of game.
+* Simple Application class
+* Layer implementation
+* Simple input class
+* GL** calls are independent of game
+
+NEW in rd132211-0 - 25-07-2025:
+* MISSING PATCH
+* Recreated version rd-132211
+* Engine version pre-0.0.1
+* VS build system
+* Initial git commit
