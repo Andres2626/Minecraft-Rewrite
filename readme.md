@@ -53,7 +53,7 @@ interested to contribute as long as:
   Minecraft that is being recreated.
 - When recreating a version of Minecraft in C++ it doesn't matter 
   whether it's in the main launcher or not. For the moment, the versions 
-  not included in this project are considered *lost* (*see [Ommniarchive Downloads]https://omniarchive.uk/downloads/*
+  not included in this project are considered *lost* (*see [Ommniarchive Downloads](https://omniarchive.uk/downloads/*)
   *for more info*)
   
   *The versions that will not be recreated for the moment are those that*
