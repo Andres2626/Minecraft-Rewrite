@@ -23,7 +23,6 @@ to the project, submit a pull request to:
 
 - Create simple documentation.
     - Rewrite some parts of the comments and readme documents.
-- Create NEWS file
 - Delete GLM from engine
   * Create Math subsystem from scratch.
 - Solve compiler warnings.
@@ -75,5 +74,6 @@ the previous list.
   * Dependencies have been moved from the main repository and are 
     now downloadable from the makefile.
   * Support for msys2 (mingw**)
-- Final Refractoring (12-08-2025)
-- Created ChangeLog file (14-08-2025)
+- Final Refractoring (12-08-25)
+- Created ChangeLog file (14-08-25)
+- Created NEWS file (14-08-25)
