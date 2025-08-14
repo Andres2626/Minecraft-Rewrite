@@ -1,20 +1,16 @@
-# exclude files
-*.o
-*.stackdump
-build/%.h
-build/%.img
-build/%.o
-%.build
-%.ld
-%.obj
-%.img
-%.dll
-%.lib
-%.exp
-%.pdb
-level.dat
-.vs/
-Game/%.log
+build/*
+Dependencies/*
 
-# directories
-build/
+!Dependencies/**
+!Dependencies/**/Makefile
+
+%.dat
+%.dll
+%.exe
+%.lib
+%.a
+%.d
+%.o
+%.log
+
+assets/terrain.png
