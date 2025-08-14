@@ -49,20 +49,15 @@ to the project, submit a pull request to:
   * OpenGL 2.0 (for testing purposes)
   * DirectX.
   * Vulkan.
-- Core engine independent of Main repository (I'm not very sure)
-- Refractoring.
-  * Current game code is hard to read.
-  * Some compiler warnings are quite silly (vs code at the moment).
+- Separate the engine from the main project
+  * Create independent game engine
 - Event subsystem from scratch.
 - Geometry shader support.
-- Performace and stability
-  * Engine and game.
-  * There will always be this.
 - Improve Camera Ray Algorithm.
 - Implement argument parser in the engine.
 - Separate chunk buffers (light and dark blocks)
 - Implement better FPS limit procedure in the future.
-- Implement support for more toolchains (Windows)
+- Implement support for windows toolchains
   * Cygwin (X11)
   * Msys2
   * Visual studio (separate .vs** files)
@@ -81,3 +76,4 @@ the previous list.
   * Dependencies have been moved from the main repository and are 
     now downloadable from the makefile.
   * Support for msys2 (mingw**)
+- Final Refractoring (12-08-2025)
