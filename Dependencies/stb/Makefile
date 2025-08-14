@@ -18,7 +18,7 @@ PHONY	+= install-deps build-deps clean-deps-install clean-deps-build
 	
 install-deps: $(SRCDIR)
 	
-build-deps: 
+build-deps: install-deps
 	@echo "Nothing to build"
 	@echo "copying all STB includes"
 	cp $(SRCDIR)/*.h $(INCDIR)
