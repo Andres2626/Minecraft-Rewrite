@@ -1,7 +1,7 @@
 build/*
 Dependencies/*
 
-!Dependencies/**/
+!Dependencies/**
 !Dependencies/**/Makefile
 
 %.dat
@@ -12,3 +12,5 @@ Dependencies/*
 %.d
 %.o
 %.log
+
+assets/terrain.png
