@@ -104,11 +104,11 @@ redistributed if:
 
 ## Building
 
-Read [Building Guide](./Documentation/building_guide.md) for more info.
+Read [Building Guide](./Documentation/building-guide.md) for more info.
 
 ## Run application
 
-Read [Running MC](./Documentation/running_mc.md) for more info.
+Read [Running MC](./Documentation/running-mc.md) for more info.
 
 ## TODO List
 
