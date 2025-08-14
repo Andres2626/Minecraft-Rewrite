@@ -1,0 +1,448 @@
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-2025 [PATCH 2] Final
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-25 Modified .gitignore
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-2025 Fix readme and docs
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-2025 Fix readme and docs
+    
+
+2025-08-13  Andres2626  andrescamorao9@gmail.com
+    13-08-25 Fix docs
+    
+
+2025-08-13  Andres2626  andrescamorao9@gmail.com
+    13-08-25 Fix readme
+    
+
+2025-08-13  Andres2626  113268055+Andres2626@users.noreply.github.com
+    makefile (#3)
+    
+    
+
+2025-08-13  Andres2626  andrescamorao9@gmail.com
+    13-08-2025 [PATCH 2] Some fixes
+    * Added simple documentation
+    * Reestructured README.md, fixes in limitation of liability, copyright notice,
+      etc
+    
+      **Removed Mojang A.B. Resources**
+    
+      commit: d835c23c111a86d32578d8f93fa743f02ac27dad
+    
+    * Remove this-> in the sandbox/block/Tile.cpp
+    * Added build and running guide
+    * Added shasum of original game jar files
+    
+
+2025-08-13  Andres2626  andrescamorao9@gmail.com
+    13-08-2025 Deleted all Mojang A.B Resources
+    For avoid ploblems in the future, terrain.png is deleted.
+    
+    * Deleted all releases patch 0 and patch 1
+    * Updated copyright notice
+    * Added assets/terrain.png to .gitignore
+    * Updated limitation on liability
+    
+
+2025-08-13  Andres2626  andrescamorao9@gmail.com
+    13-08-25 Updated TODO file
+    
+
+2025-08-13  Andres2626  andrescamorao9@gmail.com
+    13-08-25 Updated .gitignore
+    
+
+2025-08-13  Andres2626  andrescamorao9@gmail.com
+    13-08-2025 Fix makefiles bugs
+    Some dependencies, when build-deps rule is executed from main makefile, the
+    dependencies not install before building rule, for solve this:
+    
+    'build: install $(...) $(...)'
+    
+
+2025-08-12  Andres2626  113268055+Andres2626@users.noreply.github.com
+    Change build system. Makefiles instead of .VS files (#2)
+    
+    * Download all MC dependencies from remote repositories
+    * Deleted all VS files
+    * Support for mingw**
+    * Deleted build counter system
+    * Added makefile help rule
+    * Update TODO file
+    * Reestructured src/ files
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-2023 [patch 2] Main changes
+    * Deleted Dependencies/ code files
+    * Download system for each MC dependency
+    * Assets moved to main directory
+    * Changed includes in Game/ source files
+    * core.h detetct GNU and VS compiler
+    
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-25 Changed documentation subdirectories
+    
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-25 [patch 2] Deleted build counter system
+    
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-25 Update readme file
+    
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-25 Update TODO file
+    
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-25 Added makefile help rule
+    
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-2025 [patch 2] Changed all build system
+    Support for mingw**, through makefiles, ensures MC's
+    compatibility with UNIX environments.
+    
+    However, such support for Linux and other systems is not
+    yet available, as makefiles do not directly implement it.
+    All makefiles use the host-specific GNU tools, so it *might*
+    be compatible with Linux.
+    
+    However, the GLFW makefile is not compatible with Linux,
+    as MC does not support x11 and forces compilation for WinX
+    via CMAKE GLFW_BUILD_WIN32=ON.
+    
+    Furthermore, makefiles only support a very specific
+    toolchain: mingw** for native Windows environments (excluding
+    cygwin, msys2, WSL, etc.).
+    
+    The MC compilation process is as follows:
+    
+    1) User installation and building of libraries.
+    
+    The main makefile contains the "build-deps"
+    and "install-deps" dependencies.
+    
+    "make install-deps" -> only download all dependencies.
+    
+    "make build-deps" -> install and compile all dependencies.
+    
+    This must be done before compiling anything from the MC
+    engine using "make all" or similar. Therefore, the makefile
+    displays a warning message and sleeps for 3 seconds.
+    
+    2) Compiling the MC engine
+    
+    3) Compiling the sandbox game
+    
+    Note that MC's compilation rules do not check dependencies,
+    which can cause compilation errors if not careful.
+    
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-25 Moved assets/ to main directory
+    
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-25 Reworked .gitignore file
+    
+
+2025-08-12  Andres2626  andrescamorao9@gmail.com
+    12-08-2025 [patch 2] Deleted .vs** files
+    Deleted some .vs** files in the core/ and sandbox/ directories,
+    
+    For the GLAD dependency, all .vs files were removed, leaving a
+    single makefile that automatically downloads the dependency from
+    remote repository.
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Update TODO
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Update TODO
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Update TODO and readme.MD
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Update TODO and readme.MD
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Update readme.MD
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Update readme.MD
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Documentation/ directory
+    - Created Documentation/
+    - Moved Resources/ to Documentation/
+    - Imported Original release notes to changes/rd-132211-1
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Updated TODO file
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Very much refractoring.
+    - Updated .gitignore file.
+    - Name of the libraries renamed to UNIX format lib***.lib.
+    - Shader changes.
+    - Moved selector functions to player class.
+    - Added function for get chunk draw calls.
+    - Added debug and release definitions MC_USE_DEBUG and MC_USE_RELEASE
+    - Added GameProperties struct
+    - Added FPS limit in application
+      * TODO: Implement better procedure in the future
+    - Added some useful get** functions in Level class
+    - MC_ASSERT Changed
+      * Argument fmt deleted, changed by ...
+      * Renamed to mc_assert
+    - Application instance renamed to s_Instance.
+    - Rubydung
+      * Moved to constructor:
+        - Renderer init.
+        - Icon set.
+      * Added GameProperties in RubyDung class
+      * Destructor:
+        - Added pointer check for delete pointers.
+      * Deleted Selector part
+      * Obtain VP with mat4 definition
+        - In the shader it is obtained directly in the function.
+      * Moved fog color to constructor (GameProperties)
+        - In the renderer the FogColor are builded in OnRender()
+          This was a problem because the values for FogColor are constant
+          and that call can be saved.
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-2025 Some fixes
+    - Refractoring part II
+    - Log system changed.
+      * printf() format instead of cout command.
+      * C nostalgia.
+      * Deleted Logger.h, Logger.c, LogMessage.h, LogMessage.c
+      * Added Log.cpp
+      * Format in log messages mc_fmt(x)
+      * More organization in calls to the log.
+    - Log messages improved.
+    - Layer changes
+      * ILayer changed to Layer
+      * MC::Layer changed to MC::Layers
+    - Application changes
+      * Deleted pop layer functions
+    - Image class
+      * The image now is an struct
+    - Updated mc.h
+    
+
+2025-08-05  Andres2626  andrescamorao9@gmail.com
+    05-08-25 Update .gitignore
+    
+
+2025-08-04  Andres2626  andrescamorao9@gmail.com
+    04-08-25 Refractoring part II
+    
+
+2025-08-04  Andres2626  andrescamorao9@gmail.com
+    04-08-25 Refractoring part I
+    
+
+2025-08-04  Andres2626  andrescamorao9@gmail.com
+    03-08-25 Fixed prefix confusion in definitions.
+    - Removed the 'RD_' prefix from the core engine.
+    - Changed the 'RD_' prefix to 'MC_'
+    
+
+2025-08-04  Andres2626  andrescamorao9@gmail.com
+    04-08-25 Updated TODO List
+    
+
+2025-08-04  Andres2626  andrescamorao9@gmail.com
+    04-08-2025 Some improvements, files and fixes
+    - TODO list updated.
+      * "Improve Camera Ray Algorithm"
+    - Input definitions (key, mouse, gamepad, joystick codes)
+      * App/InputDefs.h
+    - Create simple assert macro.
+      * Util.h
+      * RD_ASSERT(x, fmt, ...)
+    - Create ILayer, (Layer/ILayer.h)
+      * Simple Layer interface OnRender, OnUpdate, ... declared as prototype functions.
+    - Layer::DefaultLayer renamed to Layer::Default (solved ambiguous name)
+      * Now for avoid ambiguous names, classes, enums and structs not have the name of th    subsystem (Layer::Default instead of Layer::DefaultLayer)
+    - Created Layer stack, Layer/Stack.cpp and Layer/Stack.h.
+      * Class LayerStack
+    - Internal definitions (breakpoint and printf) Utils.cpp and Utils.h
+      * MC::internal_printf() Tiny C implementation of function printf
+      * MC::internal_breakpoint()
+    - Created exit in winX host
+      * __debugbreak()
+    - Edited types file (typedef convention)
+      * Now all typedefs of RD engine have this format:
+    
+        rd_##type_t
+    
+    - Edited Host/Init files:
+      * Changed int and char** to int* and char*** types
+    
+
+2025-08-03  Andres2626  andrescamorao9@gmail.com
+    03-08-25 Added TODO list
+    
+
+2025-08-03  Andres2626  andrescamorao9@gmail.com
+    03-08-2025 Added TODO File
+    
+
+2025-08-03  Andres2626  andrescamorao9@gmail.com
+    03-08-2025 Main changes
+    - Added Log subsystem from https://github.com/Andres2626/FSLogger
+    - Added Math subsystem.
+    - Namespace glm now is MC::Math.
+    - Changed Log internal system (operator << instead of printf())
+    - Deleted Log implementation from Util.cpp and Util.h.
+    - Added Math and Log subsystem to main header.
+    - Changed all Math definitions
+    
+
+2025-08-03  Andres2626  andrescamorao9@gmail.com
+    03-08-25 Added Math subsystem
+    - Added namespace glm to MC::Math
+    - Created Main.h Math.cpp
+    - TODO: Implement math engine from scratch.
+    
+
+2025-08-03  Andres2626  andrescamorao9@gmail.com
+    03-08-25 Added Log subsystem (from FSLog)
+    
+
+2025-08-03  Andres2626  andrescamorao9@gmail.com
+    03-08-25 Host directory
+    - Implemented FSLog (ConsoleOutput) functions in Console.cpp
+    - Created class MC::Console and MC::Host
+    - Deleted C part of Host
+    - Console.cpp and Init.cpp are platform independent
+    - Changed winX files (windows/*)
+    
+
+2025-08-03  Andres2626  andrescamorao9@gmail.com
+    03-08-2025 Changes in event system
+    - Changed gleq for dll exporting.
+    - Created event.cpp and enable gleq implementation on it.
+    - Modified event.h for gleq function prototypes.
+    
+
+2025-08-02  Andres2626  andrescamorao9@gmail.com
+    2-08-2025 Added version recreation file.
+    
+
+2025-08-02  Andres2626  andrescamorao9@gmail.com
+    2-08-2025 Subsystem Engine renamed to Core
+    
+
+2025-08-02  Andres2626  andrescamorao9@gmail.com
+    2-08-2025 Update readme for mc project
+    
+
+2025-08-02  Andres2626  andrescamorao9@gmail.com
+    2-08-2025 Changed source directory structure in Game/
+    
+
+2025-08-02  Andres2626  andrescamorao9@gmail.com
+    2-08-2025 Changed .gitignore
+    
+
+2025-08-02  Andres2626  andrescamorao9@gmail.com
+    2-08-2025 Subsystem Cngine renamed to Core
+    
+
+2025-07-31  Andres2626  113268055+Andres2626@users.noreply.github.com
+    Main engine independent of the game (#1)
+    
+    - Created dll interface for winX in engine project
+    - Moved sandbox.cpp to Game project
+    - Engine/Assets moved to Game/Assets
+    - Game header and code files moved to Game project
+    - Moved mc.h to Engine/src
+
+2025-07-31  Andres2626  andrescamorao9@gmail.com
+    31-07-2025 main engine independent of the game
+    
+
+2025-07-31  Andres2626  andrescamorao9@gmail.com
+    31-07-2025 - Some fixes and files
+    - Create simple input class (App/Input.h, App/Input.cpp)
+    - Simple InputManager (mouse, keyboard, position) using GLEQ event
+    - All engine files moved to src/MC/
+    - Created engine main include file (mc.h)
+    - Created simple types file (types.h)
+    - Edited common.h for force winX builds
+    - Rubydung class moved to Rubydung.cpp and Rubydung.h
+    - Sandbox.cpp only have Game class and game entry point -> int main()
+    - Player and GLFWwindow now are independent!
+    - Added depth and blend in Renderer
+    - Added draw call in Renderer
+    - RubyDung.cpp now are independent of stb_image.h functions (Added Image class)
+    - Texture class are dependent of Image class
+    - Reorganized include order in all files (view Linux kernel include info)
+    - Selector class are independent of GLAD calls
+    - Main.cpp changed to Sandbox.cpp
+    
+
+2025-07-30  Andres2626  andrescamorao9@gmail.com
+    30-07-2025 Modified readme and solution file
+    
+
+2025-07-30  Andres2626  andrescamorao9@gmail.com
+    30-07-2025 Reorganization of includes and improved common file
+    
+
+2025-07-30  Andres2626  andrescamorao9@gmail.com
+    30-07-2025 Layer implementation
+    
+
+2025-07-30  Andres2626  andrescamorao9@gmail.com
+    30-07-2025 Added simple application class
+    
+
+2025-07-30  Andres2626  andrescamorao9@gmail.com
+    30-07-2025 Changed common.h definitions to Chunkdef.h
+    
+
+2025-07-30  Andres2626  andrescamorao9@gmail.com
+    30-07-2025 Modified common file
+    
+
+2025-07-30  Andres2626  andrescamorao9@gmail.com
+    30-07-2025 Reorganization of project dependencies
+    
+
+2025-07-30  Andres2626  andrescamorao9@gmail.com
+    30-07-2025 .assets/ changed to Resource/
+    
+
+2025-07-29  Andres2626  andrescamorao9@gmail.com
+    29-07-25 Delete some files
+    
+
+2025-07-25  Andres2626  andrescamorao9@gmail.com
+    25-07-2025 Initailze git and first commit
