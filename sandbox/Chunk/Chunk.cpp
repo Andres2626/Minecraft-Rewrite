@@ -137,12 +137,7 @@ void Chunk::Render(Shader* shader) const
 	/* push model matrix */
 	shader->Set4x4("s_M", mat4(1.0f));
 
-	/* 
-	 * DRAW PROCESS
-	 * TODO: Separate the buffers in two parts: light (for light blocks) and
-	 * black (oclussion blocks) for avoid fs_in.brightness < 0.6f in fragment 
-	 * shader (view assets/Shaders/chunk.shader)
-	 */
+	/* DRAW PROCESS */
 	VAO->Bind();
 	m_Level->IncrementDrawCalls();
 	Renderer::DrawElements(GL_TRIANGLES, IBO->GetSize());

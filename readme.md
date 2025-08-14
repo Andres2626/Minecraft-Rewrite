@@ -38,11 +38,8 @@ It is not intended to add/arrive at the following:
 - ***PARTIALLY*** rd-132211.
   The version is 100% written, but some important changes to the MC Engine 
   are missing:
-  - Implement Makefile build system.
-  - *Final refractoring!*
   - Simple documentation.
   - Port to cygwin and linux.
-  - Separate chunk buffer
   
 ## Contribute
 
