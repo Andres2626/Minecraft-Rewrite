@@ -36,7 +36,7 @@ clean-deps-install:
 clean-deps-build:
 	rm -rf $(OUTDIR)/
 	
-build-deps: $(OUTDIR) install-deps
+build-deps: install-deps $(OUTDIR) 
 	$(MK) $(OUTDIR) all
 	@echo "copying all GLFW lib, bin and include files"
 	cp -r $(SRCDIR)/include/GLFW $(INCDIR)/

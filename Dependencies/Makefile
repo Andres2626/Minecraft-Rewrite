@@ -1,7 +1,10 @@
+TOP_SRC := ..
+
 SUBDIRS += libgfx GLFW gleq glm gzip-hpp stb zlib
 export MK = $(MAKE) -C
 PHONY   := all clean distclean install-deps build-deps clean-deps-install clean-deps-build
 
+OUTDIR  := $(TOP_SRC)/build
 BINDIR  := bin/
 LIBDIR  := lib/
 INCDIR  := include/
@@ -25,6 +28,7 @@ build-deps: $(DIRS) $(SUBDIRS)
 	for dir in $(SUBDIRS); do \
 		$(MK) $$dir $@; \
 	done
+	cp -r $(BINDIR) $(OUTDIR)/
 
 clean-deps-install:$(SUBDIRS)
 	@echo "cleaning dependencies build files"

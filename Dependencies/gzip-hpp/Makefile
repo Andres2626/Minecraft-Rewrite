@@ -17,7 +17,7 @@ PHONY   += install-deps build-deps clean-deps-install clean-deps-build
 	
 install-deps: $(SRCDIR)
 	
-build-deps: $(INCDIR)/gzip
+build-deps: install-deps $(INCDIR)/gzip
 	@echo "Nothing to build"
 	
 clean-deps-install:
