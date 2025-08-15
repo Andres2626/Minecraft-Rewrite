@@ -22,6 +22,7 @@ to the project, submit a pull request to:
 ==========================================================================
 
 - Create simple documentation.
+    - At the moment the documentation is very simple.
     - Rewrite some parts of the comments and readme documents.
 - Delete GLM from engine
   * Create Math subsystem from scratch.
@@ -52,14 +53,15 @@ to the project, submit a pull request to:
   * Create independent game engine
 - Event subsystem from scratch.
 - Geometry shader support.
-- Improve Camera Ray Algorithm.
-- Implement argument parser in the engine.
+- Implement argument parser in the engine (getopt)
 - Implement better FPS limit procedure in the future.
 - Implement support for windows toolchains
-  * Cygwin (X11)
-  * Msys2
   * Visual studio (separate .vs** files)
+    Technically, it's compatible with VS, since the first versions of the 
+	engine and the rewritten code were for a VS environment. The only 
+	thing that was removed were all the .vs files in *PATCH 2*.
   * ...
+- Support for cross compiling
 
 DONE List
 
@@ -77,3 +79,5 @@ the previous list.
 - Final Refractoring (12-08-25)
 - Created ChangeLog file (14-08-25)
 - Created NEWS file (14-08-25)
+- Compatibility with *emulated* unix environments (cygwin, msys2...) (14-08-25)
+- X11 Compatible (14-08-25)
