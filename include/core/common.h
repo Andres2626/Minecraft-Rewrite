@@ -19,10 +19,9 @@
 #define MC_USE_UNKNOUN_COMPILER
 #endif 
 
-#if defined(_WIN32) || defined(MC_USE_WINDOWS32)
-#if defined(__CYGWIN__)
+#if defined (__CYGWIN__)
 #define MC_USE_CYGWIN
-#endif
+#elif defined(_WIN32) || defined(MC_USE_WINDOWS32)
 #define MC_PLATFORM_WINDOWS
 #if defined(_WIN64) || defined (MC_MACHINE64)
 #define MC_PLATFORM_WIN32
@@ -34,22 +33,20 @@
 #error "Platform is not supported"
 #endif
 
-#if defined (MC_PLATFORM_WINDOWS)
-#if defined (MC_EXPORT_DLL)
-#if defined (MC_USE_GNU_COMPILER)
+#if defined(MC_PLATFORM_WINDOWS)
+#if defined(MC_EXPORT_DLL)
+#if defined(MC_USE_GNU_COMPILER)
 #define MC_API __attribute__((dllexport))
 #else
 #define MC_API __declspec(dllexport)
 #endif
-#else
-#if defined (MC_EXPORT_LIB)
+#elif defined(MC_EXPORT_LIB)
 #define MC_API
 #else
-#if defined (MC_USE_GNU_COMPILER)
+#if defined(MC_USE_GNU_COMPILER)
 #define MC_API __attribute__((dllimport))
 #else
 #define MC_API __declspec(dllimport)
-#endif
 #endif
 #endif
 #endif
