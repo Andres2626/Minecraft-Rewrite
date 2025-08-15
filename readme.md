@@ -1,4 +1,9 @@
-# Minecraft Rewrite (MC Rewrite)
+# 🛠️ Minecraft Rewrite (MC Rewrite)
+
+![Language](https://img.shields.io/badge/language-C++-brightgreen)
+![Language](https://img.shields.io/badge/language-C-brightgreen)
+![Status](https://img.shields.io/badge/status-In%20Development-yellow)
+![Version](https://img.shields.io/badge/version-rd132211-blue)
 
 The MC project is an attempt to rewrite the original Minecraft code in C++. 
 MC aims to achieve the widest cross-platform compatibility  (as in the Java 
@@ -10,7 +15,19 @@ game code; it is a complete and total rewrite in C++ (***see limitation of***
 ***liability***). Currently, the engine and game use newer versions of OpenGL 
 (>3.3).
 
-## Goals of this project
+## 📋 Table of Contents
+- [Goals](#-goals-of-this-project)
+- [Not Included](#-things-that-will-not-be-done)
+- [Current Progress](#-versions-currently-recreated)
+- [Contributing](#-contribute)
+- [Limitation of Liability](#-limitation-of-liability)
+- [Copyright Notice](#-copyright-notice)
+- [Build Instructions](./Documentation/building-guide.md)
+- [Run Instructions](./Documentation/running-mc.md)
+- [TODO](./TODO)
+- [Contact](./Documentation/contact-info.md)
+
+## ✅ Goals of this project
 
 - Recreate in c++ all versions of the Minecraft Java Edition (up to 1.0 at
   the moment), 
@@ -22,7 +39,7 @@ game code; it is a complete and total rewrite in C++ (***see limitation of***
 - Creating a game engine from scratch.
 - Preserve the **functionality** of the *as-is* Java edition
   
-## Things that will not be done
+## 🚫 Things that will not be done
 
 It is not intended to add/arrive at the following:
 
@@ -33,7 +50,7 @@ It is not intended to add/arrive at the following:
 - A multiplayer support bridge for non-Java Edition versions
 - Adding features that are not in the original code.
 
-## Versions currenly recreated
+## 📌 Versions currenly recreated
 
 - ***PARTIALLY*** rd-132211.
   The version is 100% written, but some important changes to the MC Engine 
@@ -41,7 +58,7 @@ It is not intended to add/arrive at the following:
   - Simple documentation.
   - Port to cygwin and linux.
   
-## Contribute
+## 🤝 Contribute
 
 Anyone interested can contribute to the project. I encourage anyone 
 interested to contribute as long as:
@@ -71,14 +88,14 @@ the project.
 - [The word of notch](https://blog.omniarchive.uk/archive/)
 
 Also, keep in mind that each tag in this repository contains a file 
-called the "recreated version file", which indicates the version 
+called the "rewrited version file", which indicates the version 
 currently being worked on for the MC project.
 
-Refrain from submitting pull requests that affect previous file.
+Refrain from submitting PR's that affect previous file.
 
 Once the above is done and the code is ready, [send a pull request](https://github.com/Andres2626/Minecraft-Rewrite/pulls)
 
-## Limitation of liability
+## ⚖️ Limitation of liability
 
 This project is not affiliated with Mojang A.B. Furthermore, MC 
 project is not *as-is* copy of original game code.
@@ -88,7 +105,7 @@ have to find them yourself (see 'Building' for more info)
 
 Please read the copyright notice.
 
-## Copyright Notice
+## © Copyright Notice
 
 MC project code is (C) Andres26 2025, but the code can be 
 redistributed if:
@@ -98,20 +115,3 @@ redistributed if:
 - The copyright notice MUST be intact.
 
 - It is prohibited to distribute this for a fee.
-
-## Building
-
-Read [Building Guide](./Documentation/building-guide.md) for more info.
-
-## Run application
-
-Read [Running MC](./Documentation/running-mc.md) for more info.
-
-## TODO List
-
-view [TODO](./TODO)
-
-## Contact 
-
-Any questions, reports or clarifications, mail me at 
-minecraftrewrite21@gmai.com or in the [discussion page.](https://github.com/Andres2626/Minecraft-Rewrite/discussions)

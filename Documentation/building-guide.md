@@ -22,20 +22,14 @@ mind:
 4. Once you have the original game assets, copy them to the *$CD/assets* 
    directory.
    
-5. At the moment makefile **ONLY** supports MINGW toolchain, because GLFW build
-   is forced for build for winX platforms
-   
-   NOTE: This *not* work in cygwin or msys2 (except msys2-mingw), therefore no 
-   X11, wayland or similar (TODO: Implement this)
+5. At the moment makefile **ONLY** winX platforms (cygwin, mingw, msys2, etc)
 
 Use:
 
 ```
-
 $ make install-deps # for installing dependencies
 
 $ make build-deps # for building and installing dependencies
-
 ```
 
 3. Note that by running *make all* you are not running install-deps and build-deps. 
