@@ -25,16 +25,18 @@ clean-deps-install:
 clean-deps-build:
 	rm -rf $(OUTDIR)/
 	
-build-deps: install-deps $(OUTDIR) 
+build-deps: install-deps $(OUTDIR) make copy
+
+make:
 	$(MK) $(OUTDIR) all
+	
+copy:
 	@echo "copying all zlib include files"
 	cp $(SRCDIR)/*.h $(INCDIR)
-	
 	@echo "copying all zlib .$(LIBEXT) files"
 	@for f in $(shell find $(OUTDIR) -name '*.$(LIBEXT)'); do \
 		cp $$f $(LIBDIR)/; \
 	done
-	
 	@echo "copying all zlib .$(DYNEXT) files"
 	@for f in $(shell find $(OUTDIR) -name '*.$(DYNEXT)'); do \
 		cp $$f $(BINDIR)/; \

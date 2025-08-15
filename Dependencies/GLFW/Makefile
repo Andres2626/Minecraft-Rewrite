@@ -30,16 +30,18 @@ clean-deps-install:
 clean-deps-build:
 	rm -rf $(OUTDIR)/
 	
-build-deps: install-deps $(OUTDIR) 
+build-deps: install-deps $(OUTDIR) make copy 
+
+make:
 	$(MK) $(OUTDIR) all
+	
+copy:
 	@echo "copying all GLFW include files"
 	cp -r $(SRCDIR)/include/GLFW $(INCDIR)/
-	
 	@echo "copying all GLFW .$(LIBEXT) files"
 	@for f in $(shell find $(OUTDIR)/src -name '*.$(LIBEXT)'); do \
 		cp $$f $(LIBDIR)/; \
 	done
-	
 	@echo "copying all GLFW .$(DYNEXT) files"
 	@for f in $(shell find $(OUTDIR)/src -name '*.$(DYNEXT)'); do \
 		cp $$f $(BINDIR)/; \
