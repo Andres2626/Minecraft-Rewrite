@@ -1,3 +1,27 @@
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-08-2025 [PATCH 3] Final
+    
+    * include/core/common.h. Fix dllexport bug.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-08-25 [PATCH 3] Final
+    
+    * Fix makefile copy bug.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-2025 [PATCH 3] Final
+    
+    * Updated ChangeLog file
+    
+    Signed-off-by: Andres26  <andrescamorao9@gmail.com>
+    
+
 2025-08-14  Andres2626  andrescamorao9@gmail.com
     14-08-2025 [PATCH 3] Final
     * Recreated version rd-132211.
