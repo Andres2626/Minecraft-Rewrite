@@ -20,6 +20,7 @@
 #endif 
 
 #if defined (__CYGWIN__)
+#define MC_PLATFORM_WINDOWS
 #define MC_USE_CYGWIN
 #elif defined(_WIN32) || defined(MC_USE_WINDOWS32)
 #define MC_PLATFORM_WINDOWS
