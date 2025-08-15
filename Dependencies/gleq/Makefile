@@ -1,10 +1,7 @@
 #
 # Makefile for GLEQ dependency
 #
-
-export MK = $(MAKE) -C
-GIT         := git
-			
+		
 # Remote GIT repository
 REPO        := https://github.com/glfw/gleq.git
 

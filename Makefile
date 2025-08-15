@@ -1,5 +1,3 @@
-export MK = $(MAKE) -C
-
 export OUTDIR         = build
 export ENGDIR         = core
 export INCDIR         = include
@@ -22,26 +20,28 @@ endif
 
 export CFLAGS
 
+# export gcc, ar, etc.
+include scripts/command.mk
+
 # detect host platform
 ifeq ($(OS), Windows_NT)
-ifneq (,$(findstring mingw,$(COMPILER_TARGET)))
-export PLATFORM = windows
-export TOOLCHAIN = mingw
+include scripts/windows-platform.mk
 else
-# At the moment MC engine doesn't support cygwin or msys2 (except for msys-mingw**)
-$(error platform $(COMPILER_TARGET) not supported)
-endif
-else
+-include scripts/none-platform.mk
 # TODO: More platform support in the future
 $(error platform $(shell uname -o) not supported)
 endif
 
+$(info using $(COMPILER_TARGET) toolchain)
+
 all: dep_warning core sandbox
 
 dep_warning:
-	@echo Before building the MC project, you need to have the dependencies 
-	@echo installed and built. To do this, use the make build-deps command 
-	@echo to avoid compilation errors.
+	@echo "Before building the MC project, you need to have the dependencies"
+	@echo "installed and built. To do this, use the make build-deps command" 
+	@echo "to avoid compilation errors."
+	@echo ""
+	@echo "see 'make help' for more info"
 	@sleep 3
 
 distclean: clean
@@ -50,6 +50,8 @@ distclean: clean
 clean:
 	@echo "Clearing All..."
 	rm -rf $(OUTDIR)/*
+	rm -rf ./*.log
+	rm -rf ./*.dat
 	
 core:
 	@echo "Building engine"

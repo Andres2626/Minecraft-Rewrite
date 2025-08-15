@@ -3,8 +3,6 @@
 # NOTE: To avoid installing the .py generator, I created a repository 
 #       with the GLAD files. For more information, see include/glad.h
 #
-export MK = $(MAKE) -C
-GIT		:= git
 
 # Remote repository
 REPO	:= https://github.com/Andres2626/libgfx.git
@@ -23,8 +21,16 @@ install-deps: $(SRCDIR)
 build-deps: install-deps
 	$(MK) $(SRCDIR) all
 	cp -r $(SRCDIR)/include/ ../ 
-	cp $(OUTDIR)/libgfx.dll $(BINDIR)/libgfx.dll
-	cp $(OUTDIR)/libgfxdll.a $(LIBDIR)/libgfxdll.a
+	
+	@echo "copying all libgfx .$(LIBEXT) files"
+	@for f in $(shell find $(OUTDIR) -name '*.$(LIBEXT)'); do \
+		cp $$f $(LIBDIR)/; \
+	done
+	
+	@echo "copying all libgfx .$(DYNEXT) files"
+	@for f in $(shell find $(OUTDIR) -name '*.$(DYNEXT)'); do \
+		cp $$f $(BINDIR)/; \
+	done
 	
 clean-deps-install:
 	rm -rf $(SRCDIR)

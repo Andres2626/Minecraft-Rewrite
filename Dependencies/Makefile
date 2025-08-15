@@ -1,14 +1,15 @@
 TOP_SRC := ..
 
-SUBDIRS += libgfx GLFW gleq glm gzip-hpp stb zlib
+SUBDIRS += libgfx GLFW zlib gleq glm gzip-hpp stb
 export MK = $(MAKE) -C
-PHONY   := all clean distclean install-deps build-deps clean-deps-install clean-deps-build
 
 OUTDIR  := $(TOP_SRC)/build
 BINDIR  := bin/
 LIBDIR  := lib/
 INCDIR  := include/
 DIRS    += $(BINDIR) $(LIBDIR) $(INCDIR)
+
+PHONY   := all clean distclean install-deps build-deps clean-deps-install clean-deps-build
 
 all: install-deps build-deps
 	

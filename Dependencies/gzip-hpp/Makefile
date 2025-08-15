@@ -1,8 +1,6 @@
 #
 # Makefile for gzip-hpp dependency
 #
-export MK = $(MAKE) -C
-GIT         := git
 
 # Remote repository
 REPO        := https://github.com/mapbox/gzip-hpp.git

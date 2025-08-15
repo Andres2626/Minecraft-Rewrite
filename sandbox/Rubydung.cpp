@@ -161,6 +161,8 @@ void Rubydung::OnTick()
 #else
 	printf("%i fps, %i\n", Application::Get().GetFPS(), m_Level->GetUpdates());
 #endif
+
+	m_Level->RestartUpdates();
 }
 
 void Rubydung::OnSuspended() 
