@@ -1,6 +1,15 @@
 2025-08-15  Andres2626  andrescamorao9@gmail.com
     15-08-2025 [PATCH 3] Final
     
+    * Updated ChangeLog
+    * include/core/common.h Fix dllexport bug
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-08-2025 [PATCH 3] Final
+    
     * include/core/common.h. Fix dllexport bug.
     
     Signed-off-by: Andres26 <andrescamorao9@gmail.com>
