@@ -1,4 +1,4 @@
-# Running MC
+# ▶️ Running MC
 
 Once you have installed and builded dependencies, and MC project you can run the
 game with:

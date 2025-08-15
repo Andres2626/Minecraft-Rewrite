@@ -5,50 +5,46 @@
 ![Status](https://img.shields.io/badge/status-In%20Development-yellow)
 ![Version](https://img.shields.io/badge/version-rd132211-blue)
 
-The MC project is an attempt to rewrite the original Minecraft code in C++. 
-MC aims to achieve the widest cross-platform compatibility  (as in the Java 
-version), preserve the *original* Minecraft experience, and, above all, 
-achieve the highest performance and stability for the game.
+The MC project is an attempt to rewrite the original *Minecraft JE* code in **C++**. 
+aiming for:
+- **Maximum cross-platform compatibility** (like *JE*)
+- **Preservation of JE original experience.**
+- **Highest performance and stability**
 
-**DISCLAIMER**: This is not intended to be an *as-is* copy of the original 
-game code; it is a complete and total rewrite in C++ (***see limitation of*** 
-***liability***). Currently, the engine and game use newer versions of OpenGL 
-(>3.3).
+> ⚠️ **DISCLAIMER**: This is **NOT** an *as-is* copy or decompilation of original game.
+> Currently, the engine and game use newer versions of OpenGL (>3.3).
+> See [Limitation-of-liability](#-limitation-of-liability) for more info
 
 ## 📋 Table of Contents
-- [Goals](#-goals-of-this-project)
-- [Not Included](#-things-that-will-not-be-done)
-- [Current Progress](#-versions-currently-recreated)
-- [Contributing](#-contribute)
-- [Limitation of Liability](#-limitation-of-liability)
-- [Copyright Notice](#-copyright-notice)
-- [Build Instructions](./Documentation/building-guide.md)
-- [Run Instructions](./Documentation/running-mc.md)
-- [TODO](./TODO)
-- [Contact](./Documentation/contact-info.md)
+1. [Goals](#-goals-of-this-project)
+2. [Not Included](#-things-that-will-not-be-done)
+3. [Current Progress](#-versions-currently-recreated)
+4. [Contributing](#-contribute)
+5. [Limitation of Liability](#-limitation-of-liability)
+6. [Copyright Notice](#-copyright-notice)
+7. [Build Instructions](./Documentation/building-guide.md)
+8. [Run Instructions](./Documentation/running-mc.md)
+9. [TODO](./TODO)
+10. [Contact](./Documentation/contact-info.md)
 
 ## ✅ Goals of this project
 
-- Recreate in c++ all versions of the Minecraft Java Edition (up to 1.0 at
-  the moment), 
-  Adding the features of each version in the process.  
-- Add support and compatibility for as many platforms as possible. (like 
-  Java Edition)
-- Rewrite the main game code in C++, maintaining maximum performance and 
-  stability (unlike the Java version)
-- Creating a game engine from scratch.
-- Preserve the **functionality** of the *as-is* Java edition
+- Recreate in c++ all versions of the *JE* (up to 1.0 at the moment).
+- Add support and compatibility for as many platforms as possible. (like *JE*)
+- Rewrite the main game code in *C++*, maintaining maximum performance and 
+  stability compared to *JE*
+- Write a inpependent game engine from scratch.
+- Preserve the **functionality** of the *as-is* Java edition.
   
 ## 🚫 Things that will not be done
 
 It is not intended to add/arrive at the following:
 
-- The complete rewrite of the Bedrock edition and its derivatives 
-  (e.g. MCPE, Xbox version...)
+- The complete rewrite of the *BE* and its derivatives (e.g. MCPE, Xbox version, etc).
 - An *as-is* copy and decompilation of the original game.
-- Rewrite versions beyond R1.0 (*for now*)
-- A multiplayer support bridge for non-Java Edition versions
-- Adding features that are not in the original code.
+- Rewrite versions beyond R1.0 (*for now*).
+- A multiplayer support bridge for non-Java Edition versions.
+- Adding non-original features.
 
 ## 📌 Versions currenly recreated
 
@@ -60,40 +56,8 @@ It is not intended to add/arrive at the following:
   
 ## 🤝 Contribute
 
-Anyone interested can contribute to the project. I encourage anyone 
-interested to contribute as long as:
-
-- All features that are added must be consistent with the version of 
-  Minecraft that is being recreated.
-- When recreating a version of Minecraft in C++ it doesn't matter 
-  whether it's in the main launcher or not. For the moment, the versions 
-  not included in this project are considered *lost* (*see [Ommniarchive Downloads](https://omniarchive.uk/downloads/)*
-  *for more info*)
-  
-  *The versions that will not be recreated for the moment are those that*
-  *do not have the original .jar.*
-  
-*Any contribution are welcome. but...* I recommend that before contributing 
-to the code, you should be familiarwith the original code for all Java 
-versions or at least have an idea of how the code originally worked 
-(especially early versions) and keep in mind the IRC logs, the original 
-changelogs, videos, etc. of older versions (*see [Ommniarchive](https://omniarchive.shoutwiki.com/wiki/Main_Page) for more info*).
-
-Below are some links that could be of great help when contributing to 
-the project.
-
-- [Ommniarchive](https://omniarchive.shoutwiki.com/wiki/Main_Page)
-- [Minecraft Java Versions](https://minecraft.fandom.com/wiki/Java_Edition_version_history)
-- [Minecraft 2009 Original logs](https://web.archive.org/web/20140601000000*/https://echelog.com/logs/browse/lwjgl/1242165600)
-- [The word of notch](https://blog.omniarchive.uk/archive/)
-
-Also, keep in mind that each tag in this repository contains a file 
-called the "rewrited version file", which indicates the version 
-currently being worked on for the MC project.
-
-Refrain from submitting PR's that affect previous file.
-
-Once the above is done and the code is ready, [send a pull request](https://github.com/Andres2626/Minecraft-Rewrite/pulls)
+Thank you for your interest in contributing to the MC project. Before 
+you begin contributing, please check [Contribution Guide](./CONTRIBUTING.MD).
 
 ## ⚖️ Limitation of liability
 
