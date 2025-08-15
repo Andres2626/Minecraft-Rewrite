@@ -2,8 +2,6 @@
 # Makefile for zlib dependency
 # NOTE: At the moment the makefile only use winX (zlib/win32/makefile.gcc)
 #
-export MK = $(MAKE)
-GIT		:= git
 
 # Remote repository
 REPO	:= https://github.com/madler/zlib.git
@@ -18,34 +16,37 @@ LIBDIR  := ../lib
 PHONY   += install-deps build-deps clean-deps-install clean-deps-build
 	
 install-deps: $(SRCDIR)
-	
-build-deps: install-deps $(OUTDIR)
-	@echo "copying all ZLIB files"
-	cp $(SRCDIR)/*.h $(INCDIR)
-	cp $(OUTDIR)/libz.a $(LIBDIR)/libz.a
-	cp $(OUTDIR)/libz.dll.a $(LIBDIR)/libz.dll.a
-	cp $(OUTDIR)/zlib1.dll $(BINDIR)/zlib1.dll
-	
+
+# clean build dir
 clean-deps-install:
-	rm -rf $(SRCDIR)
+	rm -rf $(SRCDIR)/
 
+# clean install directory
 clean-deps-build:
-	rm -rf $(OUTDIR)/zlib1.dll
-	rm -rf $(OUTDIR)/libz.dll.a
-	rm -rf $(OUTDIR)/libz.a
-	rmdir $(OUTDIR)
-	cd $(SRCDIR) && $(MK) -f win32/makefile.gcc clean
-
-$(OUTDIR):
-	mkdir -p $@
-	cd $(SRCDIR) && $(MK) -f win32/makefile.gcc all
-	cp $(SRCDIR)/zlib1.dll $(OUTDIR)/zlib1.dll
-	cp $(SRCDIR)/libz.dll.a $(OUTDIR)/libz.dll.a
-	cp $(SRCDIR)/libz.a $(OUTDIR)/libz.a
-
+	rm -rf $(OUTDIR)/
+	
+build-deps: install-deps $(OUTDIR) 
+	$(MK) $(OUTDIR) all
+	@echo "copying all zlib include files"
+	cp $(SRCDIR)/*.h $(INCDIR)
+	
+	@echo "copying all zlib .$(LIBEXT) files"
+	@for f in $(shell find $(OUTDIR) -name '*.$(LIBEXT)'); do \
+		cp $$f $(LIBDIR)/; \
+	done
+	
+	@echo "copying all zlib .$(DYNEXT) files"
+	@for f in $(shell find $(OUTDIR) -name '*.$(DYNEXT)'); do \
+		cp $$f $(BINDIR)/; \
+	done
+	
 $(SRCDIR):
 	@echo "installing zlib source from $(REPO)"
 	$(GIT) clone $(REPO)
+	
+$(OUTDIR):
+	mkdir -p $@
+	$(CMAKE) -G "Unix Makefiles" -S $(SRCDIR) -B $(OUTDIR) $(CMFLAGS)
 
 .PHONY: $(PHONY)
 	

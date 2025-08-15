@@ -2,9 +2,6 @@
 # Makefile for GLM dependency
 #
 
-export MK = $(MAKE) -C
-GIT		:= git
-
 # Remote repository
 REPO	:= https://github.com/icaven/glm.git
 

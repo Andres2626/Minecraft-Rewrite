@@ -1,11 +1,6 @@
 #
 # Makefile for sandbox
 #
-export MK = $(MAKE) -C
-CPP     := g++
-CC		:= gcc
-AR 		:= ar
-NM      := nm
 
 # Misc directories
 TOPDIR 			:= ..
@@ -21,14 +16,22 @@ DEP_INC			:= $(DEPDIR)/include
 
 EXEC        := $(OUTPUT_BIN)/rd-132211
 
-LFLAGS += -L$(DEP_LIB) -L$(OUTPUT_LIB)
+ifeq ($(TOOLCHAIN), mingw)
+LIB    := $(OUTPUT_LIB)/libmccoredll.$(LIBEXT)
+LIBLNK := -lopengl32 -lgfxdll -lglfw3dll -lz 
+else ifeq ($(TOOLCHAIN), cygwin)
+LIB    :=
+LIBLNK := -lopengl32 -lgfx -lglfw-3 -lz 
+endif
+
+LFLAGS += -L$(DEP_LIB) -L$(OUTPUT_BIN) -L$(DEP_BIN)
 IFLAGS += -I$(INCDIR) -I$(INCDIR)/core -I$(INCDIR)/sandbox/ -I$(DEP_INC) -I$(OUTPUT_INC)
 CFLAGS += $(LFLAGS) $(IFLAGS)
 CPPFILES+= $(shell find -name "*.cpp")
 OFILES += $(patsubst %.cpp, $(OUTDIR)/sandbox/%.o, $(CPPFILES))
 DFILES := $(patsubst %.o, %.d, $(OFILES))
 
-EXEC_CFLAGS += $(LFLAGS) -lmccoredll -lz -lglfw3dll
+EXTRA_CFLAGS += $(LFLAGS) $(LIBLNK) -lmccore
 
 PHONY += all clean distclean
 .PHONY: $(PHONY)
@@ -49,7 +52,7 @@ clean:
 
 $(EXEC): $(OFILES)
 	@mkdir -p $(@D)
-	$(CPP) $^ -o $@ $(EXEC_CFLAGS)
+	$(CPP) $^ -o $@ $(EXTRA_CFLAGS)
 
 $(OUTDIR)/sandbox/%.o: %.cpp
 	@mkdir -p $(@D)

@@ -2,8 +2,6 @@
 # Makefile for stb dependency
 # NOTE: The project at the moment only use stb_image
 #
-export MK = $(MAKE) -C
-GIT         := git
 
 # Remote repository
 REPO 	:= https://github.com/nothings/stb.git
