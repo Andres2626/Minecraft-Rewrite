@@ -1,12 +1,3 @@
-#
-# Makefile for MC Engine
-#
-export MK = $(MAKE) -C
-CPP     := g++
-CC		:= gcc
-AR 		:= ar
-NM      := nm
-
 # Misc directories
 TOPDIR := ..
 INCDIR := $(TOPDIR)/include
@@ -20,13 +11,20 @@ DEP_BIN		:= $(DEPDIR)/bin
 DEP_INC		:= $(DEPDIR)/include
 
 BIN    := $(OUTPUT_BIN)/mccore.dll
-LIB    := $(OUTPUT_LIB)/libmccoredll.a
 
-LFLAGS += -L$(DEP_LIB) -L$(OUTPUT_LIB)
+ifeq ($(TOOLCHAIN), mingw)
+LIB    := $(OUTPUT_LIB)/libmccoredll.$(LIBEXT)
+LIBLNK := -lopengl32 -lgfxdll -lglfw3dll -lz
+else ifeq ($(TOOLCHAIN), cygwin)
+LIB    :=
+LIBLNK := -lopengl32 -lgfx -lglfw-3 -lz
+endif
+
+LFLAGS += -L$(DEP_LIB) -L$(OUTPUT_LIB) -L$(DEP_BIN)
 IFLAGS += -I$(INCDIR) -I$(INCDIR)/core -I$(INCDIR)/sandbox/ -I$(DEP_INC) -I$(OUTPUT_INC)
 CFLAGS += $(IFLAGS) -FPIC -DMC_EXPORT_DLL -MMD -MP
 
-EXEC_CFLAGS += -Wl,--out-implib,$(LIB) $(LFLAGS) -lopengl32 -lgfxdll -lglfw3dll -lz 
+EXTRA_CFLAGS += $(LFLAGS) $(LIBLNK)
 
 EXCCPPFILES := ./Host/Windows/console.cpp ./Host/Windows/init.cpp
 ALLCPPFILES := $(shell find . -name "*.cpp")
@@ -60,7 +58,7 @@ $(OUTPUT_BIN):
 
 $(BIN): $(OFILES)
 	@mkdir -p $(@D)
-	$(CPP) -shared $^ -o $@ $(EXEC_CFLAGS)
+	$(CPP) -shared $^ -o $@ $(EXTRA_CFLAGS) $(EXEC_CFLAGS)$(LIB)
 
 $(OUTDIR)/core/%.o: %.cpp
 	@mkdir -p $(@D)
