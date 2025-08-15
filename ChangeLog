@@ -1,4 +1,98 @@
 2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-2025 [PATCH 3] Final
+    * Recreated version rd-132211.
+    * Engine version 0.0.2-prealpha.
+    * libgfx PATCH 1 version 0.0.1-prealpha
+    * cygwin and mingw compatible.
+    * X11 compatible
+    * Fix shader fog bug.
+    * Fix level updates bug.
+    * ZLIB now compiles with cmake.
+    * Added specific OS makefiles.
+    * Exit definition now is dependent of windows toolchain (__debugbreak()
+    and raise(SIGTRAP))
+    
+    Signed-off-by: Andres26  <andrescamorao9@gmail.com>
+    
+
+2025-08-14  Andres2626  113268055+Andres2626@users.noreply.github.com
+    [PATCH 3] Cygwin compatible
+    
+    * Cygwin and Mingw are compatible
+    * Fix shader bug
+    * Fix makefiles bugs
+    * Added __debugbreak() dependent of windows toolchain
+    * ZLIB now compiles in cmake
+    * libgfx PATCH 1
+    [relnotes](https://github.com/Andres2626/libgfx/releases/tag/v0.0.1-palpha)
+    * Fix level updates reset
+
+2025-08-14  Andres2626  113268055+Andres2626@users.noreply.github.com
+    Merge branch 'master' into cygwin
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-25 [PATCH 3] Cygwin compatibility
+    
+    All makefiles are now compatible with cygwin and msys2.
+    
+    For this, the files that are dependent on $(OS) and that are
+    included in the main makefile were created.
+    
+     ** scripts/windows-platform.mk -> window specific variables
+    
+    This exports its variables via export to all makefiles marked
+    as $(SUBDIRS) via the $(MAKE) command.
+    
+     ** scripts/command.mk -> gcc, ld, ar, etc commands
+    
+    To be compatible with Cygwin, MC now supports X11 and OpenGL3.3
+    
+    * ZLIB now compiles with cmake (avoid use of native makefiles)
+    * Also fixed the level update reset (now resets to 0 every second)
+    
+    In include/core/Host/Windows/exit.h the definition MC_INTERNAL_BREAK_POINT
+    was established depending on the Windows toolchain
+    
+     ** raise(SIGTRAP) for *emulated* unix enviroments (cygwin, msys2...)
+     ** __debugbreak() for VS and mingw compilers
+    
+    Now all comments will have the original author's signature at the
+    end, like this:
+    
+     ** Signed-off-by: author <email>
+    
+    Signed-off-by: Andres26  <andrescamorao9@gmail.com>
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-25 Modified ChangeLog
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-2025 [PATCH 3] Fix shader bug
+    The fog procedure was being done incorrectly, so it was changed back
+    to how it was before.
+    
+    commit: 6291f9e2b4a4dc23cb8282aefab67c297fbee681
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-25 Modified Makefile
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-04-2025 Created NEWS File
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-04-2025 Created NEWS File
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
+    14-08-2025 [PATCH 2] Final
+    
+
+2025-08-14  Andres2626  andrescamorao9@gmail.com
     14-08-2025 [PATCH 2] Final
     
 
