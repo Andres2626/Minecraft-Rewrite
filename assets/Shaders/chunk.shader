@@ -47,21 +47,15 @@ uniform float s_fend;
 
 uniform sampler2D t1;
 
-vec4 apply_fog() {
-	vec4 ret;
-	float dist = length(fs_in.worldPos - s_cpos);
-	float fogFactor = clamp((s_fend - dist) / (s_fend - s_fstart), 0.0, 1.0);
-	vec3 final = mix(s_fcolor.rgb, ret.rgb, fogFactor);
-	ret = vec4(final, ret.a);
-	return ret;
-}
-
 void main() 
 {
 	vec4 result = texture(t1, fs_in.uv) * fs_in.brightness;
 	
 	if (fs_in.brightness < 0.6f) {
-		result = apply_fog();
+		float dist = length(fs_in.worldPos - s_cpos);
+		float fogFactor = clamp((s_fend - dist) / (s_fend - s_fstart), 0.0, 1.0);
+		vec3 final = mix(s_fcolor.rgb, result.rgb, fogFactor);
+		result = vec4(final, result.a);
 	}
 
 	FragColor = result;
