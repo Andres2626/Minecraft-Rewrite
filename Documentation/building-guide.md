@@ -1,4 +1,4 @@
-# Building process
+# 🛠️ Building Guide
 
 Once you have obtained the code from the main repository, you can begin building 
 the project.
