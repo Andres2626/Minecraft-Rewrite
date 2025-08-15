@@ -18,15 +18,17 @@ PHONY   += install-deps build-deps clean-deps-install clean-deps-build
 	
 install-deps: $(SRCDIR)
 	
-build-deps: install-deps
+build-deps: install-deps make copy
+
+make:
 	$(MK) $(SRCDIR) all
-	cp -r $(SRCDIR)/include/ ../ 
 	
+copy:
+	cp -r $(SRCDIR)/include/ ../ 
 	@echo "copying all libgfx .$(LIBEXT) files"
 	@for f in $(shell find $(OUTDIR) -name '*.$(LIBEXT)'); do \
 		cp $$f $(LIBDIR)/; \
 	done
-	
 	@echo "copying all libgfx .$(DYNEXT) files"
 	@for f in $(shell find $(OUTDIR) -name '*.$(DYNEXT)'); do \
 		cp $$f $(BINDIR)/; \
