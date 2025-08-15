@@ -50,7 +50,6 @@ distclean: clean
 clean:
 	@echo "Clearing All..."
 	rm -rf $(OUTDIR)/*
-	rmdir $(OUTDIR)/
 	
 core:
 	@echo "Building engine"
