@@ -1,8 +1,20 @@
 NEWS - list of all major game and engine changes
 
-NEW in rd132211-2 - 14-08-25:
+New in rd-132211-3 - 14-08-25:
+* Recreated version rd-132211.
+* Engine version 0.0.2-prealpha.
+* libgfx PATCH 1 version 0.0.1-prealpha
+* cygwin and mingw compatible.
+* X11 compatible
+* Fix shader fog bug.
+* Fix level updates bug.
+* ZLIB now compiles with cmake.
+* Added specific OS makefiles.
+* Exit definition now is dependent of windows toolchain (__debugbreak() and raise(SIGTRAP))
+
+New in rd132211-2 - 14-08-25:
 * Recreated version rd-132211
-* Engine version PreAlpha 0.0.1
+* Engine version 0.0.1-prealpha
 * All original game assets belonging to Mojang A.B are removed from the main repository.
 * Final refractoring.
 * Deleted patch 0 and patch 1.
@@ -19,19 +31,19 @@ NEW in rd132211-2 - 14-08-25:
 * Moved assets to main directory
 * Fixed some bugs
 
-NEW in rd132211-1 - 31-07-25:
+New in rd132211-1 - 31-07-25:
 * MISSING PATCH
 * Recreated version rd-132211
-* Engine version pre-0.0.1
+* Engine version pre-0.0.1 (MISSING)
 * Main engine independent of game.
 * Simple Application class
 * Layer implementation
 * Simple input class
 * GL** calls are independent of game
 
-NEW in rd132211-0 - 25-07-2025:
+New in rd132211-0 - 25-07-25:
 * MISSING PATCH
 * Recreated version rd-132211
-* Engine version pre-0.0.1
+* Engine version pre-0.0.1 (MISSING)
 * VS build system
 * Initial git commit

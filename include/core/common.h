@@ -19,35 +19,37 @@
 #define MC_USE_UNKNOUN_COMPILER
 #endif 
 
-#if defined (__CYGWIN__)
+#if defined(_WIN32) || defined(MC_USE_WINDOWS32)
+#if defined(__CYGWIN__)
 #define MC_USE_CYGWIN
+#endif
 #define MC_PLATFORM_WINDOWS
-#elif defined(_WIN32) || defined(MC_USE_WINDOWS32)
-#define MC_PLATFORM_WINDOWS
-#if defined(_WIN64) || defined(MC_MACHINE64)
-#define MC_PLATFORM_WIN64
-#else
+#if defined(_WIN64) || defined (MC_MACHINE64)
 #define MC_PLATFORM_WIN32
+#else
+#define MC_PLATFORM_WIN64
 #endif
 #else
 #define MC_PLATFORM_UNSUPPORTED
 #error "Platform is not supported"
 #endif
 
-#if defined(MC_PLATFORM_WINDOWS)
-#if defined(MC_EXPORT_DLL)
-#if defined(MC_USE_GNU_COMPILER)
+#if defined (MC_PLATFORM_WINDOWS)
+#if defined (MC_EXPORT_DLL)
+#if defined (MC_USE_GNU_COMPILER)
 #define MC_API __attribute__((dllexport))
 #else
 #define MC_API __declspec(dllexport)
 #endif
-#elif defined(MC_EXPORT_LIB)
+#else
+#if defined (MC_EXPORT_LIB)
 #define MC_API
 #else
-#if defined(MC_USE_GNU_COMPILER)
+#if defined (MC_USE_GNU_COMPILER)
 #define MC_API __attribute__((dllimport))
 #else
 #define MC_API __declspec(dllimport)
+#endif
 #endif
 #endif
 #endif
@@ -56,7 +58,7 @@
 #define MC_VERSION_MINOR     0
 #define MC_VERSION_PATH      1
 #define MC_VERSION_NUMBER    ((MC_VERSION_MAJOR * 10000) + (MC_VERSION_MINOR * 100) + MC_VERSION_PATH)
-#define MC_VERSION_STRING    "pa.0.0.1"
+#define MC_VERSION_STRING    "pa.0.0.2"
 #define _USE_MATH_DEFINES 1
 
 #include <fstream>
