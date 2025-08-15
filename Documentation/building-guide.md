@@ -1,50 +1,106 @@
 # 🛠️ Building Guide
 
-Once you have obtained the code from the main repository, you can begin building 
-the project.
+The following is the complete guide to compile MC and its dependencies.
 
-NOTE: Before building the project code, it is necessary to keep the following in 
-mind:
+## Table of contents
+1. [Important notes](#-important-notes)
+2. [Developer Build system note](#-developer-build-system-note)
 
-1. The MC project does not contain the original game assets, so you will have to 
-   find them yourself (***see limitation of liability***).
+## ⚠️ Important notes
 
-2. The project *as is* does not contain the dependency codes. You do not need to 
-   install the dependencies yourself, as the *makefile*  automatically downloads 
-   all the dependencies and builds them using a special rule.
+- The *MC project* does **NOT** contain the original game assets - you 
+  must obtained them yourself (see *limitation of liability* in the 
+  README for more info).
+- The project *as is* does **NOT** contain dependencies code. your need 
+  install dependencies using makefile special rule.
+- The build system currenly supports **Windows-like platforms** (cygwin, 
+  msys2, mingw, etc). 
+  
+## 📢 Developer build system note
 
-3. Check the .jar file from which the assets were extracted.
-   
-   For more caution see the sha256 of the original .jar files here
-   
-   [used files](./used-jar-files.txt)
-   
-4. Once you have the original game assets, copy them to the *$CD/assets* 
-   directory.
-   
-5. At the moment makefile **ONLY** winX platforms (cygwin, mingw, msys2, etc)
+This project uses a **custom makefile** instead of *CMAKE* or other build 
+systems for technnical and several reasons.
 
-Use:
+> - One of the reasons why the MC project prefers makefiles instead of 
+>   using *CMAKE* is the ability to automatically manage dependencies, 
+>	adding an auto-install and auto-build interface, simplifying things 
+>	a lot when building with make as 
+>   opposed to *CMAKE*.
+> - Full control of all aspects of the BUILD.
+> - Simplified setup, without requiring additional *CMAKE* scripts.
+> - Simplicity of building the **MC project**.
+
+## ✅ Prerequisites for build
+
+- GNU GCC 13.4.0
+- GNU Coreutils 9.0
+- GNU binutils 2.45
+- cmake 3.28.3
+- git 2.45.1
+- make 4.4.1
+- "Emulated" UNIX environment in winX (cygwin, msys2) or mingw
+- **You must been INSTALLED MC project from oficial repository.** see 
+  [Installation Guide](installation-guide.md) for more info.
+
+Although we would like to avoid using cmake as much as possible in the MC 
+project, it is necessary because compiling *GLFW* and *ZLIB* require *CMAKE* to 
+configure the build environment.
+
+*GIT* in this case is nesesary because auto-install downloads dependencies 
+from a remote *GIT* repository.
+
+## 1️⃣  Prepare assets
+
+1. Obtain the original Minecraft Java edition '.jar' for the version being
+   rewrited.
+2. Verify the file with **SHA-256** and compare with used '.jar'. 
+   check [used files](used-jar-files.txt) for more info.
+3. Extract the JE resources in $(CD)/assets.
+
+## 2️⃣  Install and build dependencies
+
+If you **ONLY** install the dependencies run:
 
 ```
-$ make install-deps # for installing dependencies
-
-$ make build-deps # for building and installing dependencies
+$ make install-deps
 ```
 
-3. Note that by running *make all* you are not running install-deps and build-deps. 
-So before running *all* you must run *build-deps*.
+On the other hand, if your intention is install and build all the dependencies, 
+run:
 
-To build the MC project:
+```
+$ make build-deps
+```
+
+ℹ️ Note: Running *make all* does **NOT** install and build dependencies, you must
+run *make build-deps* before *make all*. The above is necessary to avoid compilation 
+errors.
+
+## 3️⃣  Building MC Project
 
 ```
 $ make all
 ```
 
+This build all *MC project* without dependencies.
+
+ℹ️ Note: In case you have forgotten that you need to install the dependencies before 
+starting *all* the program always reminds you with a message like this:
+
+> Before building the MC project, you need to have the dependencies
+> installed and built. To do this, use the make build-deps command
+> to avoid compilation errors.
+>
+> see 'make help' for more info
+
+*After this the makefile stops for 3 seconds*
+
+## 📦 Makefile targets
+
 Additionally, the makefile has other special rules (use each one carefully to avoid
 compilation errors)
 
-*The following is documented in scripts/help_target.mk*
+If you run the *help* rule you should see a message like this:
 
 ```
 Cleaning Targets:

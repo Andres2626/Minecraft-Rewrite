@@ -22,6 +22,7 @@ aiming for:
 4. [Contributing](#-contribute)
 5. [Limitation of Liability](#-limitation-of-liability)
 6. [Copyright Notice](#-copyright-notice)
+7. [Install Instructions](./Documentation/installing-guide.md)
 7. [Build Instructions](./Documentation/building-guide.md)
 8. [Run Instructions](./Documentation/running-mc.md)
 9. [TODO](./TODO)
