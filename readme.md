@@ -22,11 +22,12 @@ aiming for:
 4. [Contribute](#-contribute)
 5. [Limitation of Liability](#-limitation-of-liability)
 6. [Copyright Notice](#-copyright-notice)
-7. [Install Instructions](./Documentation/installing-guide.md)
-8. [Build Instructions](./Documentation/building-guide.md)
-9. [Run Instructions](./Documentation/running-mc.md)
-10. [TODO](./TODO)
-11. [Contact](./Documentation/contact-info.md)
+7. [Install](./Documentation/installing-guide.md)
+8. [Build](./Documentation/building-guide.md)
+9. [Run](./Documentation/running-mc.md)
+10. [Debug](./Documentation/debugging-guide.md)
+11. [TODO](./TODO)
+12. [Contact](./Documentation/contact-info.md)
 
 ## ✅ Goals of this project
 
@@ -52,13 +53,12 @@ It is not intended to add/arrive at the following:
 - ***PARTIALLY*** rd-132211.
   The version is 100% written, but some important changes to the MC Engine 
   are missing:
-  - Simple documentation.
-  - Port to cygwin and linux.
+  - Port linux.
   
 ## 🤝 Contribute
 
 Thank you for your interest in contributing to the MC project. Before 
-you begin contributing, please check [Contribution Guide](./CONTRIBUTING.MD).
+you begin contributing, please check [Contribution Guide](./CONTRIBUTING.md).
 
 ## ⚖️ Limitation of liability
 
