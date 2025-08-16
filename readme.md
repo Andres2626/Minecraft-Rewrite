@@ -22,6 +22,7 @@ aiming for:
 4. [Contribute](#-contribute)
 5. [Limitation of Liability](#-limitation-of-liability)
 6. [Copyright Notice](#-copyright-notice)
+7. [Directory structure](./Documentation/directory-structure.md)
 7. [Install](./Documentation/installing-guide.md)
 8. [Build](./Documentation/building-guide.md)
 9. [Run](./Documentation/running-mc.md)
