@@ -1,10 +1,10 @@
 # 📁 File structure
 
 *MC project* is organized as follows
-
+```
 ./
 │
-├─ assets/
+├─ assets/ 
 │   ├─ Internal/
 │   └─ Shaders/
 │
@@ -53,3 +53,4 @@
 ├─ .gitignore
 ├─ CONTRIBUTING.md
 └─ readme.md
+```
