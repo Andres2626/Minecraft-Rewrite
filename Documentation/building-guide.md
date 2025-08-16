@@ -5,6 +5,11 @@ The following is the complete guide to compile MC and its dependencies.
 ## Table of contents
 1. [Important notes](#-important-notes)
 2. [Developer Build system note](#-developer-build-system-note)
+2. [Prerequisites for build](#-prerequisites-for-build)
+2. [Prepare assets](#-prepare-assets)
+2. [Install and build dependencies](#-install-and-build-dependencies)
+2. [Building MC project](#-building-mc-project)
+2. [Makefile targets](#-makefile-targets)
 
 ## ⚠️ Important notes
 
@@ -40,7 +45,7 @@ systems for technnical and several reasons.
 - make 4.4.1
 - "Emulated" UNIX environment in winX (cygwin, msys2) or mingw
 - **You must been INSTALLED MC project from oficial repository.** see 
-  [Installation Guide](installation-guide.md) for more info.
+  [Installation Guide](installation-guide.md) for more info. *MC Project* does **NOT** support non winX platforms.  
 
 Although we would like to avoid using cmake as much as possible in the MC 
 project, it is necessary because compiling *GLFW* and *ZLIB* require *CMAKE* to 
@@ -59,7 +64,7 @@ from a remote *GIT* repository.
 
 ## 2️⃣  Install and build dependencies
 
-If you **ONLY** install the dependencies run:
+If you **ONLY** install dependencies run:
 
 ```
 $ make install-deps
