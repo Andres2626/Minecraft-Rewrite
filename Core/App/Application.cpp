@@ -78,7 +78,7 @@ namespace MC
 		void Application::Run()
 		{
 			Events::Event ev;
-			this->m_Timer = new Utils::Timer();
+			m_Timer = new Utils::Timer();
 			float ti = 0.0f;
 			float update_timer = m_Timer->ElapsedMillis();
 			float update_tick = 1000.0f / 60.0f;
@@ -113,12 +113,12 @@ namespace MC
 				}
 
 				while (m_Suspended)
-					this->OnSuspended();
+					OnSuspended();
 
 				if (m_Win->Close())
 					m_Running = false;
 
-				this->OnEvent(ev);
+				OnEvent(ev);
 
 				/* TODO: Improve this! */
 				if (m_FPSGoal > 0) {
