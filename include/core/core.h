@@ -21,9 +21,6 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/Texture.h"
 
-#include "Host/console.h"
-#include "Host/init.h"
-
 #include "Layers/Layer.h"
 #include "Layers/Stack.h"
 #include "Layers/Default.h"

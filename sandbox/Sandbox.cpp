@@ -1,6 +1,5 @@
 #include "Rubydung.h"
 
-#include <Host/init.h>
 #include <Log/Log.h>
 #include <App/Application.h>
 
@@ -38,14 +37,9 @@ public:
 
 int main(int argc, char** argv) 
 {
-	Host::Init(&argc, &argv);
-
 	log_init(MC_LOG_STDOUT | MC_LOG_FILE);
 	log_set_level(MC_LEVEL_TRACE);
-
 	Game game;
 	game.Start();
-
-	Host::End();
 	return 0;
 }

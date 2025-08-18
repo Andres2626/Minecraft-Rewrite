@@ -21,15 +21,14 @@ namespace MC
 
 		Application::~Application()
 		{
-			if (m_Win)
-				delete m_Win;
+			
 		}
 
 		void Application::Init()
 		{
 			mc_info("MC Engine version: %s\n", MC_VERSION_STRING);
-	
-			m_Win = new Window(m_Name.c_str(), m_Pr);
+			
+			m_Win = std::make_unique<Window>(m_Name.c_str(), m_Pr);
 			Input::Init();
 		}
 
@@ -65,59 +64,47 @@ namespace MC
 
 		inline void Application::SetFPSGoal(int fps)
 		{
-			if (fps > 0) {
-				m_FPSGoal = fps;
-				m_Delay = 1000.0f / static_cast<float>(fps); // 1000ms / fps
-			}
-			else {
-				m_FPSGoal = 0;
+			mc_assert(fps > 0, "invalid FPS goal");
+			m_FPSGoal = fps;
+			if (fps > 0)
+				m_Delay = 1000.0f / static_cast<float>(fps);
+			else
 				m_Delay = 0.0f;
-			}
 		}
 
 		void Application::Run()
 		{
 			Events::Event ev;
-			m_Timer = new Utils::Timer();
+			m_Timer = std::make_unique<Utils::Timer>();
 			float ti = 0.0f;
 			float update_timer = m_Timer->ElapsedMillis();
 			float update_tick = 1000.0f / 60.0f;
-			Utils::Timestep step(m_Timer->ElapsedMillis());
+			Utils::Timestep step(update_timer);
 			while (m_Running) {
 				Utils::Timer frametime;
-
 				m_Win->Clear();
 				float now = m_Timer->ElapsedMillis();
 				while (now - update_timer >= update_tick) {
 					step.Update(now);
-
 					OnUpdate(step);
-
 					m_UPS++;
 					update_timer += update_tick;
 				}
-
 				OnRender();
 				m_Win->Update();
-
 				m_FPS++;
 				m_FrameTime = frametime.ElapsedMillis();
-
 				if (now - ti > 1000.0f) {
 					ti += 1000.0f;
-
 					OnTick();
-
 					m_FPS = 0;
 					m_UPS = 0;
 				}
-
 				while (m_Suspended)
 					OnSuspended();
-
 				if (m_Win->Close())
 					m_Running = false;
-
+				
 				OnEvent(ev);
 
 				/* TODO: Improve this! */
@@ -141,7 +128,6 @@ namespace MC
 
 		void Application::OnRender()
 		{
-
 			m_LayerStack.OnRender();
 		}
 

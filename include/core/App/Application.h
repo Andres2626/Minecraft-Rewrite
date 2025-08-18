@@ -13,7 +13,7 @@ namespace MC
 		class MC_API Application : public Layers::Layer 
 		{
 		protected:
-			Window* m_Win;
+			std::unique_ptr<Window> m_Win;
 			WindowProperties m_Pr;
 		private:
 			bool m_Running;
@@ -25,7 +25,7 @@ namespace MC
 			float m_FrameTime;
 			rd_str_t m_Name;
 		private:
-			Utils::Timer* m_Timer;
+			std::unique_ptr<Utils::Timer> m_Timer;
 			Layers::Stack m_LayerStack;
 		public:
 			Application(const rd_str_t& name, const WindowProperties& pr);

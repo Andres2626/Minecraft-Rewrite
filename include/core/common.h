@@ -29,6 +29,8 @@
 #else
 #define MC_PLATFORM_WIN64
 #endif
+#elif defined (__linux__)
+#define MC_PLATFORM_LINUX
 #else
 #define MC_PLATFORM_UNSUPPORTED
 #error "Platform is not supported"
@@ -58,6 +60,13 @@
 #define MC_VERSION_NUMBER    ((MC_VERSION_MAJOR * 10000) + (MC_VERSION_MINOR * 100) + MC_VERSION_PATH)
 #define MC_VERSION_STRING    "pa.0.0.2"
 #define _USE_MATH_DEFINES 1
+
+#if defined(MC_USE_CYGWIN) || (MC_PLATFORM_LINUX)
+#include <signal.h>
+#define MC_INTERNAL_BREAK_POINT raise(SIGTRAP)
+#else
+#define MC_INTERNAL_BREAK_POINT __debugbreak()
+#endif
 
 #include <fstream>
 #include <iostream>
