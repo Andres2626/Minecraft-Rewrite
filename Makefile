@@ -37,8 +37,8 @@ $(info using $(COMPILER_TARGET) toolchain)
 all: dep_warning core sandbox
 
 dep_warning:
-	@echo "Before building the MC project, you need to have the dependencies"
-	@echo "installed and built. To do this, use the make build-deps command" 
+	@echo "Before building MC project, you need to have the dependencies"
+	@echo "installed and built. To do this, use 'make build-deps' command" 
 	@echo "to avoid compilation errors."
 	@echo ""
 	@echo "see 'make help' for more info"

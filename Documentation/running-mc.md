@@ -1,14 +1,10 @@
-# ▶️ Running MC
+# ▶️ Running MC project
 
-Once you have installed and build dependencies, and MC project you can run the
+Once you have installed and built dependencies and MC project, you can run the
 game with:
 
 ```
 $ make run
 ```
-
-Or you can launch it directly from your browser, but keep in mind that mingw 
-*sometimes* sets up its own DLL to run with your game. So be aware of the runtime 
-dependencies to run the application.
 
 Once this is done, have fun!

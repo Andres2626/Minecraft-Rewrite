@@ -1,7 +1,6 @@
 # 🛠️ Minecraft Rewrite (MC Rewrite)
 
-![Language](https://img.shields.io/badge/language-C++-brightgreen)
-![Language](https://img.shields.io/badge/language-C-brightgreen)
+![Language](https://img.shields.io/badge/languages-C/C++-brightgreen)
 ![Status](https://img.shields.io/badge/status-In%20Development-yellow)
 ![Version](https://img.shields.io/badge/version-rd132211-blue)
 
@@ -11,7 +10,7 @@ aiming for:
 - **Preservation of JE original experience.**
 - **Highest performance and stability**
 
-> ⚠️ **DISCLAIMER**: This is **NOT** an *as-is* copy or decompilation of original game.
+> ⚠️ **DISCLAIMER**: This project is **NOT** an *as-is* copy or decompilation of original game.
 > Currently, the engine and game use newer versions of OpenGL (>3.3).
 > See [Limitation of liability](#-limitation-of-liability) for more info
 
@@ -21,14 +20,14 @@ aiming for:
 3. [Versions currently recreated](#-versions-currently-recreated)
 4. [Contribute](#-contribute)
 5. [Limitation of Liability](#-limitation-of-liability)
-6. [Copyright Notice](#-copyright-notice)
+6. [Copyright Notice](#-©-copyright-notice)
 7. [Directory structure](./Documentation/directory-structure.md)
-7. [Install](./Documentation/installing-guide.md)
-8. [Build](./Documentation/building-guide.md)
-9. [Run](./Documentation/running-mc.md)
-10. [Debug](./Documentation/debugging-guide.md)
-11. [TODO](./TODO)
-12. [Contact](./Documentation/contact-info.md)
+8. [Install](./Documentation/installing-guide.md)
+9. [Build](./Documentation/building-guide.md)
+10. [Run](./Documentation/running-mc.md)
+11. [Debug](./Documentation/debugging-guide.md)
+12. [TODO](./TODO)
+13. [Contact](./Documentation/contact-info.md)
 
 ## ✅ Goals of this project
 
@@ -47,14 +46,14 @@ It is not intended to add/arrive at the following:
 - An *as-is* copy and decompilation of the original game.
 - Rewrite versions beyond R1.0 (*for now*).
 - A multiplayer support bridge for *non-JE* versions.
-- Adding non-original features.
+- Adding non-original game features.
 
 ## 📌 Versions currently recreated
 
-- ***PARTIALLY*** rd-132211.
+- ***PARTIALLY*** rd-132211. view [original release notes](Documentation/versions/rd-132211-1/relnotes.md)
   The version is 100% written, but some important changes to the MC Engine 
   are missing:
-  - Port linux.
+  - Port to Linux.
   
 ## 🤝 Contribute
 
@@ -63,20 +62,16 @@ you begin contributing, please check [Contribution Guide](./CONTRIBUTING.md).
 
 ## ⚖️ Limitation of liability
 
-This project is not affiliated with Mojang A.B. Furthermore, MC 
-project is not *as-is* copy of original game code.
+This project is an independent rewrite of original game and **not affiliated with or endorsed**
+**by Mojang AB or Microsoft.**, Therefore, it does not contain the assets of the original game.
 
-The project **DOES NOT** have the original game assets, so you'll 
-have to find them yourself (see 'Building' for more info)
+All original assets are the property of their respective owners.
 
 Please read the copyright notice.
 
 ## © Copyright notice
 
-**MC Rewrite** code is © Andres26 2025. Redistribution is allowed under these terms:
+Copyright (C) 2025 Andres26
 
-- Full source code is available.
-
-- The copyright notice MUST be intact.
-
-- It is prohibited to distribute this for a fee.
+This project is licensed under GNU General Public License, version 3 (GPLv3)
+See [LICENSE](./LICENSE) for more details.

@@ -1,6 +1,5 @@
 # 📁 File structure
 
-*MC project* is organized as follows
 ```
 ./
 │
