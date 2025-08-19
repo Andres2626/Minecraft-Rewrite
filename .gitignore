@@ -13,4 +13,5 @@ Dependencies/
 %.o
 %.log
 
+assets/Internal/win_icon.png
 assets/terrain.png
