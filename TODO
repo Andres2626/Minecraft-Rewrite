@@ -1,0 +1,54 @@
+
+At the moment these are the list of things to do in the MC Rewrite project.
+
+Please note that marking any of the items in this file as 'DONE' requires 
+that item to be moved to the end of this 'DONE List' file.
+
+For bug tracking, please write to:
+
+	https://github.com/Andres2626/Minecraft-Rewrite/issues
+	
+or
+
+	minecraftrewrite21@gmail.com
+	
+To mark one of these items as 'DONE' and once changes have been made 
+to the project, submit a pull request to:
+
+	https://github.com/Andres2626/Minecraft-Rewrite/pulls
+
+                          * Andres26 *
+
+==========================================================================
+
+- Delete GLM from engine.
+  * Create Math subsystem from scratch.
+- Solve compiler warnings.
+  * DLL warnings in vs compiler (C4251).
+- Modding system.
+  * DL.
+	- Dynamic Loading protocol for modules (dlcfn.h and LoadLibrary).
+	- Low level modding system.
+  * LUA scripting.
+	- High level modding system.
+- More platform support in the future.
+  * Windows older versions (since 2000 edition).
+  * Linux. (not tested)
+  * Android (very important).
+  * Apple.
+  * Xbox.
+  * Wii.
+  * ...
+- Graphic platform support:
+  * OpenGL 2.0 (for testing purposes).
+  * DirectX.
+  * Vulkan.
+- Separate the engine from the main project.
+  * Create independent game engine.
+- Event subsystem from scratch.
+- Geometry shader support.
+- Implement argument parser in the engine (getopt).
+- Implement better FPS limit procedure in the future.
+- Support for cross compiling.
+- Change .md to .rst files.
+- Reimplement FPS limit function in Application class.
