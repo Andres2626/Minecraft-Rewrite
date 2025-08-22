@@ -10,28 +10,8 @@
 #define MC_LOG_STDOUT BIT_L(1)
 #define MC_LOG_FILE BIT_L(2)
 
-#define MC_RELPATH strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__
-
-/*
- * mc_fmt - Pass format string to log output.
- *
- * This macro passes the format string to the log functions without
- * modifications by default.
- *
- * To add a common prefix to log messages, you can `#undef` this macro
- * and redefine it to suit your needs.
- *
- * Example:
- *     #undef mc_fmt
- *     #define mc_fmt(fmt) "my_module: " fmt
- *
- * The above redefinition causes all mc_* log functions to print messages
- * prefixed with "my_module: ".
- */
-#define mc_fmt(fmt) fmt
-
 /* print MC message */
-#define mc_print(level, fmt, ...) MC::log_print(level, MC_RELPATH, __LINE__, mc_fmt(fmt), ##__VA_ARGS__);
+#define mc_print(level, fmt, ...) MC::log_print(level, __FILE__, __LINE__, fmt, ##__VA_ARGS__)
 
 #define mc_info(fmt, ...) mc_print(MC_LEVEL_INFO, fmt, ##__VA_ARGS__)
 #define mc_warn(fmt, ...) mc_print(MC_LEVEL_WARN, fmt, ##__VA_ARGS__)
@@ -44,6 +24,8 @@
 #else
 #define mc_debug(...)
 #endif
+
+#define MC_LOG_USE_RELPATH
 
 namespace MC {
 
