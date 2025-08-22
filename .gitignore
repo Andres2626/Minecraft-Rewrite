@@ -1,9 +1,3 @@
-build/
-Dependencies/
-
-!Dependencies/**
-!Dependencies/**/Makefile
-
 %.dat
 %.dll
 %.exe
@@ -12,6 +6,10 @@ Dependencies/
 %.d
 %.o
 %.log
+%.so
+%.obj
 
+build/
+assets/Internal
 assets/Internal/win_icon.png
 assets/terrain.png
