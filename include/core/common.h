@@ -38,20 +38,32 @@
 
 #if defined(MC_PLATFORM_WINDOWS)
 #if defined(MC_EXPORT_DLL)
-#if defined(MC_USE_GNU_COMPILER)
-#define MC_API __attribute__((dllexport))
-#else
 #define MC_API __declspec(dllexport)
-#endif
-#elif defined(MC_EXPORT_LIB)
-#define MC_API
-#else
-#if defined(MC_USE_GNU_COMPILER)
-#define MC_API __attribute__((dllimport))
-#else
+#elif defined(MC_IMPORT_DLL)
 #define MC_API __declspec(dllimport)
+#else
+#define MC_API
 #endif
+#elif defined(MC_PLATFORM_LINUX)
+#if defined(MC_EXPORT_DLL) || defined(MC_IMPORT_DLL)
+#if defined(MC_USE_GNU_COMPILER)
+#define MC_API __attribute__((visibility("default")))
+#else
+#define MC_API
 #endif
+#else
+#define MC_API
+#endif
+#else
+#define MC_API
+#endif
+
+/* debug break macro */
+#if defined (MC_PLATFORM_WINDOWS)
+#define MC_INTERNAL_BREAK_POINT __debugbreak()
+#elif defined (MC_PLATFORM_LINUX)
+#include <signal.h>
+#define MC_INTERNAL_BREAK_POINT raise(SIGTRAP)
 #endif
 
 #define MC_VERSION_MAJOR     0
@@ -60,13 +72,6 @@
 #define MC_VERSION_NUMBER    ((MC_VERSION_MAJOR * 10000) + (MC_VERSION_MINOR * 100) + MC_VERSION_PATH)
 #define MC_VERSION_STRING    "pa.0.0.2"
 #define _USE_MATH_DEFINES 1
-
-#if defined(MC_USE_CYGWIN) || (MC_PLATFORM_LINUX)
-#include <signal.h>
-#define MC_INTERNAL_BREAK_POINT raise(SIGTRAP)
-#else
-#define MC_INTERNAL_BREAK_POINT __debugbreak()
-#endif
 
 #include <fstream>
 #include <iostream>
