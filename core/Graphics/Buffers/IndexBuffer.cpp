@@ -1,6 +1,6 @@
 #include "Graphics/Buffers/IndexBuffer.h"
 
-#include <glad/glad.h>
+#include <gfx/glad.h>
 
 namespace MC 
 {
@@ -18,7 +18,7 @@ namespace MC
 			glDeleteBuffers(1, &m_ID);
 		}
 
-		void IndexBuffer::Build(rd_uint8_t size, const void* data) 
+		void IndexBuffer::Build(mc_u8 size, const void* data)
 		{
 			m_Size = size;
 

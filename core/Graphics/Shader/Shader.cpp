@@ -1,13 +1,13 @@
 #include "Graphics/Shader/Shader.h"
 
-#include <glad/glad.h>
+#include <gfx/glad.h>
 
 namespace MC 
 {
 	namespace Graphics 
 	{
 
-		Shader::Shader(const rd_str_t& filepath)
+		Shader::Shader(const mc_str& filepath)
 			: m_Path(filepath) 
 		{
 			ShaderSources shaders = ParseFromFile(filepath);
@@ -29,7 +29,7 @@ namespace MC
 			glUseProgram(0);
 		}
 
-		void Shader::SetBool(const rd_str_t& name, bool value) 
+		void Shader::SetBool(const mc_str& name, bool value)
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -37,7 +37,7 @@ namespace MC
 			}
 		}
 
-		void Shader::SetInt(const rd_str_t& name, int value) 
+		void Shader::SetInt(const mc_str& name, int value)
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -45,7 +45,7 @@ namespace MC
 			}
 		}
 
-		void Shader::SetFloat(const rd_str_t& name, float value) 
+		void Shader::SetFloat(const mc_str& name, float value)
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -53,7 +53,7 @@ namespace MC
 			}
 		}
 
-		void Shader::SetVec2(const rd_str_t& name, const Math::vec2& value) 
+		void Shader::SetVec2(const mc_str& name, const Math::vec2& value)
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -61,7 +61,7 @@ namespace MC
 			}
 		}
 
-		void Shader::SetVec3(const rd_str_t& name, const Math::vec3& value) 
+		void Shader::SetVec3(const mc_str& name, const Math::vec3& value)
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -69,7 +69,7 @@ namespace MC
 			}
 		}
 
-		void Shader::SetVec4(const rd_str_t& name, const Math::vec4& value) 
+		void Shader::SetVec4(const mc_str& name, const Math::vec4& value)
 		{
 			int location = GetUniformLocation(name);
 			if (location != -1) {
@@ -77,27 +77,27 @@ namespace MC
 			}
 		}
 
-		void Shader::Set2x2(const rd_str_t& name, const Math::mat2& value) 
+		void Shader::Set2x2(const mc_str& name, const Math::mat2& value)
 		{
 			int location = GetUniformLocation(name);
 			glUniformMatrix2fv(location, 1, GL_FALSE, (const float*)&value);
 		}
 
-		void Shader::Set3x3(const rd_str_t& name, const Math::mat3& value) 
+		void Shader::Set3x3(const mc_str& name, const Math::mat3& value)
 		{
 			int location = GetUniformLocation(name);
 			glUniformMatrix3fv(location, 1, GL_FALSE, (const float*)&value);
 		}
 
-		void Shader::Set4x4(const rd_str_t& name, const Math::mat4& value) 
+		void Shader::Set4x4(const mc_str& name, const Math::mat4& value)
 		{
 			int location = GetUniformLocation(name);
 			glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)&value);
 		}
 
-		ShaderSources Shader::ParseFromFile(const rd_str_t& path) 
+		ShaderSources Shader::ParseFromFile(const mc_str& path)
 		{
-			rd_str_t line;
+			mc_str line;
 			std::stringstream ss[2];
 			std::ifstream stream(path);
 
@@ -112,10 +112,10 @@ namespace MC
 			ShaderType type = ShaderType::UNKNOUN;
 
 			while (getline(stream, line)) {
-				if (line.find("#shader") != rd_str_t::npos) {
-					if (line.find("vertex") != rd_str_t::npos)
+				if (line.find("#shader") != mc_str::npos) {
+					if (line.find("vertex") != mc_str::npos)
 						type = ShaderType::VERTEX;
-					else if (line.find("fragment") != rd_str_t::npos)
+					else if (line.find("fragment") != mc_str::npos)
 						type = ShaderType::FRAGMENT;
 				}
 				else {
@@ -129,7 +129,7 @@ namespace MC
 			};
 		}
 
-		rd_uint8_t Shader::Load(rd_uint8_t type, const rd_str_t& source)
+		mc_u8 Shader::Load(mc_u8 type, const mc_str& source)
 		{
 			int result = GL_FALSE;
 			unsigned int id = glCreateShader(type);
@@ -165,11 +165,11 @@ namespace MC
 			return id;
 		}
 
-		GLuint Shader::Create(const rd_str_t& vertex_source, const rd_str_t& fragmement_source) 
+		GLuint Shader::Create(const mc_str& vertex_source, const mc_str& fragmement_source)
 		{
-			rd_uint8_t program = glCreateProgram();
-			rd_uint8_t vs = Load(GL_VERTEX_SHADER, vertex_source);
-			rd_uint8_t fs = Load(GL_FRAGMENT_SHADER, fragmement_source);
+			mc_u8 program = glCreateProgram();
+			mc_u8 vs = Load(GL_VERTEX_SHADER, vertex_source);
+			mc_u8 fs = Load(GL_FRAGMENT_SHADER, fragmement_source);
 
 			glAttachShader(program, vs);
 			glAttachShader(program, fs);
@@ -181,7 +181,7 @@ namespace MC
 			return program;
 		}
 
-		GLint Shader::GetUniformLocation(rd_str_t name) 
+		GLint Shader::GetUniformLocation(mc_str name)
 		{
 			int location = glGetUniformLocation(m_ShaderID, name.c_str());
 #if defined (MC_USE_DEBUG)

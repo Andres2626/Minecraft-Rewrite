@@ -1,13 +1,13 @@
 #include "Graphics/Buffers/VertexLayout.h"
 
-#include <glad/glad.h>
+#include <gfx/glad.h>
 
 namespace MC 
 {
 	namespace Graphics
 	{
 
-		void VertexLayout::AddAttribute(rd_uint8_t index, rd_int_t size, rd_uint8_t type, rd_int8_t stride, const void* offset, rd_uchar8_t normalized)
+		void VertexLayout::AddAttribute(mc_u8 index, mc_int size, mc_u8 type, mc_i8 stride, const void* offset, mc_uc8 normalized)
 		{
 			m_Attribs.push_back({ index, size, type, stride, offset, normalized });
 		}

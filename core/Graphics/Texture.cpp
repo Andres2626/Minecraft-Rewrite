@@ -1,7 +1,7 @@
 #include "Graphics/Texture.h"
 
 #include <stb_image.h>
-#include <glad\glad.h>
+#include <gfx/glad.h>
 
 namespace MC 
 {

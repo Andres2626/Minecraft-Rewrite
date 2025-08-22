@@ -14,8 +14,8 @@ namespace MC
 		class MC_API Renderer 
 		{
 		public:
-			static void Enable(rd_uint8_t func);
-			static void Disable(rd_uint8_t func);
+			static void Enable(mc_u8 func);
+			static void Disable(mc_u8 func);
 		public:
 			static void ClearColor(Math::vec3 color);
 			static void Viewport(Math::ivec2 pos, Math::ivec2 size);
@@ -23,8 +23,8 @@ namespace MC
 			static void DepthFunc(const DepthValue& val);
 			static void BlendFunc(const BlendValue& sfactor, const BlendValue& dfactor);
 		public:
-			static void DrawArrays(rd_uint8_t mode, rd_uint8_t size);
-			static void DrawElements(rd_uint8_t mode, rd_uint8_t size);
+			static void DrawArrays(mc_u8 mode, mc_u8 size);
+			static void DrawElements(mc_u8 mode, mc_u8 size);
 		};
 
 	}

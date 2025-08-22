@@ -1,6 +1,6 @@
 #include "Graphics/Buffers/VertexBuffer.h"
 
-#include <glad/glad.h>
+#include <gfx/glad.h>
 
 namespace MC 
 {
@@ -18,7 +18,7 @@ namespace MC
 			glDeleteBuffers(1, &m_ID);
 		}
 
-		void VertexBuffer::Build(rd_uint8_t size, const void* data)
+		void VertexBuffer::Build(mc_u8 size, const void* data)
 		{
 			this->m_Size = size;
 
