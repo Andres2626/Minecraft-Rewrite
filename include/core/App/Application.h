@@ -18,17 +18,15 @@ namespace MC
 		private:
 			bool m_Running;
 			bool m_Suspended;
-			int m_FPSGoal;
-			float m_Delay;
 			int m_FPS;
 			int m_UPS;
 			float m_FrameTime;
-			rd_str_t m_Name;
+			mc_str m_Name;
 		private:
 			std::unique_ptr<Utils::Timer> m_Timer;
 			Layers::Stack m_LayerStack;
 		public:
-			Application(const rd_str_t& name, const WindowProperties& pr);
+			Application(const mc_str& name, const WindowProperties& pr);
 			~Application();
 		public:
 			virtual void Init();
@@ -47,7 +45,6 @@ namespace MC
 			void OnTick() override;
 			void OnSuspended() override;
 		public:
-			void SetFPSGoal(int fps);
 			inline int GetFPS() { return m_FPS; }
 			inline int GetUPS() { return m_UPS; }
 			inline float GetFrameTime() { return m_FrameTime; }
