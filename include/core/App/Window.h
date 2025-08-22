@@ -43,11 +43,11 @@ namespace MC
 		private:
 			bool m_Init;
 			WindowProperties m_Pr;
-			rd_str_t m_Title;
+			mc_str m_Title;
 			GLFWwindow* m_Win; /* OpenGL window */
 		public:
 			/* Initializes and create window */
-			Window(const rd_str_t& title, const WindowProperties& properties);
+			Window(const mc_str& title, const WindowProperties& properties);
 			~Window();
 		private:
 			/* returns FALSE in case of error */

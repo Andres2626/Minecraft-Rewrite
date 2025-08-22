@@ -10,7 +10,7 @@ namespace MC
 
 		class MC_API Texture : public Image {
 		public:
-			rd_uint8_t m_ID;
+			mc_u8 m_ID;
 		public:
 			Texture() = default;
 			~Texture() = default;

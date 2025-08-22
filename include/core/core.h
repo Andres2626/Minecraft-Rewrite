@@ -35,3 +35,4 @@
 #include "Utils/Timer.h"
 #include "Utils/Timestep.h"
 #include "Utils/Util.h"
+#include "Utils/gzip.h"

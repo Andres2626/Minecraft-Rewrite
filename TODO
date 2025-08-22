@@ -21,63 +21,34 @@ to the project, submit a pull request to:
 
 ==========================================================================
 
-- Create simple documentation.
-    - At the moment the documentation is very simple.
-    - Rewrite some parts of the comments and readme documents.
-- Delete GLM from engine
+- Delete GLM from engine.
   * Create Math subsystem from scratch.
 - Solve compiler warnings.
-  * DLL warnings in vs compiler (C4251)
-- Change license 
-  * Current license is very ambiguous and simple.
-  * Create LISCENSE file.
-- Modding system
-  * DL
-	- Dynamic Loading protocol for modules (dlcfn.h and LoadLibrary)
+  * DLL warnings in vs compiler (C4251).
+- Modding system.
+  * DL.
+	- Dynamic Loading protocol for modules (dlcfn.h and LoadLibrary).
 	- Low level modding system.
-  * LUA scripting
-	- High level modding system
-- More platform support in the future
-  * Windows older versions (since 2000 edition)
-  * Linux.
-  * Android (very important)
+  * LUA scripting.
+	- High level modding system.
+- More platform support in the future.
+  * Windows older versions (since 2000 edition).
+  * Linux. (not tested)
+  * Android (very important).
   * Apple.
-  * Xbox
+  * Xbox.
   * Wii.
   * ...
 - Graphic platform support:
-  * OpenGL 2.0 (for testing purposes)
+  * OpenGL 2.0 (for testing purposes).
   * DirectX.
   * Vulkan.
-- Separate the engine from the main project
-  * Create independent game engine
+- Separate the engine from the main project.
+  * Create independent game engine.
 - Event subsystem from scratch.
 - Geometry shader support.
-- Implement argument parser in the engine (getopt)
+- Implement argument parser in the engine (getopt).
 - Implement better FPS limit procedure in the future.
-- Implement support for windows toolchains
-  * Visual studio (separate .vs** files)
-    Technically, it's compatible with VS, since the first versions of the 
-	engine and the rewritten code were for a VS environment. The only 
-	thing that was removed were all the .vs files in *PATCH 2*.
-  * ...
-- Support for cross compiling
-
-DONE List
-
-The following items are the list of things already completed from 
-the previous list.
-
-=======================================================================
-
-- Changed build system (12-08-2025)
-  * Added subdirs
-  * Reorganization of all files
-  * Dependencies have been moved from the main repository and are 
-    now downloadable from the makefile.
-  * Support for msys2 (mingw**)
-- Final Refractoring (12-08-25)
-- Created ChangeLog file (14-08-25)
-- Created NEWS file (14-08-25)
-- Compatibility with *emulated* unix environments (cygwin, msys2...) (14-08-25)
-- X11 Compatible (14-08-25)
+- Support for cross compiling.
+- Change .md to .rst files.
+- Reimplement FPS limit function in Application class.

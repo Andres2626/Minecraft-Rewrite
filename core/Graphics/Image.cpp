@@ -27,6 +27,7 @@ namespace MC
 
 		bool Image::LoadFromFile(const char* path)
 		{
+			this->path = path;
 			pixels = stbi_load(path, &x, &y, &nr_channels, 0);
 			if (!pixels)
 				return false;

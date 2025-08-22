@@ -8,41 +8,42 @@ namespace MC
 		int flags;
 		int level;
 	};
-	
+
 	static const char* level_str[] = {
 		"", "info", "warn", "ERROR", "FATAL", // basic levels
 		"debug", "trace"
 	};
-	
-	static struct log log;
+
+	static struct log log = { nullptr, 0, 0, 0 };
 
 	/* write to buffer and print string (using vfprintf) */
-	static void internal_vfprintf(const char* fmt, va_list list)
+	static void internal_vprintf(const char* fmt, va_list list)
 	{
-		if (log.flags & MC_LOG_FILE) {
-			vfprintf(log.fp, fmt, list);
-			fflush(log.fp);
+		if (log.flags & MC_LOG_STDOUT) {
+			va_list copy;
+			va_copy(copy, list);
+			vfprintf(stderr, fmt, copy);
+			va_end(copy);
 		}
 
-		if (log.flags & MC_LOG_STDOUT)
-			vfprintf(stderr, fmt, list);
+		if ((log.flags & MC_LOG_FILE) && log.fp) {
+			va_list copy;
+			va_copy(copy, list);
+			vfprintf(log.fp, fmt, copy);
+			fflush(log.fp);
+			va_end(copy);
+		}
 	}
 
-	static void internal_write(const char* fmt, ...) 
+	static void internal_write(const char* fmt, ...)
 	{
 		va_list args;
 		va_start(args, fmt);
-		internal_vfprintf(fmt, args);
+		internal_vprintf(fmt, args);
 		va_end(args);
 	}
-	
-	static void set_prefix_output(const char* prefix) 
-	{
-		//TODO: Implement colors
-		internal_write("[%s] ", prefix);
-	}
 
-	static void get_time_buff(const char* fmt, char* buffer, size_t size) 
+	static void get_time_buff(const char* fmt, char* buffer, size_t size)
 	{
 		strftime(buffer, size, fmt, localtime(&log.now));
 	}
@@ -64,24 +65,43 @@ namespace MC
 		return 1;
 	}
 
-	void log_fini() 
+	void log_fini()
 	{
 		fclose(log.fp);
+	}
+
+	static const char* convert_to_relpath(const char* path)
+	{
+#if defined (MC_PLATFORM_WINDOWS)
+		return strrchr(path, '\\') ? strrchr(path, '\\') + 1 : path;
+#else
+		return strrchr(path, '/') ? strrchr(path, '/') + 1 : path;
+#endif
 	}
 
 	void log_print(int level, const char* file, int line, const char* fmt, ...)
 	{
 		if (level > log.level)
-			return; 
+			return;
 		
-		char tb[30]; // time buffer
+		char tb[30], buff[512];
+		const char* file_ = NULL;
+		
+#if defined (MC_LOG_USE_RELPATH)
+		file_ = convert_to_relpath(file);
+#else
+		file_ = file;
+#endif
 		get_time_buff("[%Y-%m-%d %H-%M-%S]", tb, sizeof(tb));
-		internal_write("%s [%s:%i] ", tb, file, line);
-		set_prefix_output(level_str[level]);
+		
+		int n = snprintf(buff, sizeof(buff), "%s [%s:%i] [%s] ", tb, file_, line, level_str[level]);
+		
 		va_list args;
 		va_start(args, fmt);
-		internal_vfprintf(fmt, args);
+		vsnprintf(buff+n, sizeof(buff)-n, fmt, args);
 		va_end(args);
+		
+		internal_write(buff);
 	}
 
 	int log_get_level()

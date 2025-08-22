@@ -1,6 +1,6 @@
 #include "Graphics/Buffers/VertexArray.h"
 
-#include <glad/glad.h>
+#include <gfx/glad.h>
 
 namespace MC 
 {

@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+#include <gfx/glad.h>
 #include "App/Window.h"
 
 #include "App/Input.h"
@@ -16,7 +16,7 @@ namespace MC
 			mc_fatal("glfw error %i: %s\n", error, msg);
 		}
 
-		Window::Window(const rd_str_t& title, const WindowProperties& properties)
+		Window::Window(const mc_str& title, const WindowProperties& properties)
 			: m_Title(title), m_Pr(properties), m_Init(false)
 		{
 			/* Create window */

@@ -10,7 +10,7 @@ namespace MC
 		{
 		public:
 			const char* path;
-			unsigned char* pixels;
+			mc_uc8* pixels;
 			int x;
 			int y;
 			int nr_channels;

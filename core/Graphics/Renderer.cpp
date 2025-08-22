@@ -1,19 +1,19 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/BlendValue.h"
 
-#include <glad/glad.h>
+#include <gfx/glad.h>
 
 namespace MC 
 {
 	namespace Graphics 
 	{
 
-		void Renderer::Enable(rd_uint8_t func) 
+		void Renderer::Enable(mc_u8 func)
 		{
 			glEnable(func);
 		}
 
-		void Renderer::Disable(rd_uint8_t func) 
+		void Renderer::Disable(mc_u8 func)
 		{
 			glDisable(func);
 		}
@@ -38,12 +38,12 @@ namespace MC
 			glBlendFunc((GLenum)sfactor, (GLenum)dfactor);
 		}
 
-		void Renderer::DrawArrays(rd_uint8_t mode, rd_uint8_t size)
+		void Renderer::DrawArrays(mc_u8 mode, mc_u8 size)
 		{
 			glDrawArrays(mode, 0, size);
 		}
 
-		void Renderer::DrawElements(rd_uint8_t mode, rd_uint8_t size)
+		void Renderer::DrawElements(mc_u8 mode, mc_u8 size)
 		{
 			glDrawElements(mode, size, GL_UNSIGNED_INT, 0);
 		}
