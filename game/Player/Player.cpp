@@ -1,9 +1,11 @@
 #include "Player/Player.h"
 
 #include "Level/Level.h"
+
 #include <App/Input.h>
 #include <App/Application.h>
 #include <Graphics/Camera/Ray.h>
+#include <Utils/Util.h>
 
 using namespace MC;
 using namespace App;
@@ -12,8 +14,8 @@ bool first = true;
 
 static const double PI = 3.14159265358979323846;
 
-Player::Player(Level* level)
-	: m_Ground(false), m_Size({ 0.3f, 0.9f }), m_Level(level), Cam(vec3(0.0f))
+Player::Player(Level& level)
+	: m_Ground(false), m_Size({ 0.3f, 0.9f }), m_Level(level), Cam(vec3(0.0f)), m_DMov(vec3(0.0f, 0.0f, 0.0f))
 {
 	float x = (float)App::Application::GetProperties().x;
 	float y = (float)App::Application::GetProperties().y;
@@ -23,7 +25,9 @@ Player::Player(Level* level)
 	Cam.near = 0.05f;
 	Cam.far = 100.0f;
 	Cam.Update();
-	m_Sel = new Selector();
+
+	/* create selector renderer */
+	m_Sel = std::make_unique<Selector>();
 
 	ResetPos();
 }
@@ -41,31 +45,34 @@ void Player::Render()
 
 void Player::Move(const vec3& pos) 
 {
-	vec3 org = pos;
-	vec3 a = pos;
-	std::vector<AABB> aabbs = m_Level->GetCubes(m_Box.Expand(pos));
+	vec3 oldPos = pos;
+	vec3 newPos = pos;
+	std::vector<AABB> aabbs = m_Level.GetCubes(m_Box.Expand(pos));
 
 	for (AABB& aabb : aabbs) {
-		a.x = aabb.ClipXCollide(m_Box, a.x);
-		a.y = aabb.ClipYCollide(m_Box, a.y);
-		a.z = aabb.ClipZCollide(m_Box, a.z);
+		newPos.x = aabb.ClipXCollide(m_Box, newPos.x);
+		newPos.y = aabb.ClipYCollide(m_Box, newPos.y);
+		newPos.z = aabb.ClipZCollide(m_Box, newPos.z);
 	}
 
-	m_Box.Move({ a.x, a.y, a.z });
-	this->m_Ground = (org.y != a.y) && (org.y < 0.0f);
+	m_Box.Move(newPos);
 
-	if (org.x != a.x)
+	/* check if the player is on the ground */
+	m_Ground = (oldPos.y != newPos.y) && (oldPos.y < 0.0f);
+
+	vec3 delta = newPos - oldPos;
+	if (delta.x != 0.0f)
 		m_DMov.x = 0.0f;
 
-	if (org.y != a.y)
+	if (delta.y != 0.0f)
 		m_DMov.y = 0.0f;
 
-	if (org.z != a.z)
+	if (delta.z != 0.0f)
 		m_DMov.z = 0.0f;
 
-	m_Pos.x = (m_Box.p0.x + m_Box.p1.x) / 2.0f;
-	m_Pos.y = m_Box.p0.y + 1.62f;
-	m_Pos.z = (m_Box.p0.z + m_Box.p1.z) / 2.0f;
+	m_Pos = { (m_Box.p0.x + m_Box.p1.x) / 2.0f,
+			   m_Box.p0.y + 1.62f,
+			  (m_Box.p0.z + m_Box.p1.z) / 2.0f };
 }
 
 void Player::MoveRelative(vec2 a, float speed) 
@@ -108,7 +115,7 @@ bool Player::Raycast(const vec3& org, const vec3& dir, Hitresult& ret)
 		/* impact block */
 		ivec3 blockpos = floor(equation);
 
-		if (blockpos != lblock && m_Level->IsSolidTile(blockpos)) {
+		if (blockpos != lblock && m_Level.IsSolidTile(blockpos)) {
 			ivec3 normal = lblock - blockpos;
 
 			/* obtain block face normal */
@@ -143,7 +150,6 @@ void Player::Update()
 	vec2 a(0.0f, 0.0f);
 	float hspeed;
 
-	/* DONE: Window independent of the Player */
 	if (Input::IsKeyPressed(MC_KEY_R))
 		this->ResetPos();
 	if (Input::IsKeyPressed(MC_KEY_W))
@@ -178,7 +184,7 @@ void Player::Update()
 void Player::ResetPos() 
 {
 	vec3 newPos;
-	ivec3 Size = m_Level->GetSize();
+	ivec3 Size = m_Level.GetSize();
 
 	/* Calculate new player position */
 	newPos.x = (float)(rand() % Size.x + 1);
@@ -198,6 +204,7 @@ void Player::SetPos(const vec3& newPos)
 	/* Calculate new AABB */
 	m_Box = AABB({ newPos.x - this->m_Size.x, newPos.y - this->m_Size.y, newPos.z - this->m_Size.x },
 		         { newPos.x + this->m_Size.x, newPos.y + this->m_Size.y, newPos.z + this->m_Size.x });
+
 	Cam.Update();
 }
 
@@ -224,10 +231,10 @@ void Player::Pick(float time, Shader* shader)
 
 		/* Avoid click spam */
 		if (left && !m_MouseLeft)
-			m_Level->SetTile(ret.block, 0); /* delete tile */
+			m_Level.SetTile(ret.block, 0); /* delete block */
 
 		if (right && !m_MouseRight)
-			m_Level->SetTile(ret.block + ret.face, 1); /* set tile */
+			m_Level.SetTile(ret.block + ret.face, 1); /* set block */
 
 		/* Update mouse state */
 		m_MouseLeft = left;

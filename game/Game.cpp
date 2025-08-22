@@ -29,8 +29,6 @@ public:
 	void Init() override
 	{
 		Application::Init();
-		SetFPSGoal(60);
-
 		PushLayer(new Rubydung());
 	}
 };

@@ -6,7 +6,10 @@ Rubydung::Rubydung()
 	: m_InternalWindow(Application::Get().GetWindow()),
 	  m_Props(m_InternalWindow.GetProps()), m_GProperties()
 {
-	m_Timer = new Timer();
+	/* initialize random number generator */
+	srand(time(NULL));
+
+	m_Timer = std::make_unique<Timer>();
 	m_Last = { m_Props.x / 2, m_Props.y / 2 };
 
 	/* Set window icon */
@@ -24,20 +27,7 @@ Rubydung::Rubydung()
 
 Rubydung::~Rubydung() 
 {
-	if (m_Player)
-		delete m_Player;
 
-	if (m_Level)
-		delete m_Level;
-
-	if (m_SShader)
-		delete m_SShader;
-
-	if (m_CShader)
-		delete m_CShader;
-
-	if (m_Timer)
-		delete m_Timer;
 }
 
 void Rubydung::Init() 
@@ -45,12 +35,12 @@ void Rubydung::Init()
 	Default::Init();
 
 	/* load shaders */
-	m_CShader = new Shader("assets/Shaders/chunk.shader");
-	m_SShader = new Shader("assets/Shaders/selector.shader");
+	m_CShader = std::make_unique<Shader>("assets/Shaders/chunk.shader");
+	m_SShader = std::make_unique<Shader>("assets/Shaders/selector.shader");
 
 	/* Create player and level */
-	m_Level = new Level(m_GProperties.LevelSize);
-	m_Player = new Player(m_Level);
+	m_Level = std::make_unique<Level>(m_GProperties.LevelSize);
+	m_Player = std::make_unique<Player>(*m_Level);
 
 	/* load texture */
 	if (!m_TerrainTexture.LoadFromFile("assets/terrain.png", GL_NEAREST))
@@ -88,7 +78,6 @@ void Rubydung::OnCursorMoved(int& x, int& y)
 {
 	vec2 offset(x - m_Last.x, m_Last.y - y);
 	m_Last = vec2(x, y);
-
 	m_Player->MouseMove(offset);
 }
 
@@ -141,12 +130,12 @@ void Rubydung::OnRender()
 	m_CShader->SetFloat("s_fstart", m_GProperties.FogStart);
 	m_CShader->SetFloat("s_fend", m_GProperties.FogEnd);
 
-	m_Level->Render(m_CShader, m_Player);
+	m_Level->Render(m_CShader.get(), m_Player.get());
 
 	m_SShader->Bind();
 	m_SShader->Set4x4("s_VP", VP);
 
-	m_Player->Pick(m_Timer->ElapsedMillis(), m_SShader);
+	m_Player->Pick(m_Timer->ElapsedMillis(), m_SShader.get());
 }
 
 void Rubydung::OnTick() 
@@ -157,7 +146,6 @@ void Rubydung::OnTick()
 	mc_debug("fps: %i, ups: %i, cups: %i\n", Application::Get().GetFPS(), Application::Get().GetUPS(), m_Level->GetUpdates());
 	mc_debug("Rendered chunks: %i / total chunks: %i\n", m_Level->GetDrawCalls(), m_Level->GetChunksCount());
 	m_Level->RestartDrawCalls();
-	m_Level->RestartUpdates();
 #else
 	printf("%i fps, %i\n", Application::Get().GetFPS(), m_Level->GetUpdates());
 #endif

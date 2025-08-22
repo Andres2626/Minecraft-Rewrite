@@ -1,6 +1,8 @@
 #pragma once
 #include "Player/Player.h"
 
+#include "Chunk/Chunk.h"
+
 #include <Physics/AABB.h>
 
 using namespace MC;
@@ -8,34 +10,34 @@ using namespace Math;
 using namespace Physics;
 using namespace Graphics;
 
-class Chunk;
-
 class Level 
 {
 public:
-	std::vector<ivec3> m_Updates;
 	std::unordered_map<int, Chunk> m_ChunkRenderer;
+	std::vector<ivec3> m_Updates;
 private:
+	size_t m_Volume;
 	int m_ChunkUpdates;
 	int m_DrawCalls;
-	uint8_t* m_Blocks;
 	ivec3 m_Size;
-	rd_str_t m_LevelFile;
+	mc_str m_LevelFile;
+	mc_uc8* m_Blocks;
 public:
 	Level(const ivec3& size);
 	~Level();
 public:
+	/* check if level file exists */
 	bool Levelcheck();
 	void Save();
 	void Load();
 public:
-	bool IsSolidTile(ivec3 pos);
-	bool IsLightBlocker(ivec3 pos);
-	float GetBrigthness(ivec3 pos);
+	bool IsSolidTile(const ivec3& pos);
+	bool IsLightBlocker(const ivec3& pos);
+	float GetBrigthness(const ivec3& pos);
 public:
 	void Render(Shader* shader, Player* player);
 public:
-	void SetTile(ivec3 blockpos, int type);
+	void SetTile(const ivec3& blockpos, int type);
 public:
 	std::vector<AABB> GetCubes(const AABB& aabb);
 public:

@@ -23,14 +23,14 @@ class Rubydung : public Default
 private:
 	GameProperties m_GProperties;
 	vec2 m_Last;
-	Shader* m_CShader;
-	Shader* m_SShader;
-	Level* m_Level;
-	Player* m_Player;
+	std::unique_ptr<Shader> m_CShader;
+	std::unique_ptr<Shader> m_SShader;
+	std::unique_ptr<Level> m_Level;
+	std::unique_ptr<Player> m_Player;
+	std::unique_ptr<Timer> m_Timer;
 	Texture m_TerrainTexture;
 	Window m_InternalWindow;
 	WindowProperties m_Props;
-	Timer* m_Timer;
 	bool m_MouseLeft;
 	bool m_MouseRight;
 public:

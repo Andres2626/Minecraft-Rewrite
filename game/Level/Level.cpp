@@ -3,35 +3,33 @@
 #include "Chunk/Chunk.h"
 #include "Player/Player.h"
 
-#include <gzip/compress.hpp>
-#include <gzip/decompress.hpp>
+#include <Utils/Util.h>
+#include <Utils/gzip.h>
 
 #include <memory>
 
 Level::Level(const ivec3& size)
 	: m_Size(size), m_ChunkUpdates(0), m_LevelFile("level.dat")
 {
-	/* initialize random number generator */
-	srand(time(NULL));
-
-	int v = size.x * size.y * size.z;
+	/* calculate level volume */
+	m_Volume = (size_t)size.x * size.y * size.z;
 
 	/* check valid level size */
-	if (v < 0)
+	if (m_Volume < 0)
 		mc_fatal("level invalid size (x=%i, y=%i, z=%i)\n", size.x, size.y, size.z);
 
 	/* create level array */
-	m_Blocks = (uint8_t*)malloc(v);
+	m_Blocks = (mc_uc8*)malloc(m_Volume);
 	if (!m_Blocks)
-		mc_fatal("alloc_blocks() failed: out of memory (size=%i)\n", v);
+		mc_fatal("alloc_blocks() failed: out of memory (volume=%i)\n", m_Volume);
 
-	/* check if level.dat exists in filesystem */
+	/* check if level file exits */
 	if (!Levelcheck()) {
 		for (int x = 0; x < size.x; x++) {
 			for (int y = 0; y < size.z; y++) {
 				for (int z = 0; z < size.y; z++) {
 					int index = GetBlockIndex({ x, y, z });
-					int solid = (uint8_t)(y <= (size.z * 2 / 3));
+					int solid = (mc_uc8)(y <= (size.z * 2 / 3));
 					m_Blocks[index] = solid ? 1 : 0;
 				}
 			}
@@ -59,33 +57,32 @@ Level::Level(const ivec3& size)
 				 * for avoid call to destructor when chunk inserting in the
 				 * map use this instead of map::emplace(index chunk{...})
 				 */
-				m_ChunkRenderer.emplace(
-					std::piecewise_construct,
-					std::forward_as_tuple(index),
-					std::forward_as_tuple(this, ivec3{ cx, cy, cz })
-				);
+				m_ChunkRenderer.emplace(std::piecewise_construct,
+					                    std::forward_as_tuple(index),
+					                    std::forward_as_tuple(this, ivec3{ cx, cy, cz }));
 			}
 		}
 	}
 }
 
-bool Level::IsSolidTile(ivec3 pos)
+bool Level::IsSolidTile(const ivec3& pos)
 {
 	return (pos.x >= 0) && (pos.y >= 0) && (pos.z >= 0) &&
-		(pos.x < m_Size.x) && (pos.y < m_Size.z) && (pos.z < m_Size.y) &&
-		(m_Blocks[GetBlockIndex(pos)]);
+		   (pos.x < m_Size.x) && (pos.y < m_Size.z) && (pos.z < m_Size.y) &&
+		   m_Blocks[GetBlockIndex(pos)];
 }
 
-bool Level::IsLightBlocker(ivec3 pos)
+bool Level::IsLightBlocker(const ivec3& pos)
 {
 	return IsSolidTile(pos);
 }
 
-float Level::GetBrigthness(ivec3 pos)
+float Level::GetBrigthness(const ivec3& pos)
 {
 	/* if the block is out of bounds, mark the block as light */
 	if (pos.x < 0 || pos.y < 0 || pos.z < 0 ||
-		pos.x >= m_Size.x || pos.y >= m_Size.z || pos.z >= m_Size.y) {
+		pos.x >= m_Size.x || pos.y >= m_Size.z || 
+		pos.z >= m_Size.y) {
 		return 1.0f; /* light block */
 	}
 
@@ -115,41 +112,52 @@ void Level::Save()
 {
 	mc_info("saving level\n");
 
-	int bufflen = m_Size.x * m_Size.y * m_Size.z;
-	std::string buff;
+	size_t outSize = 0;
 
-	/* compress file using gzip */
-	buff = gzip::compress(reinterpret_cast<const char*>(m_Blocks), bufflen);
+	/* compress data */
+	unsigned char* raw = Utils::compress(m_Blocks, m_Volume, &outSize);
+	if (!raw)
+		mc_fatal("error compressing level\n");
 
-	/* open level.dat for write buff */
-	std::ofstream dis(m_LevelFile, std::ios::out | std::ios::binary);
-	if (!dis.is_open())
+	/* open file in binary write */
+	std::ofstream file(m_LevelFile, std::ios::out | std::ios::binary);
+	if (!file.is_open()) {
+		free(raw);
 		mc_fatal("failed to open level file: \"%s\"\n", m_LevelFile);
+	}
 
-	/* write buff to level.dat and close */
-	dis.write(buff.data(), buff.size());
-	dis.close();
+	/* write compressed data */
+	file.write(reinterpret_cast<const char*>(raw), outSize);
+	file.close();
+
+	/* desallocate data */
+	free(raw);
 }
 
 void Level::Load() 
 {
 	mc_info("loading level\n");
 
-	/* open level.dat */
-	std::ifstream dos(m_LevelFile, std::ios::in | std::ios::binary);
-	if (!dos.is_open())
+	size_t outSize = 0;
+
+	/* open file for binary read */
+	std::ifstream file(m_LevelFile, std::ios::binary);
+	if (!file)
 		mc_fatal("failed to open level file: \"%s\"\n", m_LevelFile);
 
-	/* read file (compressed) */
-	std::string compressed((std::istreambuf_iterator<char>(dos)), std::istreambuf_iterator<char>());
-	dos.close();
+	/* decompress data */
+	std::vector<unsigned char> in((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	unsigned char* raw = Utils::decompress(in.data(), in.size(), &outSize);
+	if (!raw)
+		mc_fatal("error decompressing level\n");
 
-	/* decompress file using gzip */
-	std::string decompressed = gzip::decompress(compressed.c_str(), compressed.size());
-	int bufflen = m_Size.x * m_Size.y * m_Size.z;
+	mc_assert(outSize == m_Volume, "invalid decompressed file size");
 
-	/* copy decompressed file to block array */
-	memcpy(m_Blocks, decompressed.data(), bufflen);
+	/* copy decompressed data */
+	memcpy(m_Blocks, reinterpret_cast<const char*>(raw), outSize);
+
+	/* desallocate data */
+	free(raw);
 }
 
 void Level::Render(Shader* shader, Player* player) 
@@ -162,7 +170,7 @@ void Level::Render(Shader* shader, Player* player)
 	}
 }
 
-void Level::SetTile(ivec3 blockpos, int type) 
+void Level::SetTile(const ivec3& blockpos, int type) 
 {
 	/* check if the block is out of level */
 	if (blockpos.x < 0 || blockpos.y < 0 || blockpos.z < 0 || 

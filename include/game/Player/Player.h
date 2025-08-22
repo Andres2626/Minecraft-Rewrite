@@ -5,7 +5,7 @@
 #include <Graphics/Shader/Shader.h>
 #include <Graphics/Camera/Camera.h>
 
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 
 using namespace MC;
 using namespace Graphics;
@@ -17,9 +17,9 @@ class Level;
 class Player 
 {
 protected:
-	Level* m_Level;
+	Level& m_Level;
 private:
-	Selector* m_Sel;
+	std::unique_ptr<Selector> m_Sel;
 	bool m_MouseLeft;
 	bool m_MouseRight;
 	bool m_Ground;
@@ -30,7 +30,7 @@ private:
 public:
 	Camera Cam;
 public:
-	Player(Level* level);
+	Player(Level& level);
 	~Player();
 public:
 	void Render();
