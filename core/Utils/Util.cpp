@@ -1,4 +1,4 @@
-#include "Utils/util.h"
+#include "Utils/Util.h"
 
 #include <stdarg.h>
 
@@ -7,7 +7,7 @@ namespace MC
 	namespace Internal
 	{
 
-		int printf(const char* fmt, ...)
+		int mc_printf(const char* fmt, ...)
 		{
 			va_list args;
 			va_start(args, fmt);
@@ -16,7 +16,7 @@ namespace MC
 			return ret;
 		}
 
-		void breakpoint()
+		void mc_breakpoint()
 		{
 			MC_INTERNAL_BREAK_POINT;
 		}
