@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Options
 option(MC_DEBUG_MODE "Enable debug mode" OFF)
-option(MC_COMP_WARNS "Enable all/extra warnings and -Werror option (GCC) /W4 in MSVC" OFF)
-option(MC_AUTODEP "Enables automatic install and construction of all dependencies" ON)
+option(MC_COMP_WARNS "Enable all/extra warnings and -Werror option (GCC) or /W4 in MSVC" OFF)
+option(MC_AUTODEP "Installs dependencies via FetchContent" ON)
 
 # Compiler warnings
 if (MC_COMP_WARNS)

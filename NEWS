@@ -1,27 +1,53 @@
 NEWS - list of all major game and engine changes
 
+New in rd-132211-4 - 23-08-25:
+* Recreated version rd-132211.
+* Engine version 0.0.2-prealpha.
+* libgfx PATCH 1 version 0.02-prealpha.
+* libgfx is now part of main repository (lib/gfx and include/lib/gfx).
+* Sandbox renamed to game
+* Improved log subsystem bugs.
+* Deleted mc_fmt() macro in log subsystem.
+* MC_LOG_USE_RELPATH macro for use relpaths in log subsystem.
+* Solved game and engine bugs.
+* Changed all prefix of typedefs mc instead of rd.
+* Deleted FPS limit function in Application.
+* Deleted gzip-hpp dependency.
+* Tiny implementation of compression/decompression functions in c.
+* Refractoring.
+* Changed Make to CMake bassed build system.
+* Deleted all Makefiles.
+* Support for IDE (vs, ...), windows toolchains and UNIX systems (not tested).
+* C/C++ definitions for Linux platform.
+* Improved MC_API definition.
+* Removed mc prefix from util functions.
+* Moved MC_INTERNAL_BREAK_POINT macro to common.h.
+* Created UNIX scripts for install dependencies and build MC.
+* Fix Documentation/ files.
+* Created lib directories (lib/ and include/lib/).
+
 New in rd-132211-3 - 14-08-25:
 * Recreated version rd-132211.
 * Engine version 0.0.2-prealpha.
-* libgfx PATCH 1 version 0.0.1-prealpha
+* libgfx PATCH 1 version 0.01-prealpha.
 * cygwin and mingw compatible.
-* X11 compatible
+* X11 compatible.
 * Fix shader fog bug.
 * Fix level updates bug.
 * ZLIB now compiles with cmake.
 * Added specific OS makefiles.
-* Exit definition now is dependent of windows toolchain (__debugbreak() and raise(SIGTRAP))
+* Exit definition now is dependent of windows toolchain (__debugbreak() and raise(SIGTRAP)).
 
 New in rd132211-2 - 14-08-25:
-* Recreated version rd-132211
-* Engine version 0.0.1-prealpha
+* Recreated version rd-132211.
+* Engine version 0.01-prealpha.
 * All original game assets belonging to Mojang A.B are removed from the main repository.
 * Final refractoring.
 * Deleted patch 0 and patch 1.
 * Changed build system to Makefiles.
 * Deleted all VS files.
 * Create very simple documentation.
-* Log system (printf() function)
+* Log subsystem (printf() function).
 * Main engine independent of game.
 * Deleted Dependencies code -- now makefile install and build this with install-deps and build-deps rule
 * Very very simple documentation.
@@ -34,7 +60,7 @@ New in rd132211-2 - 14-08-25:
 New in rd132211-1 - 31-07-25:
 * MISSING PATCH
 * Recreated version rd-132211
-* Engine version pre-0.0.1 (MISSING)
+* Engine version pre-0.01 (MISSING)
 * Main engine independent of game.
 * Simple Application class
 * Layer implementation
@@ -44,6 +70,6 @@ New in rd132211-1 - 31-07-25:
 New in rd132211-0 - 25-07-25:
 * MISSING PATCH
 * Recreated version rd-132211
-* Engine version pre-0.0.1 (MISSING)
+* Engine version pre-0.01 (MISSING)
 * VS build system
 * Initial git commit

@@ -4,52 +4,55 @@
 ./
 │
 ├─ assets/ 
-│   ├─ Internal/
 │   └─ Shaders/
 │
-├─ Core/
+├─ core/
 │   ├─ App/
 │   ├─ Events/
 │   ├─ Graphics/
-│	├─ Host/
 │	├─ Layers/
 │	├─ Log/
 │	├─ Math/
 │	├─ Physics/
 │	├─ Utils/
-│	└─ Makefile
+│	└─ CMakeLists.txt
 │
 ├─ Dependencies/
-│   ├─ GLFW/
-│	├─ gleq/
-│	├─ glm/
-│	├─ gzip-hpp/
-│	├─ libgfx/
-│	├─ stb/
-│	├─ zlib/
-│   └─ Makefile
+│   └─ CMakeLists.txt
 │
 ├─ Documentation/
 │	└─ versions/
 │	
 ├─ include/
 │	├─ core/
-│	└─ sandbox/
+│	├─ game/
+│	└─ lib/
 │
-├─ sandbox/
+├─ game/
 │	├─ Player/
 │	├─ Level/
 │	├─ Chunk/
 │	├─ Block/
-│	└─ Makefile/
+│	└─ CMakeLists.txt
+│
+├─ lib/
+│	├─ gfx/
+│	└─ CMakeLists.txt
 │
 ├─ scripts/
+│	├─ auto-install.sh
+│	├─ auto-build.sh
+│	└─ cleaning-dependencies.sh
+│
 ├─ ChangeLog
-├─ Makefile
+├─ LICENSE
 ├─ NEWS
 ├─ REWRITE_VER_RD132211
 ├─ TODO
-├─ .gitignore
 ├─ CONTRIBUTING.md
-└─ readme.md
+├─ README.md
+├─ .gitignore
+├─ .gitattributes
+├─ .gitmodules
+└─ CMakeLists.txt
 ```
