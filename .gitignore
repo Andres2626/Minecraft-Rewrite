@@ -10,6 +10,9 @@
 %.obj
 
 build/
+dependencies/*
 assets/Internal
 assets/Internal/win_icon.png
 assets/terrain.png
+
+!dependencies/CMakeLists.txt
