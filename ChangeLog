@@ -1,3 +1,312 @@
+2025-08-23  Andres2626  andrescamorao9@gmail.com
+    23-08-25 [PATCH 4] FINAL
+    
+    * Updated documentation.
+    * Updated NEWS.
+    * unistall-submodules.sh renamed to clean-dependencies.sh.
+    
+    Signed-by-off: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 Scripts
+    
+    * Added auto-install.sh, auto-build.sh, unistall-submodules.sh.
+    * For UNIX users, the submodules are installed using git and
+      then the entire MC project is built.
+    
+    * unistall-submodules.sh: delete all submodules source code.
+    * auto-install: install all dependencies using git submodule.
+    * auto-build: configure build with cmake and run make command.
+      auto-build requires auto-install to have been run previously
+      because it disables MC_AUTODEP by default to avoid downloading
+      dependencies twice.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 Created submodules
+    
+    * Created gitmodules file.
+    * Updated gitignore file.
+    * Now to install and build the dependencies there are 2 ways:
+      - CMake with FetchContent (windows users).
+      - GIT with submodule init and updade (unix users)
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 Created .gitattributes file
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  113268055+Andres2626@users.noreply.github.com
+    [PATCH 4] Cmake support. (#6)
+    
+    * Changed build system to cmake (again)
+    * Some fixes.
+    * Solved log stackdump.
+    * Refractoring.
+    * Sandbox renamed to game.
+    * Support for IDE (VS, ...), cygwin, mingw, msys, and other windows
+    toolchains.
+    * Support for Linux (not tested)
+    * libgfx now are part of the main repository.
+    * libgfx repository deleted.
+    * gzip-hpp dependency deleted from the game.
+    * gzip is now part of the core.
+    * Deleted FPS limit function.
+    * Renamed all core types.
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-2025 [PATCH 4] libgfx.
+    
+    * libgfx is now is part of main repository
+    * Deleted libgfx repository.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-2025 [PATCH 4] Sandbox renamed to game
+    
+    * Moved include/sandbox/ to include/game/.
+    * Moved sandbox/ to game/.
+    * Some functions were rewritten using modern c++.
+    * Some bug fixes.
+    * Some Refractoring.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-2025 Updated core includes.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-2025 [PATCH 4] Common definitions
+    
+    * Added support for linux.
+    * Moved MC_INTERNAL_BREAK_POINT macro to common.h.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 [PATCH 4] Util functions
+    
+    * Deleted mc prefix of all the Util.h and Util.cpp functions.
+      to avoid redundancies
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 [PATCH 4] Log subsystem
+    
+    * Fixed issue with printing to stderr and log.fp (core dumped).
+      Functions brought in from the stdarg.h library were not in the
+      correct order.
+    
+    * The logging system now prints its format to a buffer and then
+      prints everything via internal_write()
+    
+    * macro mc_fmt() deleted.
+    
+    * Now to obtain the RELPATH the platform on which the platform
+      runs is checked, due to the file system. '/' for linux '\\' for
+      windows.
+    
+    * To use RELPATH you have to define MC_LOG_USE_RELPATH beforehand.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-2025 [PATCH 4] Typedefs confussion
+    
+    * Changed all prefix of typedefs mc instead of rd.
+    * All typedefs changed with this format:
+    
+      mc_u8, mc_int, mc_i8, ...
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 Updated TODO file
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 [PATCH 4] Application class
+    
+    * Typedef confussion:
+      - Changed all rd to mc types.
+    * Changed all raw-pointers to std::unique_ptr.
+    * Deleted FPS limit funcion:
+      - TODO: Reimplement this in the future.
+    
+    Signed-by-off: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 Updated gitignore
+    
+    Signed-by-off: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 [PATCH 3] deleted gzip-hpp dependency
+    
+    * Simple C bassed compression/decompression library.
+    
+    Signed-by-off: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-22  Andres2626  andrescamorao9@gmail.com
+    22-08-25 [PATCH 4] Changed make to cmake bassed build system
+    
+    * Deleted all makefiles.
+    * Deleted config/ directory.
+    * IDE support (VS, ...).
+      - Default working directory in VS is $(SRC) directory.
+    * Suport for UNIX platforms (not tested).
+    * Dependencies:
+    
+      For auto-install and auto-build, Now to install and build the
+      dependencies, FetchContent is used, this is enabled by default
+      through the MC_AUTODEP variable.
+    
+      - Added debug mode with MC_DEBUG_MODE variable.
+      - Added compiler warnings (-Wall -Wextra -Werror / /W4) with MC_COMP_WARNS
+        variable.
+    
+    * Library install: cmake automatically copies shared libraries '.dll/.so'  to
+      game build directory.
+    
+    * VS filters: cmake preserves the directory structure in project files
+      in the VS IDE
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-19  Andres2626  andrescamorao9@gmail.com
+    19-08-25 Fix info files.
+    * Fix clarity and spelling errors throughout documentation.
+    * README.md adapted to GPLv3.
+    * CONTRIBUTING.md adapted to GPLv3.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-19  Andres2626  andrescamorao9@gmail.com
+    19-08-2025 project license changed to GPLv3
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-18  Andres2626  andrescamorao9@gmail.com
+    18-08-25 Updated .gitignore
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-18  Andres2626  andrescamorao9@gmail.com
+    18-08-25 Main changes
+    * Core/App/Application.cpp Changed regular pointers to std::unique_ptr
+    * Deleted OS dependend files
+    * Changed Log system
+      * TODO: Implement colors
+    * sandbox/sandbox.cpp Deleted Host::Init() and Host::End()
+    * Include/core/common.h Host definitions and macros changed to common file
+    * Include/core/common.h Added __linux__
+    * Include/core/utils/util.h
+      * MC::Internal::mc_breakpoint changed to MC::internal::breakpoint
+      * MC::Internal::mc_print changed to MC::internal::print
+      * Naming convention
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-18  Andres2626  andrescamorao9@gmail.com
+    18-08-25 "Recreate" changed to "Rewrite" term
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-18  Andres2626  andrescamorao9@gmail.com
+    18-08-2025 Renamed scripts/ to config/
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-08-2025 Documentation
+    * Updated Documentation/directory-structure.md and readme.md
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-08-25 Documentation
+    * Added debugging guide.
+    * Added MC project directory structure.
+    * Updated readme.md
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-08-2025 Updated documentation
+    
+    * Created simple contrubuting rules
+    * Core/App/Application.cpp -> deleted 'this->' references
+    * Core/Graphics/Camera/Camera.cpp -> deleted 'this->' references
+    * RECREATED_VER_RD132211 changed to REWRITE_VER_RD132211
+    * Updated Documentation/building-guide.md
+    * include/core/Graphics/Camera/Ray.h -> Deleted TODO thing
+    * Updated readme.md
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-08-2025 Add documentation
+    
+    * Updated building, running and readme.
+    * Add install guide.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-08-25 Documentation part I
+    
+    Signed-off-by: andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-08-25 Improved README
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-15  Andres2626  andrescamorao9@gmail.com
+    15-18-2025 [PATCH 3] UPLOAD
+    
+    * Fix makefile bugs
+    * mingw32, mingw64 and cygwin platforms
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
 2025-08-15  Andres2626  andrescamorao9@gmail.com
     15-08-2025 [PATCH 3] Final
     
@@ -106,7 +415,7 @@
     The fog procedure was being done incorrectly, so it was changed back
     to how it was before.
     
-    commit: 6291f9e2b4a4dc23cb8282aefab67c297fbee681
+    commit: ae2c142829e5b50473b28dbc35c3b5e97e1dcc43
     
 
 2025-08-14  Andres2626  andrescamorao9@gmail.com
@@ -167,16 +476,6 @@
     * Remove this-> in the sandbox/block/Tile.cpp
     * Added build and running guide
     * Added shasum of original game jar files
-    
-
-2025-08-13  Andres2626  andrescamorao9@gmail.com
-    13-08-2025 Deleted all Mojang A.B Resources
-    For avoid ploblems in the future, terrain.png is deleted.
-    
-    * Deleted all releases patch 0 and patch 1
-    * Updated copyright notice
-    * Added assets/terrain.png to .gitignore
-    * Updated limitation on liability
     
 
 2025-08-13  Andres2626  andrescamorao9@gmail.com
