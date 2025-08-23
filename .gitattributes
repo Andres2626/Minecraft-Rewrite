@@ -1,0 +1,4 @@
+# ignore glad files from language count
+lib/gfx/glad.c linguist-vendored
+include/lib/gfx/glad.h linguist-vendored
+include/lib/gfx/KHR/khrplatform.h linguist-vendored
