@@ -1,7 +1,7 @@
 NEWS - list of all major game and engine changes
 
 New in rd-132211-4 - 23-08-25:
-* Recreated version rd-132211.
+* Rewrite version: rd-132211.
 * Engine version 0.0.2-prealpha.
 * libgfx PATCH 1 version 0.02-prealpha.
 * libgfx is now part of main repository (lib/gfx and include/lib/gfx).
@@ -27,7 +27,7 @@ New in rd-132211-4 - 23-08-25:
 * Created lib directories (lib/ and include/lib/).
 
 New in rd-132211-3 - 14-08-25:
-* Recreated version rd-132211.
+* Rewrite version: rd-132211.
 * Engine version 0.0.2-prealpha.
 * libgfx PATCH 1 version 0.01-prealpha.
 * cygwin and mingw compatible.
@@ -39,7 +39,7 @@ New in rd-132211-3 - 14-08-25:
 * Exit definition now is dependent of windows toolchain (__debugbreak() and raise(SIGTRAP)).
 
 New in rd132211-2 - 14-08-25:
-* Recreated version rd-132211.
+* Rewrite version: rd-132211.
 * Engine version 0.01-prealpha.
 * All original game assets belonging to Mojang A.B are removed from the main repository.
 * Final refractoring.
@@ -49,27 +49,27 @@ New in rd132211-2 - 14-08-25:
 * Create very simple documentation.
 * Log subsystem (printf() function).
 * Main engine independent of game.
-* Deleted Dependencies code -- now makefile install and build this with install-deps and build-deps rule
+* Deleted Dependencies code -- now makefile install and build this with install-deps and build-deps rule.
 * Very very simple documentation.
-* Deleted VS support (TODO: Implement this)
+* Deleted VS support (TODO: Implement this).
 * MINGW support.
-* GLAD code is stored in libgfx
-* Moved assets to main directory
-* Fixed some bugs
+* GLAD code is stored in libgfx.
+* Moved assets to main directory.
+* Fixed some bugs.
 
 New in rd132211-1 - 31-07-25:
-* MISSING PATCH
-* Recreated version rd-132211
-* Engine version pre-0.01 (MISSING)
+* MISSING PATCH.
+* Rewrite version: rd-132211.
+* Engine version pre-0.01 (MISSING).
 * Main engine independent of game.
-* Simple Application class
-* Layer implementation
-* Simple input class
-* GL** calls are independent of game
+* Simple Application class.
+* Layer implementation.
+* Simple input class.
+* GL** calls are independent of game.
 
 New in rd132211-0 - 25-07-25:
-* MISSING PATCH
-* Recreated version rd-132211
-* Engine version pre-0.01 (MISSING)
-* VS build system
-* Initial git commit
+* MISSING PATCH.
+* Rewrite version: rd-132211.
+* Engine version pre-0.01 (MISSING).
+* VS build system.
+* Initial git commit.

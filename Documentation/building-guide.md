@@ -96,6 +96,8 @@ Delete dependencies subdirectories manually.
 
 ## 📦 CMake options
 
+```
 MC_AUTODEP # Installs dependencies via FetchContent (default=ON).
 MC_DEBUG_MODE # Enable debug mode (default=OFF)
 MC_COMP_WARNS # Enable all/extra warnings and -Werror option (GCC) or /W4 in MSVC (default=OFF)
+```

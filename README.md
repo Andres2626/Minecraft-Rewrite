@@ -14,6 +14,8 @@ aiming for:
 > Currently, the engine and game use newer versions of OpenGL (>3.3).
 > See [Limitation of liability](#-limitation-of-liability) for more info
 
+![demo](./Documentation/resources/mc-240825.gif)
+
 ## 📋 Table of Contents
 1. [Goals of this project](#-goals-of-this-project)
 2. [Things that will not be done](#-things-that-will-not-be-done)
@@ -50,7 +52,7 @@ It is not intended to add/arrive at the following:
 
 ## 📌 Versions currently recreated
 
-- ***PARTIALLY*** rd-132211. view [original release notes](Documentation/versions/rd-132211-1/relnotes.md)
+- ***PARTIALLY*** rd-132211. view [original release notes](Documentation/versions/rd-132211-1/original-relnotes.md)
   The version is 100% written, but some important changes to the MC Engine 
   are missing:
   - Port to Linux.
