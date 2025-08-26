@@ -154,7 +154,7 @@ the MC Engine. It's also not meant to be a project that goes too far; it was nev
 to be anything more than a hobby. Probably the present code and the binaries published here 
 will be useful to someone else, to contribute or create their own diffusions.
 
-You can view [full demostration video](https://www.youtube.com/watch?v=On8Z-XixrrU].
+You can view [full demostration video.](https://www.youtube.com/watch?v=On8Z-XixrrU)
 
 ## That's all 
 
@@ -168,6 +168,6 @@ etc. , feel free to report them via GitHub issues or in attached email.
 
 That's all, and we'll see each other again.
 
-<center>Andres26</center>
-<center>Aug 26, 2025</center>
-<center>minecraftrewrite21@gmai.com</center>
+Andres26
+Aug 26, 2025
+minecraftrewrite21@gmai.com
