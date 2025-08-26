@@ -32,10 +32,10 @@ The following is the complete guide to compile MC and its dependencies.
 1. Obtain the required '.jar' file for the version being rewritten. 
 2. Verify the file with **SHA-256** and compare with used '.jar'. 
    Check [used files](used-jar-files.txt) for more info.
-3. Extract the JE resources in $(PROJECT_ROOT)/assets.
+3. Extract the JE resources in '$(PROJECT_ROOT)/assets'.
 4. For older versions, you must get the icon used in the original game 
    from LWJGL library.
-5. Copy your icon to $(PROJECT_ROOT)/assets/Internal/win_icon.png
+5. Copy your icon to '$(PROJECT_ROOT)/assets/Internal/win_icon.png'.
 
 ## 2️⃣  Install dependencies
 

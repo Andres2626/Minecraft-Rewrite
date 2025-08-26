@@ -1,13 +1,14 @@
 # ▶️ Running MC
 
 Once you have installed and built dependencies and MC project, you can run the
-game launching in $(CMAKE_BUILD_DIR)/game/rd-132211.
+game launching in '$(CMAKE_BUILD_DIR)/game/rd-132211.'
 
 ## ⚠️ Important notes
 
 - There's no need to copy the libraries to the executable directory. cmake does that for you.
 - If you run the executable directly, you have to copy the assets into the directory where 
   the game is running.
+- To run the application you must have a graphics card that supports modern versions of OpenGL (>3.3)
 
 ### Windows users
 

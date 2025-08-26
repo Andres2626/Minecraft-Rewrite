@@ -52,10 +52,7 @@ It is not intended to add/arrive at the following:
 
 ## 📌 Versions currently recreated
 
-- ***PARTIALLY*** rd-132211. view [original release notes](Documentation/versions/rd-132211-1/original-relnotes.md)
-  The version is 100% written, but some important changes to the MC Engine 
-  are missing:
-  - Port to Linux.
+- ***FULL*** rd-132211. view [summary and relnotes](Documentation/versions/rd-132211/relnotes.md)
   
 ## 🤝 Contribute
 
