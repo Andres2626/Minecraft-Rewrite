@@ -1,3 +1,44 @@
+2025-08-26  Andres2626  andrescamorao9@gmail.com
+    26-08-25 [PATCH 5] Updated Documentation
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-26  Andres2626  andrescamorao9@gmail.com
+    26-08-25 [PATCH 5] Fix documentation
+    
+    * Documentation/rd-132211-1/ changed to Documentation/rd-132211/.
+    * OGL warning in running guide.
+    * Updated release notes
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-25  Andres2626  andrescamorao9@gmail.com
+    25-08-25 Some fixes
+    
+    * Fix documentation.
+    * Fix scripts bugs (cd directory)
+    * Updated NEWS file.
+    * Updated original release notes.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-25  Andres2626  andrescamorao9@gmail.com
+    25-08-25 Updated .gitmodules
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-23  Andres2626  andrescamorao9@gmail.com
+    23-08-25 [PATCH 4] UPDATE
+    
+    * Update ChangeLog.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
 2025-08-23  Andres2626  andrescamorao9@gmail.com
     23-08-25 [PATCH 4] FINAL
     
@@ -5,7 +46,7 @@
     * Updated NEWS.
     * unistall-submodules.sh renamed to clean-dependencies.sh.
     
-    Signed-by-off: Andres26 <andrescamorao9@gmail.com>
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
     
 
 2025-08-22  Andres2626  andrescamorao9@gmail.com

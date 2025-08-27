@@ -1,5 +1,11 @@
 NEWS - list of all major game and engine changes
 
+New in rd-132211-5 - 26-08-25
+* Rewrite version: rd-132211.
+* Engine version 0.0.2-prealpha.
+* libgfx PATCH 1 version 0.02-prealpha.
+* Final version.
+
 New in rd-132211-4 - 23-08-25:
 * Rewrite version: rd-132211.
 * Engine version 0.0.2-prealpha.
