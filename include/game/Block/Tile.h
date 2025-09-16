@@ -7,7 +7,7 @@
 
 enum class Face 
 {
-	FRONT = 1,
+	FRONT,
 	BACK,
 	LEFT,
 	RIGHT,
@@ -22,11 +22,13 @@ enum TileType
 	ROCK = 1
 };
 
-class Tile 
+class Tile
 {
+private:
+	int mesh_index = 0;
 public:
 	TileType type;
-
+public:
 	float vfront[VERTICES_SIZE];
 	float vback[VERTICES_SIZE];
 	float vleft[VERTICES_SIZE];
@@ -38,7 +40,7 @@ public:
 	Tile(TileType type);
 	~Tile();
 private:
-	void calculate_tex_coords(TileType type);
-	void push_uv(float u, float v);
-	void push_vertices(enum Face, float x, float y, float z);
+	void CalculateUV(TileType type);
+	void Push(float u, float v);
+	void Push(enum Face, float x, float y, float z);
 };

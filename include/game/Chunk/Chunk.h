@@ -27,12 +27,10 @@ protected:
 	std::unique_ptr<IndexBuffer> IBO;
 	Level* m_Level;
 public:
-	/* VBO buffer */
 	std::vector<float> vertices;
-
-	/* IBO buffer */
 	std::vector<unsigned int> indices;
 private:
+	/* rebuild flag */
 	bool m_Dirty; 
 	ivec3 m_Pos;
 	AABB m_Box;
@@ -42,11 +40,9 @@ public:
 public:
 	/* calculate mesh */
 	void Build();
-
-	/* draw chunk */
 	void Render(Shader* shader) const;
 private:
-	void AddFace(const vec3& fpos, Face f, Tile t);
+	void AddFace(const ivec3& fpos, Face f, Tile t);
 	void PushIndices(int count);
 public:
 	inline void SetDirty() { m_Dirty = true; }

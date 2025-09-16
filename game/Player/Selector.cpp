@@ -45,7 +45,6 @@ Selector::~Selector()
 
 void Selector::SetHit(const Hitresult& hit) 
 {
-	/* set hit info */
 	this->m_Hit = hit;
 }
 

@@ -1,59 +1,77 @@
 #include "Block/Tile.h"
 
-static int index = 0;
+#include <Log/Log.h>
+
+/* 
+ * each cell of the texture atlas occupies 1/16 in the UV coordinates.
+ * for avoid texture blending use 0.0624375 instead of 0.0625.
+ */
+#define UV_COORD 0.0624375f
+
+/* 2 values per vertex (u, v)*/
+#define UV_SIZE 2
+
+/* 3 values per vertex (x, y, z) */
+#define VERTEX_SIZE 3
+
+/* push vertices in the array */
+#define VERTEX_FACE(f) v##f[mesh_index] = x; \
+v##f[mesh_index + 1] = y; \
+v##f[mesh_index + 2] = z;
 
 Tile::Tile(TileType type) 
 	: type(type)
 {
-	/* if the block is air, is not nesesary calculate vertices */
-	if (type == AIR)
-		return;
-
-	/* calculate the UV coordinates in texture atlas */
-	if (type == TileType::GRASS) {
-		calculate_tex_coords(TileType::GRASS);
+	/* calculate the UV coordinates from texture atlas */
+	switch (type) {
+	case TileType::AIR: return; /* UV for air blocks is not nesesary */
+	case TileType::GRASS:
+		CalculateUV(TileType::GRASS);
+		break;
+	case TileType::ROCK:
+		CalculateUV(TileType::ROCK);
+		break;
+	default: /* check if the block is valid */
+		mc_fatal("invalid block type");
+		return; 
 	}
+	
+	/* initialize block array */
+	Push(Face::FRONT, 0.0f, 0.0f, 0.0f);
+	Push(Face::FRONT, 1.0f, 0.0f, 0.0f);
+	Push(Face::FRONT, 1.0f, 1.0f, 0.0f);
+	Push(Face::FRONT, 0.0f, 1.0f, 0.0f);
+	mesh_index = 0;
 
-	if (type == TileType::ROCK) {
-		calculate_tex_coords(TileType::ROCK);
-	}
+	Push(Face::BACK, 0.0f, 0.0f, 1.0f);
+	Push(Face::BACK, 1.0f, 0.0f, 1.0f);
+	Push(Face::BACK, 1.0f, 1.0f, 1.0f);
+	Push(Face::BACK, 0.0f, 1.0f, 1.0f);
+	mesh_index = 0;
 
-	/* initialize block model */
-	push_vertices(Face::FRONT, 0.0f, 0.0f, 0.0f);
-	push_vertices(Face::FRONT, 1.0f, 0.0f, 0.0f);
-	push_vertices(Face::FRONT, 1.0f, 1.0f, 0.0f);
-	push_vertices(Face::FRONT, 0.0f, 1.0f, 0.0f);
-	index = 0;
+	Push(Face::LEFT, 0.0f, 1.0f, 1.0f);
+	Push(Face::LEFT, 0.0f, 1.0f, 0.0f);
+	Push(Face::LEFT, 0.0f, 0.0f, 0.0f);
+	Push(Face::LEFT, 0.0f, 0.0f, 1.0f);
+	mesh_index = 0;
 
-	push_vertices(Face::BACK, 0.0f, 0.0f, 1.0f);
-	push_vertices(Face::BACK, 1.0f, 0.0f, 1.0f);
-	push_vertices(Face::BACK, 1.0f, 1.0f, 1.0f);
-	push_vertices(Face::BACK, 0.0f, 1.0f, 1.0f);
-	index = 0;
+	Push(Face::RIGHT, 1.0f, 1.0f, 1.0f);
+	Push(Face::RIGHT, 1.0f, 1.0f, 0.0f);
+	Push(Face::RIGHT, 1.0f, 0.0f, 0.0f);
+	Push(Face::RIGHT, 1.0f, 0.0f, 1.0f);
+	mesh_index = 0;
 
-	push_vertices(Face::LEFT, 0.0f, 1.0f, 1.0f);
-	push_vertices(Face::LEFT, 0.0f, 1.0f, 0.0f);
-	push_vertices(Face::LEFT, 0.0f, 0.0f, 0.0f);
-	push_vertices(Face::LEFT, 0.0f, 0.0f, 1.0f);
-	index = 0;
+	Push(Face::BOTTOM, 0.0f, 0.0f, 0.0f);
+	Push(Face::BOTTOM, 1.0f, 0.0f, 0.0f);
+	Push(Face::BOTTOM, 1.0f, 0.0f, 1.0f);
+	Push(Face::BOTTOM, 0.0f, 0.0f, 1.0f);
+	mesh_index = 0;
 
-	push_vertices(Face::RIGHT, 1.0f, 1.0f, 1.0f);
-	push_vertices(Face::RIGHT, 1.0f, 1.0f, 0.0f);
-	push_vertices(Face::RIGHT, 1.0f, 0.0f, 0.0f);
-	push_vertices(Face::RIGHT, 1.0f, 0.0f, 1.0f);
-	index = 0;
-
-	push_vertices(Face::BOTTOM, 0.0f, 0.0f, 0.0f);
-	push_vertices(Face::BOTTOM, 1.0f, 0.0f, 0.0f);
-	push_vertices(Face::BOTTOM, 1.0f, 0.0f, 1.0f);
-	push_vertices(Face::BOTTOM, 0.0f, 0.0f, 1.0f);
-	index = 0;
-
-	push_vertices(Face::TOP, 0.0f, 1.0f, 0.0f);
-	push_vertices(Face::TOP, 1.0f, 1.0f, 0.0f);
-	push_vertices(Face::TOP, 1.0f, 1.0f, 1.0f);
-	push_vertices(Face::TOP, 0.0f, 1.0f, 1.0f);
-	index = 0;
+	Push(Face::TOP, 0.0f, 1.0f, 0.0f);
+	Push(Face::TOP, 1.0f, 1.0f, 0.0f);
+	Push(Face::TOP, 1.0f, 1.0f, 1.0f);
+	Push(Face::TOP, 0.0f, 1.0f, 1.0f);
+	mesh_index = 0;
 }
 
 Tile::~Tile() 
@@ -61,61 +79,53 @@ Tile::~Tile()
 
 }
 
-void Tile::calculate_tex_coords(TileType type) 
+void Tile::CalculateUV(TileType type) 
 {
-	/* calculate uv */
+	/* calculate UV coordinates */
 	float u0 = (int)type / 16.0f;
-	float u1 = u0 + 0.0624375f; /* constant! */
+	float u1 = u0 + UV_COORD;
 	float v0 = 1.0f;
-	float v1 = v0 - 0.0624375f;
+	float v1 = v0 - UV_COORD;
 	
-	push_uv(u0, v0);
-	push_uv(u1, v0);
-	push_uv(u1, v1);
-	push_uv(u0, v1);
-	index = 0;
+	Push(u0, v0);
+	Push(u1, v0);
+	Push(u1, v1);
+	Push(u0, v1);
+	mesh_index = 0;
 }
 
-void Tile::push_uv(float u, float v) 
+void Tile::Push(float u, float v) 
 {
-	/* push texcoords in texture array */
-	texcoords[index] = u;
-	texcoords[index + 1] = v;
-	index += 2;
+	texcoords[mesh_index] = u;
+	texcoords[mesh_index + 1] = v;
+	mesh_index += UV_SIZE;
 }
 
-void Tile::push_vertices(Face f, float x, float y, float z) 
+void Tile::Push(Face f, float x, float y, float z) 
 {
-	/* push vertices in vertices array */
-	if (f == Face::FRONT) {
-		vfront[index] = x;
-		vfront[index + 1] = y;
-		vfront[index + 2] = z;
+	switch (f) {
+	case Face::FRONT: 
+		VERTEX_FACE(front);
+		break;
+	case Face::BACK: 
+		VERTEX_FACE(back);
+		break;
+	case Face::LEFT: 
+		VERTEX_FACE(left);
+		break;
+	case Face::RIGHT: 
+		VERTEX_FACE(right);
+		break;
+	case Face::BOTTOM: 
+		VERTEX_FACE(bottom);
+		break;
+	case Face::TOP: 
+		VERTEX_FACE(top);
+		break;
+	default:
+		mc_fatal("invalid block face");
+		return;
 	}
-	else if (f == Face::BACK) {
-		vback[index] = x;
-		vback[index + 1] = y;
-		vback[index + 2] = z;
-	}
-	else if (f == Face::LEFT) {
-		vleft[index] = x;
-		vleft[index + 1] = y;
-		vleft[index + 2] = z;
-	}
-	else if (f == Face::RIGHT) {
-		vright[index] = x;
-		vright[index + 1] = y;
-		vright[index + 2] = z;
-	}
-	else if (f == Face::BOTTOM) {
-		vbottom[index] = x;
-		vbottom[index + 1] = y;
-		vbottom[index + 2] = z;
-	}
-	else if (f == Face::TOP) {
-		vtop[index] = x;
-		vtop[index + 1] = y;
-		vtop[index + 2] = z;
-	}
-	index += 3;
+	
+	mesh_index += VERTEX_SIZE;
 }

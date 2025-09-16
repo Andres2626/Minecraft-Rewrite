@@ -18,6 +18,15 @@
 Tile rock = Tile(ROCK);
 Tile grass = Tile(GRASS);
 
+glm::ivec3 FaceNormals[] = {
+	{ 0, 0, -1 },
+	{ 0, 0, 1 },
+	{ -1, 0, 0 },
+	{ 1, 0, 0 },
+	{0, -1, 0 },
+	{ 0, 1, 0 }
+};
+
 Chunk::Chunk(Level* level, const ivec3& pos)
    : m_Level(level), m_Pos(pos), m_Dirty(true)
 {
@@ -48,9 +57,9 @@ Chunk::~Chunk()
 
 void Chunk::Build() 
 {
-	/* if the chunk is marked as dirty, rebuild the vertices and indices */
+	/* if the chunk is marked as 'dirty', rebuild the vertices and indices */
 	if (!m_Dirty)
-		return; /* if the chunk is not marked at dirty, advoid chunk rebuilding */
+		return; /* advoid chunk rebuilding */
 	
 	/* Increment CUPS by 1 */
 	m_Level->IncrementUpdates();
@@ -76,29 +85,12 @@ void Chunk::Build()
 
 				/*
 				 * Push all the vertices in the buffer.
-				 * if the block have adjacent solid blocks ignore this
-				 * block (render optimization)
+				 * ignore tile meshing if have adjacent solid tile.
 				 */
 				if (m_Level->IsSolidTile(p)) {
-					if (!m_Level->IsSolidTile({ p.x + 1, p.y, p.z })) {
-						AddFace(p, Face::RIGHT, tl);
-					}
-					if (!m_Level->IsSolidTile({ p.x - 1, p.y, p.z })) {
-						AddFace(p, Face::LEFT, tl);
-					}
-					if (!m_Level->IsSolidTile({ p.x, p.y + 1, p.z })) {
-						AddFace(p, Face::TOP, tl);
-					}
-
-					if (!m_Level->IsSolidTile({ p.x, p.y - 1, p.z })) {
-						AddFace(p, Face::BOTTOM, tl);
-					}
-					if (!m_Level->IsSolidTile({ p.x, p.y, p.z + 1 })) {
-						AddFace(p, Face::BACK, tl);
-					}
-
-					if (!m_Level->IsSolidTile({ p.x, p.y, p.z - 1 })) {
-						AddFace(p, Face::FRONT, tl);
+					for (int i = 0; i < 6; i++) {
+						if (!m_Level->IsSolidTile(p + FaceNormals[i]))
+							AddFace(p, (Face)i, tl);
 					}
 				}
 			}
@@ -126,10 +118,10 @@ void Chunk::Build()
 	VL.AddAttribute(SHADER_TEX_BIT, 2, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	VL.AddAttribute(SHADER_BRIG_BIT, 1, GL_FLOAT, 6 * sizeof(float), (void*)(5 * sizeof(float)));
 
-	this->VAO->Link(VL);
-	this->VAO->Unbind();
+	VAO->Link(VL);
+	VAO->Unbind();
 
-	this->m_Dirty = false;
+	m_Dirty = false;
 }
 
 void Chunk::Render(Shader* shader) const
@@ -144,7 +136,7 @@ void Chunk::Render(Shader* shader) const
 	VAO->Unbind();
 }
 
-void Chunk::AddFace(const vec3& fpos, Face f, Tile t) 
+void Chunk::AddFace(const ivec3& fpos, Face f, Tile t) 
 {
 	int count = vertices.size() / 6;
 
