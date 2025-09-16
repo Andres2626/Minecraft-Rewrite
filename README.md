@@ -52,7 +52,7 @@ It is not intended to add/arrive at the following:
 
 ## 📌 Versions currently recreated
 
-- ***FULL*** rd-132211. view [summary and relnotes.](Documentation/versions/rd-132211/relnotes.md)
+- ***FULL*** rd-132211. view [summary, controls, etc...](Documentation/game/summary.md) [relnotes](https://github.com/Andres2626/Minecraft-Rewrite/releases/tag/rd-132211-final)
   
 ## 🤝 Contribute
 
