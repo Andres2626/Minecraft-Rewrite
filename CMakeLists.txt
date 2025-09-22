@@ -28,6 +28,7 @@ endif()
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_subdirectory(dependencies)
+add_subdirectory(dl)
 add_subdirectory(lib)
 add_subdirectory(core)
 add_subdirectory(game)
