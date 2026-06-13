@@ -18,3 +18,5 @@ target_compile_definitions(mccore PRIVATE MC_EXPORT_DLL=1)
 target_include_directories(mccore PRIVATE ${stb_SOURCE_DIR} ${gleq_SOURCE_DIR})
 target_include_directories(mccore PRIVATE ${INCDIR} ${COREINCDIR} ${LIBINCDIR} ${GLADINCDIR})
 target_link_libraries(mccore PRIVATE glfw gleq zlib glm stb gfx spdlog::spdlog)
+
+install(TARGETS mccore RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)

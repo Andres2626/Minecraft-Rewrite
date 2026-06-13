@@ -16,6 +16,8 @@ aiming for:
 
 ![demo](./Documentation/resources/mc-240825.gif)
 
+![demo](./Documentation/resources/rd-131655.gif)
+
 ## 📋 Table of Contents
 1. [Goals of this project](#-goals-of-this-project)
 2. [Things that will not be done](#-things-that-will-not-be-done)

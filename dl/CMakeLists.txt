@@ -14,3 +14,5 @@ source_group(TREE ${INCDIR} PREFIX "include\\dl" FILES ${DLINCS})
 # include directory
 target_include_directories(dl PRIVATE ${INCDIR})
 target_include_directories(dl PRIVATE ${LIBINCDIR})
+
+install(TARGETS dl RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)

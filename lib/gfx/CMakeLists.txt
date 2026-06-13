@@ -13,3 +13,5 @@ add_library(gfx STATIC glad.c)
 target_include_directories(gfx PRIVATE ${INCDIR})
 target_include_directories(gfx PRIVATE ${LIBINCDIR})
 target_include_directories(gfx PRIVATE ${GLADINCDIR})
+
+install(TARGETS gfx RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)

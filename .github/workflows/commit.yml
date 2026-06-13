@@ -12,7 +12,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [ ubuntu-22.04, windows-latest ]       
+                os: [ ubuntu-22.04, windows-2025-vs2026 ]       
         runs-on: ${{ matrix.os }}
         steps:
             - uses: actions/checkout@v4
@@ -31,13 +31,13 @@ jobs:
               if: runner.os == 'Windows'
               shell: cmd
               run: |
-                cmake -B build_win64 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 16 2019" -A x64
+                cmake -B build_win64 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A x64
                 cmake --build build_win64 --config Debug -j4
             - name: build_win32
               if: runner.os == 'Windows'
               shell: cmd
               run: |
-                cmake -B build_win32 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 16 2019" -A Win32
+                cmake -B build_win32 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A Win32
                 cmake --build build_win32 --config Debug -j4
              
                 

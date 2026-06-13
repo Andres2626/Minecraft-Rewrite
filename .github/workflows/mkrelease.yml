@@ -1,0 +1,113 @@
+name: mkrelease
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Tag name'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as prerelease?'
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-22.04, windows-2025-vs2026 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup_lnx
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libgl1-mesa-dev
+          sudo apt-get install -y curl git build-essential cmake
+
+      - name: build_lnx
+        if: runner.os == 'Linux'
+        run: |
+          cmake -B build_lnx -S . -DCMAKE_INSTALL_PREFIX=install_lnx -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
+          cd ./build_lnx && make -j4
+
+      - name: install_lnx
+        if: runner.os == 'Linux'
+        run: |
+          cmake --install build_lnx
+          cd install_lnx && tar -czvf ../mcrw-${{ inputs.version }}-linux-x64.tar.gz .
+
+      - name: upload_lnx
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcrw-linux-x64
+          path: mcrw-${{ inputs.version }}-linux-x64.tar.gz
+
+      - name: build_win64
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cmake -B build_win64 -S . -DCMAKE_INSTALL_PREFIX=install_win64 -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A x64
+          cmake --build build_win64 --config Release -j4
+
+      - name: install_win64
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cmake --install build_win64 --config Release
+          cd install_win64 && tar -czvf ../mcrw-${{ inputs.version }}-win-x64.tar.gz .
+
+      - name: upload_win64
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcrw-win-x64
+          path: mcrw-${{ inputs.version }}-win-x64.tar.gz
+
+      - name: build_win32
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cmake -B build_win32 -S . -DCMAKE_INSTALL_PREFIX=install_win32 -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A Win32
+          cmake --build build_win32 --config Release -j4
+
+      - name: install_win32
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cmake --install build_win32 --config Release
+          cd install_win32 && tar -czvf ../mcrw-${{ inputs.version }}-win-x86.tar.gz .
+
+      - name: upload_win32
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcrw-win-x86
+          path: mcrw-${{ inputs.version }}-win-x86.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: download_artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.version }}
+          name: ${{ inputs.version }}
+          prerelease: ${{ inputs.prerelease }}
+          files: |
+            artifacts/mcrw-linux-x64/*.tar.gz
+            artifacts/mcrw-win-x64/*.tar.gz
+            artifacts/mcrw-win-x86/*.tar.gz
