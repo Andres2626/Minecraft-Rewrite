@@ -3,20 +3,21 @@
 
 #include "App/Input.h"
 #include "Events/Event.h"
+
+#define MC_LOG_PREFIX "Window"
 #include "Log/Log.h"
 
 namespace MC 
 {
 	namespace App 
 	{
-
 		/* GLFW Error handler */
-		void ErrorCallback(int error, const char* msg)
+		void ErrorCallback(int error, const char *msg)
 		{
-			mc_fatal("glfw error %i: %s\n", error, msg);
+			mc_fatal("glfw error {}: {}\n", error, msg);
 		}
 
-		Window::Window(const mc_str& title, const WindowProperties& properties)
+		Window::Window(const char *title, const WindowProperties &properties)
 			: m_Title(title), m_Pr(properties), m_Init(false)
 		{
 			/* Create window */
@@ -53,9 +54,9 @@ namespace MC
 				glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 			/* Create window via GLFW */
-			m_Win = glfwCreateWindow(m_Pr.x, m_Pr.y, m_Title.c_str(), 0, 0);
+			m_Win = glfwCreateWindow(m_Pr.x, m_Pr.y, m_Title, 0, 0);
 			if (!m_Win) {
-				mc_fatal("error initializing window (%ix%i title:%s)\n", m_Pr.x, m_Pr.y, m_Title);
+				mc_fatal("error initializing window: {}x{} title: {}\n", m_Pr.x, m_Pr.y, m_Title);
 				return false;
 			}
 
@@ -74,9 +75,9 @@ namespace MC
 			if (!m_Pr.cursor.enable)
 				glfwSetInputMode(m_Win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-			mc_warn("GL version: %s\n", glGetString(GL_VERSION));
-			mc_warn("GPU vendor: %s\n", glGetString(GL_VENDOR));
-			mc_warn("GPU name: %s\n", glGetString(GL_RENDERER));
+			mc_warn("graphic driver version: {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+			mc_warn("driver vendor: {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
+			mc_warn("driver name: {}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
 
 			return true;
 		}
@@ -102,17 +103,17 @@ namespace MC
 			glfwSwapBuffers(m_Win);
 		}
 
-		int Window::GetEvent(MC::Events::Event& ev)
+		int Window::GetEvent(MC::Events::Event &ev)
 		{
 			return gleqNextEvent(&ev);
 		}
 
-		void Window::FreeEvent(MC::Events::Event& ev)
+		void Window::FreeEvent(MC::Events::Event &ev)
 		{
 			gleqFreeEvent(&ev);
 		}
 
-		void Window::SetIcon(const Graphics::Image& img)
+		void Window::SetIcon(const Graphics::Image &img)
 		{
 			GLFWimage image[1];
 			image[0].width = img.x;

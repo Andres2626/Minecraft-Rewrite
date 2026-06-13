@@ -18,10 +18,9 @@ namespace MC
 			glDeleteBuffers(1, &m_ID);
 		}
 
-		void IndexBuffer::Build(mc_u8 size, const void* data)
+		void IndexBuffer::Build(mc_u8 size, const void *data)
 		{
 			m_Size = size;
-
 			Bind();
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 		}

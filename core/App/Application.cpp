@@ -3,17 +3,15 @@
 #include "App/Input.h"
 
 #include "Utils/Util.h"
-
-#include <thread>
+#include "Log/Log.h"
 
 namespace MC 
 {
 	namespace App 
 	{
-
 		static Application* s_Instance = nullptr;
 
-		Application::Application(const mc_str& name, const WindowProperties& pr)
+		Application::Application(const char *name, const WindowProperties &pr)
 			: m_FPS(0), m_UPS(0), m_FrameTime(0.0f), m_Name(name), m_Pr(pr), m_Running(false), m_Suspended(false)
 		{
 			s_Instance = this;
@@ -21,18 +19,18 @@ namespace MC
 
 		Application::~Application()
 		{
-
+			Log::Fini();
 		}
 
 		void Application::Init()
 		{
-			mc_info("MC Engine version: %s\n", MC_VERSION_STRING);
-	
-			m_Win = std::make_unique<Window>(m_Name.c_str(), m_Pr);
+			Log::Init(MC_LOG_STDOUT | MC_LOG_FILE, level_enum::info);
+			mc_info("Minecraft rewrite engine version {}", MC_VERSION_STRING);
+			m_Win = std::make_unique<Window>(m_Name, m_Pr);
 			Input::Init();
 		}
 
-		void Application::PushLayer(Layers::Layer* layer)
+		void Application::PushLayer(Layers::Layer *layer)
 		{
 			this->m_LayerStack.PushLayer(layer);
 		}
@@ -71,6 +69,7 @@ namespace MC
 			float update_tick = 1000.0f / 60.0f;
 			Utils::Timestep step(update_timer);
 			while (m_Running) {
+
 				Utils::Timer frametime;
 				m_Win->Clear();
 				float now = m_Timer->ElapsedMillis();
@@ -93,8 +92,10 @@ namespace MC
 					m_UPS = 0;
 				}
 
-				while (m_Suspended)
-					this->OnSuspended();
+				while (m_Suspended) {
+					/* reload timer */
+					OnSuspended();
+				}
 
 				if (m_Win->Close())
 					m_Running = false;
@@ -103,12 +104,12 @@ namespace MC
 			}
 		}
 
-		void Application::OnUpdate(Utils::Timestep& ts)
+		void Application::OnUpdate(Utils::Timestep &ts)
 		{
 			m_LayerStack.OnUpdate(ts);
 		}
 
-		void Application::OnEvent(Events::Event& ev)
+		void Application::OnEvent(Events::Event &ev)
 		{
 			m_LayerStack.OnEvent(ev);
 		}
@@ -128,7 +129,7 @@ namespace MC
 			m_LayerStack.OnSuspended();
 		}
 
-		Application& Application::Get() 
+		Application &Application::Get() 
 		{
 			mc_assert(s_Instance, "application instance is null pointer\n");
 			return *s_Instance;

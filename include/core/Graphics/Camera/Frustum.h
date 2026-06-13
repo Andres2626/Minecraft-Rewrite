@@ -17,8 +17,8 @@ namespace MC {
 			void Calculate(Math::mat4 proj, Math::mat4 view);
 		public:
 			bool PointInside(Math::vec3 pos);
-			bool CubeInside(Physics::AABB& aabb);
-			bool CubeFullyInside(Physics::AABB& aabb);
+			bool CubeInside(Physics::AABB &aabb);
+			bool CubeFullyInside(Physics::AABB &aabb);
 			bool SphereInside(Math::vec3 pos, float r);
 		};
 

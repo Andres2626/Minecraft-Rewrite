@@ -8,7 +8,7 @@ namespace MC
 	namespace Graphics 
 	{
 
-		bool Texture::LoadFromFile(const char* file, unsigned int mode) 
+		bool Texture::LoadFromFile(const char *file, unsigned int mode) 
 		{
 			SetFlip(true);
 

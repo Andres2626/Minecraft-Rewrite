@@ -25,7 +25,7 @@ namespace MC
 			stbi_set_flip_vertically_on_load(flip);
 		}
 
-		bool Image::LoadFromFile(const char* path)
+		bool Image::LoadFromFile(const char *path)
 		{
 			this->path = path;
 			pixels = stbi_load(path, &x, &y, &nr_channels, 0);

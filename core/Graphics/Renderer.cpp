@@ -28,12 +28,12 @@ namespace MC
 			glViewport(pos.x, pos.y, size.x, size.y);
 		}
 
-		void Renderer::DepthFunc(const DepthValue& val)
+		void Renderer::DepthFunc(const DepthValue &val)
 		{
 			glDepthFunc((GLenum)val);
 		}
 
-		void Renderer::BlendFunc(const BlendValue& sfactor, const BlendValue& dfactor)
+		void Renderer::BlendFunc(const BlendValue &sfactor, const BlendValue &dfactor)
 		{
 			glBlendFunc((GLenum)sfactor, (GLenum)dfactor);
 		}
@@ -47,6 +47,5 @@ namespace MC
 		{
 			glDrawElements(mode, size, GL_UNSIGNED_INT, 0);
 		}
-
 	}
 }

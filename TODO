@@ -1,9 +1,6 @@
 
 At the moment these are the list of things to do in the MC Rewrite project.
 
-Please note that marking any of the items in this file as 'DONE' requires 
-that item to be moved to the end of this 'DONE List' file.
-
 For bug tracking, please write to:
 
 	https://github.com/Andres2626/Minecraft-Rewrite/issues
@@ -17,38 +14,54 @@ to the project, submit a pull request to:
 
 	https://github.com/Andres2626/Minecraft-Rewrite/pulls
 
-                          * Andres26 *
+===============================================================================
 
-==========================================================================
-
-- Delete GLM from engine.
-  * Create Math subsystem from scratch.
-- Solve compiler warnings.
-  * DLL warnings in vs compiler (C4251).
-- Modding system.
-  * DL.
-	- Dynamic Loading protocol for modules (dlcfn.h and LoadLibrary).
-	- Low level modding system.
-  * LUA scripting.
-	- High level modding system.
-- More platform support in the future.
-  * Windows older versions (since 2000 edition).
-  * Linux. (not tested)
-  * Android (very important).
-  * Apple.
-  * Xbox.
-  * Wii.
-  * ...
-- Graphic platform support:
-  * OpenGL 2.0 (for testing purposes).
-  * DirectX.
-  * Vulkan.
-- Separate the engine from the main project.
-  * Create independent game engine.
-- Event subsystem from scratch.
-- Geometry shader support.
-- Implement argument parser in the engine (getopt).
-- Implement better FPS limit procedure in the future.
-- Support for cross compiling.
-- Change .md to .rst files.
-- Reimplement FPS limit function in Application class.
+## Build
+    - [ ] Compiler warnings.
+    - [x] C4251 warning (exporting classes with DLL members) in MSVC.
+    - [ ] Compiler detection (core/common.h)
+        - [x] MSVC.
+        - [x] GNU.
+        - [ ] Other compilers.
+    - [ ] Stabilize ABI.
+## Engine
+    - [ ] Some Application functions are not used by engine (stop and suspended)
+    - [ ] Improve finish process
+## Directories
+    - [ ] Separate dependencies and third-party libraries.
+    - [ ] Create third-party directory
+## Modding System
+    - [ ] Dynamic Loading (DL) — low-level modding system.
+    - [ ] Dynamic Loading protocol (dlfcn.h on Unix/LoadLibrary on Windows).
+    - [ ] Note: the current code in the `dl/` folder is not yet used.
+    - [ ] Lua scripting — high-level modding system.
+    - [ ] Hybrid system: DL + Lua.
+## Platform Support
+    - [ ] Windows (older versions, from Windows 2000).
+    - [ ] Linux (untested).
+    - [ ] Android (high priority).
+    - [ ] Apple (macOS/iOS).
+    - [ ] Xbox.
+    - [ ] Wii.
+    - [ ] Other platforms to be defined.
+## Graphics Support
+    - [ ] OpenGL 2.0.
+    - [ ] OpenGL ES.
+    - [ ] WebGL.
+    - [ ] DirectX.
+    - [ ] Vulkan.
+## Architecture / Engine
+    - [ ] Separate the engine from the main project.
+    - [ ] Create an independent and reusable game engine.
+    - [ ] Implement an event subsystem from scratch.
+    - [ ] Support for geometry shaders.
+## Tools and Utilities
+    - [ ] Implement an argument parser in the engine (getopt).
+    - [ ] Cross-compilation support.
+## Performance
+    - [ ] High performace and stability in main game.
+    - [ ] Reimplement the FPS limit in the `Application` class with a better procedure.
+## Documentation
+    - [ ] Migrate `.md` files to `.rst`.
+## Misc
+    - [ ] Improve error handling.

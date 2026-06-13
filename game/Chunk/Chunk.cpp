@@ -27,7 +27,7 @@ glm::ivec3 FaceNormals[] = {
 	{ 0, 1, 0 }
 };
 
-Chunk::Chunk(Level* level, const ivec3& pos)
+Chunk::Chunk(Level *level, const ivec3 &pos)
    : m_Level(level), m_Pos(pos), m_Dirty(true)
 {
 	m_Level = level;
@@ -78,10 +78,9 @@ void Chunk::Build()
 					   (m_Pos.z * CHUNK_XYZ) + cz);
 
 				/* The top blocks of the chunk will always be grass (for now) */
-				if (p.y == (m_Level->GetSize().z * 2 / 3))
+				tl = rock;
+				if (p.y == (m_Level->GetSize().y * 2 / 3))
 					tl = grass;
-				else if (p.y < (m_Level->GetSize().z * 2 / 3) || p.y >= 0)
-					tl = rock;
 
 				/*
 				 * Push all the vertices in the buffer.
@@ -108,12 +107,8 @@ void Chunk::Build()
 	 *  -- Mark the chunk as not dirty.
 	 */
 	MC::Graphics::VertexLayout VL;
-
-	VAO.reset(new VertexArray());
-	VBO.reset(new VertexBuffer());
-	IBO.reset(new IndexBuffer());
 	VBO->Build(vertices.size() * sizeof(float), vertices.data());
-	IBO->Build(indices.size() * sizeof(unsigned int), indices.data());
+	IBO->Build((mc_u8)(indices.size() * sizeof(mc_u8)), indices.data());
 	VL.AddAttribute(SHADER_VERTEX_BIT, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
 	VL.AddAttribute(SHADER_TEX_BIT, 2, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	VL.AddAttribute(SHADER_BRIG_BIT, 1, GL_FLOAT, 6 * sizeof(float), (void*)(5 * sizeof(float)));
@@ -124,7 +119,7 @@ void Chunk::Build()
 	m_Dirty = false;
 }
 
-void Chunk::Render(Shader* shader) const
+void Chunk::Render(Shader *shader) const
 {
 	/* push model matrix */
 	shader->Set4x4("s_M", mat4(1.0f));
@@ -136,9 +131,9 @@ void Chunk::Render(Shader* shader) const
 	VAO->Unbind();
 }
 
-void Chunk::AddFace(const ivec3& fpos, Face f, Tile t) 
+void Chunk::AddFace(const ivec3 &fpos, Face f, Tile t) 
 {
-	int count = vertices.size() / 6;
+	int count = (int)(vertices.size() / 6);
 
 	/* brigthness face values */
 	float c1 = 1.0f;

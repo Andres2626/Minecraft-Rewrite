@@ -8,11 +8,13 @@
 %.log
 %.so
 %.obj
+%.log
 
 build/
 dependencies/*
 assets/Internal
 assets/Internal/win_icon.png
 assets/terrain.png
+level.dat
 
 !dependencies/CMakeLists.txt

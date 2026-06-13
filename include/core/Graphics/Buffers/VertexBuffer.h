@@ -10,13 +10,13 @@ namespace MC
 		{
 		private:
 			mc_u8 m_ID;
-			mc_u8 m_Size;
+			size_t m_Size;
 		public:
 			VertexBuffer();
 			~VertexBuffer();
 		public:
 			/* build vertex buffer from vertices */
-			void Build(mc_u8 size, const void* data);
+			void Build(size_t size, const void* data);
 		public:
 			void Bind() const;
 			void Unbind() const;

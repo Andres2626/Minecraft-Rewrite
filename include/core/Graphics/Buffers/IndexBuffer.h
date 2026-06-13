@@ -15,7 +15,7 @@ namespace MC
 			IndexBuffer();
 			~IndexBuffer();
 		public:
-			void Build(mc_u8 size, const void* data);
+			void Build(mc_u8 size, const void *data);
 		public:
 			void Bind() const;
 			void Unbind() const;

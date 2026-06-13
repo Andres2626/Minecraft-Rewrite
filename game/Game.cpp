@@ -1,5 +1,7 @@
 #include "Rubydung.h"
 
+#include <spdlog/spdlog.h>
+
 #include <Log/Log.h>
 #include <App/Application.h>
 
@@ -23,7 +25,7 @@ public:
 
 	~Game()
 	{ 
-	
+
 	}
 
 	void Init() override
@@ -35,8 +37,6 @@ public:
 
 int main(int argc, char** argv) 
 {
-	log_init(MC_LOG_STDOUT | MC_LOG_FILE);
-	log_set_level(MC_LEVEL_TRACE);
 	Game game;
 	game.Start();
 	return 0;

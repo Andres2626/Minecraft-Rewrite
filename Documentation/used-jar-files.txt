@@ -1,1 +1,2 @@
-version: rd-132211 shasum: 393e8d4b4d708587e2accd7c5221db65365e1075 *rd-132211-launcher.jar
+version: rd-131655 shasum: not found file: not found
+version: rd-132211 shasum: 393e8d4b4d708587e2accd7c5221db65365e1075 file: rd-132211-launcher.jar

@@ -24,7 +24,7 @@ namespace MC
 			}
 		}
 
-		void Input::ProcessEvent(const Events::Event& ev)
+		void Input::ProcessEvent(const Events::Event &ev)
 		{
 			switch (ev.type) {
 			case GLEQ_KEY_PRESSED:

@@ -14,7 +14,6 @@ namespace MC
 {
 	namespace App 
 	{
-
 		/* This struct is used when window class is initialized.
 		have some properties of window*/
 		struct MC_API WindowProperties 
@@ -42,12 +41,12 @@ namespace MC
 		{
 		private:
 			bool m_Init;
+			const char* m_Title;
 			WindowProperties m_Pr;
-			mc_str m_Title;
 			GLFWwindow* m_Win; /* OpenGL window */
 		public:
 			/* Initializes and create window */
-			Window(const mc_str& title, const WindowProperties& properties);
+			Window(const char *title, const WindowProperties &properties);
 			~Window();
 		private:
 			/* returns FALSE in case of error */
@@ -59,8 +58,8 @@ namespace MC
 			void Update();
 			void Finish();
 		public:
-			int GetEvent(MC::Events::Event& ev);
-			void FreeEvent(MC::Events::Event& ev);
+			int GetEvent(MC::Events::Event &ev);
+			void FreeEvent(MC::Events::Event &ev);
 		public:
 			void SetIcon(const Graphics::Image& img);
 		public:

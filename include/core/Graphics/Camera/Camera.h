@@ -24,7 +24,7 @@ namespace MC
 			float fov;
 		public:
 			/* build camera */
-			Camera(const Math::vec3& pos);
+			Camera(const Math::vec3 &pos);
 			~Camera();
 		public:
 			/* Detect if box is in frustum (not fully) */

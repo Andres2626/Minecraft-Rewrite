@@ -1,7 +1,9 @@
 #include "Graphics/Camera/Ray.h"
 
-namespace MC {
-	namespace Graphics {
+namespace MC 
+{
+	namespace Graphics 
+	{
 
 		Math::vec3 Ray::GetRay(float step, Math::vec3 pos, Math::vec3 dir) 
 		{

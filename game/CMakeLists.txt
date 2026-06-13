@@ -28,12 +28,11 @@ target_include_directories(rd-132211 PRIVATE ${LIBINCDIR})
 target_include_directories(rd-132211 PRIVATE ${GLADINCDIR})
 
 # link all used libraries
-target_link_libraries(rd-132211 PRIVATE mccore glfw gleq zlib glm stb gfx)
+target_link_libraries(rd-132211 PRIVATE mccore glfw gleq zlib glm stb gfx spdlog)
 
 # copy .dll files to .exe directory
 add_custom_command(TARGET rd-132211 POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:mccore> $<TARGET_FILE_DIR:rd-132211>
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:zlib> $<TARGET_FILE_DIR:rd-132211>
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:glfw> $<TARGET_FILE_DIR:rd-132211>
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gfx> $<TARGET_FILE_DIR:rd-132211>
-)
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:glfw> $<TARGET_FILE_DIR:rd-132211>)
+   

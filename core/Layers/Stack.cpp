@@ -4,7 +4,6 @@ namespace MC
 {
 	namespace Layers
 	{
-
 		Stack::Stack()
 		{ 
 		
@@ -15,7 +14,7 @@ namespace MC
 
 		}
 
-		void Stack::PushLayer(Layer* layer)
+		void Stack::PushLayer(Layer *layer)
 		{
 			m_Layers.push_back(layer);
 		}
@@ -28,7 +27,7 @@ namespace MC
 			}
 		}
 
-		void Stack::OnUpdate(Utils::Timestep& ts)
+		void Stack::OnUpdate(Utils::Timestep &ts)
 		{
 			for (mc_size i = 0; i < m_Layers.size(); i++) {
 				if (m_Layers[i]->IsVisible())
@@ -36,7 +35,7 @@ namespace MC
 			}
 		}
 
-		void Stack::OnEvent(Events::Event& ev)
+		void Stack::OnEvent(Events::Event &ev)
 		{
 			for (mc_size i = 0; i < m_Layers.size(); i++) {
 				if (m_Layers[i]->IsVisible())

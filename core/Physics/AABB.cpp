@@ -6,8 +6,7 @@ namespace MC
 {
 	namespace Physics 
 	{
-
-		AABB::AABB(const Math::vec3& p0, const Math::vec3& p1) 
+		AABB::AABB(const Math::vec3 &p0, const Math::vec3 &p1) 
 		{
 			this->p0 = p0;
 			this->p1 = p1;
@@ -19,7 +18,7 @@ namespace MC
 
 		}
 
-		AABB AABB::Expand(const Math::vec3& pos) 
+		AABB AABB::Expand(const Math::vec3 &pos) 
 		{
 			Math::vec3 _p0 = this->p0;
 			Math::vec3 _p1 = this->p1;
@@ -42,14 +41,14 @@ namespace MC
 			return AABB(_p0, _p1);
 		}
 
-		AABB AABB::Grow(const Math::vec3& pos) 
+		AABB AABB::Grow(const Math::vec3 &pos) 
 		{
 			Math::vec3 _p0 = this->p0 - pos;
 			Math::vec3 _p1 = this->p1 + pos;
 			return AABB(_p0, _p1);
 		}
 
-		float AABB::ClipXCollide(const AABB& other, float x) 
+		float AABB::ClipXCollide(const AABB &other, float x) 
 		{
 			if (other.p1.y <= this->p0.y || other.p0.y >= this->p1.y)
 				return x;
@@ -71,7 +70,7 @@ namespace MC
 			return x;
 		}
 
-		float AABB::ClipYCollide(const AABB& other, float y) 
+		float AABB::ClipYCollide(const AABB &other, float y) 
 		{
 			if (other.p1.x <= this->p0.x || other.p0.x >= this->p1.x)
 				return y;
@@ -92,7 +91,7 @@ namespace MC
 			return y;
 		}
 
-		float AABB::ClipZCollide(const AABB& other, float z) 
+		float AABB::ClipZCollide(const AABB &other, float z) 
 		{
 			if (other.p1.x <= this->p0.x || other.p0.x >= this->p1.x)
 				return z;
@@ -114,7 +113,7 @@ namespace MC
 			return z;
 		}
 
-		bool AABB::Intersects(const AABB& other) 
+		bool AABB::Intersects(const AABB &other) 
 		{
 			bool x0 = other.p1.x > this->p0.x;
 			bool x1 = other.p0.x < this->p1.x;
@@ -125,7 +124,7 @@ namespace MC
 			return x0 && x1 && y0 && y1 && z0 && z1;
 		}
 
-		void AABB::Move(const Math::vec3& pos) 
+		void AABB::Move(const Math::vec3 &pos) 
 		{
 			this->p0 += pos;
 			this->p1 += pos;

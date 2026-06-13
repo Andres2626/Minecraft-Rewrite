@@ -4,7 +4,6 @@ namespace MC
 {
 	namespace Utils 
 	{
-
 		Timer::Timer()
 		{
 			this->Reset();

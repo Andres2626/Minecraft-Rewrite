@@ -14,7 +14,7 @@ bool first = true;
 
 static const double PI = 3.14159265358979323846;
 
-Player::Player(Level& level)
+Player::Player(Level &level)
 	: m_Ground(false), m_Size({ 0.3f, 0.9f }), m_Level(level), Cam(vec3(0.0f)), m_DMov(vec3(0.0f, 0.0f, 0.0f))
 {
 	float x = (float)App::Application::GetProperties().x;
@@ -43,7 +43,7 @@ void Player::Render()
 	Cam.Update();
 }
 
-void Player::Move(const vec3& pos) 
+void Player::Move(const vec3 &pos) 
 {
 	vec3 oldPos = pos;
 	vec3 newPos = pos;
@@ -95,13 +95,10 @@ void Player::MouseMove(vec2 pos)
 	Cam.rot += pos;
 
 	/* Block camera rotation */
-	if (Cam.rot.y > 89.0f)
-		Cam.rot.y = 89.0f;
-	if (Cam.rot.y < -89.0f)
-		Cam.rot.y = -89.0f;
+	Cam.rot.y = std::clamp(Cam.rot.y, -89.0f, 89.0f);
 }
 
-bool Player::Raycast(const vec3& org, const vec3& dir, Hitresult& ret)
+bool Player::Raycast(const vec3 &org, const vec3 &dir, Hitresult &ret)
 {
 	vec3 d = dir;
 	vec3 lpoint = org;
@@ -188,14 +185,14 @@ void Player::ResetPos()
 
 	/* Calculate new player position */
 	newPos.x = (float)(rand() % Size.x + 1);
-	newPos.y = (float)(Size.z + 10);
-	newPos.z = (float)(rand() % Size.y + 1);
+	newPos.y = (float)(Size.y + 10);
+	newPos.z = (float)(rand() % Size.z + 1);
 
 	/* Restore player position */
 	SetPos(newPos);
 }
 
-void Player::SetPos(const vec3& newPos) 
+void Player::SetPos(const vec3 &newPos) 
 {
 	/* Set player vectors */
 	m_Pos = newPos;
@@ -208,7 +205,7 @@ void Player::SetPos(const vec3& newPos)
 	Cam.Update();
 }
 
-void Player::Pick(float time, Shader* shader)
+void Player::Pick(float time, Shader *shader)
 {
 	/* Obtain the vectors of parametric equation f(t) = ray * d + pos */
 	vec3 ray = Cam.front;

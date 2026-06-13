@@ -25,7 +25,7 @@ protected:
 	std::unique_ptr<VertexArray> VAO;
 	std::unique_ptr<VertexBuffer> VBO;
 	std::unique_ptr<IndexBuffer> IBO;
-	Level* m_Level;
+	Level *m_Level;
 public:
 	std::vector<float> vertices;
 	std::vector<unsigned int> indices;
@@ -42,11 +42,11 @@ public:
 	void Build();
 	void Render(Shader* shader) const;
 private:
-	void AddFace(const ivec3& fpos, Face f, Tile t);
+	void AddFace(const ivec3 &fpos, Face f, Tile t);
 	void PushIndices(int count);
 public:
 	inline void SetDirty() { m_Dirty = true; }
 	inline bool GetDirty() { return m_Dirty; }
-	inline ivec3 GetPosition() { return m_Pos; }
-	inline AABB GetBox() { return m_Box; }
+	inline ivec3 &GetPosition() { return m_Pos; }
+	inline AABB &GetBox() { return m_Box; }
 };

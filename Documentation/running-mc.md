@@ -24,3 +24,10 @@ $ $(CMAKE_BUILD_DIR)/game/rd-132211
 ```
 
 This avoids copying the assets directly to the directory where the executable is located.
+
+## Controls
+
+- 'WASD' player move.
+- 'SPACE' for jump.
+- 'R' for to restore the player's position to an arbitrary position in the level.
+- 'ESC' for exit.

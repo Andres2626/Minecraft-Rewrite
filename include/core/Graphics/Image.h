@@ -9,8 +9,8 @@ namespace MC
 		struct MC_API Image 
 		{
 		public:
-			const char* path;
-			mc_uc8* pixels;
+			const char *path;
+			mc_uc8 *pixels;
 			int x;
 			int y;
 			int nr_channels;
@@ -19,7 +19,7 @@ namespace MC
 			~Image();
 		public:
 			void SetFlip(bool flip);
-			bool LoadFromFile(const char* path);
+			bool LoadFromFile(const char *path);
 			void Free();
 		};
 

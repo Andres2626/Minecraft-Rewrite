@@ -20,12 +20,12 @@ namespace MC
 
 		}
 
-		void Default::OnUpdate(Utils::Timestep& ts)
+		void Default::OnUpdate(Utils::Timestep &ts)
 		{
 
 		}
 
-		void Default::OnEvent(Events::Event& ev)
+		void Default::OnEvent(Events::Event &ev)
 		{
 
 		}

@@ -18,7 +18,7 @@ namespace MC
 			glDeleteBuffers(1, &m_ID);
 		}
 
-		void VertexBuffer::Build(mc_u8 size, const void* data)
+		void VertexBuffer::Build(size_t size, const void *data)
 		{
 			this->m_Size = size;
 

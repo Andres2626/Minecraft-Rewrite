@@ -3,6 +3,9 @@
 
 #include "errors.h"
 
+struct dl_mod;
+struct mc_mod;
+
 void mc_set_module_path(const char *path);
 const char* mc_get_module_path();
 int mc_open_module(struct dl_mod *dl, struct mc_mod **mod, const char *name);

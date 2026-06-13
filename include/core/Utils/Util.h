@@ -18,8 +18,5 @@ namespace MC
 	namespace Internal 
 	{
 
-		MC_API int mc_printf(const char* fmt, ...);
-		MC_API void mc_breakpoint();
-
 	}
 }

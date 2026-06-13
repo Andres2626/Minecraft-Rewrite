@@ -165,7 +165,7 @@ const char* mc_get_module_error(int error)
 	return error_list[error];
 }
 
-int mc_load_module(struct mc_mod *mod, void *api)
+int mc_load_module(struct mc_mod *mod, void* api)
 {
 	/* check if the module is loaded */
 	if (!mod)

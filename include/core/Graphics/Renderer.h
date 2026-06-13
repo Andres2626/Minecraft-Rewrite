@@ -20,8 +20,8 @@ namespace MC
 			static void ClearColor(Math::vec3 color);
 			static void Viewport(Math::ivec2 pos, Math::ivec2 size);
 		public:
-			static void DepthFunc(const DepthValue& val);
-			static void BlendFunc(const BlendValue& sfactor, const BlendValue& dfactor);
+			static void DepthFunc(const DepthValue &val);
+			static void BlendFunc(const BlendValue &sfactor, const BlendValue &dfactor);
 		public:
 			static void DrawArrays(mc_u8 mode, mc_u8 size);
 			static void DrawElements(mc_u8 mode, mc_u8 size);

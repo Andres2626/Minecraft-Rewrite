@@ -6,31 +6,74 @@
 #include <Utils/Util.h>
 #include <Utils/gzip.h>
 
+#define MC_LOG_PREFIX "Level"
+#include <Log/Log.h>
+
 #include <memory>
 
-Level::Level(const ivec3& size)
+static float NormRand()
+{
+	return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+}
+
+Level::Level(const ivec3 &size)
 	: m_Size(size), m_ChunkUpdates(0), m_LevelFile("level.dat")
 {
-	/* calculate level volume */
-	m_Volume = (size_t)size.x * size.y * size.z;
-
-	/* check valid level size */
-	if (m_Volume < 0)
-		mc_fatal("level invalid size (x=%i, y=%i, z=%i)\n", size.x, size.y, size.z);
+	m_Volume = (size_t)(size.x * size.z * size.y);
+	if (!m_Volume)
+		mc_fatal("invalid size x={} y={} z={}", size.x, size.z, size.y);
 
 	/* create level array */
 	m_Blocks = (mc_uc8*)malloc(m_Volume);
 	if (!m_Blocks)
-		mc_fatal("alloc_blocks() failed: out of memory (volume=%i)\n", m_Volume);
+		mc_fatal("block array not allocated: {} size={}", m_Volume, strerror(errno));
 
 	/* check if level file exits */
 	if (!Levelcheck()) {
 		for (int x = 0; x < size.x; x++) {
-			for (int y = 0; y < size.z; y++) {
-				for (int z = 0; z < size.y; z++) {
+			for (int y = 0; y < size.y; y++) {
+				for (int z = 0; z < size.z; z++) {
 					int index = GetBlockIndex({ x, y, z });
-					int solid = (mc_uc8)(y <= (size.z * 2 / 3));
+					int solid = (mc_uc8)(y <= (size.y * 2 / 3));
 					m_Blocks[index] = solid ? 1 : 0;
+				}
+			}
+		}
+
+		/* 
+		 * create caves
+		 * from: https://github.com/thecodeofnotch/rd-131655/blob/master/src/main/java/com/mojang/rubydung/level/Level.java
+		 */
+		for (int i = 0; i < 10000; i++) {
+			int caveSize = (int)(NormRand() * 7) + 1;
+
+			int caveX = (int)(NormRand() * m_Size.x);
+			int caveY = (int)(NormRand() * m_Size.y);
+			int caveZ = (int)(NormRand() * m_Size.z);
+
+			for (int radius = 0; radius < caveSize; radius++) {
+				for (int sphere = 0; sphere < 1000; sphere++) {
+					int offsetX = (int)(NormRand() * radius * 2 - radius);
+					int offsetY = (int)(NormRand() * radius * 2 - radius);
+					int offsetZ = (int)(NormRand() * radius * 2 - radius);
+
+					double distance = offsetX * offsetX + offsetY * offsetY + offsetZ * offsetZ;
+					if (distance > radius * radius)
+						continue;
+
+					int tileX = caveX + offsetX;
+					int tileY = caveY + offsetY;
+					int tileZ = caveZ + offsetZ;
+
+					int index = GetBlockIndex({ tileX, tileY, tileZ });
+
+					if (index >= 0 && index < m_Volume) {
+						if (tileX > 0 && tileY > 0 && tileZ > 0
+							&& tileX < m_Size.x - 1 && tileY < m_Size.y && tileZ < m_Size.z - 1) {
+
+							m_Blocks[index] = 0;
+						}
+					}
 				}
 			}
 		}
@@ -49,8 +92,8 @@ Level::Level(const ivec3& size)
 
 	/* create chunk renderer */
 	for (int cx = 0; cx < size.x / CHUNK_XYZ; cx++) {
-		for (int cy = 0; cy < size.z / CHUNK_XYZ; cy++) {
-			for (int cz = 0; cz < size.y / CHUNK_XYZ; cz++) {
+		for (int cy = 0; cy < size.y / CHUNK_XYZ; cy++) {
+			for (int cz = 0; cz < size.z / CHUNK_XYZ; cz++) {
 				int index = GetChunkIndex({ cx, cy, cz });
 
 				/*
@@ -63,12 +106,15 @@ Level::Level(const ivec3& size)
 			}
 		}
 	}
+
+	mc_info("save_file=./{} x={} y={} z={} size={} renderer_size={}", m_LevelFile, size.x, 
+		    size.z, size.y, m_Volume, m_ChunkRenderer.size());
 }
 
 bool Level::IsSolidTile(const ivec3& pos)
 {
 	return (pos.x >= 0) && (pos.y >= 0) && (pos.z >= 0) &&
-		   (pos.x < m_Size.x) && (pos.y < m_Size.z) && (pos.z < m_Size.y) &&
+		   (pos.x < m_Size.x) && (pos.y < m_Size.y) && (pos.z < m_Size.z) &&
 		   m_Blocks[GetBlockIndex(pos)];
 }
 
@@ -81,12 +127,12 @@ float Level::GetBrigthness(const ivec3& pos)
 {
 	/* if the block is out of bounds, mark the block as light */
 	if (pos.x < 0 || pos.y < 0 || pos.z < 0 ||
-		pos.x >= m_Size.x || pos.y >= m_Size.z || 
-		pos.z >= m_Size.y) {
+		pos.x >= m_Size.x || pos.y >= m_Size.y || 
+		pos.z >= m_Size.z) {
 		return 1.0f; /* light block */
 	}
 
-	for (int i = pos.y; i < m_Size.z; i++) {
+	for (int i = pos.y; i < m_Size.y; i++) {
 		if (IsLightBlocker({ pos.x, i, pos.z })) {
 			return 0.5f; /* dark block */
 		}
@@ -110,20 +156,20 @@ bool Level::Levelcheck()
 
 void Level::Save() 
 {
-	mc_info("saving level\n");
+	mc_info("saving file=./{}", m_LevelFile);
 
 	size_t outSize = 0;
 
 	/* compress data */
 	unsigned char* raw = Utils::compress(m_Blocks, m_Volume, &outSize);
 	if (!raw)
-		mc_fatal("error compressing level\n");
+		mc_fatal("error compressing");
 
 	/* open file in binary write */
 	std::ofstream file(m_LevelFile, std::ios::out | std::ios::binary);
 	if (!file.is_open()) {
 		free(raw);
-		mc_fatal("failed to open level file: \"%s\"\n", m_LevelFile);
+		mc_fatal("failed to open file: \"{}\"", m_LevelFile);
 	}
 
 	/* write compressed data */
@@ -136,20 +182,20 @@ void Level::Save()
 
 void Level::Load() 
 {
-	mc_info("loading level\n");
+	mc_info("loading level file=./{}", m_LevelFile);
 
 	size_t outSize = 0;
 
 	/* open file for binary read */
 	std::ifstream file(m_LevelFile, std::ios::binary);
 	if (!file)
-		mc_fatal("failed to open level file: \"%s\"\n", m_LevelFile);
+		mc_fatal("failed to open file: \"{}\"", m_LevelFile);
 
 	/* decompress data */
 	std::vector<unsigned char> in((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	unsigned char* raw = Utils::decompress(in.data(), in.size(), &outSize);
 	if (!raw)
-		mc_fatal("error decompressing level\n");
+		mc_fatal("error decompressing");
 
 	mc_assert(outSize == m_Volume, "invalid decompressed file size");
 
@@ -160,7 +206,7 @@ void Level::Load()
 	free(raw);
 }
 
-void Level::Render(Shader* shader, Player* player) 
+void Level::Render(Shader *shader, Player *player) 
 {
 	/* check if chunk is in camera frustum */
 	for (auto& n : m_ChunkRenderer) {
@@ -174,17 +220,14 @@ void Level::SetTile(const ivec3& blockpos, int type)
 {
 	/* check if the block is out of level */
 	if (blockpos.x < 0 || blockpos.y < 0 || blockpos.z < 0 || 
-		blockpos.x >= m_Size.x || blockpos.y >= m_Size.z ||
-		blockpos.z >= m_Size.y) {
+		blockpos.x >= m_Size.x || blockpos.y >= m_Size.y ||
+		blockpos.z >= m_Size.z) {
 		return; /* block out of bounds */
 	}
 
-	/* detect if block is not air */
-	bool flag = (type > 0);
-
 	/* set block type in the array */
 	int index = GetBlockIndex(blockpos);
-	m_Blocks[index] = flag;
+	m_Blocks[index] = (type > 0);
 
 	/* convert position to chunk position */
 	ivec3 chunk = floor(vec3(blockpos) / (float)CHUNK_XYZ);
@@ -198,27 +241,32 @@ void Level::SetTile(const ivec3& blockpos, int type)
 	 * changed chunks in array and update block adjacent blocks
 	 */
 	m_Updates.push_back(chunk);
-	if (blockpos.x % 16 == 0)
+	int lx = blockpos.x & 15;
+	int ly = blockpos.y & 15;
+	int lz = blockpos.z & 15;
+
+	if (lx == 0)
 		m_Updates.push_back(chunk + ivec3(-1, 0, 0));
-	if (blockpos.x % 16 == 15)
+	if (lx == 15)
 		m_Updates.push_back(chunk + ivec3(1, 0, 0));
-	if (blockpos.y % 16 == 0)
+	if (ly == 0)
 		m_Updates.push_back(chunk + ivec3(0, -1, 0));
-	if (blockpos.y % 16 == 15)
+	if (ly == 15)
 		m_Updates.push_back(chunk + ivec3(0, 1, 0));
-	if (blockpos.z % 16 == 0)
+	if (lz == 0)
 		m_Updates.push_back(chunk + ivec3(0, 0, -1));
-	if (blockpos.z % 16 == 15)
+	if (lz == 15)
 		m_Updates.push_back(chunk + ivec3(0, 0, 1));
 
 
 	/* find chunk position in the map */
-	for (const auto& ch : m_Updates) {
+	for (const auto &ch : m_Updates) {
 		chunk_index = GetChunkIndex(ch);
 		auto it = m_ChunkRenderer.find(chunk_index);
 		if (it != m_ChunkRenderer.end()) {
+
 			/*
-			 * yes! the chunk position is found in the level, now the
+			 * The chunk position is found in the level, now the
 			 * program check if the chunk is out of level and call to 
 			 * SetDirty() and rebuild chunk.
 			 */
@@ -233,29 +281,16 @@ void Level::SetTile(const ivec3& blockpos, int type)
 
 }
 
-std::vector<AABB> Level::GetCubes(const AABB& aabb) 
+std::vector<AABB> Level::GetCubes(const AABB &aabb) 
 {
-	std::vector <AABB> aabbs;
+	std::vector<AABB> aabbs;
 	vec3 p0 = aabb.p0;
 	vec3 p1 = aabb.p1 + 1.0f;
-	
-	if (p0.x < 0.0f)
-		p0.x = 0.0f;
 
-	if (p0.y < 0.0f)
-		p0.y = 0.0f;
-
-	if (p0.z < 0.0f)
-		p0.z = 0.0f;
-
-	if (p1.x > m_Size.x)
-		p1.x = (float)m_Size.x;
-
-	if (p1.y > m_Size.z)
-		p1.y = (float)m_Size.z;
-
-	if (p1.z > m_Size.y)
-		p1.z = (float)m_Size.y;
+	p0.x = std::max(p0.x, 0.0f);
+	p0.y = std::max(p0.y, 0.0f);
+	p0.z = std::max(p0.z, 0.0f);
+	Math::clamp(p0, vec3(0.0f), vec3(m_Size.x, m_Size.y, m_Size.z));
 
 	/* check all player adjacent blocks */
 	for (int x3 = (int)p0.x; x3 < p1.x; ++x3) {
@@ -278,5 +313,5 @@ int Level::GetChunkIndex(const ivec3& chunk)
 
 int Level::GetBlockIndex(const ivec3& block) 
 {
-	return (block.y * m_Size.y + block.z) * m_Size.x + block.x;
+	return (block.y * m_Size.z + block.z)* m_Size.x + block.x;
 }

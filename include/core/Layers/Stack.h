@@ -16,12 +16,12 @@ namespace MC
 			Stack();
 			~Stack();
 		public:
-			void PushLayer(Layer* layer);
+			void PushLayer(Layer *layer);
 		public:
 			void Init() override;
 		public:
-			void OnUpdate(Utils::Timestep& ts) override;
-			void OnEvent(Events::Event& ev) override;
+			void OnUpdate(Utils::Timestep &ts) override;
+			void OnEvent(Events::Event &ev) override;
 			void OnRender() override;
 			void OnTick() override;
 			void OnSuspended() override;

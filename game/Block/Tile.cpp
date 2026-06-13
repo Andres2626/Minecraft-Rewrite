@@ -15,9 +15,9 @@
 #define VERTEX_SIZE 3
 
 /* push vertices in the array */
-#define VERTEX_FACE(f) v##f[mesh_index] = x; \
-v##f[mesh_index + 1] = y; \
-v##f[mesh_index + 2] = z;
+#define VERTEX_FACE(f)	v##f[mesh_index] = x; \
+						v##f[mesh_index + 1] = y; \
+						v##f[mesh_index + 2] = z;
 
 Tile::Tile(TileType type) 
 	: type(type)

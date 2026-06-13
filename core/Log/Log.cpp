@@ -1,117 +1,63 @@
+
+#define MC_LOG_PREFIX "Log"
 #include "Log/Log.h"
 
 namespace MC 
 {
-	struct log {
-		FILE* fp;
-		time_t now;
-		int flags;
-		int level;
-	};
+    static std::shared_ptr<spdlog::logger> m_logger;
 
-	static const char* level_str[] = {
-		"", "info", "warn", "ERROR", "FATAL", // basic levels
-		"debug", "trace"
-	};
-
-	static struct log log = { nullptr, 0, 0, 0 };
-
-	/* write to buffer and print string (using vfprintf) */
-	static void internal_vprintf(const char* fmt, va_list list)
+	static void get_time_buff(const char *fmt, char *buffer, size_t size)
 	{
-		if (log.flags & MC_LOG_STDOUT) {
-			va_list copy;
-			va_copy(copy, list);
-			vfprintf(stderr, fmt, copy);
-			va_end(copy);
-		}
-
-		if ((log.flags & MC_LOG_FILE) && log.fp) {
-			va_list copy;
-			va_copy(copy, list);
-			vfprintf(log.fp, fmt, copy);
-			fflush(log.fp);
-			va_end(copy);
-		}
+		time_t now = time(NULL);
+		strftime(buffer, size, fmt, localtime(&now));
 	}
 
-	static void internal_write(const char* fmt, ...)
+	int Log::Init(mc_u32 flags, level_enum lv)
 	{
-		va_list args;
-		va_start(args, fmt);
-		internal_vprintf(fmt, args);
-		va_end(args);
+        char t_buff[32];
+        get_time_buff("%Y-%m-%d_%H-%M-%S.log", t_buff, 32);
+
+        bool sout = BIT_CHK(flags, MC_LOG_STDOUT);
+        bool fout = BIT_CHK(flags, MC_LOG_FILE);
+
+        try {
+            std::vector<spdlog::sink_ptr> sinks;
+
+            if (sout) {
+                auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+                console->set_level(lv);
+                sinks.push_back(console);
+            }
+            if (fout) {
+                auto file = std::make_shared<spdlog::sinks::basic_file_sink_mt>(t_buff, true);
+                file->set_level(lv);
+                sinks.push_back(file);
+            }
+
+            m_logger = std::make_shared<spdlog::logger>("log", sinks.begin(), sinks.end());
+            m_logger->set_level(lv);
+            m_logger->flush_on(spdlog::level::warn);
+            m_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] %^%l%$: %v");
+            spdlog::set_default_logger(m_logger);
+        }
+        catch (const spdlog::spdlog_ex& ex)
+        {
+            fprintf(stderr, "Error initializing log %s\n", ex.what());
+            return 1;
+        }
+       
+        mc_info("conout={} fout={} log_file=./{} verbose={}", sout, fout, fout ? t_buff : "NULL", (mc_u32)lv);
+        return 0;
 	}
 
-	static void get_time_buff(const char* fmt, char* buffer, size_t size)
+	int Log::Fini()
 	{
-		strftime(buffer, size, fmt, localtime(&log.now));
+        mc_info("finished");
+		return 0;
 	}
 
-	int log_init(int flags)
-	{
-		char tb[30], fb[30];
-		log.now = time(NULL);
-		get_time_buff("%Y-%m-%d_%H-%M-%S", tb, sizeof(tb));
-		snprintf(fb, sizeof(fb), "%s.log", tb);
-		log.flags = flags;
-		if (log.flags & MC_LOG_FILE) {
-			log.fp = fopen(fb, "a");
-			if (!log.fp) {
-				fprintf(stderr, "[ERROR] could not find log file \"%s\"", fb);
-				return 0;
-			}
-		}
-		return 1;
-	}
-
-	void log_fini()
-	{
-		fclose(log.fp);
-	}
-
-	static const char* convert_to_relpath(const char* path)
-	{
-#if defined (MC_PLATFORM_WINDOWS)
-		return strrchr(path, '\\') ? strrchr(path, '\\') + 1 : path;
-#else
-		return strrchr(path, '/') ? strrchr(path, '/') + 1 : path;
-#endif
-	}
-
-	void log_print(int level, const char* file, int line, const char* fmt, ...)
-	{
-		if (level > log.level)
-			return;
-		
-		char tb[30], buff[512];
-		const char* file_ = NULL;
-		
-#if defined (MC_LOG_USE_RELPATH)
-		file_ = convert_to_relpath(file);
-#else
-		file_ = file;
-#endif
-		get_time_buff("[%Y-%m-%d %H-%M-%S]", tb, sizeof(tb));
-		
-		int n = snprintf(buff, sizeof(buff), "%s [%s:%i] [%s] ", tb, file_, line, level_str[level]);
-		
-		va_list args;
-		va_start(args, fmt);
-		vsnprintf(buff+n, sizeof(buff)-n, fmt, args);
-		va_end(args);
-		
-		internal_write(buff);
-	}
-
-	int log_get_level()
-	{
-		return log.level;
-	}
-
-	void log_set_level(int level)
-	{
-		log.level = level;
-	}
-
+    std::shared_ptr<spdlog::logger>& Log::GetInstance()
+    { 
+        return m_logger; 
+    };
 }

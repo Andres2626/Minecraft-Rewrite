@@ -26,7 +26,6 @@
 #include "Layers/Default.h"
 
 #include "Log/Log.h"
-#include "Log/LogLevel.h"
 
 #include "Math/Math.h"
 

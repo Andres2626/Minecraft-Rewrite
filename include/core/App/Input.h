@@ -22,7 +22,7 @@ namespace MC
 			static double m_Y;
 		public:
 			static void Init();
-			static void ProcessEvent(const Events::Event& ev);
+			static void ProcessEvent(const Events::Event &ev);
 			static bool IsKeyPressed(int key);
 			static bool IsMouseButtonPressed(int button);
 		public:

@@ -9,7 +9,7 @@ namespace MC
 {
 	namespace Utils 
 	{
-		unsigned char* decompress(const void* in, size_t in_size, size_t* out)
+		unsigned char* decompress(const void *in, size_t in_size, size_t *out)
 		{
 			z_stream inflate_s;
 			size_t max_size = 1024 * 1024 * 1024;
@@ -17,7 +17,7 @@ namespace MC
 			size_t out_size = in_size * 2;
 			size_t total = 0;
 			int ret = 0;
-			unsigned char* output = NULL;
+			unsigned char *output = NULL;
 			
 			/* check valid size */
 			if (in_size == 0) 

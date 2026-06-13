@@ -3,7 +3,6 @@
 #include "Window.h"
 
 #include "Layers/Stack.h"
-#include "Log/Log.h"
 #include "Utils/Timer.h"
 
 namespace MC 
@@ -21,17 +20,17 @@ namespace MC
 			int m_FPS;
 			int m_UPS;
 			float m_FrameTime;
-			mc_str m_Name;
+			const char *m_Name;
 		private:
 			std::unique_ptr<Utils::Timer> m_Timer;
 			Layers::Stack m_LayerStack;
 		public:
-			Application(const mc_str& name, const WindowProperties& pr);
+			Application(const char *name, const WindowProperties &pr);
 			~Application();
 		public:
 			virtual void Init();
 		public:
-			void PushLayer(Layers::Layer* layer);
+			void PushLayer(Layers::Layer *layer);
 		public:
 			void Start();
 			void Suspend();
@@ -39,8 +38,8 @@ namespace MC
 			void Stop();
 		private:
 			void Run();
-			void OnUpdate(Utils::Timestep& ts) override;
-			void OnEvent(Events::Event& ev) override;
+			void OnUpdate(Utils::Timestep &ts) override;
+			void OnEvent(Events::Event &ev) override;
 			void OnRender() override;
 			void OnTick() override;
 			void OnSuspended() override;
@@ -49,9 +48,9 @@ namespace MC
 			inline int GetUPS() { return m_UPS; }
 			inline float GetFrameTime() { return m_FrameTime; }
 		public:
-			static Application& Get();
-			static inline WindowProperties& GetProperties() { return Get().m_Pr; };
-			inline Window& GetWindow() { return *m_Win; };
+			static Application &Get();
+			static inline WindowProperties &GetProperties() { return Get().m_Pr; };
+			inline Window &GetWindow() { return *m_Win; };
 		};
 
 	}

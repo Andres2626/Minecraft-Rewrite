@@ -1,5 +1,26 @@
 NEWS - list of all major game and engine changes
 
+New in rd-131655 (Cave game tech)
+* Recreated version: rd-131655 from https://github.com/thecodeofnotch/rd-131655
+* Engine version: 0.02
+* libgfx version: 0.02
+* Disable selector and player pick from code.
+* Change log system to spdlog bassed log system.
+* Add random cave generator from code https://github.com/thecodeofnotch/rd-131655/blob/master/src/main/java/com/mojang/rubydung/level/Level.java.
+* Improve mesh generation.
+* Refractor core/common.h
+* Improve TODO list.
+* Refractor cmake files.
+* Add spdlog as dependency.
+* Change x,y,z convention in engine.
+* The version in the game is exactly like the original versions.
+* Disable C4251 warning.
+* Disable C4996 warning.
+* Change versioning to semver in the engine.
+* Clean code.
+* Improve documentation.
+* Add commit check workflow to git repository.
+
 New in rd-132211-5 - 26-08-25
 * Rewrite version: rd-132211.
 * Engine version 0.0.2-prealpha.

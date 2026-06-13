@@ -24,7 +24,6 @@ aiming for:
 5. [Limitation of Liability](#-limitation-of-liability)
 6. [Copyright Notice](#-©-copyright-notice)
 7. [Directory structure](./Documentation/directory-structure.md)
-8. [Install](./Documentation/installing-guide.md)
 9. [Build](./Documentation/building-guide.md)
 10. [Run](./Documentation/running-mc.md)
 11. [Debug](./Documentation/debugging-guide.md)
@@ -50,10 +49,11 @@ It is not intended to add/arrive at the following:
 - A multiplayer support bridge for *non-JE* versions.
 - Adding non-original game features.
 
-## 📌 Versions currently recreated
+## 📌 Currently available versions
 
-- ***FULL*** rd-132211. view [summary, controls, etc...](Documentation/game/summary.md) [relnotes](https://github.com/Andres2626/Minecraft-Rewrite/releases/tag/rd-132211-final)
-  
+- ***FULL*** rd-132211
+- ***FULL (RECREATED)*** rd-131655 (Cave game tech)
+
 ## 🤝 Contribute
 
 Thank you for your interest in contributing to the MC project. Before 
