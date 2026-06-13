@@ -1,0 +1,47 @@
+name: commit
+
+# This runs every time a push/pull request is made.
+on:
+    push:
+        branches: [ master ]
+    pull_request:
+        branches: [ master ]
+        
+jobs:
+    build-check:
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ ubuntu-22.04, windows-2019 ]       
+        runs-on: ${{ matrix.os }}
+        steps:
+            - uses: actions/checkout@v4
+            - name: setup_lnx
+              if: runner.os == 'Linux'
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y curl git build-essential
+                CMAKE_VERSION="4.1.6"
+                curl -sSL https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh -o install-cmake.sh
+                chmod +x install-cmake.sh
+                ./install-cmake.sh --prefix=/usr/local --skip-license
+            - name: build_lnx
+              if: runner.os == 'Linux'
+              run: |
+                cmake -B build_lnx -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -G "Unix Makefiles"
+                cd ./build_lnx && make -j4
+            - name: build_win64
+              if: runner.os == 'Windows'
+              shell: cmd
+              run: |
+                cmake -B build_win64 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -G "Visual Studio 16 2019" -A x64
+                cmake --build build_win64 --config Debug -j4
+            - name: build_win32
+              if: runner.os == 'Windows'
+              shell: cmd
+              run: |
+                cmake -B build_win32 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -G "Visual Studio 16 2019" -A Win32
+                cmake --build build_win32 --config Debug -j4
+             
+                
+              
