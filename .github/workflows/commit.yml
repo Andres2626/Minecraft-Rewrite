@@ -20,23 +20,24 @@ jobs:
               if: runner.os == 'Linux'
               run: |
                 sudo apt-get update
+                sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libgl1-mesa-dev
                 sudo apt-get install -y curl git build-essential cmake
             - name: build_lnx
               if: runner.os == 'Linux'
               run: |
-                cmake -B build_lnx -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
+                cmake -B build_lnx -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
                 cd ./build_lnx && make -j4
             - name: build_win64
               if: runner.os == 'Windows'
               shell: cmd
               run: |
-                cmake -B build_win64 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -G "Visual Studio 16 2019" -A x64
+                cmake -B build_win64 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 16 2019" -A x64
                 cmake --build build_win64 --config Debug -j4
             - name: build_win32
               if: runner.os == 'Windows'
               shell: cmd
               run: |
-                cmake -B build_win32 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -G "Visual Studio 16 2019" -A Win32
+                cmake -B build_win32 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 16 2019" -A Win32
                 cmake --build build_win32 --config Debug -j4
              
                 
