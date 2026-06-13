@@ -14,9 +14,9 @@ aiming for:
 > Currently, the engine and game use newer versions of OpenGL (>3.3).
 > See [Limitation of liability](#-limitation-of-liability) for more info
 
-![demo](./Documentation/resources/mc-240825.gif)
-
-![demo](./Documentation/resources/rd-131655.gif)
+![demo](./Documentation/resources/rd-131655.png)
+![demo](./Documentation/resources/fog_and_caves.png)
+![demo](./Documentation/resources/benchmark.png)
 
 ## 📋 Table of Contents
 1. [Goals of this project](#-goals-of-this-project)

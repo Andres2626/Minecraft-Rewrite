@@ -34,7 +34,7 @@ add_subdirectory(lib)
 add_subdirectory(core)
 add_subdirectory(game)
 
-install(DIRECTORY assets/Shaders DESTINATION bin)
+install(DIRECTORY assets/Shaders DESTINATION bin/assets)
 install(DIRECTORY include DESTINATION include)
 install(DIRECTORY Documentation DESTINATION man)
 install(FILES LICENSE NEWS RECREATED_VER_RD131655 TODO ChangeLog README.md DESTINATION .)
