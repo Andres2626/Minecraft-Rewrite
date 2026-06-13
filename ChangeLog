@@ -1,3 +1,178 @@
+2026-06-13  Andres26  andrescamorao9@gmail.com
+
+2026-06-13 rd-131655
+    
+    * Change README.md.
+    * Delete rd-132211 images.
+    * Change CMakeLists.txt
+      - When the files are installed, the folder 'bin/Shaders/' is
+        created instead of 'bin/assets/Shaders'.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-06-12  Andres26  andrescamorao9@gmail.com
+
+2026-06-12 commit check test 2
+    
+    * Change windows-latest to windows-2025-vs2026.
+    * Add install directives in cmake files.
+    * Change image in the readme.md
+    * Solve identation error.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-06-12  Andres26  andrescamorao9@gmail.com
+
+2026-06-12 rd-131655 (Cave game tech)
+    * Recreated version: rd-131655 from https://github.com/thecodeofnotch/rd-131655
+    * Engine version: 0.02
+    * libgfx version: 0.02
+    * Disable selector and player pick from code.
+    * Change log system to spdlog bassed log system.
+    * Add random cave generator from code https://github.com/thecodeofnotch/rd-131655/blob/master/src/main/java/com/mojang/rubydung/level/Level.java.
+    * Improve mesh generation.
+    * Refractor core/common.h
+    * Improve TODO list.
+    * Refractor cmake files.
+    * Add spdlog as dependency.
+    * Change x,y,z convention in engine.
+    * The version in the game is exactly like the original versions.
+    * Disable C4251 warning.
+    * Disable C4996 warning.
+    * Change versioning to semver in the engine.
+    * Clean code.
+    * Improve documentation.
+    * Add commit check workflow to git repository.
+    * Commit check test 5.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-06-12  Andres26  andrescamorao9@gmail.com
+
+2026-06-12 commit check test
+    
+    * Install GLFW dependencies.
+    * Added OpenGL dependency.
+    * Disable GLFW_INSTALL in CMake generation rules.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-06-12  Andres26  andrescamorao9@gmail.com
+
+2026-06-12 commit check test 2
+    
+    * Deleted wayland support for GLFW
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-06-12  Andres26  andrescamorao9@gmail.com
+
+2026-06-12 commit check test 1
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-06-12  Andres26  andrescamorao9@gmail.com
+
+2026-06-12 Add workflows to github
+    
+    * Verify compilation each push/pull request
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-21  Andres26  andrescamorao9@gmail.com
+
+2025-09-21 Error codes for engine
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-21  Andres26  andrescamorao9@gmail.com
+
+2025-09-21 Simple engine API
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-21  Andres26  andrescamorao9@gmail.com
+
+2025-09-21 Error handling in dl library
+    
+    * Improved returns when library fails.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-21  Andres26  andrescamorao9@gmail.com
+
+2025-09-21 Added engine module loader
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-21  Andres26  andrescamorao9@gmail.com
+
+2025-09-21 Added DL subdirectory
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-19  Andres2626  andrescamorao9@gmail.com
+
+2025-19-09 Added simple dynamic loading library
+    
+    * 'include/core/types.h' moved to 'include/'.
+    * 'dl.c' and 'dl.h' added.
+    * DL library compatible with Windows and POSIX.
+    * DL library taken from https://github.com/Andres2626/DL-Library
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-15  Andres2626  andrescamorao9@gmail.com
+    15-09-2025 Clean code
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-15  Andres2626  andrescamorao9@gmail.com
+    15-09-2025 Readme fixes.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-15  Andres2626  andrescamorao9@gmail.com
+    15-09-2025 rd-132211 -> rd-132328
+    
+    * Full rd-132211 and start with rd-132328.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-09-15  Andres2626  andrescamorao9@gmail.com
+    15-09-2025 Deleted Documentation/rd-132211 directory
+    
+    * summary.md -> documentation of game.
+    * Documentation/versions/rd-132211/resources changed to Documentation/Resources.
+    * Deleted rd-132211 renamed to summary.md.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2025-08-26  Andres2626  andrescamorao9@gmail.com
+    26-08-2025 Version rd-132211 finished.
+    
+    * Patch 5
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
 2025-08-26  Andres2626  andrescamorao9@gmail.com
     26-08-25 [PATCH 5] Updated Documentation
     

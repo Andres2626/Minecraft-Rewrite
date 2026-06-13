@@ -53,8 +53,8 @@ It is not intended to add/arrive at the following:
 
 ## 📌 Currently available versions
 
+- ***FULL (RECREATED)*** rd-131655 (Cave game tech) from: https://github.com/thecodeofnotch/rd-131655 thanks to thecodeofnotch for this.
 - ***FULL*** rd-132211
-- ***FULL (RECREATED)*** rd-131655 (Cave game tech)
 
 ## 🤝 Contribute
 
@@ -64,7 +64,7 @@ you begin contributing, please check [Contribution Guide](./CONTRIBUTING.md).
 ## ⚖️ Limitation of liability
 
 This project is an independent rewrite of original game and **not affiliated with or endorsed**
-**by Mojang AB or Microsoft.** Therefore, it does not contain the assets of the original game.
+**by Mojang AB or Microsoft.** Therefore, *it does not contain the assets of the original game.*
 
 All original assets are the property of their respective owners.
 
