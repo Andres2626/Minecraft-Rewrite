@@ -24,7 +24,7 @@ jobs:
             - name: build_lnx
               if: runner.os == 'Linux'
               run: |
-                cmake -B build_lnx -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -G "Unix Makefiles"
+                cmake -B build_lnx -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
                 cd ./build_lnx && make -j4
             - name: build_win64
               if: runner.os == 'Windows'
