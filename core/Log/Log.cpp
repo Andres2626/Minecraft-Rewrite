@@ -12,7 +12,7 @@ namespace MC
 		strftime(buffer, size, fmt, localtime(&now));
 	}
 
-	int Log::Init(mc_u32 flags, level_enum lv)
+	int Log::Init(u32t flags, level_enum lv)
 	{
         char t_buff[32];
         get_time_buff("%Y-%m-%d_%H-%M-%S.log", t_buff, 32);
@@ -46,7 +46,7 @@ namespace MC
             return 1;
         }
        
-        mc_info("conout={} fout={} log_file=./{} verbose={}", sout, fout, fout ? t_buff : "NULL", (mc_u32)lv);
+        mc_info("conout={} fout={} log_file=./{} verbose={}", sout, fout, fout ? t_buff : "NULL", (u32t)lv);
         return 0;
 	}
 

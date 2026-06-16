@@ -80,7 +80,9 @@ namespace MC
 					update_timer += update_tick;
 				}
 
-				OnRender();
+				float alpha = (now - update_timer) / update_tick;
+
+				OnRender(alpha);
 				m_Win->Update();
 				m_FPS++;
 				m_FrameTime = frametime.ElapsedMillis();
@@ -114,9 +116,9 @@ namespace MC
 			m_LayerStack.OnEvent(ev);
 		}
 
-		void Application::OnRender()
+		void Application::OnRender(float alpha)
 		{
-			m_LayerStack.OnRender();
+			m_LayerStack.OnRender(alpha);
 		}
 
 		void Application::OnTick()

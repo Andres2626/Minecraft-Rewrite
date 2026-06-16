@@ -24,7 +24,7 @@ Level::Level(const ivec3 &size)
 		mc_fatal("invalid size x={} y={} z={}", size.x, size.z, size.y);
 
 	/* create level array */
-	m_Blocks = (mc_uc8*)malloc(m_Volume);
+	m_Blocks = (u8t*)malloc(m_Volume);
 	if (!m_Blocks)
 		mc_fatal("block array not allocated: {} size={}", m_Volume, strerror(errno));
 
@@ -34,46 +34,8 @@ Level::Level(const ivec3 &size)
 			for (int y = 0; y < size.y; y++) {
 				for (int z = 0; z < size.z; z++) {
 					int index = GetBlockIndex({ x, y, z });
-					int solid = (mc_uc8)(y <= (size.y * 2 / 3));
+					int solid = (u8t)(y <= (size.y * 2 / 3));
 					m_Blocks[index] = solid ? 1 : 0;
-				}
-			}
-		}
-
-		/* 
-		 * create caves
-		 * from: https://github.com/thecodeofnotch/rd-131655/blob/master/src/main/java/com/mojang/rubydung/level/Level.java
-		 */
-		for (int i = 0; i < 10000; i++) {
-			int caveSize = (int)(NormRand() * 7) + 1;
-
-			int caveX = (int)(NormRand() * m_Size.x);
-			int caveY = (int)(NormRand() * m_Size.y);
-			int caveZ = (int)(NormRand() * m_Size.z);
-
-			for (int radius = 0; radius < caveSize; radius++) {
-				for (int sphere = 0; sphere < 1000; sphere++) {
-					int offsetX = (int)(NormRand() * radius * 2 - radius);
-					int offsetY = (int)(NormRand() * radius * 2 - radius);
-					int offsetZ = (int)(NormRand() * radius * 2 - radius);
-
-					double distance = offsetX * offsetX + offsetY * offsetY + offsetZ * offsetZ;
-					if (distance > radius * radius)
-						continue;
-
-					int tileX = caveX + offsetX;
-					int tileY = caveY + offsetY;
-					int tileZ = caveZ + offsetZ;
-
-					int index = GetBlockIndex({ tileX, tileY, tileZ });
-
-					if (index >= 0 && index < m_Volume) {
-						if (tileX > 0 && tileY > 0 && tileZ > 0
-							&& tileX < m_Size.x - 1 && tileY < m_Size.y && tileZ < m_Size.z - 1) {
-
-							m_Blocks[index] = 0;
-						}
-					}
 				}
 			}
 		}

@@ -30,7 +30,6 @@ Selector::Selector()
 	this->VBO->Build(12 * sizeof(float), vertices);
 	this->IBO->Build(6 * sizeof(unsigned int), indices);
 	VL.AddAttribute(SHADER_VERTEX_BIT, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
-
 	this->VAO->Link(VL);
 	this->VAO->Unbind();
 }

@@ -109,4 +109,6 @@
 #pragma warning(disable:4996) /* _CRT_SECURE_NO_WARNINGS */
 #endif
 
+typedef std::string mc_str;
+
 #endif /* _COMMON_H_ */

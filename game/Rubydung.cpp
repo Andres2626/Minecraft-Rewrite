@@ -34,19 +34,35 @@ void Rubydung::Init()
 
 	/* load shaders */
 	m_CShader = std::make_unique<Shader>("assets/Shaders/chunk.shader");
-	//m_SShader = std::make_unique<Shader>("assets/Shaders/selector.shader");
+	m_SShader = std::make_unique<Shader>("assets/Shaders/selector.shader");
+	m_CharShader = std::make_unique<Shader>("assets/Shaders/character.shader");
 	m_Level = std::make_unique<Level>(m_GProperties.LevelSize);
 	m_Player = std::make_unique<Player>(*m_Level);
+	
+	for (int i = 0; i < 100; i++)
+		m_Zombies.push_back(std::make_unique<Zombie>(*m_Level, vec3(128.0f, 0.0f, 128.0f)));
+
 
 	/* load texture */
 	if (!m_TerrainTexture.LoadFromFile("assets/terrain.png", GL_NEAREST))
 		mc_fatal("failed to open texture file: \"{}\"", m_TerrainTexture.path);
+
+	if (!m_CharTexture.LoadFromFile("assets/char.png", GL_NEAREST))
+		mc_fatal("failed to open char file: \"{}\"", m_CharTexture.path);
+
+	m_CShader->SetInt("t1", 0);
+	m_CharShader->SetInt("t1", 0);
 }
 
 void Rubydung::OnUpdate(Timestep &ts) 
 {
 	Default::OnUpdate(ts);
 	m_Player->Update();
+	m_Player->UpdateRayCast();
+	m_Player->Pick();
+
+	for (int i = 0; i < m_Zombies.size(); i++) 
+		m_Zombies[i]->Update();
 }
 
 void Rubydung::OnKeyPressed(int key) 
@@ -94,42 +110,39 @@ void Rubydung::OnEvent(Event &ev)
 	}
 }
 
-void Rubydung::OnRender() 
+void Rubydung::OnRender(float alpha)
 {
-	Default::OnRender();
+	Default::OnRender(alpha);
 	mat4 VP = m_Player->Cam.GetProj() * m_Player->Cam.GetView();
-
-	/* 
-	 * GAME RENDER MAIN PROCESS:
-	 * -- Enable chunk shader
-	 * -- Render player (Update Camera vectors)
-	 * -- Get VP and set it in the chunk shader
-	 * -- Update player
-	 * -- Set fog uniforms in the chunk shader
-	 * -- Render level
-	 * -- Enable selector shader
-	 * -- PlayerPick process
-	 */
+	
 	m_CShader->Bind();
-	m_Player->Render();
+	m_TerrainTexture.Bind();
 	m_CShader->Set4x4("s_VP", VP);
 	m_CShader->SetVec3("s_cpos", m_Player->Cam.pos);
 	m_CShader->SetVec4("s_fcolor", m_GProperties.FogColor);
 	m_CShader->SetFloat("s_fstart", m_GProperties.FogStart);
 	m_CShader->SetFloat("s_fend", m_GProperties.FogEnd);
+	m_CShader->SetInt("t1", 0);
+	m_Player->Render();
 	m_Level->Render(m_CShader.get(), m_Player.get());
-	//m_SShader->Bind();
-	//m_SShader->Set4x4("s_VP", VP);
-	//m_Player->Pick(m_Timer->ElapsedMillis(), m_SShader.get());
+	m_SShader->Bind();
+	m_SShader->Set4x4("s_VP", VP);
+	m_Player->RenderPick(m_Timer->ElapsedMillis(), m_SShader.get());
+	m_CharShader->Bind();
+	m_CharTexture.Bind();
+	m_CharShader->Set4x4("s_VP", VP);
+
+	for (int i = 0; i < m_Zombies.size(); i++)
+		m_Zombies[i]->Render(alpha, m_CharShader.get(), m_Timer->ElapsedSeconds());
 }
 
 void Rubydung::OnTick() 
 {
 	Default::OnTick();
 
-#ifndef MC_USE_RELEASE
-	mc_debug("fps: {}, ups: {}, cups: {}", Application::Get().GetFPS(), Application::Get().GetUPS(), m_Level->GetUpdates());
-	mc_debug("Rendered chunks: {} / total chunks: {}", m_Level->GetDrawCalls(), m_Level->GetChunksCount());
+#ifdef MC_USE_RELEASE
+	mc_info("fps: {}, ups: {}, cups: {}, ms/f: {}", Application::Get().GetFPS(), Application::Get().GetUPS(), m_Level->GetUpdates(), 1000.0f / Application::Get().GetFPS());
+	mc_info("Rendered chunks: {} / total chunks: {}", m_Level->GetDrawCalls(), m_Level->GetChunksCount());
 	m_Level->RestartDrawCalls();
 #else
 	mc_info("{} fps, {}", Application::Get().GetFPS(), m_Level->GetUpdates());

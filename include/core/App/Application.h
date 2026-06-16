@@ -40,7 +40,7 @@ namespace MC
 			void Run();
 			void OnUpdate(Utils::Timestep &ts) override;
 			void OnEvent(Events::Event &ev) override;
-			void OnRender() override;
+			void OnRender(float alpha) override;
 			void OnTick() override;
 			void OnSuspended() override;
 		public:

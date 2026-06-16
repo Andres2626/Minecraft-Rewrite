@@ -23,7 +23,7 @@ glm::ivec3 FaceNormals[] = {
 	{ 0, 0, 1 },
 	{ -1, 0, 0 },
 	{ 1, 0, 0 },
-	{0, -1, 0 },
+	{ 0, -1, 0 },
 	{ 0, 1, 0 }
 };
 
@@ -39,12 +39,12 @@ Chunk::Chunk(Level *level, const ivec3 &pos)
 		       (pos.z * CHUNK_XYZ) + CHUNK_XYZ });
 
 	/* create mesh buffers */
-	this->VAO = std::make_unique<VertexArray>();
-	this->VBO = std::make_unique<VertexBuffer>();
-	this->IBO = std::make_unique<IndexBuffer>();
+	VAO = std::make_unique<VertexArray>();
+	VBO = std::make_unique<VertexBuffer>();
+	IBO = std::make_unique<IndexBuffer>();
 
 	/* build buffer mesh */
-	this->Build();
+	Build();
 }
 
 Chunk::~Chunk() 
@@ -69,9 +69,9 @@ void Chunk::Build()
 	std::vector<unsigned int>().swap(this->indices);
 
 	Tile tl = rock;
-	for (int cx = 0; cx <= CHUNK_XYZ; cx++) {
-		for (int cy = 0; cy <= CHUNK_XYZ; cy++) {
-			for (int cz = 0;cz <= CHUNK_XYZ; cz++) {
+	for (int cx = 0; cx < CHUNK_XYZ; cx++) {
+		for (int cy = 0; cy < CHUNK_XYZ; cy++) {
+			for (int cz = 0;cz < CHUNK_XYZ; cz++) {
 
 				/* convert chunk position to global position */
 				ivec3 p((m_Pos.x * CHUNK_XYZ) + cx, (m_Pos.y * CHUNK_XYZ) + cy,
@@ -108,14 +108,12 @@ void Chunk::Build()
 	 */
 	MC::Graphics::VertexLayout VL;
 	VBO->Build(vertices.size() * sizeof(float), vertices.data());
-	IBO->Build((mc_u8)(indices.size() * sizeof(mc_u8)), indices.data());
+	IBO->Build(indices.size(), indices.data());
 	VL.AddAttribute(SHADER_VERTEX_BIT, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
 	VL.AddAttribute(SHADER_TEX_BIT, 2, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	VL.AddAttribute(SHADER_BRIG_BIT, 1, GL_FLOAT, 6 * sizeof(float), (void*)(5 * sizeof(float)));
-
 	VAO->Link(VL);
 	VAO->Unbind();
-
 	m_Dirty = false;
 }
 

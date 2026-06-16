@@ -38,7 +38,7 @@ namespace MC
 	class MC_API Log
 	{
 	public:
-		static int Init(mc_u32 flags, level_enum lv);
+		static int Init(u32t flags, level_enum lv);
 		static int Fini();
 	public:
 		static std::shared_ptr<spdlog::logger>& GetInstance();

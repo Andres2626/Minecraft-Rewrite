@@ -15,7 +15,7 @@ namespace MC {
             frustum[side][3] /= magnitude;
         }
 
-        void Frustum::Calculate(Math::mat4 proj, Math::mat4 view) 
+        void Frustum::Calculate(const Math::mat4 &proj, const Math::mat4 &view) 
         {
             Math::mat4 _clip = proj * view;
             float* clip = (float*)&_clip; /* Convert mat4 to float array */
@@ -68,25 +68,18 @@ namespace MC {
 
         bool Frustum::CubeInside(Physics::AABB& aabb) 
         {
-            for (int i = 0; i < 6; i++) {
-                if (ft[i][0] * aabb.p0.x + ft[i][1] * aabb.p0.y + ft[i][2] * aabb.p0.z + ft[i][3] > 0)
-                    continue;
-                if (ft[i][0] * aabb.p1.x + ft[i][1] * aabb.p0.y + ft[i][2] * aabb.p0.z + ft[i][3] > 0)
-                    continue;
-                if (ft[i][0] * aabb.p0.x + ft[i][1] * aabb.p1.y + ft[i][2] * aabb.p0.z + ft[i][3] > 0)
-                    continue;
-                if (ft[i][0] * aabb.p1.x + ft[i][1] * aabb.p1.y + ft[i][2] * aabb.p0.z + ft[i][3] > 0)
-                    continue;
-                if (ft[i][0] * aabb.p0.x + ft[i][1] * aabb.p0.y + ft[i][2] * aabb.p1.z + ft[i][3] > 0)
-                    continue;
-                if (ft[i][0] * aabb.p1.x + ft[i][1] * aabb.p0.y + ft[i][2] * aabb.p1.z + ft[i][3] > 0)
-                    continue;
-                if (ft[i][0] * aabb.p0.x + ft[i][1] * aabb.p1.y + ft[i][2] * aabb.p1.z + ft[i][3] > 0)
-                    continue;
-                if (ft[i][0] * aabb.p1.x + ft[i][1] * aabb.p1.y + ft[i][2] * aabb.p1.z + ft[i][3] > 0)
-                    continue;
-                return false;
+            for (int i = 0; i < 6; i++)
+            {
+                Math::vec3 p;
+
+                p.x = (ft[i][0] >= 0.0f) ? aabb.p1.x : aabb.p0.x;
+                p.y = (ft[i][1] >= 0.0f) ? aabb.p1.y : aabb.p0.y;
+                p.z = (ft[i][2] >= 0.0f) ? aabb.p1.z : aabb.p0.z;
+
+                if (ft[i][0] * p.x + ft[i][1] * p.y + ft[i][2] * p.z + ft[i][3] < 0.0f)
+                    return false;
             }
+
             return true;
         }
 

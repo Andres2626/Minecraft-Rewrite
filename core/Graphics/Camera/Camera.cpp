@@ -13,13 +13,13 @@ namespace MC {
 
 		Camera::~Camera() 
 		{
-			if (this->fr)
+			if (fr)
 				delete fr;
 		}
 
 		bool Camera::InFrustum(Physics::AABB box) 
 		{
-			return this->fr->CubeInside(box);
+			return fr->CubeInside(box);
 		}
 
 		void Camera::Update() 

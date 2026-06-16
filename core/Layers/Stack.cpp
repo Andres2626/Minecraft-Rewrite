@@ -21,7 +21,7 @@ namespace MC
 
 		void Stack::Init()
 		{
-			for (mc_size i = 0; i < m_Layers.size(); i++) {
+			for (u32t i = 0; i < m_Layers.size(); i++) {
 				if (m_Layers[i]->IsVisible())
 					m_Layers[i]->Init();
 			}
@@ -29,7 +29,7 @@ namespace MC
 
 		void Stack::OnUpdate(Utils::Timestep &ts)
 		{
-			for (mc_size i = 0; i < m_Layers.size(); i++) {
+			for (u32t i = 0; i < m_Layers.size(); i++) {
 				if (m_Layers[i]->IsVisible())
 					m_Layers[i]->OnUpdate(ts);
 			}
@@ -37,23 +37,23 @@ namespace MC
 
 		void Stack::OnEvent(Events::Event &ev)
 		{
-			for (mc_size i = 0; i < m_Layers.size(); i++) {
+			for (u32t i = 0; i < m_Layers.size(); i++) {
 				if (m_Layers[i]->IsVisible())
 					m_Layers[i]->OnEvent(ev);
 			}
 		}
 
-		void Stack::OnRender()
+		void Stack::OnRender(float alpha)
 		{
-			for (mc_size i = 0; i < m_Layers.size(); i++) {
+			for (u32t i = 0; i < m_Layers.size(); i++) {
 				if (m_Layers[i]->IsVisible())
-					m_Layers[i]->OnRender();
+					m_Layers[i]->OnRender(alpha);
 			}
 		}
 
 		void Stack::OnTick()
 		{
-			for (mc_size i = 0; i < m_Layers.size(); i++) {
+			for (u32t i = 0; i < m_Layers.size(); i++) {
 				if (m_Layers[i]->IsVisible())
 					m_Layers[i]->OnTick();
 			}
@@ -61,7 +61,7 @@ namespace MC
 
 		void Stack::OnSuspended()
 		{
-			for (mc_size i = 0; i < m_Layers.size(); i++) {
+			for (u32t i = 0; i < m_Layers.size(); i++) {
 				if (m_Layers[i]->IsVisible())
 					m_Layers[i]->OnSuspended();
 			}

@@ -146,7 +146,7 @@ namespace MC
 			};
 		}
 
-		mc_u8 Shader::Load(mc_u8 type, const mc_str &source)
+		u32t Shader::Load(u32t type, const mc_str &source)
 		{
 			int result = GL_FALSE;
 			unsigned int id = glCreateShader(type);
@@ -182,11 +182,11 @@ namespace MC
 			return id;
 		}
 
-		GLuint Shader::Create(const mc_str &vertex_source, const mc_str &fragmement_source)
+		u32t Shader::Create(const mc_str &vertex_source, const mc_str &fragmement_source)
 		{
-			mc_u8 program = glCreateProgram();
-			mc_u8 vs = Load(GL_VERTEX_SHADER, vertex_source);
-			mc_u8 fs = Load(GL_FRAGMENT_SHADER, fragmement_source);
+			u32t program = glCreateProgram();
+			u32t vs = Load(GL_VERTEX_SHADER, vertex_source);
+			u32t fs = Load(GL_FRAGMENT_SHADER, fragmement_source);
 
 			glAttachShader(program, vs);
 			glAttachShader(program, fs);
@@ -198,7 +198,7 @@ namespace MC
 			return program;
 		}
 
-		GLint Shader::GetUniformLocation(mc_str name)
+		i32t Shader::GetUniformLocation(mc_str name)
 		{
 			int location = glGetUniformLocation(m_ShaderID, name.c_str());
 #if defined (MC_USE_DEBUG)

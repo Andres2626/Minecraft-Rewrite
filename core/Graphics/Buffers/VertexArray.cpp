@@ -11,7 +11,7 @@ namespace MC
 			: m_ID(0)
 		{ 
 			glGenVertexArrays(1, &m_ID);
-			this->Bind();
+			Bind();
 		}
 
 		VertexArray::~VertexArray() 
@@ -31,6 +31,7 @@ namespace MC
 
 		void VertexArray::Link(const VertexLayout &layout) const 
 		{
+			Bind();
 			layout.Init();
 		}
 

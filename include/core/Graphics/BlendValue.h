@@ -6,7 +6,7 @@ namespace MC
 	namespace Graphics 
 	{
 		/* Values stoled from glad/glad.h */
-		enum class BlendValue 
+		enum class BlendValue : u32t
 		{
 			ZERO = 0,
 			ONE = 1,

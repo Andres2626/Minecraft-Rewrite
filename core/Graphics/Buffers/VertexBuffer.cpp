@@ -18,11 +18,11 @@ namespace MC
 			glDeleteBuffers(1, &m_ID);
 		}
 
-		void VertexBuffer::Build(size_t size, const void *data)
+		void VertexBuffer::Build(uintptr_t size, const void *data)
 		{
-			this->m_Size = size;
+			m_Size = size;
 
-			this->Bind();
+			Bind();
 			glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 		}
 

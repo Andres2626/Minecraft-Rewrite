@@ -8,12 +8,12 @@ namespace MC
 
 		struct MC_API VertexAttrib
 		{
-			mc_u8 index; // shader bit (view Shaderflags.h)
-			mc_int size; // dimension of data
-			mc_u8 type; // type of data
-			mc_i8 stride;
+			u32t index; // shader bit (view Shaderflags.h)
+			i32t size; // dimension of data
+			u32t type; // type of data
+			i32t stride;
 			const void* offset;
-			mc_uc8 normalized;
+			u8t normalized;
 		};
 
 		class MC_API VertexLayout 
@@ -24,7 +24,7 @@ namespace MC
 			VertexLayout() = default;
 			~VertexLayout() = default;
 		public:
-			void AddAttribute(mc_u8 index, mc_int size, mc_u8 type, mc_i8 stride, const void* offset, mc_uc8 normalized = 0);
+			void AddAttribute(u32t index, i32t size, u32t type, i32t stride, const void* offset, u8t normalized = 0);
 		public:
 			void Init() const;
 		};

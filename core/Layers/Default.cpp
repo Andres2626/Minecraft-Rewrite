@@ -30,7 +30,7 @@ namespace MC
 
 		}
 
-		void Default::OnRender()
+		void Default::OnRender(float alpha)
 		{
 
 		}

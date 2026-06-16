@@ -20,7 +20,7 @@ namespace MC
 		class MC_API Shader 
 		{
 		private:
-			mc_u8 m_ShaderID;
+			u32t m_ShaderID;
 			mc_str m_Path;
 		public:
 			/* load shader from file */
@@ -44,10 +44,10 @@ namespace MC
 			void Set4x4(const mc_str &name, const Math::mat4 &value);
 		private:
 			ShaderSources ParseFromFile(const mc_str &path);
-			mc_u8 Load(mc_u8 type, const mc_str &source);
-			mc_u8 Create(const mc_str &vertex_source, const mc_str&fragmement_source);
+			u32t Load(u32t type, const mc_str &source);
+			u32t Create(const mc_str &vertex_source, const mc_str&fragmement_source);
 		private:
-			mc_int GetUniformLocation(mc_str name);
+			i32t GetUniformLocation(mc_str name);
 		};
 	}
 }

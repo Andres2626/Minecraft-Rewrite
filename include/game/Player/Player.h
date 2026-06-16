@@ -2,6 +2,8 @@
 #include "Hitresult.h"
 #include "Selector.h"
 
+#include "Entity/Entity.h"
+
 #include <Graphics/Shader/Shader.h>
 #include <Graphics/Camera/Camera.h>
 
@@ -14,19 +16,14 @@ using namespace Physics;
 
 class Level;
 
-class Player 
+class Player : public Entity
 {
-protected:
-	Level& m_Level;
 private:
 	std::unique_ptr<Selector> m_Sel;
 	bool m_MouseLeft;
 	bool m_MouseRight;
-	bool m_Ground;
-	vec2 m_Size;
-	AABB m_Box;
-	vec3 m_Pos;
-	vec3 m_DMov;
+	bool m_RayState;
+	Hitresult m_HitResult;
 public:
 	Camera Cam;
 public:
@@ -44,7 +41,9 @@ public:
 	void ResetPos();
 	void SetPos(const vec3& newPos);
 public:
-	void Pick(float time, Shader* shader);
+	void UpdateRayCast();
+	void RenderPick(float time, Shader* shader);
+	void Pick();
 public:
-	inline bool GetGround() { return m_Ground; }
+	inline bool GetGround() { return attr.isGround; }
 };

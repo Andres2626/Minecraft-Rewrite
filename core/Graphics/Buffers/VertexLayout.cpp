@@ -7,7 +7,7 @@ namespace MC
 	namespace Graphics
 	{
 
-		void VertexLayout::AddAttribute(mc_u8 index, mc_int size, mc_u8 type, mc_i8 stride, const void *offset, mc_uc8 normalized)
+		void VertexLayout::AddAttribute(u32t index, i32t size, u32t type, i32t stride, const void *offset, u8t normalized)
 		{
 			m_Attribs.push_back({ index, size, type, stride, offset, normalized });
 		}

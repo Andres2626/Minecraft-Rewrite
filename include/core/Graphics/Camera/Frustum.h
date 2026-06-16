@@ -14,7 +14,7 @@ namespace MC {
 			Frustum() = default;
 			~Frustum() = default;
 		public:
-			void Calculate(Math::mat4 proj, Math::mat4 view);
+			void Calculate(const Math::mat4 &proj, const Math::mat4 &view);
 		public:
 			bool PointInside(Math::vec3 pos);
 			bool CubeInside(Physics::AABB &aabb);

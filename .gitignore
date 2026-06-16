@@ -15,6 +15,8 @@ dependencies/*
 assets/Internal
 assets/Internal/win_icon.png
 assets/terrain.png
+assets/char.png
 level.dat
+diff.log
 
 !dependencies/CMakeLists.txt

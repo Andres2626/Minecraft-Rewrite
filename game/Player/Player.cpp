@@ -10,12 +10,8 @@
 using namespace MC;
 using namespace App;
 
-bool first = true;
-
-static const double PI = 3.14159265358979323846;
-
 Player::Player(Level &level)
-	: m_Ground(false), m_Size({ 0.3f, 0.9f }), m_Level(level), Cam(vec3(0.0f)), m_DMov(vec3(0.0f, 0.0f, 0.0f))
+	: Entity(level), Cam(vec3{ 0.0f, 0.0f, 0.0f })
 {
 	float x = (float)App::Application::GetProperties().x;
 	float y = (float)App::Application::GetProperties().y;
@@ -28,6 +24,7 @@ Player::Player(Level &level)
 
 	/* create selector renderer */
 	m_Sel = std::make_unique<Selector>();
+	attr.heightOffset = 1.62f;
 
 	ResetPos();
 }
@@ -39,60 +36,26 @@ Player::~Player()
 
 void Player::Render() 
 {
-	Cam.pos = m_Pos;
+	Cam.pos = attr.pos;
 	Cam.Update();
 }
 
 void Player::Move(const vec3 &pos) 
 {
-	vec3 oldPos = pos;
-	vec3 newPos = pos;
-	std::vector<AABB> aabbs = m_Level.GetCubes(m_Box.Expand(pos));
-
-	for (AABB& aabb : aabbs) {
-		newPos.x = aabb.ClipXCollide(m_Box, newPos.x);
-		newPos.y = aabb.ClipYCollide(m_Box, newPos.y);
-		newPos.z = aabb.ClipZCollide(m_Box, newPos.z);
-	}
-
-	m_Box.Move(newPos);
-
-	/* check if the player is on the ground */
-	m_Ground = (oldPos.y != newPos.y) && (oldPos.y < 0.0f);
-
-	vec3 delta = newPos - oldPos;
-	if (delta.x != 0.0f)
-		m_DMov.x = 0.0f;
-
-	if (delta.y != 0.0f)
-		m_DMov.y = 0.0f;
-
-	if (delta.z != 0.0f)
-		m_DMov.z = 0.0f;
-
-	m_Pos = { (m_Box.p0.x + m_Box.p1.x) / 2.0f,
-			   m_Box.p0.y + 1.62f,
-			  (m_Box.p0.z + m_Box.p1.z) / 2.0f };
+	Entity::Move(pos);
 }
 
 void Player::MoveRelative(vec2 a, float speed) 
 {
-	float dis = length(a);
-	float s = sin(radians(Cam.rot.x));
-	float c = cos(radians(Cam.rot.x));
-	if (dis >= 0.01f) {
-		dis = speed / sqrt(dis);
-		a *= dis;
-		m_DMov.x += a.x * c - a.y * s;
-		m_DMov.z += a.y * c + a.x * s;
-	}
+	Entity::MoveRelative(a, speed);
 }
 
 void Player::MouseMove(vec2 pos) 
 {
 	/* set mouse sensibility */
 	pos *= 0.2f;
-	Cam.rot += pos;
+	Cam.rot += vec2(pos.x, pos.y);
+	attr.rot += vec2(pos.x, pos.y);
 
 	/* Block camera rotation */
 	Cam.rot.y = std::clamp(Cam.rot.y, -89.0f, 89.0f);
@@ -148,7 +111,7 @@ void Player::Update()
 	float hspeed;
 
 	if (Input::IsKeyPressed(MC_KEY_R))
-		this->ResetPos();
+		ResetPos();
 	if (Input::IsKeyPressed(MC_KEY_W))
 		a.x++;
 	if (Input::IsKeyPressed(MC_KEY_S))
@@ -157,24 +120,24 @@ void Player::Update()
 		a.y--;
 	if (Input::IsKeyPressed(MC_KEY_D))
 		a.y++;
-	if (Input::IsKeyPressed(MC_KEY_SPACE) && this->m_Ground)
-		m_DMov.y = 0.12f;
+	if (Input::IsKeyPressed(MC_KEY_SPACE) && attr.isGround)
+		attr.delta.y = 0.12f;
 
 	/* calculate player horizontal speed */
-	hspeed = this->m_Ground ? 0.02f : 0.005f;
+	hspeed = attr.isGround ? 0.02f : 0.005f;
 	MoveRelative(a, hspeed);
 
-	m_DMov.y -= 0.005f; /* gravity speed */
+	attr.delta.y -= 0.005f; /* gravity speed */
 
-	Move(m_DMov);
+	Move(attr.delta);
 
-	m_DMov.x *= 0.91f;
-	m_DMov.y *= 0.98f;
-	m_DMov.z *= 0.91f;
+	attr.delta.x *= 0.91f;
+	attr.delta.y *= 0.98f;
+	attr.delta.z *= 0.91f;
 
-	if (this->m_Ground) {
-		m_DMov.x *= 0.8f;
-		m_DMov.z *= 0.8f;
+	if (attr.isGround) {
+		attr.delta.x *= 0.8f;
+		attr.delta.z *= 0.8f;
 	}
 }
 
@@ -195,46 +158,50 @@ void Player::ResetPos()
 void Player::SetPos(const vec3 &newPos) 
 {
 	/* Set player vectors */
-	m_Pos = newPos;
+	attr.pos = newPos;
 	Cam.pos = newPos;
 
 	/* Calculate new AABB */
-	m_Box = AABB({ newPos.x - this->m_Size.x, newPos.y - this->m_Size.y, newPos.z - this->m_Size.x },
-		         { newPos.x + this->m_Size.x, newPos.y + this->m_Size.y, newPos.z + this->m_Size.x });
+	attr.box = AABB({ newPos.x - attr.size.x, newPos.y - attr.size.y, newPos.z - attr.size.x },
+		            { newPos.x + attr.size.x, newPos.y + attr.size.y, newPos.z + attr.size.x });
 
 	Cam.Update();
 }
 
-void Player::Pick(float time, Shader *shader)
+void Player::UpdateRayCast()
 {
-	/* Obtain the vectors of parametric equation f(t) = ray * d + pos */
 	vec3 ray = Cam.front;
 	vec3 org = Cam.pos;
+	m_RayState = Raycast(org, ray, m_HitResult);
+}
 
-	/* Result of the hit */
-	Hitresult ret;
+void Player::RenderPick(float time, Shader* shader)
+{
+	if (!m_RayState)
+		return;
 
-	/* The camera hit solid block? */
-	bool hit = Raycast(org, ray, ret);
+	/* Render player selector */
+	m_Sel->SetHit(m_HitResult);
+	m_Sel->Render(Cam, shader, time);
+}
 
-	if (hit) {
-		/* Render player selector */
-		m_Sel->SetHit(ret);
-		m_Sel->Render(Cam, shader, time);
+void Player::Pick()
+{
+	if (!m_RayState)
+		return;
 
-		/* Get mouse button status */
-		bool left = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_1);
-		bool right = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_2);
+	/* Get mouse button status */
+	bool left = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_1);
+	bool right = Input::IsMouseButtonPressed(MC_MOUSE_BUTTON_2);
 
-		/* Avoid click spam */
-		if (left && !m_MouseLeft)
-			m_Level.SetTile(ret.block, 0); /* delete block */
+	/* Avoid click spam */
+	if (left && !m_MouseLeft)
+		m_Level.SetTile(m_HitResult.block + m_HitResult.face, 1); /* set block */
 
-		if (right && !m_MouseRight)
-			m_Level.SetTile(ret.block + ret.face, 1); /* set block */
-
-		/* Update mouse state */
-		m_MouseLeft = left;
-		m_MouseRight = right;
-	}
+	if (right && !m_MouseRight)
+		m_Level.SetTile(m_HitResult.block, 0); /* delete block */
+		
+	/* Update mouse state */
+	m_MouseLeft = left;
+	m_MouseRight = right;
 }

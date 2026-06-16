@@ -21,7 +21,7 @@ private:
 	int m_DrawCalls;
 	ivec3 m_Size;
 	mc_str m_LevelFile;
-	mc_uc8* m_Blocks;
+	u8t *m_Blocks;
 public:
 	Level(const ivec3& size);
 	~Level();

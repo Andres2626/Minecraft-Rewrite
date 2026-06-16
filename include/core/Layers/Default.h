@@ -17,7 +17,7 @@ namespace MC
 			virtual void Init() override;
 			virtual void OnUpdate(Utils::Timestep &ts) override;
 			virtual void OnEvent(Events::Event &ev) override;
-			virtual void OnRender() override;
+			virtual void OnRender(float alpha) override;
 			virtual void OnTick() override;
 			virtual void OnSuspended() override;
 		};
