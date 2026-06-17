@@ -1,5 +1,24 @@
 NEWS - list of all major game and engine changes
 
+New in rd-132328
+* Rewrite version: rd-132328.
+* Engine version 0.03.
+* libgfx version: 0.02.
+* Enable selector and player pick from code.
+* Delete cave generation.
+* Add interpolation factor in OnRender().
+* Change all type definition.
+* Optimize frustum CubeInside() function.
+* Add support for different image channels in texture reported by stb_image.
+* Fix chunk border detext intervals.
+* Add Entity class.
+* Some functions of Player passed to Entity.
+* Invert mouse input.
+* Separed Pick() function.
+* Add char.png texture
+* Add 100 Zombies.
+* Add Character shader.
+
 New in rd-131655 (Cave game tech)
 * Recreated version: rd-131655 from https://github.com/thecodeofnotch/rd-131655
 * Engine version: 0.02

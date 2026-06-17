@@ -14,9 +14,7 @@ aiming for:
 > Currently, the engine and game use newer versions of OpenGL (>3.3).
 > See [Limitation of liability](#-limitation-of-liability) for more info
 
-![demo](./Documentation/resources/rd-131655.png)
-![demo](./Documentation/resources/fog_and_caves.png)
-![demo](./Documentation/resources/benchmark.png)
+![demo](./Documentation/resources/rd-132328.png)
 
 ## 📋 Table of Contents
 1. [Goals of this project](#-goals-of-this-project)
@@ -55,6 +53,7 @@ It is not intended to add/arrive at the following:
 
 - ***FULL (RECREATED)*** rd-131655 (Cave game tech) from: https://github.com/thecodeofnotch/rd-131655 thanks to thecodeofnotch for this.
 - ***FULL*** rd-132211
+- ***FULL*** rd-132328
 
 ## 🤝 Contribute
 

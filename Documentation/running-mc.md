@@ -1,7 +1,7 @@
 # ▶️ Running MC
 
 Once you have installed and built dependencies and MC project, you can run the
-game launching in '$(CMAKE_BUILD_DIR)/game/rd-132211.'
+game launching in '$(CMAKE_BUILD_DIR)/game/rd-132328.'
 
 ## ⚠️ Important notes
 
@@ -20,7 +20,7 @@ game launching in '$(CMAKE_BUILD_DIR)/game/rd-132211.'
 You can run:
 
 ```
-$ $(CMAKE_BUILD_DIR)/game/rd-132211
+$ $(CMAKE_BUILD_DIR)/game/rd-132328
 ```
 
 This avoids copying the assets directly to the directory where the executable is located.
@@ -31,3 +31,5 @@ This avoids copying the assets directly to the directory where the executable is
 - 'SPACE' for jump.
 - 'R' for to restore the player's position to an arbitrary position in the level.
 - 'ESC' for exit.
+- 'Left Click' for push block.
+- 'Right Click' for break block.

@@ -42,7 +42,6 @@ void Rubydung::Init()
 	for (int i = 0; i < 100; i++)
 		m_Zombies.push_back(std::make_unique<Zombie>(*m_Level, vec3(128.0f, 0.0f, 128.0f)));
 
-
 	/* load texture */
 	if (!m_TerrainTexture.LoadFromFile("assets/terrain.png", GL_NEAREST))
 		mc_fatal("failed to open texture file: \"{}\"", m_TerrainTexture.path);
@@ -61,8 +60,9 @@ void Rubydung::OnUpdate(Timestep &ts)
 	m_Player->UpdateRayCast();
 	m_Player->Pick();
 
-	for (int i = 0; i < m_Zombies.size(); i++) 
-		m_Zombies[i]->Update();
+	for (auto& z : m_Zombies) {
+		z->Update();
+	}
 }
 
 void Rubydung::OnKeyPressed(int key) 
@@ -132,15 +132,17 @@ void Rubydung::OnRender(float alpha)
 	m_CharTexture.Bind();
 	m_CharShader->Set4x4("s_VP", VP);
 
-	for (int i = 0; i < m_Zombies.size(); i++)
-		m_Zombies[i]->Render(alpha, m_CharShader.get(), m_Timer->ElapsedSeconds());
+	for (auto &z : m_Zombies) {
+		if (m_Player->Cam.InFrustum(z->attr.box))
+			z->Render(alpha, m_CharShader.get(), m_Timer->ElapsedSeconds());
+	}
 }
 
 void Rubydung::OnTick() 
 {
 	Default::OnTick();
 
-#ifdef MC_USE_RELEASE
+#ifndef MC_USE_RELEASE
 	mc_info("fps: {}, ups: {}, cups: {}, ms/f: {}", Application::Get().GetFPS(), Application::Get().GetUPS(), m_Level->GetUpdates(), 1000.0f / Application::Get().GetFPS());
 	mc_info("Rendered chunks: {} / total chunks: {}", m_Level->GetDrawCalls(), m_Level->GetChunksCount());
 	m_Level->RestartDrawCalls();

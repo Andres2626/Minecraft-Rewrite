@@ -1,3 +1,69 @@
+2026-06-16  Andres26  andrescamorao9@gmail.com
+
+2026-06-16 rd-132328-1
+    
+    - Application
+    
+      Added interpolation factor for the 'OnRender()' call
+    
+    - Type confussion
+    
+      Fix type definitions in 'include/types.h'
+    
+    - Camera and frustum
+    
+      Optimize CubeInside function in 'include/core/Graphics/camera/frustum.h'
+    
+    - Renderer
+    
+      Add 'CullFace()' and 'FrontFace()' functions.
+    
+    - Texture loader
+    
+      Due to the 'Zombie' texture (char.png), support was added
+      for different channels reported by the 'stb_image' library.
+      The call to the 'glTexImage2D()' function supports GL_RED,
+      GL_RGB, and GL_RGBA texture types.
+    
+    - Chunk
+    
+      Fix chunk border detect intervals.
+    
+    - Level
+    
+      Delete cave generation.
+    
+    - Entity
+    
+      Add class entity for 'Zombie' and 'Player' class.
+    
+    - Player
+    
+      Some functions were passed to the 'Entity' class.
+      Invert mouse input.
+      The 'pick()' function is separated into several functions
+      to render the selector, update the raycast and level.
+    
+    - Game
+    
+      Add 'char.png' for texturize 'Zombie'.
+      Add character shader and renderer.
+      Enable selector and his shader.
+      Enable block pick.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-06-13  Andres26  andrescamorao9@gmail.com
+
+2026-06-13 rd-131655
+    
+    * Recreated MC version rd-131655
+    * Change README.md and ChangeLog.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
 2026-06-13  Andres26  andrescamorao9@gmail.com
 
 2026-06-13 rd-131655

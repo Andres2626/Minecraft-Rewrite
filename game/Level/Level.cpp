@@ -73,19 +73,19 @@ Level::Level(const ivec3 &size)
 		    size.z, size.y, m_Volume, m_ChunkRenderer.size());
 }
 
-bool Level::IsSolidTile(const ivec3& pos)
+bool Level::IsSolidTile(const ivec3 &pos)
 {
 	return (pos.x >= 0) && (pos.y >= 0) && (pos.z >= 0) &&
 		   (pos.x < m_Size.x) && (pos.y < m_Size.y) && (pos.z < m_Size.z) &&
 		   m_Blocks[GetBlockIndex(pos)];
 }
 
-bool Level::IsLightBlocker(const ivec3& pos)
+bool Level::IsLightBlocker(const ivec3 &pos)
 {
 	return IsSolidTile(pos);
 }
 
-float Level::GetBrigthness(const ivec3& pos)
+float Level::GetBrigthness(const ivec3 &pos)
 {
 	/* if the block is out of bounds, mark the block as light */
 	if (pos.x < 0 || pos.y < 0 || pos.z < 0 ||
@@ -123,7 +123,7 @@ void Level::Save()
 	size_t outSize = 0;
 
 	/* compress data */
-	unsigned char* raw = Utils::compress(m_Blocks, m_Volume, &outSize);
+	u8t *raw = Utils::compress(m_Blocks, m_Volume, &outSize);
 	if (!raw)
 		mc_fatal("error compressing");
 
@@ -171,7 +171,7 @@ void Level::Load()
 void Level::Render(Shader *shader, Player *player) 
 {
 	/* check if chunk is in camera frustum */
-	for (auto& n : m_ChunkRenderer) {
+	for (auto &n : m_ChunkRenderer) {
 		if (player->Cam.InFrustum(n.second.GetBox())) {
 			n.second.Render(shader);
 		}

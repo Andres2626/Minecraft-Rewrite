@@ -97,36 +97,58 @@ Signed-off-by: Andres26  <andrescamorao9@gmail.com>
 Example 3 (long patch): 
 
 ```
-14-08-25 [PATCH 3] Cygwin compatibility
-All makefiles are now compatible with cygwin and msys2.
+2026-06-16 rd-131655-1
+- Application
 
-For this, the files that are dependent on $(OS) and that are
-included in the main makefile were created.
+  Added interpolation factor for the 'OnRender()' call
 
- ** scripts/windows-platform.mk -> window specific variables
+- Type confussion
 
-This exports its variables via export to all makefiles marked
-as $(SUBDIRS) via the $(MAKE) command.
+  Fix type definitions in 'include/types.h'
 
- ** scripts/command.mk -> gcc, ld, ar, etc commands
+- Camera and frustum
 
-To be compatible with Cygwin, MC now supports X11 and OpenGL3.3
+  Optimize CubeInside function in 'include/core/Graphics/camera/frustum.h'
 
-* ZLIB now compiles with cmake (avoid use of native makefiles)
-* Also fixed the level update reset (now resets to 0 every second)
+- Renderer
 
-In include/core/Host/Windows/exit.h the definition MC_INTERNAL_BREAK_POINT
-was established depending on the Windows toolchain
+  Add 'CullFace()' and 'FrontFace()' functions.
 
- ** raise(SIGTRAP) for *emulated* unix enviroments (cygwin, msys2...)
- ** __debugbreak() for VS and mingw compilers
+- Texture loader
 
-Now all comments will have the original author's signature at the
-end, like this:
+  Due to the 'Zombie' texture (char.png), support was added
+  for different channels reported by the 'stb_image' library.
+  The call to the 'glTexImage2D()' function supports GL_RED,
+  GL_RGB, and GL_RGBA texture types.
 
- ** Signed-off-by: author <email>
+- Chunk
 
-Signed-off-by: Andres26  <andrescamorao9@gmail.com>
+  Fix chunk border detect intervals.
+
+- Level
+
+  Delete cave generation.
+
+- Entity
+
+  Add class entity for 'Zombie' and 'Player' class.
+
+- Player
+
+  Some functions were passed to the 'Entity' class.
+  Invert mouse input.
+  The 'pick()' function is separated into several functions
+  to render the selector, update the raycast and level.
+
+- Game
+
+  Add 'char.png' for texturize 'Zombie'.
+  Add character shader and renderer.
+  Enable selector and his shader.
+  Enable block pick.
+
+Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+
 ```
 
 ## 6️⃣  Submitting a PR

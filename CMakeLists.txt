@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(MCRewrite LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
-set(MCVER rd-131655)
+set(MCVER rd-132328)
 
 # Options
 option(MC_DEBUG_MODE "Enable debug mode" OFF)
