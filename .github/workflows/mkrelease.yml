@@ -39,7 +39,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           cmake --install build_lnx
-          tar -czvf mcrw-${{ inputs.version }}-linux-x64.tar.gz -C install_lnx bin include lib man share ChangeLog LICENSE NEWS README.md TODO RECREATED_VER_RD131655
+          tar -czvf mcrw-${{ inputs.version }}-linux-x64.tar.gz -C install_lnx bin include lib man share ChangeLog LICENSE NEWS README.md TODO 
 
       - name: upload_lnx
         if: runner.os == 'Linux'
@@ -60,7 +60,7 @@ jobs:
         shell: cmd
         run: |
           cmake --install build_win64 --config Release
-          tar -czvf mcrw-${{ inputs.version }}-win-x64.tar.gz -C install_win64 bin include lib man share ChangeLog LICENSE NEWS README.md TODO RECREATED_VER_RD131655
+          tar -czvf mcrw-${{ inputs.version }}-win-x64.tar.gz -C install_win64 bin include lib man share ChangeLog LICENSE NEWS README.md TODO 
 
       - name: upload_win64
         if: runner.os == 'Windows'
@@ -81,7 +81,7 @@ jobs:
         shell: cmd
         run: |
           cmake --install build_win32 --config Release
-          tar -czvf mcrw-${{ inputs.version }}-win-x86.tar.gz -C install_win32 bin include lib man share ChangeLog LICENSE NEWS README.md TODO RECREATED_VER_RD131655
+          tar -czvf mcrw-${{ inputs.version }}-win-x86.tar.gz -C install_win32 bin include lib man share ChangeLog LICENSE NEWS README.md TODO 
 
       - name: upload_win32
         if: runner.os == 'Windows'
