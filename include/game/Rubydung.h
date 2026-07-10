@@ -3,10 +3,12 @@
 #include "Player/Hitresult.h"
 #include "Player/Selector.h"
 #include "Player/Player.h"
-#include "Block/Tile.h"
 #include "Level/Level.h"
 #include "Chunk/Chunk.h"
 #include "Character/Zombie.h"
+#include "Entity/EntityManager.h"
+#include "Entity/EntityRenderer.h"
+#include "gui/gui.h"
 
 #include <core.h>
 
@@ -23,16 +25,20 @@ class Rubydung : public Default
 {
 private:
 	GameProperties m_GProperties;
+	vec2 m_WinSize;
 	vec2 m_Last;
+	std::unique_ptr<gui> m_GUI;
 	std::unique_ptr<Shader> m_CharShader;
 	std::unique_ptr<Shader> m_CShader;
 	std::unique_ptr<Shader> m_SShader;
+	std::unique_ptr<Shader> m_GUIShader;
 	std::unique_ptr<Level> m_Level;
 	std::unique_ptr<Player> m_Player;
 	std::unique_ptr<Timer> m_Timer;
-	std::vector<std::unique_ptr<Zombie>> m_Zombies;
-	Texture m_TerrainTexture;
-	Texture m_CharTexture;
+	EntityManager m_Entities;
+	EntityRenderer m_EntityRenderer;
+	Texture m_TerrainAtlas;
+	Texture m_CharAtlas;
 	Window m_InternalWindow;
 	WindowProperties m_Props;
 	bool m_MouseLeft;

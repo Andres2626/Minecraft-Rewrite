@@ -2,6 +2,8 @@
 
 #include <Graphics/Renderer.h>
 
+/* TODO: Generate zombie mesh with MeshFactory */
+
 Cube::Cube(vec2 uv)
 	: m_UV(uv), pos(0.0f), rot(0.0f)
 {
@@ -15,7 +17,7 @@ Cube::~Cube()
 
 void Cube::Push(std::vector<float>& vertices, vec3 p, vec2 uv)
 {
-	vec2 u = { uv.x / 64.0f, 1.0f - (uv.y / 32.0f) };
+	vec2 u = { uv.x / 64.0f, uv.y / 32.0f };
 	vertices.push_back(p.x);
 	vertices.push_back(p.y);
 	vertices.push_back(p.z);
@@ -72,12 +74,14 @@ void Cube::AddBox(vec3 start, vec3 size, std::vector<float>& vertices, std::vect
 
 void Cube::PushIndices(std::vector<unsigned int>& indices, int count)
 {
-	indices.push_back(count);
-	indices.push_back(count + 1);
-	indices.push_back(count + 2);
-	indices.push_back(count + 2);
-	indices.push_back(count + 3);
-	indices.push_back(count);
+	unsigned int ind[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	for (int i = 0; i < 6; i++) {
+		indices.push_back(count + ind[i]);
+	}
 }
 
 mat4 Cube::GetModelMatrix()

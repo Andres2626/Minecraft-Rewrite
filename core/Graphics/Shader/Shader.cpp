@@ -10,7 +10,6 @@ namespace MC
 {
 	namespace Graphics 
 	{
-
 		Shader::Shader(const mc_str &filepath)
 			: m_Path(filepath) 
 		{
@@ -36,80 +35,65 @@ namespace MC
 
 		void Shader::SetBool(const mc_str &name, bool value)
 		{
-			int location = GetUniformLocation(name);
-			if (location != -1) {
+			i32t location = GetUniformLocation(name);
+			if (location != -1)
 				glUniform1i(location, value);
-			}
 		}
 
 		void Shader::SetInt(const mc_str &name, int value)
 		{
-			int location = GetUniformLocation(name);
-			if (location != -1) {
+			i32t location = GetUniformLocation(name);
+			if (location != -1)
 				glUniform1i(location, value);
-			}
 		}
 
 		void Shader::SetFloat(const mc_str &name, float value)
 		{
-			int location = GetUniformLocation(name);
+			i32t location = GetUniformLocation(name);
 			if (location != -1) 
-			{
 				glUniform1f(location, value);
-			}
 		}
 
 		void Shader::SetVec2(const mc_str &name, const Math::vec2 &value)
 		{
-			int location = GetUniformLocation(name);
+			i32t location = GetUniformLocation(name);
 			if (location != -1)
-			{
 				glUniform2f(location, value.x, value.y);
-			}
 		}
 
 		void Shader::SetVec3(const mc_str &name, const Math::vec3 &value)
 		{
-			int location = GetUniformLocation(name);
-			if (location != -1) {
+			i32t location = GetUniformLocation(name);
+			if (location != -1)
 				glUniform3f(location, value.x, value.y, value.z);
-			}
 		}
 
 		void Shader::SetVec4(const mc_str &name, const Math::vec4 &value)
 		{
-			int location = GetUniformLocation(name);
+			i32t location = GetUniformLocation(name);
 			if (location != -1) 
-			{
 				glUniform4f(location, value.x, value.y, value.z, value.w);
-			}
 		}
 
 		void Shader::Set2x2(const mc_str &name, const Math::mat2 &value)
 		{
-			int location = GetUniformLocation(name);
-			if (location != -1) 
-			{
+			i32t location = GetUniformLocation(name);
+			if (location != -1)
 				glUniformMatrix2fv(location, 1, GL_FALSE, (const float*)&value);
-			}
 		}
 
 		void Shader::Set3x3(const mc_str &name, const Math::mat3 &value)
 		{
-			int location = GetUniformLocation(name);
-			if (location != -1) 
-			{
+			i32t location = GetUniformLocation(name);
+			if (location != -1)
 				glUniformMatrix3fv(location, 1, GL_FALSE, (const float*)&value);
-			}
 		}
 
 		void Shader::Set4x4(const mc_str &name, const Math::mat4 &value)
 		{
-			int location = GetUniformLocation(name);
-			if (location != -1) 
-			{
+			i32t location = GetUniformLocation(name);
+			if (location != -1)
 				glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)&value);
-			}
 		}
 
 		ShaderSources Shader::ParseFromFile(const mc_str &path)
@@ -118,8 +102,10 @@ namespace MC
 			std::stringstream ss[2];
 			std::ifstream stream(path);
 
-			if (!stream)
+			if (!stream) {
+				err.SetError(ErrorType::FileNotFound);
 				mc_fatal("failed to open shader file \"{}\"\n", path);
+			}
 
 			enum class ShaderType 
 			{
@@ -135,9 +121,8 @@ namespace MC
 					else if (line.find("fragment") != mc_str::npos)
 						type = ShaderType::FRAGMENT;
 				}
-				else {
+				else
 					ss[(int)type] << line << "\n";
-				}
 			}
 
 			return{
@@ -160,6 +145,9 @@ namespace MC
 				glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
 				std::vector<char> error(len);
 				glGetShaderInfoLog(id, len, &len, &error[0]);
+
+				if (type)
+					err.SetError(ErrorType::ShaderCompileError);
 
 				switch (type) {
 				case GL_VERTEX_SHADER:

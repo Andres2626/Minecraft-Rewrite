@@ -7,7 +7,6 @@ namespace MC
 {
 	namespace Graphics 
 	{
-
 		void Renderer::Enable(u32t func)
 		{
 			glEnable(func);
@@ -61,6 +60,11 @@ namespace MC
 		void Renderer::DrawElements(u32t mode, i32t size, const void *indices)
 		{
 			glDrawElements(mode, size, GL_UNSIGNED_INT, indices);
+		}
+
+		void Renderer::Clear(u32t mask)
+		{
+			glClear(mask);
 		}
 	}
 }

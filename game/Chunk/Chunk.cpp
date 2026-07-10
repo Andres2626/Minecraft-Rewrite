@@ -5,18 +5,49 @@
 #include <Graphics/Shader/Shaderflags.h>
 #include <Graphics/Renderer.h>
 
-/* push vertex properties in the array */
-#define PUSH_VERTEX(f, brig, vb, ub) \
-	vertices.push_back(t.f[vb] + fpos.x); \
-	vertices.push_back(t.f[vb + 1] + fpos.y); \
-	vertices.push_back(t.f[vb + 2] + fpos.z); \
-	vertices.push_back(t.texcoords[ub]); \
-	vertices.push_back(t.texcoords[ub + 1]); \
-	vertices.push_back(brig)
-
 /* create block */
-Tile rock = Tile(ROCK);
-Tile grass = Tile(GRASS);
+
+static std::array<ivec3, 4> front = {
+	ivec3(0, 0, 0),
+	ivec3(1, 0, 0),
+	ivec3(1, 1, 0),
+	ivec3(0, 1, 0)
+};
+
+static std::array<ivec3, 4> back = {
+	ivec3(1, 0, 1),
+	ivec3(0, 0, 1),
+	ivec3(0, 1, 1),
+	ivec3(1, 1, 1)
+};
+
+static std::array<ivec3, 4> left = {
+	ivec3(0, 0, 0),
+	ivec3(0, 0, 1),
+	ivec3(0, 1, 1),
+	ivec3(0, 1, 0)
+};
+
+static std::array<ivec3, 4> right = {
+	ivec3(1, 0, 1),
+	ivec3(1, 0, 0),
+	ivec3(1, 1, 0),
+	ivec3(1, 1, 1)
+};
+
+static std::array<ivec3, 4> bottom = {
+	ivec3(0, 0, 1),
+	ivec3(1, 0, 1),
+	ivec3(1, 0, 0),
+	ivec3(0, 0, 0)
+};
+
+static std::array<ivec3, 4> top = {
+	ivec3(0, 1, 0),
+	ivec3(1, 1, 0),
+	ivec3(1, 1, 1),
+	ivec3(0, 1, 1)
+};
 
 glm::ivec3 FaceNormals[] = {
 	{ 0, 0, -1 },
@@ -38,10 +69,7 @@ Chunk::Chunk(Level *level, const ivec3 &pos)
 		       { (pos.x * CHUNK_XYZ) + CHUNK_XYZ, (pos.y * CHUNK_XYZ) + CHUNK_XYZ, 
 		       (pos.z * CHUNK_XYZ) + CHUNK_XYZ });
 
-	/* create mesh buffers */
-	VAO = std::make_unique<VertexArray>();
-	VBO = std::make_unique<VertexBuffer>();
-	IBO = std::make_unique<IndexBuffer>();
+	m_Mesh = std::make_unique<Mesh>(&m_MeshData);	
 
 	/* build buffer mesh */
 	Build();
@@ -49,10 +77,7 @@ Chunk::Chunk(Level *level, const ivec3 &pos)
 
 Chunk::~Chunk() 
 {
-	/* delete pointers */
-	this->VAO.reset();
-	this->VBO.reset();
-	this->IBO.reset();
+
 }
 
 void Chunk::Build() 
@@ -60,15 +85,11 @@ void Chunk::Build()
 	/* if the chunk is marked as 'dirty', rebuild the vertices and indices */
 	if (!m_Dirty)
 		return; /* advoid chunk rebuilding */
-	
-	/* Increment CUPS by 1 */
-	m_Level->IncrementUpdates();
 
 	/* reset indices and vertices vector */
-	std::vector<float>().swap(this->vertices);
-	std::vector<unsigned int>().swap(this->indices);
+	m_MeshData.vertices.clear();
+	m_MeshData.indices.clear();
 
-	Tile tl = rock;
 	for (int cx = 0; cx < CHUNK_XYZ; cx++) {
 		for (int cy = 0; cy < CHUNK_XYZ; cy++) {
 			for (int cz = 0;cz < CHUNK_XYZ; cz++) {
@@ -77,10 +98,11 @@ void Chunk::Build()
 				ivec3 p((m_Pos.x * CHUNK_XYZ) + cx, (m_Pos.y * CHUNK_XYZ) + cy,
 					   (m_Pos.z * CHUNK_XYZ) + cz);
 
-				/* The top blocks of the chunk will always be grass (for now) */
-				tl = rock;
-				if (p.y == (m_Level->GetSize().y * 2 / 3))
-					tl = grass;
+				BlockType ty = m_Level->GetBlockType(p);
+				if (ty == BlockType::AIR)
+					continue; /* ignore air blocks */
+
+				Block &blk = BlockManager::GetBlockType(ty);
 
 				/*
 				 * Push all the vertices in the buffer.
@@ -89,113 +111,91 @@ void Chunk::Build()
 				if (m_Level->IsSolidTile(p)) {
 					for (int i = 0; i < 6; i++) {
 						if (!m_Level->IsSolidTile(p + FaceNormals[i]))
-							AddFace(p, (Face)i, tl);
+							AddFace(p, (Face)i, blk);
 					}
 				}
 			}
 		}
 	}
 
-	/* 
-	 * BUILD MESH PROCESS 
-	 *  -- Create vertex layout object
-	 *  -- Reset buffer pointer (VAO, IBO and VBO)
-	 *  -- Push all vertices/indices in buffer array
-	 *  -- Setup mesh attributes
-	 *  -- Link attributes to VAO
-	 *  -- Unbind VAO
-	 *  -- Mark the chunk as not dirty.
-	 */
-	MC::Graphics::VertexLayout VL;
-	VBO->Build(vertices.size() * sizeof(float), vertices.data());
-	IBO->Build(indices.size(), indices.data());
-	VL.AddAttribute(SHADER_VERTEX_BIT, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-	VL.AddAttribute(SHADER_TEX_BIT, 2, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	VL.AddAttribute(SHADER_BRIG_BIT, 1, GL_FLOAT, 6 * sizeof(float), (void*)(5 * sizeof(float)));
-	VAO->Link(VL);
-	VAO->Unbind();
+	m_Mesh->Build();
 	m_Dirty = false;
 }
 
 void Chunk::Render(Shader *shader) const
-{
+{  
 	/* push model matrix */
 	shader->Set4x4("s_M", mat4(1.0f));
-
-	/* DRAW PROCESS */
-	VAO->Bind();
-	m_Level->IncrementDrawCalls();
-	Renderer::DrawElements(GL_TRIANGLES, IBO->GetSize());
-	VAO->Unbind();
+	m_Level->GetChunkManager()->IncrementDrawCalls();
+	m_Mesh->Render();
 }
 
-void Chunk::AddFace(const ivec3 &fpos, Face f, Tile t) 
+void Chunk::AddFace(const ivec3 &fpos, Face f, Block &t) 
 {
-	int count = (int)(vertices.size() / 6);
+	int count = (int)m_MeshData.vertices.size();
 
 	/* brigthness face values */
 	float c1 = 1.0f;
 	float c2 = 0.8f;
 	float c3 = 0.6f;
 	float br = 0.0f;
+	vec2 uv = { 0.0f, 0.0f };
+	ivec3 *quad;
 
-	/* 
-	* Push FACES in main vertex and indices. 
-	* TODO: Separate buffers.
-	*/
-	if (f == Face::FRONT) {
+	switch (f)
+	{
+	case Face::FRONT:
+		quad = front.data();
+		uv = t.front;
 		br = m_Level->GetBrigthness({ fpos.x, fpos.y, fpos.z - 1 }) * c2;
-		PUSH_VERTEX(vfront, br, 0, 0);
-		PUSH_VERTEX(vfront, br, 3, 2);
-		PUSH_VERTEX(vfront, br, 6, 4);
-		PUSH_VERTEX(vfront, br, 9, 6);
-	}
-	else if (f == Face::BACK) {
+		break;
+	case Face::BACK:
+		quad = back.data();
+		uv = t.back;
 		br = m_Level->GetBrigthness({ fpos.x, fpos.y, fpos.z + 1 }) * c2;
-		PUSH_VERTEX(vback, br, 0, 0);
-		PUSH_VERTEX(vback, br, 3, 2);
-		PUSH_VERTEX(vback, br, 6, 4);
-		PUSH_VERTEX(vback, br, 9, 6);
-	}
-	else if (f == Face::LEFT) {
+		break;
+	case Face::LEFT:
+		quad = left.data();
+		uv = t.left;
 		br = m_Level->GetBrigthness({ fpos.x - 1, fpos.y, fpos.z }) * c3;
-		PUSH_VERTEX(vleft, br, 0, 0);
-		PUSH_VERTEX(vleft, br, 3, 2);
-		PUSH_VERTEX(vleft, br, 6, 4);
-		PUSH_VERTEX(vleft, br, 9, 6);
-	}
-	else if (f == Face::RIGHT) {
+		break;
+	case Face::RIGHT:
+		quad = right.data();
+		uv = t.right;
 		br = m_Level->GetBrigthness({ fpos.x + 1, fpos.y, fpos.z }) * c3;
-		PUSH_VERTEX(vright, br, 0, 0);
-		PUSH_VERTEX(vright, br, 3, 2);
-		PUSH_VERTEX(vright, br, 6, 4);
-		PUSH_VERTEX(vright, br, 9, 6);
-	}
-	else if (f == Face::BOTTOM) {
+		break;
+	case Face::BOTTOM:
+		quad = bottom.data();
+		uv = t.bottom;
 		br = m_Level->GetBrigthness({ fpos.x, fpos.y - 1, fpos.z }) * c1;
-		PUSH_VERTEX(vbottom, br, 0, 0);
-		PUSH_VERTEX(vbottom, br, 3, 2);
-		PUSH_VERTEX(vbottom, br, 6, 4);
-		PUSH_VERTEX(vbottom, br, 9, 6);
-	}
-	else if (f == Face::TOP) {
+		break;
+	case Face::TOP:
+		quad = top.data();
+		uv = t.top;
 		br = m_Level->GetBrigthness({ fpos.x, fpos.y + 1, fpos.z }) * c1;
-		PUSH_VERTEX(vtop, br, 0, 0);
-		PUSH_VERTEX(vtop, br, 3, 2);
-		PUSH_VERTEX(vtop, br, 6, 4);
-		PUSH_VERTEX(vtop, br, 9, 6);
+		break;
+	default:
+		return;
 	}
 
-	PushIndices(count);
+	AddQuad(uv, fpos, quad, br);
+
+	MeshFactory::AddIndices(m_MeshData, count);
 }
 
-void Chunk::PushIndices(int count)
+void Chunk::AddQuad(const vec2 &uv, const ivec3 &pos, const ivec3 *quad, const float brightness)
 {
-	indices.push_back(count);
-	indices.push_back(count + 1);
-	indices.push_back(count + 2);
-	indices.push_back(count + 2);
-	indices.push_back(count + 3);
-	indices.push_back(count);
-}
+	vec2 uvs[] = {
+		uv + vec2(0, UV_COORD),
+		uv + vec2(UV_COORD, UV_COORD),
+		uv + vec2(UV_COORD, 0),
+		uv
+	};
 
+	vec3 color = vec3(1.0f, 1.0f, 1.0f);
+
+	for (int i = 0; i < 4; i++)
+	{
+		m_MeshData.vertices.push_back({quad[i] + pos, color, uvs[i], brightness});
+	}
+}

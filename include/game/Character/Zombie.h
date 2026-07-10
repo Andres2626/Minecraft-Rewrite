@@ -37,7 +37,8 @@ public:
 	~Zombie();
 public:
 	void Build();
-	void Update();
-	void Render(float alpha, Shader *shader, float seconds);
 	void PushPart(const Cube &cube);
+public:
+	void Update() override;
+	void Render(Shader *shader, float alpha, float seconds) override;
 };

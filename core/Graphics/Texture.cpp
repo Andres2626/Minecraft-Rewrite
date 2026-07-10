@@ -9,14 +9,15 @@ namespace MC
 {
 	namespace Graphics 
 	{
-
-		bool Texture::LoadFromFile(const char *file, unsigned int mode) 
+		bool Texture::LoadFromFile(const char *file, u32t mode) 
 		{
-			SetFlip(true);
-
-			if (!Image::LoadFromFile(file)) 
+			const char *errmsg = {};
+			if (!Image::LoadFromFile(file, errmsg)) {
+				err.SetError(ErrorType::AssetLoad);
+				mc_error("error loading image. internal error {}", errmsg);
 				return false;
-
+			}
+				
 			u32t format = 0;
 			switch (nr_channels)
 			{
@@ -31,6 +32,7 @@ namespace MC
 				break;
 			default:
 				mc_fatal("unsupported image channel format: {}", nr_channels);
+				err.SetError(ErrorType::Noimp);
 				return false;
 			}
 
@@ -45,12 +47,15 @@ namespace MC
 			glGenerateMipmap(GL_TEXTURE_2D);
 
 			Free();
+
+			mc_info("texture loaded: path={} x={} y={} mode={:x} format={:x}", path, x, y, static_cast<unsigned>(mode), static_cast<unsigned>(format));
+
 			return true;
 		}
 
-		void Texture::Bind() 
+		void Texture::Bind(u32t id) 
 		{
-			glActiveTexture(GL_TEXTURE0);
+			glActiveTexture(GL_TEXTURE0 + id);
 			glBindTexture(GL_TEXTURE_2D, m_ID);
 		}
 

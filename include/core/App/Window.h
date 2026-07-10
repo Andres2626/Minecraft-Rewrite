@@ -2,6 +2,7 @@
 #include "common.h"
 #include "Graphics/Image.h"
 #include "Events/Event.h"
+#include "Utils/Error.h"
 
 #include <GLFW/glfw3.h>
 
@@ -37,8 +38,10 @@ namespace MC
 			} context;
 		};
 
-		class MC_API Window 
+		class MC_API Window
 		{
+		public:
+			ErrorHandler err;
 		private:
 			bool m_Init;
 			const char* m_Title;
@@ -58,6 +61,8 @@ namespace MC
 			void Update();
 			void Finish();
 		public:
+			void OnTick();
+		public:
 			int GetEvent(MC::Events::Event &ev);
 			void FreeEvent(MC::Events::Event &ev);
 		public:
@@ -65,6 +70,8 @@ namespace MC
 		public:
 			inline WindowProperties& GetProps() { return m_Pr; }
 			inline GLFWwindow* GetWindow() { return m_Win; };
+		public:
+			Error &GetError() { return err.GetError(); }
 		};
 
 	}

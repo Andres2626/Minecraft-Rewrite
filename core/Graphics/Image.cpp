@@ -6,7 +6,7 @@
 
 namespace MC 
 {
-	namespace Graphics 
+	namespace Graphics
 	{
 
 		Image::Image()
@@ -25,12 +25,16 @@ namespace MC
 			stbi_set_flip_vertically_on_load(flip);
 		}
 
-		bool Image::LoadFromFile(const char *path)
+		bool Image::LoadFromFile(const char* path, const char* errmsg)
 		{
 			this->path = path;
 			pixels = stbi_load(path, &x, &y, &nr_channels, 0);
-			if (!pixels)
+			if (!pixels) {
+				errmsg = stbi_failure_reason();
 				return false;
+			}
+
+			errmsg = NULL;
 			return true;
 		}
 

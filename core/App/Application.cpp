@@ -26,7 +26,16 @@ namespace MC
 		{
 			Log::Init(MC_LOG_STDOUT | MC_LOG_FILE, level_enum::info);
 			mc_info("Minecraft rewrite engine version {}", MC_VERSION_STRING);
+
 			m_Win = std::make_unique<Window>(m_Name, m_Pr);
+
+			const Error &err = m_Win->GetError();
+			if (err.num != ErrorType::NoError) 
+			{
+				mc_error("Application error {}: {}", (u32t)err.num, err.str);
+				return;
+			}
+
 			Input::Init();
 		}
 
@@ -66,7 +75,7 @@ namespace MC
 			m_Timer = std::make_unique<Utils::Timer>();
 			float ti = 0.0f;
 			float update_timer = m_Timer->ElapsedMillis();
-			float update_tick = 1000.0f / 60.0f;
+			float update_tick = 1000.0f / 20.0f;
 			Utils::Timestep step(update_timer);
 			while (m_Running) {
 
@@ -123,6 +132,8 @@ namespace MC
 
 		void Application::OnTick()
 		{
+			m_Win->OnTick();
+
 			m_LayerStack.OnTick();
 		}
 

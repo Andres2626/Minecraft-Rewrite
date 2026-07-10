@@ -5,10 +5,11 @@
 Entity::Entity(Level &level)
 	: m_Level(level)
 {
+	attr.isDead = false;
 	attr.isGround = false;
 	attr.size = vec2(0.3f, 0.9f);
 	attr.pos = vec3(0.0f, 0.0f, 0.0f);
-	attr.delta = vec3(0.0f, 0.0f, 0.0f);
+	attr.motion = vec3(0.0f, 0.0f, 0.0f);
 	attr.rot = vec3(0.0f, 0.0f, 0.0f);
 	attr.box = AABB();
 	ResetPos();
@@ -37,13 +38,13 @@ void Entity::Move(const vec3& pos)
 
 	vec3 delta = newPos - oldPos;
 	if (delta.x != 0.0f)
-		attr.delta.x = 0.0f;
+		attr.motion.x = 0.0f;
 
 	if (delta.y != 0.0f)
-		attr.delta.y = 0.0f;
+		attr.motion.y = 0.0f;
 
 	if (delta.z != 0.0f)
-		attr.delta.z = 0.0f;
+		attr.motion.z = 0.0f;
 
 	attr.pos = { (attr.box.p0.x + attr.box.p1.x) / 2.0f,
 				  attr.box.p0.y + attr.heightOffset,
@@ -58,8 +59,8 @@ void Entity::MoveRelative(vec2 a, float speed)
 	if (dis >= 0.01f) {
 		dis = speed / sqrt(dis);
 		a *= dis;
-		attr.delta.x += a.x * c - a.y * s;
-		attr.delta.z += a.y * c + a.x * s;
+		attr.motion.x += a.x * c - a.y * s;
+		attr.motion.z += a.y * c + a.x * s;
 	}
 }
 
@@ -68,7 +69,7 @@ void Entity::ResetPos()
 	vec3 newPos;
 	ivec3 Size = m_Level.GetSize();
 	newPos.x = (float)(rand() % Size.x + 1);
-	newPos.y = (float)(Size.y + 10);
+	newPos.y = (float)(Size.y + 3);
 	newPos.z = (float)(rand() % Size.z + 1);
 	SetPos(newPos);
 }

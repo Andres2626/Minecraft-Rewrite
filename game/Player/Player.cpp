@@ -11,7 +11,7 @@ using namespace MC;
 using namespace App;
 
 Player::Player(Level &level)
-	: Entity(level), Cam(vec3{ 0.0f, 0.0f, 0.0f })
+	: Entity(level), Cam({ 0.0f, 0.0f, 0.0f }), m_SelectedBlock(BlockType::ROCK)
 {
 	float x = (float)App::Application::GetProperties().x;
 	float y = (float)App::Application::GetProperties().y;
@@ -19,7 +19,7 @@ Player::Player(Level &level)
 	Cam.aspect = x / y;
 	Cam.fov = 70.0f;
 	Cam.near = 0.05f;
-	Cam.far = 100.0f;
+	Cam.far = 1000.0f;
 	Cam.Update();
 
 	/* create selector renderer */
@@ -34,9 +34,10 @@ Player::~Player()
 
 }
 
-void Player::Render() 
+void Player::Render(Shader* shader, float alpha, float seconds)
 {
-	Cam.pos = attr.pos;
+	vec3 p1 = mix(attr.oldPos, attr.pos, alpha);
+	Cam.pos = p1;
 	Cam.Update();
 }
 
@@ -58,7 +59,7 @@ void Player::MouseMove(vec2 pos)
 	attr.rot += vec2(pos.x, pos.y);
 
 	/* Block camera rotation */
-	Cam.rot.y = std::clamp(Cam.rot.y, -89.0f, 89.0f);
+	Cam.rot.y= std::clamp(Cam.rot.y, -89.0f, 89.0f);
 }
 
 bool Player::Raycast(const vec3 &org, const vec3 &dir, Hitresult &ret)
@@ -107,6 +108,7 @@ bool Player::Raycast(const vec3 &org, const vec3 &dir, Hitresult &ret)
 
 void Player::Update() 
 {
+	attr.oldPos = attr.pos;
 	vec2 a(0.0f, 0.0f);
 	float hspeed;
 
@@ -121,23 +123,23 @@ void Player::Update()
 	if (Input::IsKeyPressed(MC_KEY_D))
 		a.y++;
 	if (Input::IsKeyPressed(MC_KEY_SPACE) && attr.isGround)
-		attr.delta.y = 0.12f;
+		attr.motion.y = 0.5f;
 
 	/* calculate player horizontal speed */
-	hspeed = attr.isGround ? 0.02f : 0.005f;
+	hspeed = attr.isGround ? 0.1f : 0.02f;
 	MoveRelative(a, hspeed);
 
-	attr.delta.y -= 0.005f; /* gravity speed */
+	attr.motion.y -= 0.08f; /* gravity speed */
 
-	Move(attr.delta);
+	Move(attr.motion);
 
-	attr.delta.x *= 0.91f;
-	attr.delta.y *= 0.98f;
-	attr.delta.z *= 0.91f;
+	attr.motion.x *= 0.91f;
+	attr.motion.y *= 0.98f;
+	attr.motion.z *= 0.91f;
 
 	if (attr.isGround) {
-		attr.delta.x *= 0.8f;
-		attr.delta.z *= 0.8f;
+		attr.motion.x *= 0.7f;
+		attr.motion.z *= 0.7f;
 	}
 }
 
@@ -196,10 +198,10 @@ void Player::Pick()
 
 	/* Avoid click spam */
 	if (left && !m_MouseLeft)
-		m_Level.SetTile(m_HitResult.block + m_HitResult.face, 1); /* set block */
+		m_Level.SetTile(m_HitResult.block + m_HitResult.face, m_SelectedBlock); /* set block */
 
 	if (right && !m_MouseRight)
-		m_Level.SetTile(m_HitResult.block, 0); /* delete block */
+		m_Level.SetTile(m_HitResult.block, BlockType::AIR); /* delete block */
 		
 	/* Update mouse state */
 	m_MouseLeft = left;

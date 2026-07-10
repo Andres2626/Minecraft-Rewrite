@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "Math/Math.h"
+#include "Utils/Error.h"
 
 #include <gfx/glad.h>
 
@@ -22,6 +23,7 @@ namespace MC
 		private:
 			u32t m_ShaderID;
 			mc_str m_Path;
+			ErrorHandler err;
 		public:
 			/* load shader from file */
 			Shader(const mc_str& filepath);
@@ -45,9 +47,11 @@ namespace MC
 		private:
 			ShaderSources ParseFromFile(const mc_str &path);
 			u32t Load(u32t type, const mc_str &source);
-			u32t Create(const mc_str &vertex_source, const mc_str&fragmement_source);
+			u32t Create(const mc_str &vertex_source, const mc_str &fragmement_source);
 		private:
 			i32t GetUniformLocation(mc_str name);
+		public:
+			Error &GetError() { return err.GetError(); }
 		};
 	}
 }

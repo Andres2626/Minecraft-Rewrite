@@ -3,10 +3,7 @@
 
 #include <Graphics/Shader/Shader.h>
 #include <Graphics/Shader/Shaderflags.h>
-#include <Graphics/Buffers/VertexArray.h>
-#include <Graphics/Buffers/VertexBuffer.h>
-#include <Graphics/Buffers/IndexBuffer.h>
-#include <Graphics/Buffers/VertexLayout.h>
+#include <Graphics/MeshFactory.h>
 #include <Graphics/Renderer.h>
 #include <Graphics/Camera/Camera.h>
 
@@ -17,9 +14,8 @@ using namespace Math;
 class Selector 
 {
 private:
-	std::unique_ptr<VertexArray> VAO;
-	std::unique_ptr<VertexBuffer> VBO;
-	std::unique_ptr<IndexBuffer> IBO;
+	MeshData m_MeshData;
+	std::unique_ptr<Mesh> m_Mesh;
 	Hitresult m_Hit;
 public:
 	Selector();
@@ -27,5 +23,4 @@ public:
 public:
 	void SetHit(const Hitresult& hit);
 	void Render(Camera& cam, Shader* shader, float millis);
-	void RenderInternal();
 };

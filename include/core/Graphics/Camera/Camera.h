@@ -9,36 +9,22 @@ namespace MC
 	namespace Graphics 
 	{
 
-		class MC_API Camera {
+		class MC_API Camera
+		{
 		protected:
-			Frustum* fr;
+			std::unique_ptr<Frustum> m_Frustum;
 		public:
 			Math::vec3 pos;
 			Math::vec2 rot;
 			Math::vec3 front;
 			Math::vec3 up;
 			Math::vec3 right;
-			float aspect;
-			float near;
-			float far;
-			float fov;
 		public:
-			/* build camera */
-			Camera(const Math::vec3 &pos);
-			~Camera();
+			Camera();
+			~Camera() = default;
 		public:
-			/* Detect if box is in frustum (not fully) */
-			bool InFrustum(Physics::AABB box);
-
-			/* Update vectors and recalculate frustum. */
-			void Update();
-		public:
-			/* calculate view matrix */
-			Math::mat4 GetView();
-
-			/* calculate proj matrix */
-			Math::mat4 GetProj();
+			Math::mat4 GetView() const;
+			bool InFrustum(Physics::AABB& box);
 		};
-
 	}
 }

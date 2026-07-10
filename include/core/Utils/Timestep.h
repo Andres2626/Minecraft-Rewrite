@@ -20,7 +20,7 @@ namespace MC
 			inline void Update(float current) 
 			{
 				m_Delta = current - this->m_LastTime;
-				m_LastTime = m_Delta;
+				m_LastTime = current;
 			}
 
 			inline float GetMillis() const { return this->m_Delta; };

@@ -1,0 +1,49 @@
+#include "Graphics/Mesh.h"
+
+#include <gfx/glad.h>
+#include "Graphics/Shader/Shaderflags.h"
+#include "Graphics/Buffers/VertexBuffer.h"
+
+namespace MC
+{
+	namespace Graphics
+	{
+		Mesh::Mesh(MeshData *meshData)
+		{
+			m_MeshData = meshData;
+			m_VAO = std::make_unique<VertexArray>();
+			m_IBO = std::make_unique<IndexBuffer>();
+			m_VBO = std::make_unique<VertexBuffer>();
+		}
+
+		Mesh::~Mesh()
+		{
+
+		}
+
+		void Mesh::Build()
+		{
+			VertexLayout VL;
+			m_VAO->Bind();
+			m_VBO->Build(m_MeshData->vertices.size() * sizeof(Vertex), m_MeshData->vertices.data());
+			m_IBO->Build(m_MeshData->indices.size(), m_MeshData->indices.data());
+			VL.AddAttribute(SHADER_VERTEX_BIT, sizeof(Vertex), (void*)offsetof(Vertex, pos));
+			VL.AddAttribute(SHADER_COLOR_BIT, sizeof(Vertex), (void*)offsetof(Vertex, color));
+			VL.AddAttribute(SHADER_TEX_BIT, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+			VL.AddAttribute(SHADER_BRIG_BIT, sizeof(Vertex), (void*)offsetof(Vertex, brig));
+			m_VAO->Link(VL);
+			m_VAO->Unbind();
+		}
+
+		void Mesh::Render() const
+		{
+			if (!m_IBO->GetSize())
+				return;
+
+			m_VAO->Bind();
+			Renderer::DrawElements(GL_TRIANGLES, m_IBO->GetSize());
+			m_VAO->Unbind();
+		}
+
+	}
+}

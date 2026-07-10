@@ -3,6 +3,8 @@
 
 #include "App/Input.h"
 #include "Events/Event.h"
+#include "Graphics/Renderer.h"
+#include "Graphics/GL/GLError.h"
 
 #define MC_LOG_PREFIX "Window"
 #include "Log/Log.h"
@@ -36,7 +38,7 @@ namespace MC
 			glfwSetErrorCallback(ErrorCallback);
 
 			if (!glfwInit()) {
-				mc_fatal("glfwInit() return 0\n");
+				err.SetError(ErrorType::WindowLibrary);
 				return false;
 			}
 
@@ -56,7 +58,8 @@ namespace MC
 			/* Create window via GLFW */
 			m_Win = glfwCreateWindow(m_Pr.x, m_Pr.y, m_Title, 0, 0);
 			if (!m_Win) {
-				mc_fatal("error initializing window: {}x{} title: {}\n", m_Pr.x, m_Pr.y, m_Title);
+				mc_fatal("error creating window: x={} y={} title={}", m_Pr.x, m_Pr.y, m_Title);
+				err.SetError(ErrorType::WindowBuild);
 				return false;
 			}
 
@@ -68,12 +71,22 @@ namespace MC
 
 			bool glad = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 			if (!glad) {
-				mc_fatal("GL context not initialized.\n");
+				err.SetError(ErrorType::OpenGLInit);
 				return false;
 			}
 
 			if (!m_Pr.cursor.enable)
 				glfwSetInputMode(m_Win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+			mc_info("Window: x={} y={} title={} cursor={} profile={} glver={} {} compat={}", 
+					m_Pr.x, 
+					m_Pr.y, 
+					m_Title,
+					m_Pr.cursor.enable,
+					m_Pr.context.profile,
+					m_Pr.context.ver_major,
+					m_Pr.context.ver_minor,
+					m_Pr.context.compat);
 
 			mc_warn("graphic driver version: {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
 			mc_warn("driver vendor: {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
@@ -87,6 +100,13 @@ namespace MC
 			glfwTerminate();
 		}
 
+		void Window::OnTick()
+		{
+			u32t err = Graphics::GL::Error::GetError();
+			if (err != GL_NO_ERROR)
+				mc_error("OpenGL error {}: {}", err, Graphics::GL::Error::GetErrorStr(err));
+		}
+
 		bool Window::Close()
 		{
 			return glfwWindowShouldClose(m_Win);
@@ -94,7 +114,7 @@ namespace MC
 
 		void Window::Clear()
 		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			MC::Graphics::Renderer::Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 
 		void Window::Update()

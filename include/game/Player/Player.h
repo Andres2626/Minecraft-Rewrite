@@ -2,10 +2,11 @@
 #include "Hitresult.h"
 #include "Selector.h"
 
+#include "Block/Block.h"
 #include "Entity/Entity.h"
 
 #include <Graphics/Shader/Shader.h>
-#include <Graphics/Camera/Camera.h>
+#include <Graphics/Camera/PerspectiveCamera.h>
 
 #include <GLFW/glfw3.h>
 
@@ -19,19 +20,20 @@ class Level;
 class Player : public Entity
 {
 private:
+	BlockType m_SelectedBlock;
 	std::unique_ptr<Selector> m_Sel;
 	bool m_MouseLeft;
 	bool m_MouseRight;
 	bool m_RayState;
 	Hitresult m_HitResult;
 public:
-	Camera Cam;
+	PerspectiveCamera Cam;
 public:
 	Player(Level& level);
 	~Player();
 public:
-	void Render();
-	void Update();
+	void Render(Shader* shader, float alpha, float seconds) override;
+	void Update() override;
 private:
 	void Move(const vec3& pos);
 	void MoveRelative(vec2 a, float speed);
@@ -46,4 +48,7 @@ public:
 	void Pick();
 public:
 	inline bool GetGround() { return attr.isGround; }
+	inline BlockType GetSelectedBlock() { return m_SelectedBlock; }
+public:
+	inline void SetSelectedBlock(BlockType selectedBlock) { m_SelectedBlock = selectedBlock; };
 };

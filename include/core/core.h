@@ -11,6 +11,8 @@
 #include "Graphics/Buffers/VertexBuffer.h"
 #include "Graphics/Buffers/VertexLayout.h"
 #include "Graphics/Camera/Camera.h"
+#include "Graphics/Camera/PerspectiveCamera.h"
+#include "Graphics/Camera/OrthographicCamera.h"
 #include "Graphics/Camera/Frustum.h"
 #include "Graphics/Camera/Ray.h"
 #include "Graphics/Shader/Shader.h"
@@ -18,6 +20,8 @@
 #include "Graphics/BlendValue.h"
 #include "Graphics/DepthValue.h"
 #include "Graphics/Image.h"
+#include "Graphics/Mesh.h"
+#include "Graphics/MeshFactory.h"
 #include "Graphics/Renderer.h"
 #include "Graphics/Texture.h"
 
