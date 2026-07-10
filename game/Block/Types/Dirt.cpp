@@ -1,4 +1,4 @@
-#include "Block/Types/dirt.h"
+#include "Block/Types/Dirt.h"
 
 DirtBlock::DirtBlock()
 	: Block(BlockType::DIRT)

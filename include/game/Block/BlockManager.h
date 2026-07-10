@@ -2,6 +2,7 @@
 
 #include "Block.h"
 
+#include <memory>
 #include <array>
 
 class BlockManager
