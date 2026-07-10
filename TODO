@@ -16,6 +16,10 @@ to the project, submit a pull request to:
 
 ===============================================================================
 
+## Game
+    - [ ] Separate some parts of the game into a separate library.
+    - [ ] Move fog effect to postfx shader.
+    - [ ] Improve rendering process.
 ## Build
     - [ ] Compiler warnings.
     - [x] C4251 warning (exporting classes with DLL members) in MSVC.
@@ -33,21 +37,20 @@ to the project, submit a pull request to:
 ## Modding System
     - [ ] Dynamic Loading (DL) — low-level modding system.
     - [ ] Dynamic Loading protocol (dlfcn.h on Unix/LoadLibrary on Windows).
-    - [ ] Note: the current code in the `dl/` folder is not yet used.
+    - [ ] The code in the `dl/` folder is not yet used.
     - [ ] Lua scripting — high-level modding system.
     - [ ] Hybrid system: DL + Lua.
 ## Platform Support
     - [ ] Windows (older versions, from Windows 2000).
     - [ ] Linux (untested).
+    - [ ] Web (via Emscripten)
     - [ ] Android (high priority).
     - [ ] Apple (macOS/iOS).
     - [ ] Xbox.
     - [ ] Wii.
-    - [ ] Other platforms to be defined.
 ## Graphics Support
-    - [ ] OpenGL 2.0.
     - [ ] OpenGL ES.
-    - [ ] WebGL.
+    - [ ] WebGL (via Emscripten).
     - [ ] DirectX.
     - [ ] Vulkan.
 ## Architecture / Engine
@@ -55,13 +58,19 @@ to the project, submit a pull request to:
     - [ ] Create an independent and reusable game engine.
     - [ ] Implement an event subsystem from scratch.
     - [ ] Support for geometry shaders.
+    - [ ] Implement ShaderManager.
+    - [ ] Generate zombie mesh with MeshFactory.
 ## Tools and Utilities
     - [ ] Implement an argument parser in the engine (getopt).
     - [ ] Cross-compilation support.
 ## Performance
     - [ ] High performace and stability in main game.
-    - [ ] Reimplement the FPS limit in the `Application` class with a better procedure.
+          - [ ] Implement batching for Renderer2D.
+          - [ ] Implement instancing for zombie entities.
+          - [ ] Implement Binary Greedy Meshing generation.
+    - [ ] Implement the FPS limit in the Application class.
 ## Documentation
     - [ ] Migrate `.md` files to `.rst`.
+    - [ ] Create complete documentation.
 ## Misc
     - [ ] Improve error handling.

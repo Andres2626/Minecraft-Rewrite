@@ -27,9 +27,13 @@ This avoids copying the assets directly to the directory where the executable is
 
 ## Controls
 
+- '1' Select stone.
+- '2' Select dirt.
+- '3' Select stone brick.
+- '3' Select wood.
 - 'WASD' player move.
-- 'SPACE' for jump.
-- 'R' for to restore the player's position to an arbitrary position in the level.
-- 'ESC' for exit.
-- 'Left Click' for push block.
-- 'Right Click' for break block.
+- 'SPACE' jump.
+- 'R' Restore the player's position to an arbitrary position in the level.
+- 'ESC' exit.
+- 'Left Click' push block.
+- 'Right Click' break block.
