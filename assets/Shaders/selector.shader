@@ -18,7 +18,8 @@ out vec4 FragColor;
 
 uniform float s_Timer;
 
-void main() {
+void main() 
+{
 	float a = sin(s_Timer / 100.0f) * 0.2f + 0.4f;
 	FragColor = vec4(1.0f, 1.0f, 1.0f, a);
 }
