@@ -60,6 +60,7 @@ to the project, submit a pull request to:
     - [ ] Support for geometry shaders.
     - [ ] Implement ShaderManager.
     - [ ] Generate zombie mesh with MeshFactory.
+    - [ ] ECS in the future.
 ## Tools and Utilities
     - [ ] Implement an argument parser in the engine (getopt).
     - [ ] Cross-compilation support.
