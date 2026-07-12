@@ -14,7 +14,7 @@ Zombie::Zombie(Level& level, vec3 pos)
 {
     SetPos(pos);
     attr.heightOffset = 0.0f;
-    timeoff = NormRand() * 1239813.0f;
+    timeoff = NormRand();
     rotA = (NormRand() + 1.0f) * 0.01f;
     rot = NormRand() * (float)M_PI * 2.0f;
     speed = 1.0f;
@@ -57,37 +57,4 @@ void Zombie::Update()
 
     if (attr.pos.y < -30.0f)
         attr.isDead = true;
-}
-
-void Zombie::Render(float alpha, float seconds)
-{
-    mat4 model(1.0f);
-    float t = seconds * 10.0f * speed + timeoff;
-    float dy = -fabsf((float)sin(0.6662 * t)) * 5.0f - 23.0f;
-
-    model = translate(model, mix(attr.oldPos, attr.pos, alpha));
-    model = scale(model, { 1.0f, -1.0f, 1.0f });
-    model = scale(model, { scalefac, scalefac, scalefac });
-    model = translate(model, { 0.0f, dy, 0.0f });
-    model = rotate(model, rot + 180.0f, { 0.0f, 1.0f, 0.0f });
-
-    m_PartRot[0] = { (float)(0.8f * sin(t)), (float)(sin(0.83f * t)), 0.0f };
-    m_PartRot[1] = { 0.0f, 0.0f, 0.0f };
-    m_PartRot[2] = { (float)(sin(0.6662f * t + M_PI)) * 2.0f, 0.0f, (float)(sin(0.2312f * t) + 1.0f) };
-    m_PartRot[3] = { (float)(sin(0.6662f * t)) * 2.0f, 0.0f, (float)(sin(0.2812f * t) - 1.0f) };
-    m_PartRot[4] = { (float)(sin(0.6662f * t)) * 1.4f, 0.0f, 0.0f };
-    m_PartRot[5] = { (float)(sin(0.6662f * t + M_PI)) * 1.4f, 0.0f, 0.0f };
-
-    const auto &parts = ZombieModel::Get().GetParts();
-
-    for (size_t i = 0; i < parts.size(); i++) {
-        mat4 local(1.0f);
-        local = translate(local, parts[i].rot);
-        local = rotate(local, m_PartRot[i].z, { 0.0f, 0.0f, 1.0f });
-        local = rotate(local, m_PartRot[i].y, { 0.0f, 1.0f, 0.0f });
-        local = rotate(local, m_PartRot[i].x, { 1.0f, 0.0f, 0.0f });
-
-        m_Shader->Set4x4("s_M", model * local);
-        Renderer::DrawElements(GL_TRIANGLES, parts[i].size, (void*)(parts[i].offset * sizeof(u32t)));
-    }
 }

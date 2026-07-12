@@ -60,12 +60,14 @@ void ZombieModel::Build()
     m_VAO->Link(VL);
 
     m_InstanceBuffer->Resize(MAX_INSTANCES * sizeof(ZombieInstance));
-    IVL.AddAttribute(5, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, pos), 3);
-    IVL.AddAttribute(6, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, rotY), 1);
-    IVL.AddAttribute(7, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, timeoff), 1);
-    IVL.AddAttribute(8, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, speed), 1);
-    IVL.AddAttribute(9, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, brig), 1);
+    IVL.AddAttribute(5, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, pos), 1, 3);
+    IVL.AddAttribute(6, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, rotY), 1, 1);
+    IVL.AddAttribute(7, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, timeoff), 1, 1);
+    IVL.AddAttribute(8, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, speed), 1, 1);
+    IVL.AddAttribute(9, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, brig), 1, 1);
 
+    m_VAO->Link(IVL);
+    m_InstanceBuffer->Unbind();
     m_VAO->Unbind();
 }
 
@@ -73,6 +75,15 @@ void ZombieModel::PushPart(const Cube& cube)
 {
     m_Parts.push_back({ m_partOffset, 36, cube.pos });
     m_partOffset += 36;
+}
+
+void ZombieModel::UpdateInstances(const std::vector<ZombieInstance>& instances)
+{
+    if (instances.empty())
+        return;
+
+    m_InstanceBuffer->Bind();
+    m_InstanceBuffer->Update(0, instances.size() * sizeof(ZombieInstance), instances.data());
 }
 
 void ZombieModel::Bind() const

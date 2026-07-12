@@ -70,8 +70,7 @@ to the project, submit a pull request to:
 ## Performance
     - [ ] High performace and stability in main game.
           - [ ] Implement batching for Renderer2D.
-          - [~] Implement instancing for zombie entities.
-            VertexLayout for instancing is implemented but renderer and the shader is not implemented.
+          - [x] Implement instancing for zombie entities.
           - [ ] Implement Binary Greedy Meshing generation.
     - [ ] Implement the FPS limit in the Application class.
 ## Documentation

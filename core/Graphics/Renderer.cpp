@@ -62,6 +62,11 @@ namespace MC
 			glDrawElements(mode, size, GL_UNSIGNED_INT, indices);
 		}
 
+		void Renderer::DrawElementsInstanced(u32t mode, i32t count, const void* indices, i32t icount)
+		{
+			glDrawElementsInstanced(mode, count, GL_UNSIGNED_INT, indices, icount);
+		}
+
 		void Renderer::Clear(u32t mask)
 		{
 			glClear(mask);

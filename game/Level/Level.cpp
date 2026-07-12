@@ -316,7 +316,9 @@ BlockType Level::GetBlockType(const ivec3 &pos)
 
 std::vector<AABB> Level::GetCubes(const AABB &aabb) 
 {
-	std::vector<AABB> aabbs;
+	static std::vector<AABB> aabbs;
+	aabbs.clear();
+
 	vec3 p0 = aabb.p0;
 	vec3 p1 = aabb.p1 + 1.0f;
 

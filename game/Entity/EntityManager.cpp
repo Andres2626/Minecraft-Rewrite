@@ -24,7 +24,7 @@ void EntityManager::Update()
     }
 }
 
-void EntityManager::Register(std::unique_ptr<Entity> ent)
+void EntityManager::Register(std::unique_ptr<Zombie> ent)
 {
 	m_Entities.push_back(std::move(ent));
 }

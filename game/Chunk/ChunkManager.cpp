@@ -43,9 +43,8 @@ void ChunkManager::Render(Player *player)
 	for (auto& n : m_Chunks) {
 		float ply = player->attr.pos.y / 16;
 		bool isInFrustum = player->Cam.InFrustum(n.second.GetBox());
-		if (isInFrustum) {
+		if (isInFrustum)
 			n.second.Render();
-		}
 	}
 }
 

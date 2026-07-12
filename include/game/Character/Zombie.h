@@ -12,12 +12,13 @@
 
 class Zombie : public Entity
 {
-private:
+public:
 	float scalefac;
 	float timeoff;
 	float rotA;
 	float rot;
 	float speed;
+private:
 	vec3 m_PartRot[6];
 	Shader *m_Shader;
 public:
@@ -25,5 +26,4 @@ public:
     ~Zombie();
 public:
     void Update();
-    void Render(float alpha, float seconds);
 };

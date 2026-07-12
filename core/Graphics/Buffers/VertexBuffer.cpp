@@ -33,6 +33,12 @@ namespace MC
 			glBufferData(GL_ARRAY_BUFFER, size, NULL, m_Mode);
 		}
 
+		void VertexBuffer::Update(uintptr_t offset, uintptr_t size, const void* data)
+		{
+			Bind();
+			glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+		}
+
 		void VertexBuffer::Bind() const 
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_ID);

@@ -9,7 +9,7 @@ namespace MC
 	namespace Graphics
 	{
 
-		void VertexLayout::AddAttribute(u32t index, i32t stride, const void *offset, i32t size, u8t normalized)
+		void VertexLayout::AddAttribute(u32t index, i32t stride, const void *offset, u32t divisor, i32t size, u8t normalized)
 		{
 			i32t sz = size;
 			switch (index)
@@ -28,7 +28,7 @@ namespace MC
 				break;
 			}
 
-			m_Attribs.push_back({ index, sz, GL_FLOAT, stride, offset, normalized });
+			m_Attribs.push_back({ index, sz, GL_FLOAT, stride, offset, normalized, divisor });
 		}
 
 		void VertexLayout::Init() const
@@ -42,7 +42,15 @@ namespace MC
 					                  m_Attribs[i].offset);
 
 				glEnableVertexAttribArray(m_Attribs[i].index);
+
+				if (m_Attribs[i].divisor > 0)
+					glVertexAttribDivisor(m_Attribs[i].index, m_Attribs[i].divisor);
 			}
+		}
+
+		void VertexLayout::debug(u32t index, i32t pname, i32t* params)
+		{
+			glGetVertexAttribiv(index, pname, params);
 		}
 
 	}

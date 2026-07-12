@@ -18,6 +18,7 @@ namespace MC
 		public:
 			void Build(uintptr_t size, const void* data);
 			void Resize(uintptr_t size);
+			void Update(uintptr_t offset, uintptr_t size, const void *data);
 		public:
 			void Bind() const;
 			void Unbind() const;

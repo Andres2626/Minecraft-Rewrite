@@ -29,6 +29,7 @@ namespace MC
 			static void DrawArrays(u32t mode, i32t size);
 			static void DrawElements(u32t mode, i32t size);
 			static void DrawElements(u32t mode, i32t size, const void* indices);
+			static void DrawElementsInstanced(u32t mode, i32t count, const void *indices, i32t icount);
 		public:
 			static void Clear(u32t mode);
 		};

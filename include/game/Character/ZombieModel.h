@@ -42,6 +42,7 @@ public:
 public:
 	void Build();
 	void PushPart(const Cube& cube);
+	void ZombieModel::UpdateInstances(const std::vector<ZombieInstance>& instances);
 public:
 	void Bind() const;
 	void Unbind() const;

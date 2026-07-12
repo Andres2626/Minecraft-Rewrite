@@ -33,7 +33,7 @@ public:
 	Player(Level& level);
 	~Player();
 public:
-	void Render(float alpha, float seconds) override;
+	void Render(float alpha, float seconds);
 	void Update() override;
 private:
 	void Move(const vec3& pos);
