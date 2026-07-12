@@ -25,3 +25,5 @@ struct GameProperties {
 		fg1.density = 0.06;
 	}
 };
+
+extern GameProperties GlobalGP;

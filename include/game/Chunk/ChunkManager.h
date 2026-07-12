@@ -10,6 +10,7 @@ class Player;
 class ChunkManager
 {
 protected:
+	Shader *m_Shader;
 	Level *m_Level;
 private:
 	std::queue<int> m_DirtyChunks;
@@ -21,7 +22,7 @@ public:
 	~ChunkManager();
 public:
 	void Create();
-	void Render(Shader *shader, Player *player);
+	void Render(Player *player);
 	void Update();
 	void Tick();
 	void MarkDirty(const ivec3 &blockpos);

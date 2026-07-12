@@ -25,7 +25,4 @@ private:
 	void PushIndices(std::vector<unsigned int>& indices, int count);
 public:
 	void AddBox(vec3 start, vec3 size, std::vector<float> &vertices, std::vector<unsigned int> &indices);
-	
-public:
-	mat4 GetModelMatrix();
 };

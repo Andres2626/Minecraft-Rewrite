@@ -5,7 +5,7 @@
 #include "Block/Block.h"
 #include "Entity/Entity.h"
 
-#include <Graphics/Shader/Shader.h>
+#include <Graphics/Shader/ShaderManager.h>
 #include <Graphics/Camera/PerspectiveCamera.h>
 
 #include <GLFW/glfw3.h>
@@ -22,6 +22,7 @@ class Player : public Entity
 private:
 	BlockType m_SelectedBlock;
 	std::unique_ptr<Selector> m_Sel;
+	Shader *m_Shader;
 	bool m_MouseLeft;
 	bool m_MouseRight;
 	bool m_RayState;
@@ -32,7 +33,7 @@ public:
 	Player(Level& level);
 	~Player();
 public:
-	void Render(Shader* shader, float alpha, float seconds) override;
+	void Render(float alpha, float seconds) override;
 	void Update() override;
 private:
 	void Move(const vec3& pos);
@@ -44,7 +45,7 @@ public:
 	void SetPos(const vec3& newPos);
 public:
 	void UpdateRayCast();
-	void RenderPick(float time, Shader* shader);
+	void RenderPick(float time);
 	void Pick();
 public:
 	inline bool GetGround() { return attr.isGround; }

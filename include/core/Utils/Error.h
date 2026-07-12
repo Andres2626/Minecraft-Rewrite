@@ -15,6 +15,7 @@ namespace MC
 		AssetLoad = 0x100,
 		FileNotFound,
 		ShaderCompileError,
+		ShaderRegisterError
 	};
 
 	struct Error

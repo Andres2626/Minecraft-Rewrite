@@ -1,5 +1,6 @@
 #include "Player/Player.h"
 
+#include "GameProperties.h"
 #include "Level/Level.h"
 
 #include <App/Input.h>
@@ -25,7 +26,7 @@ Player::Player(Level &level)
 	/* create selector renderer */
 	m_Sel = std::make_unique<Selector>();
 	attr.heightOffset = 1.62f;
-
+	m_Shader = &ShaderManager::Get("selector");
 	ResetPos();
 }
 
@@ -34,7 +35,7 @@ Player::~Player()
 
 }
 
-void Player::Render(Shader* shader, float alpha, float seconds)
+void Player::Render(float alpha, float seconds)
 {
 	vec3 p1 = mix(attr.oldPos, attr.pos, alpha);
 	Cam.pos = p1;
@@ -177,14 +178,17 @@ void Player::UpdateRayCast()
 	m_RayState = Raycast(org, ray, m_HitResult);
 }
 
-void Player::RenderPick(float time, Shader* shader)
+void Player::RenderPick(float time)
 {
+	m_Shader->Bind();
+	m_Shader->Set4x4("s_VP", Cam.GetProjection() * Cam.GetView());
+
 	if (!m_RayState)
 		return;
 
 	/* Render player selector */
 	m_Sel->SetHit(m_HitResult);
-	m_Sel->Render(Cam, shader, time);
+	m_Sel->Render(Cam, m_Shader, time);
 }
 
 void Player::Pick()

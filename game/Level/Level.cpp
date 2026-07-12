@@ -3,6 +3,7 @@
 #include "Chunk/Chunk.h"
 #include "Player/Player.h"
 
+#include "GameProperties.h"
 #include "Block/BlockManager.h"
 
 #include <Utils/Util.h>
@@ -59,6 +60,7 @@ Level::Level(const ivec3 &size)
 		}
 	}
 
+	m_Shader = &ShaderManager::Get("chunk");
 	m_ChunkManager = std::make_unique<ChunkManager>(this);
 	m_ChunkManager->Create();
 
@@ -253,9 +255,18 @@ void Level::BuildMap()
 	free(rockmap);
 }
 
-void Level::Render(Shader *shader, Player *player) 
+void Level::Render(Player *player) 
 {
-	m_ChunkManager->Render(shader, player);
+	/*
+	 * Actually, this shouldn't go here.
+	 * TODO: Create the Render3D, Scene3D and RenderCommand classes.
+	 */
+	m_Shader->SetVec3("s_cpos", player->Cam.pos);
+	m_Shader->SetVec4("s_fcolor0", GlobalGP.fg0.color);
+	m_Shader->SetFloat("s_fdensity0", GlobalGP.fg0.density);
+	m_Shader->SetVec4("s_fcolor1", GlobalGP.fg1.color);
+	m_Shader->SetFloat("s_fdensity1", GlobalGP.fg1.density);
+	m_ChunkManager->Render(player);
 }
 
 void Level::Update()

@@ -39,5 +39,5 @@ public:
 	virtual void ResetPos();
 	virtual void SetPos(const vec3& newPos);
 	virtual void Update() = 0;
-	virtual void Render(Shader *shader, float alpha, float seconds) = 0;
+	virtual void Render(float alpha, float seconds) = 0;
 };

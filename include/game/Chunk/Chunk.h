@@ -35,7 +35,7 @@ public:
 public:
 	/* calculate mesh */
 	void Build();
-	void Render(Shader* shader) const;
+	void Render() const;
 private:
 	void AddFace(const ivec3 &fpos, Face f, Block &t);
 	void AddQuad(const vec2& uv, const ivec3& pos, const ivec3* quad, const float brightness);

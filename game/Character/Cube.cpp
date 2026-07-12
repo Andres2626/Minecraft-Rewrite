@@ -83,13 +83,3 @@ void Cube::PushIndices(std::vector<unsigned int>& indices, int count)
 		indices.push_back(count + ind[i]);
 	}
 }
-
-mat4 Cube::GetModelMatrix()
-{
-	mat4 m = mat4(1.0f);
-	m = translate(m, pos);
-	m = rotate(m, rot.z, vec3(0.0f, 0.0f, 1.0f));
-	m = rotate(m, rot.y, vec3(0.0f, 1.0f, 0.0f));
-	m = rotate(m, rot.x, vec3(1.0f, 0.0f, 0.0f));
-	return m;
-}

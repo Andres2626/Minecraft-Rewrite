@@ -11,17 +11,19 @@ namespace MC
 		private:
 			u32t m_ID;
 			uintptr_t m_Size;
+			u32t m_Mode;
 		public:
-			VertexBuffer();
+			VertexBuffer(u32t mode);
 			~VertexBuffer();
 		public:
-			/* build vertex buffer from vertices */
 			void Build(uintptr_t size, const void* data);
+			void Resize(uintptr_t size);
 		public:
 			void Bind() const;
 			void Unbind() const;
 		public:
 			inline u32t GetId() { return m_ID; }
+			inline u32t GetMode() { return m_Mode; }
 		};
 
 	}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity/Entity.h"
+
 #include "Level/Level.h"
 
 class EntityManager

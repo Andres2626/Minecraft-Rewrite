@@ -24,7 +24,7 @@ namespace MC
 			VertexLayout() = default;
 			~VertexLayout() = default;
 		public:
-			void AddAttribute(u32t index, i32t stride, const void* offset, u8t normalized = 0);
+			void AddAttribute(u32t index, i32t stride, const void* offset, i32t size = 0, u8t normalized = 0);
 		public:
 			void Init() const;
 		};

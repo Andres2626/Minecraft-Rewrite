@@ -17,6 +17,7 @@
 #include "Graphics/Camera/Ray.h"
 #include "Graphics/Shader/Shader.h"
 #include "Graphics/Shader/Shaderflags.h"
+#include "Graphics/Shader/ShaderManager.h"
 #include "Graphics/BlendValue.h"
 #include "Graphics/DepthValue.h"
 #include "Graphics/Image.h"

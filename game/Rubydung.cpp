@@ -3,9 +3,11 @@
 static float rendertime = 0.0f;
 static float updatetime = 0.0f;
 
+GameProperties GlobalGP;
+
 Rubydung::Rubydung()
 	: m_InternalWindow(Application::Get().GetWindow()),
-	  m_Props(m_InternalWindow.GetProps()), m_GProperties()
+	  m_Props(m_InternalWindow.GetProps())
 {
 	srand((unsigned int)time(NULL));
 
@@ -27,7 +29,7 @@ Rubydung::Rubydung()
 
 	Renderer::DepthFunc(DepthValue::LEQUAL);
 	Renderer::Enable(GL_DEPTH_TEST);
-	Renderer::ClearColor(m_GProperties.SkyColor);
+	Renderer::ClearColor(GlobalGP.SkyColor);
 }
 
 Rubydung::~Rubydung() 
@@ -40,12 +42,14 @@ void Rubydung::Init()
 	Default::Init();
 
 	/* load shaders */
-	m_CShader = std::make_unique<Shader>("assets/Shaders/chunk.shader");
-	m_SShader = std::make_unique<Shader>("assets/Shaders/selector.shader");
-	m_CharShader = std::make_unique<Shader>("assets/Shaders/character.shader");
-	m_GUIShader = std::make_unique<Shader>("assets/Shaders/hud.shader");
-	m_Level = std::make_unique<Level>(m_GProperties.LevelSize);
+	ShaderManager::Register("chunk", "assets/Shaders/chunk.shader");
+	ShaderManager::Register("selector", "assets/Shaders/selector.shader");
+	ShaderManager::Register("character", "assets/Shaders/character.shader");
+	ShaderManager::Register("hud", "assets/Shaders/hud.shader");
 
+	m_Entities = std::make_unique<EntityManager>();
+	m_EntityRenderer = std::make_unique<EntityRenderer>();
+	m_Level = std::make_unique<Level>(GlobalGP.LevelSize);
 	m_Player = std::make_unique<Player>(*m_Level);
 	m_GUI = std::make_unique<gui>(m_Player.get(), m_WinSize);
 	m_GUI->Build();
@@ -54,10 +58,10 @@ void Rubydung::Init()
 	for (int i = 0; i < 10; i++) {
 		auto zm = std::make_unique<Zombie>(*m_Level, vec3(128.0f, 0.0f, 128.0f));
 		zm->ResetPos();
-		m_Entities.Register(std::move(zm));
+		m_Entities->Register(std::move(zm));
 	}
 
-	m_EntityRenderer.SetEntityManager(&m_Entities);
+	m_EntityRenderer->SetEntityManager(m_Entities.get());
 
 	/* load texture */
 	if (!m_TerrainAtlas.LoadFromFile("assets/terrain.png", GL_NEAREST))
@@ -66,9 +70,9 @@ void Rubydung::Init()
 	if (!m_CharAtlas.LoadFromFile("assets/char.png", GL_NEAREST))
 		mc_fatal("failed to open char file: \"{}\"", m_CharAtlas.path);
 
-	m_CShader->SetInt("s_t1", 0);
-	m_CharShader->SetInt("s_t1", 0);
-	m_GUIShader->SetInt("s_t1", 0);
+	ShaderManager::Get("chunk").SetInt("s_t1", 0);
+	ShaderManager::Get("character").SetInt("s_t1", 0);
+	ShaderManager::Get("hud").SetInt("s_t1", 0);
 }
 
 float accumulator = 0.0f;
@@ -78,7 +82,7 @@ void Rubydung::OnUpdate(Timestep &ts)
 	Default::OnUpdate(ts);
 	
 	m_Player->UpdateRayCast();	
-	m_Entities.Update();
+	m_Entities->Update();
 	m_Player->Update();
 	m_Player->Pick();
 	m_Level->Update();
@@ -88,7 +92,7 @@ void Rubydung::OnKeyPressed(int key)
 {
 	switch (key) {
 	case MC_KEY_G:
-		m_Entities.Register(std::make_unique<Zombie>(*m_Level, m_Player->attr.pos));
+		m_Entities->Register(std::make_unique<Zombie>(*m_Level, m_Player->attr.pos));
 		break;
 	case MC_KEY_ESCAPE:
 		m_Level->Save();
@@ -157,38 +161,29 @@ void Rubydung::OnEvent(Event &ev)
 void Rubydung::OnRender(float alpha)
 {
 	Default::OnRender(alpha);
+
+	Shader &schunk = ShaderManager::Get("chunk");
+	Shader &schar = ShaderManager::Get("character");
 	mat4 VP = m_Player->Cam.GetProjection() * m_Player->Cam.GetView();
 
 	/* world rendering */
-	m_CShader->Bind();
+	schunk.Bind();
 	m_TerrainAtlas.Bind(0);
-	m_CShader->Set4x4("s_VP", VP);
-	m_CShader->SetVec3("s_cpos", m_Player->Cam.pos);
-	m_CShader->SetVec4("s_fcolor0", m_GProperties.fg0.color);
-	m_CShader->SetFloat("s_fdensity0", m_GProperties.fg0.density);
-	m_CShader->SetVec4("s_fcolor1", m_GProperties.fg1.color);
-	m_CShader->SetFloat("s_fdensity1", m_GProperties.fg1.density);
-	m_Player->Render(m_CShader.get(), alpha, m_Timer->ElapsedSeconds());
-	m_Level->Render(m_CShader.get(), m_Player.get());
+	schunk.Set4x4("s_VP", VP);
+	m_Level->Render(m_Player.get());
+	m_Player->Render(alpha, m_Timer->ElapsedSeconds());
 
 	/* selector shader */
-	m_SShader->Bind();
-	m_SShader->Set4x4("s_VP", VP);
-	m_Player->RenderPick(m_Timer->ElapsedMillis(), m_SShader.get());
-	m_CharShader->Bind();
-	m_CharAtlas.Bind(0);
+	m_Player->RenderPick(m_Timer->ElapsedMillis());
 
 	/* character rendering */
-	m_CharShader->Set4x4("s_VP", VP);
-	m_CharShader->SetVec3("s_cpos", m_Player->Cam.pos);
-	m_CharShader->SetVec4("s_fcolor0", m_GProperties.fg0.color);
-	m_CharShader->SetFloat("s_fdensity0", m_GProperties.fg0.density);
-	m_CharShader->SetVec4("s_fcolor1", m_GProperties.fg1.color);
-	m_CharShader->SetFloat("s_fdensity1", m_GProperties.fg1.density);
-	m_EntityRenderer.Render(*m_Level, m_Player->Cam, m_CharShader.get(), alpha, m_Timer->ElapsedSeconds());
+	schar.Bind();
+	m_CharAtlas.Bind(0);
+	schar.Set4x4("s_VP", VP);
+	m_EntityRenderer->Render(*m_Level, *m_Player, alpha, m_Timer->ElapsedSeconds());
 
 	/* GUI rendering */
-	m_GUI->Render(m_GUIShader.get(), &m_TerrainAtlas);
+	m_GUI->Render(&m_TerrainAtlas);
 }
 
 void Rubydung::OnTick() 

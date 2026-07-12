@@ -7,6 +7,7 @@
 #include "Chunk/ChunkManager.h"
 
 #include <Physics/AABB.h>
+#include <Graphics/Shader/ShaderManager.h>
 
 using namespace MC;
 using namespace Math;
@@ -20,6 +21,7 @@ class Level
 protected:
 	std::unique_ptr<ChunkManager> m_ChunkManager;
 private:
+	Shader *m_Shader;
 	size_t m_Volume;
 	ivec3 m_Size;
 	mc_str m_LevelFile;
@@ -42,7 +44,7 @@ public:
 	bool IsOutOfBounds(const ivec3 &pos);
 	float GetBrigthness(const ivec3& pos);
 public:
-	void Render(Shader* shader, Player* player);
+	void Render(Player* player);
 	void Update();
 	void Tick();
 public:

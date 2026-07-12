@@ -30,8 +30,7 @@ namespace MC
 			m_Win = std::make_unique<Window>(m_Name, m_Pr);
 
 			const Error &err = m_Win->GetError();
-			if (err.num != ErrorType::NoError) 
-			{
+			if (err.num != ErrorType::NoError) {
 				mc_error("Application error {}: {}", (u32t)err.num, err.str);
 				return;
 			}

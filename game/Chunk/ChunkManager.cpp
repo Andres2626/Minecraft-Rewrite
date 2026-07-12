@@ -6,7 +6,7 @@
 ChunkManager::ChunkManager(Level *lev)
 	: m_Level(lev), m_ChunkUpdates(0), m_DrawCalls(true)
 {
-
+	m_Shader = &ShaderManager::Get("chunk");
 }
 
 ChunkManager::~ChunkManager()
@@ -15,6 +15,10 @@ ChunkManager::~ChunkManager()
 
 void ChunkManager::Create()
 {
+	/* avoid set model matrix every frame */
+	m_Shader->Bind();
+	m_Shader->Set4x4("s_M", mat4(1.0f));
+
 	auto ab = m_Level->GetSize();
 	for (int cx = 0; cx < m_Level->GetSize().x / CHUNK_XYZ; cx++) {
 		for (int cy = 0; cy < m_Level->GetSize().y / CHUNK_XYZ; cy++) {
@@ -33,14 +37,15 @@ void ChunkManager::Create()
 	}
 }
 
-void ChunkManager::Render(Shader *shader, Player *player)
+void ChunkManager::Render(Player *player)
 {
 	/* check if chunk is in camera frustum */
 	for (auto& n : m_Chunks) {
 		float ply = player->attr.pos.y / 16;
 		bool isInFrustum = player->Cam.InFrustum(n.second.GetBox());
-		if (isInFrustum) 
-			n.second.Render(shader);
+		if (isInFrustum) {
+			n.second.Render();
+		}
 	}
 }
 

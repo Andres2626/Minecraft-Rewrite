@@ -24,19 +24,14 @@ using namespace Math;
 class Rubydung : public Default 
 {
 private:
-	GameProperties m_GProperties;
 	vec2 m_WinSize;
 	vec2 m_Last;
 	std::unique_ptr<gui> m_GUI;
-	std::unique_ptr<Shader> m_CharShader;
-	std::unique_ptr<Shader> m_CShader;
-	std::unique_ptr<Shader> m_SShader;
-	std::unique_ptr<Shader> m_GUIShader;
 	std::unique_ptr<Level> m_Level;
 	std::unique_ptr<Player> m_Player;
 	std::unique_ptr<Timer> m_Timer;
-	EntityManager m_Entities;
-	EntityRenderer m_EntityRenderer;
+	std::unique_ptr <EntityManager> m_Entities;
+	std::unique_ptr <EntityRenderer> m_EntityRenderer;
 	Texture m_TerrainAtlas;
 	Texture m_CharAtlas;
 	Window m_InternalWindow;

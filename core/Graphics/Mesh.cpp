@@ -13,7 +13,7 @@ namespace MC
 			m_MeshData = meshData;
 			m_VAO = std::make_unique<VertexArray>();
 			m_IBO = std::make_unique<IndexBuffer>();
-			m_VBO = std::make_unique<VertexBuffer>();
+			m_VBO = std::make_unique<VertexBuffer>(GL_STATIC_DRAW);
 		}
 
 		Mesh::~Mesh()
@@ -33,6 +33,9 @@ namespace MC
 			VL.AddAttribute(SHADER_BRIG_BIT, sizeof(Vertex), (void*)offsetof(Vertex, brig));
 			m_VAO->Link(VL);
 			m_VAO->Unbind();
+
+			std::vector<Vertex>().swap(m_MeshData->vertices);
+			std::vector<uint32_t>().swap(m_MeshData->indices);
 		}
 
 		void Mesh::Render() const

@@ -86,10 +86,6 @@ void Chunk::Build()
 	if (!m_Dirty)
 		return; /* advoid chunk rebuilding */
 
-	/* reset indices and vertices vector */
-	m_MeshData.vertices.clear();
-	m_MeshData.indices.clear();
-
 	for (int cx = 0; cx < CHUNK_XYZ; cx++) {
 		for (int cy = 0; cy < CHUNK_XYZ; cy++) {
 			for (int cz = 0;cz < CHUNK_XYZ; cz++) {
@@ -122,10 +118,9 @@ void Chunk::Build()
 	m_Dirty = false;
 }
 
-void Chunk::Render(Shader *shader) const
+void Chunk::Render() const
 {  
 	/* push model matrix */
-	shader->Set4x4("s_M", mat4(1.0f));
 	m_Level->GetChunkManager()->IncrementDrawCalls();
 	m_Mesh->Render();
 }

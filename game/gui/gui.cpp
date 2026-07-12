@@ -52,6 +52,7 @@ gui::gui(Player *player, const vec2 &winsize)
 	m_Player = player;
 	m_WinSize = winsize;
 	m_Cam = std::make_unique<OrthographicCamera>(0.0f, m_WinSize.x, 0.0f, m_WinSize.y, 100.0f, 300.0f);
+	m_Shader = &ShaderManager::Get("hud");
 }
 
 gui::~gui()
@@ -82,19 +83,19 @@ void gui::BuildCrossHair()
 	m_Renderer.End();
 }
 
-void gui::Render(Shader *shader, Texture *tex)
+void gui::Render(Texture *tex)
 {
 	m_Cam->Update();
 
 	Renderer::Clear(GL_DEPTH_BUFFER_BIT);
 
-	shader->Bind();
+	m_Shader->Bind();
 	glm::mat4 VM = glm::mat4(1.0f);
 	VM = translate(VM, { 0.0f, 0.0f, -200.0f });
-	shader->Set4x4("s_VP", m_Cam->GetProjection() * VM);
-	shader->Set4x4("s_M", glm::mat4(1.0f));
+	m_Shader->Set4x4("s_VP", m_Cam->GetProjection() * VM);
+	m_Shader->Set4x4("s_M", glm::mat4(1.0f));
 
-	shader->SetInt("s_RenderFlags", SHADER_COLOR_FLAG);
+	m_Shader->SetInt("s_RenderFlags", SHADER_COLOR_FLAG);
 	m_Renderer.Render();
 	
 	mat4 TileModel = glm::mat4(1.0f);
@@ -103,11 +104,11 @@ void gui::Render(Shader *shader, Texture *tex)
 	TileModel = rotate(TileModel, glm::radians(30.0f), { 1.0F, 0.0F, 0.0F });
 	TileModel = rotate(TileModel, glm::radians(45.0f), { 0.0F, 1.0F, 0.0F });
 	TileModel = translate(TileModel, { 1.5F, -0.5F, -0.5F });
-	shader->Set4x4("s_M", TileModel);
+	m_Shader->Set4x4("s_M", TileModel);
 
 	/* render tile */
 	tex->Bind(0);
-	shader->SetInt("s_RenderFlags", SHADER_TEXTURE_FLAG);
+	m_Shader->SetInt("s_RenderFlags", SHADER_TEXTURE_FLAG);
 	m_Mesh->Render();
 }
 

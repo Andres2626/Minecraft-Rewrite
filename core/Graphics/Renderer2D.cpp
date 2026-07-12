@@ -15,7 +15,7 @@ namespace MC
 		{
 			m_VAO = std::make_unique<VertexArray>();
 			m_IBO = std::make_unique<IndexBuffer>();
-			m_VBO = std::make_unique<VertexBuffer>();
+			m_VBO = std::make_unique<VertexBuffer>(GL_STATIC_DRAW);
 
 			m_quadvert.reserve(RENDERER2D_INITIAL_VERTICES);
 			m_quadind.reserve(RENDERER2D_INITIAL_INDICES);
@@ -27,8 +27,7 @@ namespace MC
 
 		void Renderer2D::Begin()
 		{
-			m_quadvert.clear();
-			m_quadind.clear();
+
 		}
 
 		void Renderer2D::End()
@@ -43,6 +42,9 @@ namespace MC
 			VL.AddAttribute(SHADER_BRIG_BIT, sizeof(Vertex), (void*)offsetof(Vertex, brig));
 			m_VAO->Link(VL);
 			m_VAO->Unbind();
+
+			std::vector<Vertex>().swap(m_quadvert);
+			std::vector<uint32_t>().swap(m_quadind);
 		}
 
 		void Renderer2D::AddVertex(const Vertex& vert)

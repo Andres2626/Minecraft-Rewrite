@@ -61,13 +61,17 @@ to the project, submit a pull request to:
     - [ ] Implement ShaderManager.
     - [ ] Generate zombie mesh with MeshFactory.
     - [ ] ECS in the future.
+    - [ ] Add Scene3D, Renderer3D and RenderCommand classes.
+    - [ ] Improve EntityRenderer process.
+    - [ ] Refractor RubyDung class.
 ## Tools and Utilities
     - [ ] Implement an argument parser in the engine (getopt).
     - [ ] Cross-compilation support.
 ## Performance
     - [ ] High performace and stability in main game.
           - [ ] Implement batching for Renderer2D.
-          - [ ] Implement instancing for zombie entities.
+          - [~] Implement instancing for zombie entities.
+            VertexLayout for instancing is implemented but renderer and the shader is not implemented.
           - [ ] Implement Binary Greedy Meshing generation.
     - [ ] Implement the FPS limit in the Application class.
 ## Documentation

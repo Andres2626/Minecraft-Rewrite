@@ -9,7 +9,7 @@
 #include <Graphics/Renderer.h>
 #include <Graphics/Renderer2D.h>
 #include <Graphics/Camera/OrthographicCamera.h>
-#include <Graphics/Shader/Shader.h>
+#include <Graphics/Shader/ShaderManager.h>
 #include <Graphics/MeshFactory.h>
 #include <Graphics/Texture.h>
 
@@ -22,6 +22,7 @@ class gui
 protected:
 	Player *m_Player;
 	Renderer2D m_Renderer;
+	Shader *m_Shader;
 	std::unique_ptr<Mesh> m_Mesh;
 	MeshData m_MeshData;
 private:
@@ -36,7 +37,7 @@ public:
 public:
 	void Build();
 	void BuildCrossHair();
-	void Render(Shader *shader, Texture *tex);
+	void Render(Texture *tex);
 public:
 	void OnWindowResize(const vec2 &winsize);
 public:
