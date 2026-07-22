@@ -1,0 +1,54 @@
+[2026-07-22 16:21:10.918] info: Log: conout=true fout=true log_file=./2026-07-22_16-21-10.log verbose=2
+[2026-07-22 16:21:10.919] info: Minecraft rewrite engine version 0.5.0
+[2026-07-22 16:21:11.405] info: Window: Window: x=1024 y=768 title=Game cursor=false profile=204802 glver=3 3 compat=false
+[2026-07-22 16:21:11.406] warning: Window: graphic driver version: 3.3.0 - Build 27.20.100.9749
+[2026-07-22 16:21:11.406] warning: Window: driver vendor: Intel
+[2026-07-22 16:21:11.407] warning: Window: driver name: Intel(R) UHD Graphics 620
+[2026-07-22 16:21:11.710] info: Shader: path=assets/Shaders/chunk.shader
+[2026-07-22 16:21:11.741] info: Shader: path=assets/Shaders/selector.shader
+[2026-07-22 16:21:11.803] info: Shader: path=assets/Shaders/character.shader
+[2026-07-22 16:21:11.831] info: Shader: path=assets/Shaders/hud.shader
+[2026-07-22 16:21:11.861] info: Shader: path=assets/Shaders/particle.shader
+[2026-07-22 16:21:11.864] info: loading level file=./level.dat
+[2026-07-22 16:21:16.130] info: save_file=./level.dat x=256 y=256 z=64 size=4194304 renderer_size=1024
+[2026-07-22 16:21:16.226] info: texture loaded: path=assets/terrain.png x=256 y=256 mode=2600 format=1908
+[2026-07-22 16:21:16.228] info: texture loaded: path=assets/char.png x=64 y=32 mode=2600 format=1908
+[2026-07-22 16:21:17.237] error: Window: OpenGL error 1282: Invalid operation
+[2026-07-22 16:21:17.256] info: 485 fps, 0
+[2026-07-22 16:21:18.238] info: 346 fps, 2
+[2026-07-22 16:21:19.236] info: 284 fps, 2
+[2026-07-22 16:21:20.246] info: 282 fps, 8
+[2026-07-22 16:21:21.237] info: 280 fps, 6
+[2026-07-22 16:21:22.236] info: 356 fps, 4
+[2026-07-22 16:21:23.240] info: 383 fps, 6
+[2026-07-22 16:21:24.237] info: 388 fps, 5
+[2026-07-22 16:21:25.237] info: 365 fps, 11
+[2026-07-22 16:21:26.236] info: 365 fps, 4
+[2026-07-22 16:21:27.236] info: 413 fps, 4
+[2026-07-22 16:21:28.237] info: 412 fps, 6
+[2026-07-22 16:21:29.236] info: 411 fps, 3
+[2026-07-22 16:21:30.235] info: 413 fps, 4
+[2026-07-22 16:21:31.236] info: 406 fps, 6
+[2026-07-22 16:21:32.241] info: 426 fps, 4
+[2026-07-22 16:21:33.236] info: 418 fps, 4
+[2026-07-22 16:21:34.237] info: 402 fps, 3
+[2026-07-22 16:21:35.236] info: 411 fps, 5
+[2026-07-22 16:21:36.238] info: 341 fps, 0
+[2026-07-22 16:21:37.237] info: 308 fps, 2
+[2026-07-22 16:21:38.242] info: 307 fps, 2
+[2026-07-22 16:21:39.236] info: 312 fps, 0
+[2026-07-22 16:21:40.236] info: 316 fps, 0
+[2026-07-22 16:21:41.235] info: 325 fps, 1
+[2026-07-22 16:21:42.237] info: 323 fps, 0
+[2026-07-22 16:21:43.237] info: 315 fps, 1
+[2026-07-22 16:21:44.237] info: 316 fps, 2
+[2026-07-22 16:21:45.236] info: 310 fps, 1
+[2026-07-22 16:21:46.235] info: 384 fps, 0
+[2026-07-22 16:21:47.237] info: 363 fps, 0
+[2026-07-22 16:21:48.237] info: 310 fps, 0
+[2026-07-22 16:21:49.237] info: 339 fps, 1
+[2026-07-22 16:21:50.236] info: 359 fps, 3
+[2026-07-22 16:21:51.238] info: 336 fps, 0
+[2026-07-22 16:21:52.237] info: 413 fps, 0
+[2026-07-22 16:21:52.735] info: saving file=./level.dat
+[2026-07-22 16:21:52.995] info: Log: finished
