@@ -14,7 +14,7 @@ Rubydung::Rubydung()
 	m_Timer = std::make_unique<Timer>();
 	m_WinSize = { m_Props.x, m_Props.y };
 	m_Last = { m_Props.x / 2, m_Props.y / 2 };
-#if 0
+
 	/* Set window icon */
 	const char *errmsg = {};
 	Image wico;
@@ -26,7 +26,7 @@ Rubydung::Rubydung()
 	m_InternalWindow.SetIcon(wico);
 
 	wico.Free();
-#endif
+
 	Renderer::DepthFunc(DepthValue::LEQUAL);
 	Renderer::Enable(GL_DEPTH_TEST);
 	Renderer::ClearColor(GlobalGP.SkyColor);
