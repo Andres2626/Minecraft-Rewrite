@@ -1,19 +1,49 @@
 #pragma once
 
-#include "Character/Zombie.h"
-
 #include "Level/Level.h"
 
-class EntityManager
+class Particle;
+class Zombie;
+
+template<typename T>
+struct EntityStorage
 {
-private:
-	std::vector<std::unique_ptr<Zombie>> m_Entities;
+	std::vector<std::unique_ptr<T>> entities;
+};
+
+class EntityManager : public EntityStorage<Zombie>, public EntityStorage<Particle>
+{
 public:
 	EntityManager();
 	~EntityManager();
 public:
 	void Update();
-	void Register(std::unique_ptr<Zombie> ent);
+
+	template<typename T>
+	void Register(std::unique_ptr<T> ent) 
+	{
+		Get<T>().push_back(std::move(ent));
+	}
 public:
-	const std::vector<std::unique_ptr<Zombie>> &GetEntities() const { return m_Entities; }
+	template<typename T>
+	void UpdateStorage(std::vector<std::unique_ptr<T>>& storage)
+	{
+		auto it = storage.begin();
+
+		while (it != storage.end())
+		{
+			(*it)->Update();
+
+			if ((*it)->attr.isDead)
+				it = storage.erase(it);
+			else
+				++it;
+		}
+	}
+
+	template<typename T>
+	std::vector<std::unique_ptr<T>>& Get()
+	{
+		return this->EntityStorage<T>::entities;
+	}
 };

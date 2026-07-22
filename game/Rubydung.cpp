@@ -48,12 +48,12 @@ void Rubydung::Init()
 	ShaderManager::Register("hud", "assets/Shaders/hud.shader");
 	ShaderManager::Register("particle", "assets/Shaders/particle.shader");
 
-	m_Entities = std::make_unique<EntityManager>();
-	m_EntityRenderer = std::make_unique<EntityRenderer>();
 	m_Level = std::make_unique<Level>(GlobalGP.LevelSize);
 	m_Player = std::make_unique<Player>(*m_Level);
-	m_ParticleEngine = std::make_unique<ParticleEngine>();
-	m_Level->SetParticleEngine(m_ParticleEngine.get());
+	m_EntityManager = std::make_unique<EntityManager>();
+	m_ZombieRenderer = std::make_unique<ZombieRenderer>();
+	m_ParticleRenderer = std::make_unique<ParticleRenderer>();
+	m_Level->SetEntityManager(m_EntityManager.get());
 	m_GUI = std::make_unique<gui>(m_Player.get(), m_WinSize);
 	m_GUI->Build();
 	m_GUI->BuildCrossHair();
@@ -61,10 +61,11 @@ void Rubydung::Init()
 	for (int i = 0; i < 10; i++) {
 		auto zm = std::make_unique<Zombie>(*m_Level, vec3(128.0f, 0.0f, 128.0f));
 		zm->ResetPos();
-		m_Entities->Register(std::move(zm));
+		m_EntityManager->Register<Zombie>(std::move(zm));
 	}
 
-	m_EntityRenderer->SetEntityManager(m_Entities.get());
+	m_ZombieRenderer->SetEntityManager(m_EntityManager.get());
+	m_ParticleRenderer->SetEntityManager(m_EntityManager.get());
 
 	/* load texture */
 	if (!m_TerrainAtlas.LoadFromFile("assets/terrain.png", GL_NEAREST))
@@ -83,19 +84,18 @@ void Rubydung::OnUpdate(Timestep &ts)
 {
 	Default::OnUpdate(ts);
 	
-	m_Player->UpdateRayCast();	
-	m_Entities->Update();
+	m_Player->UpdateRayCast();
+	m_EntityManager->Update();
 	m_Player->Update();
 	m_Player->Pick();
 	m_Level->Update();
-	m_ParticleEngine->Update();
 }
 
 void Rubydung::OnKeyPressed(int key) 
 {
 	switch (key) {
 	case MC_KEY_G:
-		m_Entities->Register(std::make_unique<Zombie>(*m_Level, m_Player->attr.pos));
+		m_EntityManager->Register<Zombie>(std::make_unique<Zombie>(*m_Level, m_Player->attr.pos));
 		break;
 	case MC_KEY_ESCAPE:
 		m_Level->Save();
@@ -183,13 +183,13 @@ void Rubydung::OnRender(float alpha)
 	/* particle rendering */
 	sparticle.Bind();
 	sparticle.Set4x4("s_VP", VP);
-	m_ParticleEngine->Render(*m_Player, alpha);
+	m_ParticleRenderer->Render(*m_Player, alpha);
 
 	/* character rendering */
 	schar.Bind();
 	m_CharAtlas.Bind(0);
 	schar.Set4x4("s_VP", VP);
-	m_EntityRenderer->Render(*m_Level, *m_Player, alpha, m_Timer->ElapsedSeconds());
+	m_ZombieRenderer->Render(*m_Level, *m_Player, alpha, m_Timer->ElapsedSeconds());
 
 	/* GUI rendering */
 	m_GUI->Render(&m_TerrainAtlas);

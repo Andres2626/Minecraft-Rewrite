@@ -1,36 +1,18 @@
-#include "Particle/ParticleEngine.h"
+#include "Particle/ParticleRenderer.h"
 
-ParticleEngine::ParticleEngine()
+#include "Entity/EntityManager.h"
+
+ParticleRenderer::ParticleRenderer()
 {
-    m_Particles.reserve(1000);
     m_Instances.reserve(1000);
 	m_Shader = &ShaderManager::Get("particle");
 }
 
-ParticleEngine::~ParticleEngine()
+ParticleRenderer::~ParticleRenderer()
 {
 }
 
-void ParticleEngine::Add(std::unique_ptr<Particle> particle)
-{
-	m_Particles.push_back(std::move(particle));
-}
-
-void ParticleEngine::Update()
-{
-    auto it = m_Particles.begin();
-    while (it != m_Particles.end())
-    {
-        (*it)->Update();
-
-        if ((*it)->attr.isDead)
-            it = m_Particles.erase(it); /* delete particle */
-        else
-            ++it;
-    }
-}
-
-void ParticleEngine::Render(Player &player, float alpha)
+void ParticleRenderer::Render(Player &player, float alpha)
 {
     m_Shader->SetVec3("s_color", { 0.8f, 0.8f, 0.8f });
     m_Shader->SetVec3("s_camUp", player.Cam.up);
@@ -38,7 +20,7 @@ void ParticleEngine::Render(Player &player, float alpha)
 
     std::vector<ParticleInstance>().swap(m_Instances);
 
-    for (auto& z : m_Particles) {
+    for (auto& z : m_Entities->Get<Particle>()) {
         vec3 p1 = mix(z->attr.oldPos, z->attr.pos, alpha);
         m_Instances.push_back({ p1, z->m_Tex, z->m_TextureOff });
     }
@@ -53,3 +35,9 @@ void ParticleEngine::Render(Player &player, float alpha)
 
     ParticleModel::Get().Unbind();
 }
+
+void ParticleRenderer::SetEntityManager(EntityManager* em)
+{
+    m_Entities = em;
+}
+

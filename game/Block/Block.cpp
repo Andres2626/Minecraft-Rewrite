@@ -1,6 +1,6 @@
 #include "Block/Block.h"
 
-#include "Particle/ParticleEngine.h"
+#include "Entity/EntityManager.h"
 
 Block::Block(const BlockType& id, u32t texid)
 	: m_ID(id), m_UpdateFlag(0), m_TexID(texid)
@@ -17,7 +17,7 @@ void Block::Update(Level *lev, const ivec3 &pos, Random &random)
 
 }
 
-void Block::OnDestroy(Level *lev, const ivec3 &pos, ParticleEngine &particleEng)
+void Block::OnDestroy(Level *lev, const ivec3 &pos, EntityManager &entities)
 {
 	/* discard if block is air */
 	if (m_ID == BlockType::AIR)
@@ -35,7 +35,7 @@ void Block::OnDestroy(Level *lev, const ivec3 &pos, ParticleEngine &particleEng)
 				float mz = tz - pos.z - 0.5f;
 
 				auto pl = std::make_unique<Particle>(*lev, vec3(tx, ty, tz), vec3(mx, my, mz), (u32t)m_TexID);
-				particleEng.Add(std::move(pl));
+				entities.Register<Particle>(std::move(pl));
 			}
 		}
 	}

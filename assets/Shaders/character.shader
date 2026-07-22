@@ -126,9 +126,9 @@ void main()
 
     mat4 local = mat4(1.0);
     local = translate(local, s_partrot);
-    local = rotateX(local, partrot.z);
+    local = rotateX(local, partrot.x);
     local = rotateY(local, partrot.y);
-    local = rotateZ(local, partrot.x);
+    local = rotateZ(local, partrot.z);
     
     vec4 world = model * local * vec4(aPos, 1.0);
     worldPos = world.xyz;

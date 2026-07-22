@@ -25,7 +25,7 @@ protected:
 private:
 	Random m_Random;
 	Shader *m_Shader;
-	ParticleEngine *m_ParticleEngine;
+	EntityManager *m_EntityManager;
 	size_t m_Volume;
 	ivec3 m_Size;
 	mc_str m_LevelFile;
@@ -58,7 +58,7 @@ public:
 public:
 	std::vector<AABB> &GetCubes(const AABB& aabb);
 public:
-	void SetParticleEngine(ParticleEngine *particleEng);
+	void SetEntityManager(EntityManager *entities);
 	int GetBlockIndex(const ivec3& block);
 	inline ivec3 GetSize() const { return m_Size; }
 	ChunkManager *GetChunkManager() const;

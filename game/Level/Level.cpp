@@ -311,7 +311,7 @@ void Level::SetTile(const ivec3& blockpos, BlockType type)
 void Level::DestroyBlock(const ivec3& blockpos)
 {
 	Block &block = BlockManager::GetBlockType(GetBlockType(blockpos));
-	block.OnDestroy(this, blockpos, *m_ParticleEngine);
+	block.OnDestroy(this, blockpos, *m_EntityManager);
 	SetTile(blockpos, BlockType::AIR);
 }
 
@@ -349,14 +349,14 @@ std::vector<AABB> &Level::GetCubes(const AABB &aabb)
 	return m_cubes;
 }
 
-void Level::SetParticleEngine(ParticleEngine *particleEng)
+void Level::SetEntityManager(EntityManager *entities)
 {
-	m_ParticleEngine = particleEng;
+	m_EntityManager = entities;
 }
 
 int Level::GetBlockIndex(const ivec3& block)
 {
-	return (block.y * m_Size.z + block.z)* m_Size.x + block.x;
+	return (block.y * m_Size.z + block.z) * m_Size.x + block.x;
 }
 
 ChunkManager* Level::GetChunkManager() const

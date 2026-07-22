@@ -12,7 +12,8 @@
 using namespace MC;
 using namespace Math;
 
-class ParticleEngine;
+class Level;
+class EntityManager;
 
 enum class BlockType
 {
@@ -33,8 +34,6 @@ enum class Face
 	BOTTOM,
 	TOP
 };
-
-class Level;
 
 class Block
 {
@@ -60,7 +59,7 @@ public:
 	~Block();
 public:
 	virtual void Update(Level *lev, const ivec3 &pos, Random &random);
-	virtual void OnDestroy(Level *lev, const ivec3 &pos, ParticleEngine &particleEng);
+	virtual void OnDestroy(Level *lev, const ivec3 &pos, EntityManager &entities);
 public:
 	BlockType GetID() const { return m_ID; }
 	int IsUpdatable() { return m_UpdateFlag; };
