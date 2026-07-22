@@ -27,6 +27,9 @@ protected:
 private:
 	/* rebuild flag */
 	bool m_Dirty; 
+	bool m_Queued;
+	u32t m_Priority;
+	u32t m_DirtyTick;
 	ivec3 m_Pos;
 	AABB m_Box;
 public:
@@ -42,6 +45,12 @@ private:
 public:
 	inline void SetDirty(bool dirty) { m_Dirty = dirty; }
 	inline bool GetDirty() { return m_Dirty; }
+	inline void SetQueued(bool queued) { m_Queued = queued; }
+	inline bool GetQueued() { return m_Queued; }
+	inline void SetPriority(u32t priority) { m_Priority = priority; }
+	inline u32t GetPriority() { return m_Priority; }
+	inline void SetDirtyTick(u32t tick) { m_DirtyTick = tick; }
+	inline u32t GetDirtyTick() { return m_DirtyTick; }
 	inline ivec3 &GetPosition() { return m_Pos; }
 	inline AABB &GetBox() { return m_Box; }
 };

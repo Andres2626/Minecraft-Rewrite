@@ -2,15 +2,8 @@
 
 #include "Level/Level.h"
 
-static std::mt19937 rng(std::random_device{}());
-
-static int randRange(int min, int max)
-{
-	return std::uniform_int_distribution<int>(min, max)(rng);
-}
-
 GrassBlock::GrassBlock()
-	: Block(BlockType::GRASS)
+	: Block(BlockType::GRASS, 3)
 {
 	front = vec2(3 * UV_COORD, 0);
 	back = front;
@@ -26,13 +19,13 @@ GrassBlock::~GrassBlock()
 {
 }
 
-void GrassBlock::Update(Level *lev, const ivec3 &pos)
+void GrassBlock::Update(Level *lev, const ivec3 &pos, Random &random)
 {
-    Block::Update(lev, pos);
+    Block::Update(lev, pos, random);
 
     if (lev->IsLit(pos)) {
         for (int i = 0; i < 4; ++i) {
-            vec3 tp = { randRange(0, 3) - 1, randRange(0, 5) - 3, randRange(0, 3) - 1};
+            vec3 tp = { random.NextInt(3) - 1, random.NextInt(5) - 3, random.NextInt(3) - 1 };
             tp += pos;
 
             if (lev->GetBlockType(tp) == BlockType::DIRT && lev->IsLit(tp))

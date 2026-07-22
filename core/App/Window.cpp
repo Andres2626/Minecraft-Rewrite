@@ -5,6 +5,7 @@
 #include "Events/Event.h"
 #include "Graphics/Renderer.h"
 #include "Graphics/GL/GLError.h"
+#include "Graphics/GL/GLContext.h"
 
 #define MC_LOG_PREFIX "Window"
 #include "Log/Log.h"
@@ -56,24 +57,47 @@ namespace MC
 				glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 			/* Create window via GLFW */
-			m_Win = glfwCreateWindow(m_Pr.x, m_Pr.y, m_Title, 0, 0);
+			GLFWmonitor* monitor = nullptr;
+
+			int width = m_Pr.x;
+			int height = m_Pr.y;
+
+			if (m_Pr.fullscreen)
+			{
+				monitor = glfwGetPrimaryMonitor();
+				if (!monitor) {
+					mc_fatal("error obtaining window monitor");
+					err.SetError(ErrorType::WindowBuild);
+					return false;
+				}
+
+				const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+				if (!mode) {
+					mc_fatal("error obtaining video mode");
+					err.SetError(ErrorType::WindowBuild);
+					return false;
+				}
+
+				width = mode->width;
+				height = mode->height;
+			}
+
+			m_Win = glfwCreateWindow(width, height, m_Title, monitor, 0);
 			if (!m_Win) {
-				mc_fatal("error creating window: x={} y={} title={}", m_Pr.x, m_Pr.y, m_Title);
+				mc_fatal("error creating window: x={} y={} title={}", width, height, m_Title);
 				err.SetError(ErrorType::WindowBuild);
 				return false;
 			}
 
-			glfwMakeContextCurrent(m_Win);
+			if (!Graphics::GL::Context::Init((void*)m_Win)) {
+				mc_fatal("error creating window context");
+				err.SetError(ErrorType::ContextInit);
+				return false;
+			}
 
 			/* Initialze event system */
 			gleqInit();
 			gleqTrackWindow(m_Win);
-
-			bool glad = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-			if (!glad) {
-				err.SetError(ErrorType::OpenGLInit);
-				return false;
-			}
 
 			if (!m_Pr.cursor.enable)
 				glfwSetInputMode(m_Win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -114,7 +138,7 @@ namespace MC
 
 		void Window::Clear()
 		{
-			MC::Graphics::Renderer::Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			Graphics::Renderer::Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 
 		void Window::Update()
@@ -123,12 +147,12 @@ namespace MC
 			glfwSwapBuffers(m_Win);
 		}
 
-		int Window::GetEvent(MC::Events::Event &ev)
+		int Window::GetEvent(Events::Event &ev)
 		{
 			return gleqNextEvent(&ev);
 		}
 
-		void Window::FreeEvent(MC::Events::Event &ev)
+		void Window::FreeEvent(Events::Event &ev)
 		{
 			gleqFreeEvent(&ev);
 		}
@@ -141,6 +165,24 @@ namespace MC
 			image[0].pixels = img.pixels;
 
 			glfwSetWindowIcon(m_Win, 1, image);
+		}
+
+		bool Window::SetFullScreen(bool fullscreen)
+		{
+			GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+			if (!monitor)
+				return false;
+
+			const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+			if (!mode)
+				return false;
+
+			if (fullscreen)
+				glfwSetWindowMonitor(m_Win, monitor, 0, 0, mode->width, mode->height, 0);
+			else
+				glfwSetWindowMonitor(m_Win, nullptr, 100, 100, m_Pr.x, m_Pr.y, 0);
+
+			return true;
 		}
 
 	}

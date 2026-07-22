@@ -10,7 +10,7 @@ namespace MC
 		NoError = 0,
 		WindowLibrary,
 		WindowBuild,
-		OpenGLInit,
+		ContextInit,
 		Noimp,
 		AssetLoad = 0x100,
 		FileNotFound,

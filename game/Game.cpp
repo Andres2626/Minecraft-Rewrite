@@ -18,7 +18,7 @@ class Game : public Application
 {
 public:
 	Game()
-		: Application(WIN_TITLE, { WIN_X, WIN_Y, { false } })
+		: Application(WIN_TITLE, { WIN_X, WIN_Y, false, { false }, { CONTEXT_COMPAT_PROFILE, 3, 3, false } })
 	{ 
 	
 	}

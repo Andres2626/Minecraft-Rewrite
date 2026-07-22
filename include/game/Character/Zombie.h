@@ -17,7 +17,6 @@ public:
 	float timeoff;
 	float rotA;
 	float rot;
-	float speed;
 private:
 	vec3 m_PartRot[6];
 	Shader *m_Shader;

@@ -14,7 +14,7 @@ Rubydung::Rubydung()
 	m_Timer = std::make_unique<Timer>();
 	m_WinSize = { m_Props.x, m_Props.y };
 	m_Last = { m_Props.x / 2, m_Props.y / 2 };
-
+#if 0
 	/* Set window icon */
 	const char *errmsg = {};
 	Image wico;
@@ -23,10 +23,10 @@ Rubydung::Rubydung()
 		mc_error("error loading image. internal error {}", errmsg);
 		mc_fatal("failed to open window icon: \"{}\"", wico.path);
 	}
-
 	m_InternalWindow.SetIcon(wico);
-	wico.Free();
 
+	wico.Free();
+#endif
 	Renderer::DepthFunc(DepthValue::LEQUAL);
 	Renderer::Enable(GL_DEPTH_TEST);
 	Renderer::ClearColor(GlobalGP.SkyColor);
@@ -46,11 +46,14 @@ void Rubydung::Init()
 	ShaderManager::Register("selector", "assets/Shaders/selector.shader");
 	ShaderManager::Register("character", "assets/Shaders/character.shader");
 	ShaderManager::Register("hud", "assets/Shaders/hud.shader");
+	ShaderManager::Register("particle", "assets/Shaders/particle.shader");
 
 	m_Entities = std::make_unique<EntityManager>();
 	m_EntityRenderer = std::make_unique<EntityRenderer>();
 	m_Level = std::make_unique<Level>(GlobalGP.LevelSize);
 	m_Player = std::make_unique<Player>(*m_Level);
+	m_ParticleEngine = std::make_unique<ParticleEngine>();
+	m_Level->SetParticleEngine(m_ParticleEngine.get());
 	m_GUI = std::make_unique<gui>(m_Player.get(), m_WinSize);
 	m_GUI->Build();
 	m_GUI->BuildCrossHair();
@@ -73,9 +76,8 @@ void Rubydung::Init()
 	ShaderManager::Get("chunk").SetInt("s_t1", 0);
 	ShaderManager::Get("character").SetInt("s_t1", 0);
 	ShaderManager::Get("hud").SetInt("s_t1", 0);
+	ShaderManager::Get("particle").SetInt("s_t1", 0);
 }
-
-float accumulator = 0.0f;
 
 void Rubydung::OnUpdate(Timestep &ts) 
 {
@@ -86,6 +88,7 @@ void Rubydung::OnUpdate(Timestep &ts)
 	m_Player->Update();
 	m_Player->Pick();
 	m_Level->Update();
+	m_ParticleEngine->Update();
 }
 
 void Rubydung::OnKeyPressed(int key) 
@@ -164,6 +167,7 @@ void Rubydung::OnRender(float alpha)
 
 	Shader &schunk = ShaderManager::Get("chunk");
 	Shader &schar = ShaderManager::Get("character");
+	Shader &sparticle = ShaderManager::Get("particle");
 	mat4 VP = m_Player->Cam.GetProjection() * m_Player->Cam.GetView();
 
 	/* world rendering */
@@ -175,6 +179,11 @@ void Rubydung::OnRender(float alpha)
 
 	/* selector shader */
 	m_Player->RenderPick(m_Timer->ElapsedMillis());
+
+	/* particle rendering */
+	sparticle.Bind();
+	sparticle.Set4x4("s_VP", VP);
+	m_ParticleEngine->Render(*m_Player, alpha);
 
 	/* character rendering */
 	schar.Bind();

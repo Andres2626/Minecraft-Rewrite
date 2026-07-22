@@ -1,7 +1,7 @@
 #include "Block/Types/Wood.h"
 
 WoodBlock::WoodBlock()
-	: Block(BlockType::WOOD)
+	: Block(BlockType::WOOD, 4)
 {
 	front = vec2(4 * UV_COORD, 0);
 	back = front;

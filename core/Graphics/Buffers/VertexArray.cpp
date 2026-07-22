@@ -27,11 +27,5 @@ namespace MC
 		{
 			glBindVertexArray(0);
 		}
-
-		void VertexArray::Link(const VertexLayout &layout) const 
-		{
-			layout.Init();
-		}
-
 	}
 }

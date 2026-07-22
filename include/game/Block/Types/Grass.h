@@ -8,5 +8,5 @@ public:
 	GrassBlock();
 	~GrassBlock();
 public:
-	void Update(Level *lev, const ivec3 &pos) override;
+	void Update(Level *lev, const ivec3 &pos, Random &random) override;
 };

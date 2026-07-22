@@ -55,18 +55,18 @@ void ZombieModel::Build()
     m_VAO->Bind();
     m_VBO->Build(vertices.size() * sizeof(float), vertices.data());
     m_IBO->Build(indices.size(), indices.data());
-    VL.AddAttribute(SHADER_VERTEX_BIT, 5 * sizeof(float), (void*)0);
-    VL.AddAttribute(SHADER_TEX_BIT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    m_VAO->Link(VL);
+    VL.AddAttribute<vec3>(SHADER_VERTEX_BIT, 5 * sizeof(float), (void*)0);
+    VL.AddAttribute<vec2>(SHADER_TEX_BIT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    m_VBO->SetVertexLayout(VL);
 
     m_InstanceBuffer->Resize(MAX_INSTANCES * sizeof(ZombieInstance));
-    IVL.AddAttribute(5, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, pos), 1, 3);
-    IVL.AddAttribute(6, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, rotY), 1, 1);
-    IVL.AddAttribute(7, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, timeoff), 1, 1);
-    IVL.AddAttribute(8, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, speed), 1, 1);
-    IVL.AddAttribute(9, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, brig), 1, 1);
+    IVL.AddAttribute<vec3>(5, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, pos), 1);
+    IVL.AddAttribute<float>(6, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, rotY), 1);
+    IVL.AddAttribute<float>(7, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, timeoff), 1);
+    IVL.AddAttribute<float>(8, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, speed), 1);
+    IVL.AddAttribute<float>(9, sizeof(ZombieInstance), (void*)offsetof(ZombieInstance, brig), 1);
 
-    m_VAO->Link(IVL);
+    m_InstanceBuffer->SetVertexLayout(IVL);
     m_InstanceBuffer->Unbind();
     m_VAO->Unbind();
 }
@@ -77,7 +77,7 @@ void ZombieModel::PushPart(const Cube& cube)
     m_partOffset += 36;
 }
 
-void ZombieModel::UpdateInstances(const std::vector<ZombieInstance>& instances)
+void ZombieModel::UpdateInstances(const std::vector<ZombieInstance> &instances)
 {
     if (instances.empty())
         return;

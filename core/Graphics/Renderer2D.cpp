@@ -36,11 +36,11 @@ namespace MC
 			m_VAO->Bind();
 			m_VBO->Build(m_quadvert.size() * sizeof(Vertex), m_quadvert.data());
 			m_IBO->Build(m_quadind.size(), m_quadind.data());
-			VL.AddAttribute(SHADER_VERTEX_BIT, sizeof(Vertex), (void*)offsetof(Vertex, pos));
-			VL.AddAttribute(SHADER_COLOR_BIT, sizeof(Vertex), (void*)offsetof(Vertex, color));
-			VL.AddAttribute(SHADER_TEX_BIT, sizeof(Vertex), (void*)offsetof(Vertex, uv));
-			VL.AddAttribute(SHADER_BRIG_BIT, sizeof(Vertex), (void*)offsetof(Vertex, brig));
-			m_VAO->Link(VL);
+			VL.AddAttribute<Math::vec3>(SHADER_VERTEX_BIT, sizeof(Vertex), (void*)offsetof(Vertex, pos));
+			VL.AddAttribute<Math::vec3>(SHADER_COLOR_BIT, sizeof(Vertex), (void*)offsetof(Vertex, color));
+			VL.AddAttribute<Math::vec2>(SHADER_TEX_BIT, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+			VL.AddAttribute<float>(SHADER_BRIG_BIT, sizeof(Vertex), (void*)offsetof(Vertex, brig));
+			m_VBO->SetVertexLayout(VL);
 			m_VAO->Unbind();
 
 			std::vector<Vertex>().swap(m_quadvert);
@@ -102,7 +102,7 @@ namespace MC
 				return;
 
 			m_VAO->Bind();
-			Renderer::DrawElements(GL_TRIANGLES, m_quadind.size());
+			Renderer::DrawElements(GL_TRIANGLES, m_IBO->GetSize());
 			m_VAO->Unbind();
 		}
 

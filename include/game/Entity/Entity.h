@@ -16,6 +16,7 @@ struct EntityAttributes
 	bool isGround;
 	bool isDead;
 	float heightOffset;
+	float speed;
 	vec2 size;
 	vec3 pos;
 	vec3 oldPos;
@@ -33,6 +34,8 @@ public:
 public:
 	Entity(Level& level);
 	~Entity();
+public:
+	void SetSize(vec2 size);
 public:
 	virtual void Move(const vec3& pos);
 	virtual void MoveRelative(vec2 a, float speed);

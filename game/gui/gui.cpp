@@ -96,7 +96,9 @@ void gui::Render(Texture *tex)
 	m_Shader->Set4x4("s_M", glm::mat4(1.0f));
 
 	m_Shader->SetInt("s_RenderFlags", SHADER_COLOR_FLAG);
+	Renderer::Disable(GL_DEPTH_TEST);
 	m_Renderer.Render();
+	Renderer::Enable(GL_DEPTH_TEST);
 	
 	mat4 TileModel = glm::mat4(1.0f);
 	TileModel = translate(TileModel, { m_WinSize.x - 48.0f, m_WinSize.y - 48.0f, 0.0f });

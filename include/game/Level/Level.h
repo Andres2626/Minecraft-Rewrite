@@ -2,12 +2,13 @@
 #include "PerlinNoiseFilter.h"
 
 #include "Player/Player.h"
-
 #include "Chunk/Chunk.h"
 #include "Chunk/ChunkManager.h"
+#include "Particle/Particle.h"
 
 #include <Physics/AABB.h>
 #include <Graphics/Shader/ShaderManager.h>
+#include <Utils/Random.h>
 
 using namespace MC;
 using namespace Math;
@@ -19,9 +20,12 @@ class ChunkManager;
 class Level 
 {
 protected:
+	std::vector<AABB> m_cubes;
 	std::unique_ptr<ChunkManager> m_ChunkManager;
 private:
+	Random m_Random;
 	Shader *m_Shader;
+	ParticleEngine *m_ParticleEngine;
 	size_t m_Volume;
 	ivec3 m_Size;
 	mc_str m_LevelFile;
@@ -49,10 +53,12 @@ public:
 	void Tick();
 public:
 	void SetTile(const ivec3& blockpos, BlockType type);
+	void DestroyBlock(const ivec3& blockpos);
 	BlockType GetBlockType(const ivec3& pos);
 public:
-	std::vector<AABB> GetCubes(const AABB& aabb);
+	std::vector<AABB> &GetCubes(const AABB& aabb);
 public:
+	void SetParticleEngine(ParticleEngine *particleEng);
 	int GetBlockIndex(const ivec3& block);
 	inline ivec3 GetSize() const { return m_Size; }
 	ChunkManager *GetChunkManager() const;

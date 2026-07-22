@@ -1,7 +1,7 @@
 #include "Block/Types/StoneBrick.h"
 
 StoneBrickBlock::StoneBrickBlock()
-	: Block(BlockType::STONEBRICK)
+	: Block(BlockType::STONEBRICK, 16)
 {
 	front = vec2(0, UV_COORD);
 	back = front;

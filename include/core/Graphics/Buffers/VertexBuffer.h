@@ -1,11 +1,12 @@
 #pragma once
+#include "VertexLayout.h"
+
 #include "common.h"
 
 namespace MC 
 {
 	namespace Graphics 
 	{
-
 		class MC_API VertexBuffer 
 		{
 		private:
@@ -25,6 +26,8 @@ namespace MC
 		public:
 			inline u32t GetId() { return m_ID; }
 			inline u32t GetMode() { return m_Mode; }
+		public:
+			void SetVertexLayout(const VertexLayout &layout);
 		};
 
 	}

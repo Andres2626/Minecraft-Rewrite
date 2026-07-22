@@ -205,7 +205,7 @@ void Player::Pick()
 		m_Level.SetTile(m_HitResult.block + m_HitResult.face, m_SelectedBlock); /* set block */
 
 	if (right && !m_MouseRight)
-		m_Level.SetTile(m_HitResult.block, BlockType::AIR); /* delete block */
+		m_Level.DestroyBlock(m_HitResult.block);
 		
 	/* Update mouse state */
 	m_MouseLeft = left;

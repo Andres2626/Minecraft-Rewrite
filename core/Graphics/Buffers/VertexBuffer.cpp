@@ -49,5 +49,34 @@ namespace MC
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
+		void VertexBuffer::SetVertexLayout(const VertexLayout& layout)
+		{
+			const auto& attr = layout.GetAttribs();
+			for (int i = 0; i < attr.size(); i++) {
+				bool isIntegerType = (attr[i].type == GL_UNSIGNED_INT || attr[i].type == GL_INT ||
+					attr[i].type == GL_UNSIGNED_SHORT || attr[i].type == GL_SHORT ||
+					attr[i].type == GL_UNSIGNED_BYTE || attr[i].type == GL_BYTE);
+
+				if (isIntegerType) {
+					glVertexAttribIPointer(attr[i].index,
+						attr[i].size,
+						attr[i].type,
+						attr[i].stride,
+						attr[i].offset);
+				}
+				else {
+					glVertexAttribPointer(attr[i].index,
+						attr[i].size,
+						attr[i].type,
+						attr[i].normalized,
+						attr[i].stride,
+						attr[i].offset);
+				}
+				glEnableVertexAttribArray(attr[i].index);
+				if (attr[i].divisor > 0)
+					glVertexAttribDivisor(attr[i].index, attr[i].divisor);
+			}
+		}
+
 	}
 }

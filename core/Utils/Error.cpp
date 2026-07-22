@@ -25,8 +25,8 @@ namespace MC
 		case ErrorType::WindowBuild:
 			err.str = "Window build error";
 			break;
-		case ErrorType::OpenGLInit:
-			err.str = "OpenGL init error";
+		case ErrorType::ContextInit:
+			err.str = "Context init error";
 			break;
 		case ErrorType::AssetLoad:
 			err.str = "Resource loading error";

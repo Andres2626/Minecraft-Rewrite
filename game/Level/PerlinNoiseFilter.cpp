@@ -1,17 +1,12 @@
 #include "Level/PerlinNoiseFilter.h"
 
-#include <random>
+#include <Utils/Random.h>
 
 #define FUZZINESS 16
 
 /* code from: https://github.com/thecodeofnotch/rd-20090515/blob/master/src/main/java/com/mojang/rubydung/level/PerlinNoiseFilter.java */
 
-static std::mt19937 rng(std::random_device{}());
-
-static int randRange(int min, int max) 
-{
-	return std::uniform_int_distribution<int>(min, max)(rng);
-}
+using namespace MC;
 
 PerlinNoiseFilter::PerlinNoiseFilter(int octave)
 	: m_Octave(octave)
@@ -26,6 +21,8 @@ PerlinNoiseFilter::~PerlinNoiseFilter()
 
 int *PerlinNoiseFilter::read(int width, int height, int *out)
 {
+	Random random;
+
 	int *table = (int*)malloc(width * height *  sizeof(int));
 	if (!table)
 		return NULL;
@@ -33,7 +30,7 @@ int *PerlinNoiseFilter::read(int width, int height, int *out)
 	/* create first table */
 	for (int step = width >> m_Octave, y = 0; y < height; y += step) {
 		for (int x = 0; x < width; x += step) {
-			table[x + y * width] = randRange(-128, 128) * FUZZINESS;
+			table[x + y * width] = (random.NextInt(256) - 128) * FUZZINESS;
 		}
 	}
 
@@ -50,7 +47,7 @@ int *PerlinNoiseFilter::read(int width, int height, int *out)
 				int SY = table[x % width + (y + step) % height * width];
 				int SXY = table[(x + step) % width + (y + step) % height * width];
 
-				int mutatedValue = (v + SY + SX + SXY) / 4 + randRange(-max, max);
+				int mutatedValue = (v + SY + SX + SXY) / 4 + random.NextInt(max * 2) - max;
 
 				table[x + halfstep + (y + halfstep) * width] = mutatedValue;
 			}
@@ -68,8 +65,8 @@ int *PerlinNoiseFilter::read(int width, int height, int *out)
 
 				int hSv = table[(x + halfstep) % width + (y + halfstep) % height * width];
 
-				int mutatedValueX = (v + SX + hSv + hSX) / 4 + randRange(-max, max);
-				int mutatedValueY = (v + SY + hSv + hSY) / 4 + randRange(-max, max);
+				int mutatedValueX = (v + SX + hSv + hSX) / 4 + random.NextInt(max * 2) - max;
+				int mutatedValueY = (v + SY + hSv + hSY) / 4 + random.NextInt(max * 2) - max;
 
 				table[x + halfstep + y * width] = mutatedValueX;
 				table[x + (y + halfstep) * width] = mutatedValueY;

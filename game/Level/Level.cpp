@@ -271,20 +271,20 @@ void Level::Render(Player *player)
 
 void Level::Update()
 {
-	m_ChunkManager->Update();
-
 	int totalTiles = m_Volume;
 	int ticks = totalTiles / 400;
 
 	for (int i = 0; i < ticks; ++i) {
-		ivec3 pos = { randRange(0, m_Size.x), randRange(0, m_Size.y) , randRange(0, m_Size.z) };
-		Block &blk = BlockManager::GetBlockType(GetBlockType(pos));
+		ivec3 pos = { m_Random.NextInt(m_Size.x), m_Random.NextInt(m_Size.y) , m_Random.NextInt(m_Size.z) };
+		Block& blk = BlockManager::GetBlockType(GetBlockType(pos));
 		if (!blk.IsUpdatable())
 			continue; /* avoid call update() many times */
 
 		if (blk.GetID() != (BlockType)0)
- 			blk.Update(this, pos);
+			blk.Update(this, pos, m_Random);
 	}
+
+	m_ChunkManager->Update();
 }
 
 void Level::Tick()
@@ -299,10 +299,20 @@ void Level::SetTile(const ivec3& blockpos, BlockType type)
 
 	/* set block type in the array */
 	int index = GetBlockIndex(blockpos);
+	if (m_Blocks[index] == (u8t)type)
+		return;
+
 	m_Blocks[index] = (int)type;
 
 	UpdateHeightMap(blockpos.x, blockpos.z);
 	m_ChunkManager->MarkDirty(blockpos);
+}
+
+void Level::DestroyBlock(const ivec3& blockpos)
+{
+	Block &block = BlockManager::GetBlockType(GetBlockType(blockpos));
+	block.OnDestroy(this, blockpos, *m_ParticleEngine);
+	SetTile(blockpos, BlockType::AIR);
 }
 
 BlockType Level::GetBlockType(const ivec3 &pos)
@@ -314,10 +324,9 @@ BlockType Level::GetBlockType(const ivec3 &pos)
 	return (BlockType)m_Blocks[index];
 }
 
-std::vector<AABB> Level::GetCubes(const AABB &aabb) 
+std::vector<AABB> &Level::GetCubes(const AABB &aabb) 
 {
-	static std::vector<AABB> aabbs;
-	aabbs.clear();
+	m_cubes.clear();
 
 	vec3 p0 = aabb.p0;
 	vec3 p1 = aabb.p1 + 1.0f;
@@ -332,15 +341,20 @@ std::vector<AABB> Level::GetCubes(const AABB &aabb)
 		for (int y3 = (int)p0.y; y3 < p1.y; ++y3) {
 			for (int z3 = (int)p0.z; z3 < p1.z; ++z3) {
 				if (IsSolidTile({ x3, y3, z3 }))
-					aabbs.push_back(AABB({ (float)x3, (float)y3, (float)z3 }, { (float)(x3 + 1), (float)(y3 + 1), (float)(z3 + 1) }));
+					m_cubes.push_back(AABB({ (float)x3, (float)y3, (float)z3 }, { (float)(x3 + 1), (float)(y3 + 1), (float)(z3 + 1) }));
 			}
 		}
 	}
 
-	return aabbs;
+	return m_cubes;
 }
 
-int Level::GetBlockIndex(const ivec3& block) 
+void Level::SetParticleEngine(ParticleEngine *particleEng)
+{
+	m_ParticleEngine = particleEng;
+}
+
+int Level::GetBlockIndex(const ivec3& block)
 {
 	return (block.y * m_Size.z + block.z)* m_Size.x + block.x;
 }

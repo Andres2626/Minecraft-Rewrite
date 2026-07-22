@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Math/Math.h"
+#include "Utils/Random.h"
 
 /*
  * each cell of the texture atlas occupies 1/16 in the UV coordinates.
@@ -10,6 +11,8 @@
 
 using namespace MC;
 using namespace Math;
+
+class ParticleEngine;
 
 enum class BlockType
 {
@@ -37,6 +40,7 @@ class Block
 {
 protected:
 	BlockType m_ID;
+	u32t m_TexID;
 
 	/* 
 	 * In general, blocks do not have logic for updating themselves, with a few 
@@ -52,10 +56,11 @@ public:
 	vec2 bottom;
 	vec2 top;
 public:
-	Block(const BlockType &id);
+	Block(const BlockType &id, u32t texid);
 	~Block();
 public:
-	virtual void Update(Level *lev, const ivec3 &pos);
+	virtual void Update(Level *lev, const ivec3 &pos, Random &random);
+	virtual void OnDestroy(Level *lev, const ivec3 &pos, ParticleEngine &particleEng);
 public:
 	BlockType GetID() const { return m_ID; }
 	int IsUpdatable() { return m_UpdateFlag; };

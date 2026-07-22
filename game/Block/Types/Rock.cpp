@@ -1,7 +1,7 @@
 #include "Block/Types/Rock.h"
 
 RockBlock::RockBlock()
-	: Block(BlockType::ROCK)
+	: Block(BlockType::ROCK, 1)
 {
 	front = vec2(UV_COORD, 0);
 	back = front;

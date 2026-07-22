@@ -21,6 +21,7 @@ namespace MC
 		{
 			int x; /* width */
 			int y; /* height */
+			bool fullscreen;
 
 			/* Cursor properties */
 			struct 
@@ -63,10 +64,11 @@ namespace MC
 		public:
 			void OnTick();
 		public:
-			int GetEvent(MC::Events::Event &ev);
-			void FreeEvent(MC::Events::Event &ev);
+			int GetEvent(Events::Event &ev);
+			void FreeEvent(Events::Event &ev);
 		public:
-			void SetIcon(const Graphics::Image& img);
+			void SetIcon(const Graphics::Image &img);
+			bool SetFullScreen(bool fullscreen);
 		public:
 			inline WindowProperties& GetProps() { return m_Pr; }
 			inline GLFWwindow* GetWindow() { return m_Win; };

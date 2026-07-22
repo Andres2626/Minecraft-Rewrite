@@ -18,8 +18,6 @@ namespace MC
 			void Bind() const;
 			void Unbind() const;
 		public:
-			void Link(const VertexLayout& layout) const;
-		public:
 			inline u32t GetId() { return m_ID; }
 		};
 

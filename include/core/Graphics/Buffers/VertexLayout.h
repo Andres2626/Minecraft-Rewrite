@@ -1,12 +1,16 @@
 #pragma once
+
+#include "VertexTraits.h"
+
+#include "Log/Log.h"
+
 #include "common.h"
 
 namespace MC 
 {
 	namespace Graphics 
 	{
-
-		struct MC_API VertexAttrib
+		struct VertexAttrib
 		{
 			u32t index;
 			i32t size;
@@ -14,6 +18,8 @@ namespace MC
 			i32t stride;
 			const void* offset;
 			u8t normalized;
+
+			/* OpenGL >3.3 instancing */
 			u32t divisor;
 		};
 
@@ -25,12 +31,18 @@ namespace MC
 			VertexLayout() = default;
 			~VertexLayout() = default;
 		public:
-			void AddAttribute(u32t index, i32t stride, const void* offset, u32t divisor = 0, i32t size = 0, u8t normalized = 0);
+			template <typename T>
+			void AddAttribute(u32t index, i32t stride, const void* offset, u32t divisor = 0, bool normalized = 0);
 		public:
-			void Init() const;
-		public:
-			static void debug(u32t index, i32t pname, i32t* params);
+			const std::vector<VertexAttrib> &GetAttribs() const { return m_Attribs; };
 		};
 
+		template<typename T>
+		inline void VertexLayout::AddAttribute(u32t index, i32t stride, const void* offset, u32t divisor, bool normalized)
+		{
+			i32t size = VertexTrait<T>::size;
+			u32t type = VertexType2GL(VertexTrait<T>::type);
+			m_Attribs.push_back({index, size, type, stride, offset, normalized, divisor});
+		}
 	}
 }

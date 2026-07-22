@@ -8,6 +8,7 @@
 #include "Character/Zombie.h"
 #include "Entity/EntityManager.h"
 #include "Entity/EntityRenderer.h"
+#include "Particle/ParticleEngine.h"
 #include "gui/gui.h"
 
 #include <core.h>
@@ -30,8 +31,9 @@ private:
 	std::unique_ptr<Level> m_Level;
 	std::unique_ptr<Player> m_Player;
 	std::unique_ptr<Timer> m_Timer;
-	std::unique_ptr <EntityManager> m_Entities;
-	std::unique_ptr <EntityRenderer> m_EntityRenderer;
+	std::unique_ptr<EntityManager> m_Entities;
+	std::unique_ptr<EntityRenderer> m_EntityRenderer;
+	std::unique_ptr<ParticleEngine> m_ParticleEngine;
 	Texture m_TerrainAtlas;
 	Texture m_CharAtlas;
 	Window m_InternalWindow;

@@ -29,7 +29,7 @@ void EntityRenderer::Render(Level &lev, Player &player, float alpha, float secon
 	m_Shader->SetFloat("s_fdensity0", GlobalGP.fg0.density);
 	m_Shader->SetVec4("s_fcolor1", GlobalGP.fg1.color);
 	m_Shader->SetFloat("s_fdensity1", GlobalGP.fg1.density);
-	m_Shader->SetFloat("s_seconds", fmod(seconds, 10 * 2 * M_PI));
+	m_Shader->SetFloat("s_seconds", fmod(seconds, 2 * M_PI));
 	m_Shader->SetFloat("s_scale", 0.058333334f);
 
 	/* TODO: Use this for all entities  */
@@ -39,11 +39,12 @@ void EntityRenderer::Render(Level &lev, Player &player, float alpha, float secon
 	for (auto& z : m_EM->GetEntities()) {
 		if (player.Cam.InFrustum(z->attr.box)) {
 			vec3 p1 = mix(z->attr.oldPos, z->attr.pos, alpha);
-			instances.push_back({p1, z->rot + 180.0f, z->timeoff, z->speed, lev.GetBrigthness(z->attr.pos) });
+			instances.push_back({p1, z->rot + 180.0f, z->timeoff, z->attr.speed, lev.GetBrigthness(z->attr.pos) });
 		}
 	}
 
-	if (instances.empty()) return;
+	if (instances.empty()) 
+		return;
 
 	ZombieModel::Get().UpdateInstances(instances);
 	ZombieModel::Get().Bind();

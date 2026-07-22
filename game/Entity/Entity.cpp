@@ -20,20 +20,30 @@ Entity::~Entity()
 
 }
 
+void Entity::SetSize(vec2 size)
+{
+	attr.size = size;
+}
+
 void Entity::Move(const vec3& pos)
 {
 	vec3 oldPos = pos;
 	vec3 newPos = pos;
 
-	std::vector<AABB> aabbs = m_Level.GetCubes(attr.box.Expand(pos));
+	std::vector<AABB> &aabbs = m_Level.GetCubes(attr.box.Expand(pos));
 
-	for (AABB& aabb : aabbs) {
+	for (AABB& aabb : aabbs)
 		newPos.x = aabb.ClipXCollide(attr.box, newPos.x);
-		newPos.y = aabb.ClipYCollide(attr.box, newPos.y);
-		newPos.z = aabb.ClipZCollide(attr.box, newPos.z);
-	}
+	attr.box.Move({newPos.x, 0.0f, 0.0f});
 
-	attr.box.Move(newPos);
+	for (AABB& aabb : aabbs)
+		newPos.y = aabb.ClipYCollide(attr.box, newPos.y);
+	attr.box.Move({ 0.0f, newPos.y, 0.0f });
+
+	for (AABB& aabb : aabbs) 
+		newPos.z = aabb.ClipZCollide(attr.box, newPos.z);
+	attr.box.Move({ 0.0f, 0.0f, newPos.z });
+
 	attr.isGround = (oldPos.y != newPos.y) && (oldPos.y < 0.0f);
 
 	vec3 delta = newPos - oldPos;

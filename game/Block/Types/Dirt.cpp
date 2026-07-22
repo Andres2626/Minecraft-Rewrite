@@ -1,7 +1,7 @@
 #include "Block/Types/Dirt.h"
 
 DirtBlock::DirtBlock()
-	: Block(BlockType::DIRT)
+	: Block(BlockType::DIRT, 2)
 {
 	front = vec2(2 * UV_COORD, 0);
 	back = front;
