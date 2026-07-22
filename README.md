@@ -14,8 +14,8 @@ aiming for:
 > Currently, the engine and game use newer versions of OpenGL (>3.3).
 > See [Limitation of liability](#-limitation-of-liability) for more info
 
-![demo](./Documentation/resources/rd-200905151.png)
-![demo](./Documentation/resources/rd-200905152.png)
+![demo](./Documentation/resources/rd-1600521.png)
+![demo](./Documentation/resources/rd-1600522.png)
 
 ## 📋 Table of Contents
 1. [Goals of this project](#-goals-of-this-project)
@@ -52,6 +52,7 @@ It is not intended to add/arrive at the following:
 
 ## 📌 Currently available versions
 
+- ***FULL*** rd-160052
 - ***FULL (RECREATED)*** rd-20090515 (Cave game tech) from: https://github.com/thecodeofnotch/rd-20090515 thanks to thecodeofnotch for this.
 - ***FULL*** rd-132328
 - ***FULL*** rd-132211

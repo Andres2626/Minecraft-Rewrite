@@ -1,3 +1,168 @@
+2026-07-22  Andres26  andrescamorao9@gmail.com
+
+2026-07-22 rd-160052
+    
+    - Character
+    
+      Fix rotation bug in character.shader
+    
+    - Entity Rendering
+    
+      Delete EntityRenderer class.
+      Add ZombieRenderer class.
+      Add ParticleRenderer class
+      DONE: Improve redering for different entity types.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-22  Andres26  andrescamorao9@gmail.com
+
+2026-07-22 rd-160052
+    
+    Enable window icon in rubydung.cpp
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-22  Andres26  andrescamorao9@gmail.com
+
+2026-07-22 rd-160052
+    
+    - Engine
+    
+      Engine version changed to 0.0.5
+    
+    - Random
+    
+      Add LGC random number generation from https://github.com/openjdk/jdk/blob/master/src/java.base/share/classes/java/util/Random.java
+    
+    - Window
+    
+      Support fullscreen window.
+      Add SetFullScreen() funcion.
+      Add fullscreen on create() funcion.
+      Improve code style.
+    
+    - Buffers
+    
+      Move VertexArray::Link() code to VertexBuffer().
+      Add SetVertexLayout() funcion in VertexBuffer.
+      Add VertexTraits.
+      Move VertexLayout::Init() to VertexBuffer() and support for float and
+      integer types.
+      Refractor AddAttribute() function.
+    
+    - Context
+    
+      Add Context class for initializing OpenGL.
+    
+    - Block
+    
+      Add texID for create particles.
+      Add OnDestroy() function.
+    
+    - Zombie
+    
+      Update movement constants (as is original game)
+    
+    - Entity
+    
+      Fix bug collision on block borders.
+    
+    - Particle
+    
+      Add particles when block is destroyed.
+      Instanced renderer.
+      Texture coords is generated in the shader.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-12  Andres26  andrescamorao9@gmail.com
+
+2026-07-12 Instanced Renderer
+    
+    - Game:
+    
+      Move all matrix multiplication for zombie animation to character.shader.
+      Remove Render functions of Entity classes.
+      Optimize GetCubes() function from level.
+    
+    - Engine
+    
+      Add DrawElementsInstanced() function in Renderer.
+      Refractor VertexLayout generation.
+      Add divisors to generate mesh in VertexLayout.
+      Add Resize() and Update() functions in VertexBuffer.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-11  Andres26  andrescamorao9@gmail.com
+
+2026-07-11 Minor changes
+    
+    - Build
+    
+      Change rd-20090515 to rd-160052
+    
+    - VertexBuffer
+    
+      Add mode variable (for STATIC and DYNAMIC draw) and 'resize()' funcion.
+    
+    - VertexLayout
+    
+      Add optional argument size in 'AddLayout()' funcion.
+    
+    - Mesh and Renderer2D
+    
+      Improve memory use delete mesh vectors in the end of generation process.
+    
+    - Shader
+    
+      Add ShaderManager class.
+    
+    - Game
+    
+      Separe Zombie class in Zombie and ZombieModel classes.
+      Delete 'GetModelMatrix()' function in Cube class.
+      Add instancing layout.
+      TODO: Refractor RubyDung class.
+      TODO: draw with instancing is not implemented.
+      TODO: Improve EntityRenderer process.
+      TODO: Add Scene3D, Renderer3D and RenderCommand classes.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-10  Andres26  andrescamorao9@gmail.com
+
+2026-07-10 rd-20090515
+    
+    Fix CMakeLists.txt error.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-10  Andres26  andrescamorao9@gmail.com
+
+2026-07-10 rd-20090515
+    
+    Fix include error.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-10  Andres26  andrescamorao9@gmail.com
+
+2026-07-10 rd-20090515
+    
+    Update TODO and ChangeLog.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
 2026-07-10  Andres26  andrescamorao9@gmail.com
 
 2026-07-10 rd-20090515

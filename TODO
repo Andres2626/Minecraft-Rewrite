@@ -32,8 +32,8 @@ to the project, submit a pull request to:
     - [ ] Some Application functions are not used by engine (stop and suspended)
     - [ ] Improve finish process
 ## Directories
-    - [ ] Separate dependencies and third-party libraries.
-    - [ ] Create third-party directory
+    - [x] Separate dependencies and third-party libraries.
+    - [x] Create third-party directory
 ## Modding System
     - [ ] Dynamic Loading (DL) — low-level modding system.
     - [ ] Dynamic Loading protocol (dlfcn.h on Unix/LoadLibrary on Windows).
@@ -54,7 +54,7 @@ to the project, submit a pull request to:
     - [ ] DirectX.
     - [ ] Vulkan.
 ## Architecture / Engine
-    - [ ] Separate the engine from the main project.
+    - [x] Separate the engine from the main project.
     - [ ] Create an independent and reusable game engine.
     - [ ] Implement an event subsystem from scratch.
     - [ ] Support for geometry shaders.
@@ -62,11 +62,11 @@ to the project, submit a pull request to:
     - [ ] Generate zombie mesh with MeshFactory.
     - [ ] ECS in the future.
     - [ ] Add Scene3D, Renderer3D and RenderCommand classes.
-    - [ ] Improve EntityRenderer process.
+    - [x] Improve EntityRenderer process.
     - [ ] Refractor RubyDung class.
 ## Tools and Utilities
     - [ ] Implement an argument parser in the engine (getopt).
-    - [ ] Cross-compilation support.
+    - [x] Cross-compilation support.
 ## Performance
     - [ ] High performace and stability in main game.
           - [ ] Implement batching for Renderer2D.
@@ -76,5 +76,6 @@ to the project, submit a pull request to:
 ## Documentation
     - [ ] Migrate `.md` files to `.rst`.
     - [ ] Create complete documentation.
+    - [ ] Improve code documentation.
 ## Misc
     - [ ] Improve error handling.

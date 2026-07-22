@@ -1,5 +1,53 @@
 NEWS - list of all major game and engine changes
 
+New in rd-160052
+* Rewrite version: rd-132328.
+* Engine version 0.05.
+* libgfx version: 0.02.
+* Fix rotation bug in character.shader.
+* Delete EntityRenderer class.
+* Add ZombieRenderer and ParticleRenderer
+* Improve entity rendering.
+* Add LGC random number generation from https://github.com/openjdk/jdk/blob/master/src/java.base/share/classes/java/util/Random.java
+* Support fullscreen window.
+* Add SetFullScreen() funcion.
+* Add fullscreen on create() funcion.
+* Improve buffer creation process.
+* Support for float and integer types in buffers.
+* Add GLContext.
+* Add texID for create particles.
+* Add OnDestroy() function.
+* Update movement constants.
+* Fix bug collision on block borders.
+* Add particles when block is destroyed with instanced renderer.
+
+New in rd-20090515
+* Recreated version: rd-132328.
+* Engine version 0.04.
+* libgfx version: 0.02.
+* Add Simple Renderer2D.
+* Change 60 TPS logic to 20 TPS logic (as is in the original game).
+* Add Mesh and MeshFactory.
+* Improve error handling.
+* Add GLError class for GL error numbers.
+* Improve Shader code.
+* Improve buffer generation process.
+* Improve VertexLayout function.
+* Add Perspective and Orthographic camera.
+* Multiple texture channel support.
+* Rename Tile for Block
+* Add 10 zombies at the game starts.
+* Add fog to zombies.
+* Change entity movement constants as is original game.
+* Generate ChunkMesh with MeshFactory.
+* Generate pseudo-perlinoise map for the world.
+* Add Height array for calculate lights.
+* Remove old calculate lights.
+* Refractor some block functions.
+* Add block selector logic.
+* Add BlockManager class.
+* Add Grass update logic.
+
 New in rd-132328
 * Rewrite version: rd-132328.
 * Engine version 0.03.
