@@ -5,6 +5,15 @@
 #include "App/Window.h"
 
 #include "Events/Event.h"
+#include "Events/EventManager.h"
+#include "Events/FrameBufferEvent.h"
+#include "Events/JoystickEvent.h"
+#include "Events/KeyboardEvent.h"
+#include "Events/MonitorEvent.h"
+#include "Events/WindowEvent.h"
+#include "Events/MouseEvent.h"
+
+#include "Filesystem/FileSystem.h"
 
 #include "Graphics/Buffers/IndexBuffer.h"
 #include "Graphics/Buffers/VertexArray.h"

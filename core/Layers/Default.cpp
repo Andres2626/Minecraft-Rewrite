@@ -15,17 +15,12 @@ namespace MC
 
 		}
 
-		void Default::Init()
+		bool Default::Init()
 		{
-
+			return true;
 		}
 
 		void Default::OnUpdate(Utils::Timestep &ts)
-		{
-
-		}
-
-		void Default::OnEvent(Events::Event &ev)
 		{
 
 		}

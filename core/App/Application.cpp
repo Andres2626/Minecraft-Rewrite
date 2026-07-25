@@ -2,6 +2,7 @@
 
 #include "App/Input.h"
 
+#include "Events/EventManager.h"
 #include "Utils/Util.h"
 #include "Log/Log.h"
 
@@ -19,23 +20,24 @@ namespace MC
 
 		Application::~Application()
 		{
-			Log::Fini();
+
 		}
 
-		void Application::Init()
+		bool Application::Init()
 		{
 			Log::Init(MC_LOG_STDOUT | MC_LOG_FILE, level_enum::info);
 			mc_info("Minecraft rewrite engine version {}", MC_VERSION_STRING);
 
 			m_Win = std::make_unique<Window>(m_Name, m_Pr);
-
 			const Error &err = m_Win->GetError();
 			if (err.num != ErrorType::NoError) {
 				mc_error("Application error {}: {}", (u32t)err.num, err.str);
-				return;
+				return false;
 			}
 
 			Input::Init();
+
+			return true;
 		}
 
 		void Application::PushLayer(Layers::Layer *layer)
@@ -45,12 +47,17 @@ namespace MC
 
 		void Application::Start()
 		{
+			if (!Init())
+				return;
+
+			if (!m_LayerStack.Init())
+				return;
+
 			m_Running = true;
 			m_Suspended = false;
 			
-			Init();
-			m_LayerStack.Init();
 			Run();
+			Shutdown();
 		}
 
 		void Application::Suspend()
@@ -70,58 +77,62 @@ namespace MC
 
 		void Application::Run()
 		{
-			Events::Event ev;
-			m_Timer = std::make_unique<Utils::Timer>();
-			float ti = 0.0f;
-			float update_timer = m_Timer->ElapsedMillis();
-			float update_tick = 1000.0f / 20.0f;
-			Utils::Timestep step(update_timer);
-			while (m_Running) {
+			m_TimeAcumulator = 0.0f;
+			m_UpdateTimer = m_Timer.ElapsedMillis();
+			m_UpdateTick = 1000.0f / 20.0f;
+			m_Step = Utils::Timestep(m_UpdateTimer);
+			while (m_Running)
+				Frame();
+		}
 
-				Utils::Timer frametime;
-				m_Win->Clear();
-				float now = m_Timer->ElapsedMillis();
-				while (now - update_timer >= update_tick) {
-					step.Update(now);
-					OnUpdate(step);
-					m_UPS++;
-					update_timer += update_tick;
-				}
+		void Application::Shutdown()
+		{
+			m_LayerStack.Finish();
+			Input::Finish();
+			Log::Finish();
+		}
 
-				float alpha = (now - update_timer) / update_tick;
+		void Application::Frame()
+		{
+			Utils::Timer frametime;
 
-				OnRender(alpha);
-				m_Win->Update();
-				m_FPS++;
-				m_FrameTime = frametime.ElapsedMillis();
+			DISPATCH_EVENTS();
 
-				if (now - ti > 1000.0f) {
-					ti += 1000.0f;
-					OnTick();
-					m_FPS = 0;
-					m_UPS = 0;
-				}
-
-				while (m_Suspended) {
-					/* reload timer */
-					OnSuspended();
-				}
-
-				if (m_Win->Close())
-					m_Running = false;
-
-				this->OnEvent(ev);
+			m_Win->Clear();
+			float now = m_Timer.ElapsedMillis();
+			while (now - m_UpdateTimer >= m_UpdateTick) {
+				m_Step.Update(now);
+				OnUpdate(m_Step);
+				m_UPS++;
+				m_UpdateTimer += m_UpdateTick;
 			}
+
+			float alpha = (now - m_UpdateTimer) / m_UpdateTick;
+
+			OnRender(alpha);
+			m_Win->Update();
+			m_FPS++;
+			m_FrameTime = frametime.ElapsedMillis();
+
+			if (now - m_TimeAcumulator > 1000.0f) {
+				m_TimeAcumulator += 1000.0f;
+				OnTick();
+				m_FPS = 0;
+				m_UPS = 0;
+			}
+
+			while (m_Suspended) {
+				/* reload timer */
+				OnSuspended();
+			}
+
+			if (m_Win->Close())
+				m_Running = false;
 		}
 
 		void Application::OnUpdate(Utils::Timestep &ts)
 		{
 			m_LayerStack.OnUpdate(ts);
-		}
-
-		void Application::OnEvent(Events::Event &ev)
-		{
-			m_LayerStack.OnEvent(ev);
 		}
 
 		void Application::OnRender(float alpha)

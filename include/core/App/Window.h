@@ -1,7 +1,6 @@
 #pragma once
 #include "common.h"
 #include "Graphics/Image.h"
-#include "Events/Event.h"
 #include "Utils/Error.h"
 
 #include <GLFW/glfw3.h>
@@ -63,9 +62,6 @@ namespace MC
 			void Finish();
 		public:
 			void OnTick();
-		public:
-			int GetEvent(Events::Event &ev);
-			void FreeEvent(Events::Event &ev);
 		public:
 			void SetIcon(const Graphics::Image &img);
 			bool SetFullScreen(bool fullscreen);

@@ -15,6 +15,10 @@ namespace MC
 			std::unique_ptr<Window> m_Win;
 			WindowProperties m_Pr;
 		private:
+			float m_TimeAcumulator;
+			float m_UpdateTimer;
+			float m_UpdateTick;
+			Utils::Timestep m_Step;
 			bool m_Running;
 			bool m_Suspended;
 			int m_FPS;
@@ -22,13 +26,13 @@ namespace MC
 			float m_FrameTime;
 			const char *m_Name;
 		private:
-			std::unique_ptr<Utils::Timer> m_Timer;
+			Utils::Timer m_Timer;
 			Layers::Stack m_LayerStack;
 		public:
 			Application(const char *name, const WindowProperties &pr);
 			~Application();
 		public:
-			virtual void Init();
+			virtual bool Init();
 		public:
 			void PushLayer(Layers::Layer *layer);
 		public:
@@ -38,8 +42,9 @@ namespace MC
 			void Stop();
 		private:
 			void Run();
+			void Shutdown();
+			void Frame();
 			void OnUpdate(Utils::Timestep &ts) override;
-			void OnEvent(Events::Event &ev) override;
 			void OnRender(float alpha) override;
 			void OnTick() override;
 			void OnSuspended() override;

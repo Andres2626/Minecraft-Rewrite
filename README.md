@@ -2,7 +2,6 @@
 
 ![Language](https://img.shields.io/badge/languages-C/C++-brightgreen)
 ![Status](https://img.shields.io/badge/status-In%20Development-yellow)
-![Version](https://img.shields.io/badge/version-rd132211-blue)
 
 The MC project is an attempt to rewrite the original *Minecraft JE* code in **C++**. 
 aiming for:

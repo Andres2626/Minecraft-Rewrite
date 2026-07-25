@@ -6,18 +6,14 @@
 #include "GameProperties.h"
 #include "Block/BlockManager.h"
 
+#include <Filesystem/FileSystem.h>
 #include <Utils/Util.h>
 #include <Utils/gzip.h>
 
 #define MC_LOG_PREFIX "Level"
 #include <Log/Log.h>
 
-static std::mt19937 rng(std::random_device{}());
-
-static int randRange(int min, int max)
-{
-	return std::uniform_int_distribution<int>(min, max)(rng);
-}
+using namespace File;
 
 Level::Level(const ivec3 &size)
 	: m_Size(size), m_LevelFile("level.dat")
@@ -29,21 +25,18 @@ Level::Level(const ivec3 &size)
 	BlockManager::Init();
 
 	/* create level array */
-	m_Blocks = (u8t*)malloc(m_Volume);
-	if (!m_Blocks)
-		mc_fatal("block array not allocated: {} size={}", m_Volume, strerror(errno));
-
-	m_HeightMap = (u8t*)malloc(size.x * size.z);
-	if (!m_HeightMap)
-		mc_fatal("heights array not allocated: {} size={}", m_Volume, strerror(errno));
+	m_Blocks.resize(size.x * size.y * size.z);
+	m_HeightMap.resize(size.x * size.z);
 
 	/* check if level file exits */
 	if (!Levelcheck()) {
 		/* generate height map with noise algorithm */
-		BuildMap();
+		if (!BuildMap())
+			return;
 
 		/* create level.dat */
-		Save();
+		if (!Save())
+			return;
 	}
 	else {
 		/* 
@@ -51,7 +44,8 @@ Level::Level(const ivec3 &size)
 		* load the file and copy buffer to blocks, as was done in the original 
 		* version of Java.
 		*/
-		Load();
+		if (!Load())
+			return;
 
 		for (int x = 0; x < m_Size.x; x++) {
 			for (int z = 0; z < m_Size.z; z++) {
@@ -67,6 +61,14 @@ Level::Level(const ivec3 &size)
 	mc_info("save_file=./{} x={} y={} z={} size={} renderer_size={}", m_LevelFile, size.x, 
 		    size.z, size.y, m_Volume, m_ChunkManager->GetChunksCount());
 }
+
+Level::~Level()
+{
+	m_Blocks.clear();
+	m_HeightMap.clear();
+	mc_info("finished");
+}
+
 
 void Level::UpdateHeightMap(int x, int z)
 {
@@ -119,72 +121,66 @@ bool Level::IsOutOfBounds(const ivec3 &pos)
 	return false;
 }
 
-Level::~Level() 
-{
-	/* delete block array */
-	if (m_Blocks)
-		free(m_Blocks);
-}
-
 bool Level::Levelcheck() 
 {
-	std::ifstream file(m_LevelFile);
-	return file.good(); /* if file exists? */
+	return FileSystem::Exists(m_LevelFile);
 }
 
-void Level::Save() 
+bool Level::Save() 
 {
 	mc_info("saving file=./{}", m_LevelFile);
 
 	size_t outSize = 0;
 
-	/* compress data */
-	u8t *raw = Utils::compress(m_Blocks, m_Volume, &outSize);
-	if (!raw)
+	/* compress level */
+	u8t *raw = Utils::compress(m_Blocks.data(), m_Volume, &outSize);
+	if (!raw) {
 		mc_fatal("error compressing level");
-
-	/* open file in binary write */
-	std::ofstream file(m_LevelFile, std::ios::out | std::ios::binary);
-	if (!file.is_open()) {
-		free(raw);
-		mc_fatal("failed to open file: \"{}\"", m_LevelFile);
+		return false;
 	}
 
-	/* write compressed data */
-	file.write(reinterpret_cast<const char*>(raw), outSize);
-	file.close();
+	if (!FileSystem::WriteBinary(m_LevelFile, raw, outSize)) {
+		free(raw);
+		mc_fatal("failed to write level file: \"{}\"", m_LevelFile);
+		return false;
+	}
 
-	/* desallocate data */
 	free(raw);
 }
 
-void Level::Load() 
+bool Level::Load() 
 {
 	mc_info("loading level file=./{}", m_LevelFile);
 
-	size_t outSize = 0;
+	size_t outSize = 0, inSize = 0;
 
-	/* open file for binary read */
-	std::ifstream file(m_LevelFile, std::ios::binary);
-	if (!file)
-		mc_fatal("failed to open file: \"{}\"", m_LevelFile);
-
+	char *filbuff = (char*)FileSystem::ReadBinary(m_LevelFile, inSize);
+	if (!filbuff) {
+		mc_fatal("failed to read level file: \"{}\"", m_LevelFile);
+		return false;
+	}
+	
 	/* decompress data */
-	std::vector<unsigned char> in((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	unsigned char* raw = Utils::decompress(in.data(), in.size(), &outSize);
-	if (!raw)
+	unsigned char* raw = Utils::decompress(filbuff, inSize, &outSize);
+	free(filbuff);
+	if (!raw) {
 		mc_fatal("error decompressing level");
+		return false;
+	}
 
-	mc_assert(outSize == m_Volume, "invalid decompressed file size");
+	if (outSize != m_Volume) {
+		mc_fatal("invalid decompressed file size");
+		memcpy(m_Blocks.data(), raw, outSize);
+		free(raw);
+		return false;
+	}
 
-	/* copy decompressed data */
-	memcpy(m_Blocks, reinterpret_cast<const char*>(raw), outSize);
-
-	/* desallocate data */
+	memcpy(m_Blocks.data(), raw, outSize);
 	free(raw);
+	return true;
 }
 
-void Level::BuildMap()
+bool Level::BuildMap()
 {
 	PerlinNoiseFilter f0(0);
 	PerlinNoiseFilter f1(0);
@@ -201,7 +197,7 @@ void Level::BuildMap()
 	rockmap = f3.read(m_Size.x, m_Size.z, rockmap);
 
 	if (!firstmap || !secondmap || !cliffmap || !rockmap) {
-		mc_fatal("Error generating noise map");
+		mc_fatal("error generating noise map");
 		if (firstmap)
 			free(firstmap);
 		if (secondmap)
@@ -211,7 +207,7 @@ void Level::BuildMap()
 		if (rockmap)
 			free(rockmap);
 
-		exit(-1);
+		return false;
 	}
 
 	for (int x = 0; x < m_Size.x; x++) {
@@ -253,6 +249,7 @@ void Level::BuildMap()
 	free(secondmap);
 	free(cliffmap);
 	free(rockmap);
+	return true;
 }
 
 void Level::Render(Player *player) 

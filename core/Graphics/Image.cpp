@@ -10,7 +10,7 @@ namespace MC
 	{
 
 		Image::Image()
-			: x(0), y(0), nr_channels(0), pixels(0), path(0)
+			: x(0), y(0), nr_channels(0), pixels(nullptr), path(nullptr)
 		{
 
 		}

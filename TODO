@@ -56,9 +56,9 @@ to the project, submit a pull request to:
 ## Architecture / Engine
     - [x] Separate the engine from the main project.
     - [ ] Create an independent and reusable game engine.
-    - [ ] Implement an event subsystem from scratch.
+    - [x] Implement an event subsystem from scratch.
     - [ ] Support for geometry shaders.
-    - [ ] Implement ShaderManager.
+    - [x] Implement ShaderManager.
     - [ ] Generate zombie mesh with MeshFactory.
     - [ ] ECS in the future.
     - [ ] Add Scene3D, Renderer3D and RenderCommand classes.

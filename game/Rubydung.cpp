@@ -11,6 +11,10 @@ Rubydung::Rubydung()
 {
 	srand((unsigned int)time(NULL));
 
+	REGISTER_EVENT(EventType::KeyBoardButton, [this](Event& e) { OnEvent(e); });
+	REGISTER_EVENT(EventType::WindowResized, [this](Event& e) { OnEvent(e); });
+	REGISTER_EVENT(EventType::CursorMoved, [this](Event& e) { OnEvent(e); });
+
 	m_Timer = std::make_unique<Timer>();
 	m_WinSize = { m_Props.x, m_Props.y };
 	m_Last = { m_Props.x / 2, m_Props.y / 2 };
@@ -37,7 +41,7 @@ Rubydung::~Rubydung()
 
 }
 
-void Rubydung::Init()
+bool Rubydung::Init()
 {
 	Default::Init();
 
@@ -68,16 +72,22 @@ void Rubydung::Init()
 	m_ParticleRenderer->SetEntityManager(m_EntityManager.get());
 
 	/* load texture */
-	if (!m_TerrainAtlas.LoadFromFile("assets/terrain.png", GL_NEAREST))
+	if (!m_TerrainAtlas.LoadFromFile("assets/terrain.png", GL_NEAREST)) {
 		mc_fatal("failed to open texture file: \"{}\"", m_TerrainAtlas.path);
+		return false;
+	}
 
-	if (!m_CharAtlas.LoadFromFile("assets/char.png", GL_NEAREST))
+	if (!m_CharAtlas.LoadFromFile("assets/char.png", GL_NEAREST)) {
 		mc_fatal("failed to open char file: \"{}\"", m_CharAtlas.path);
+		return false;
+	}
 
 	ShaderManager::Get("chunk").SetInt("s_t1", 0);
 	ShaderManager::Get("character").SetInt("s_t1", 0);
 	ShaderManager::Get("hud").SetInt("s_t1", 0);
 	ShaderManager::Get("particle").SetInt("s_t1", 0);
+
+	return true;
 }
 
 void Rubydung::OnUpdate(Timestep &ts) 
@@ -91,9 +101,12 @@ void Rubydung::OnUpdate(Timestep &ts)
 	m_Level->Update();
 }
 
-void Rubydung::OnKeyPressed(int key) 
+void Rubydung::OnKey(KeyboardButtonEvent &ev) 
 {
-	switch (key) {
+	if (ev.action != ButtonAction::Press)
+		return; /* at the moment ignore released and repeated actions */
+
+	switch (ev.key) {
 	case MC_KEY_G:
 		m_EntityManager->Register<Zombie>(std::make_unique<Zombie>(*m_Level, m_Player->attr.pos));
 		break;
@@ -125,34 +138,34 @@ void Rubydung::OnKeyPressed(int key)
 	}
 }
 
-void Rubydung::OnCursorMoved(int &x, int &y) 
+void Rubydung::OnResize(WindowResizeEvent &ev)
 {
-	vec2 offset(x - m_Last.x, m_Last.y - y);
-	m_Last = vec2(x, y);
+	m_WinSize = { ev.width, ev.height };
+	Renderer::Viewport({ 0, 0 }, m_WinSize);
+	m_Player->Cam.aspect = (float)m_WinSize.x / (float)m_WinSize.y;
+	m_GUI->OnWindowResize(m_WinSize);
+}
+
+void Rubydung::OnCursorMove(CursorPositionEvent &ev)
+{
+	vec2 offset(ev.x - m_Last.x, m_Last.y - ev.y);
+	m_Last = vec2(ev.x, ev.y);
 	m_Player->MouseMove(offset);
 }
 
-void Rubydung::OnEvent(Event &ev) 
+void Rubydung::OnEvent(Event& ev)
 {
-	Default::OnEvent(ev);
-
-	while (m_InternalWindow.GetEvent(ev)) {
-		Input::ProcessEvent(ev);
-		switch (ev.type) {
-		case GLEQ_KEY_PRESSED:
-			OnKeyPressed(ev.keyboard.key);
-			break;
-		case GLEQ_WINDOW_RESIZED:
-			m_WinSize = { ev.size.width, ev.size.height };
-			Renderer::Viewport({ 0, 0 }, m_WinSize);
-			m_Player->Cam.aspect = (float)m_WinSize.x / (float)m_WinSize.y;
-			m_GUI->OnWindowResize(m_WinSize);
-			break;
-		case GLEQ_CURSOR_MOVED:
-			OnCursorMoved(ev.pos.x, ev.pos.y);
-			break;
-		}
-		m_InternalWindow.FreeEvent(ev);
+	EventType type = static_cast<EventType>(ev.type);
+	switch (type) {
+	case EventType::KeyBoardButton:
+		OnKey(static_cast<KeyboardButtonEvent&>(ev));
+		break;
+	case EventType::WindowResized:
+		OnResize(static_cast<WindowResizeEvent&>(ev));
+		break;
+	case EventType::CursorMoved:
+		OnCursorMove(static_cast<CursorPositionEvent&>(ev));
+		break;
 	}
 }
 

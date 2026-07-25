@@ -31,9 +31,11 @@ This avoids copying the assets directly to the directory where the executable is
 - '2' Select dirt.
 - '3' Select stone brick.
 - '3' Select wood.
-- 'WASD' player move.
-- 'SPACE' jump.
+- 'WASD' Player move.
+- 'SPACE' Jump.
 - 'R' Restore the player's position to an arbitrary position in the level.
-- 'ESC' exit.
-- 'Left Click' push block.
+- 'ESC' Exit.
+- 'ENTER' Save level.
+- 'G' Spawn human.
+- 'Left Click' Push block.
 - 'Right Click' break block.

@@ -28,10 +28,11 @@ public:
 
 	}
 
-	void Init() override
+	bool Init() override
 	{
 		Application::Init();
 		PushLayer(new Rubydung());
+		return true;
 	}
 };
 

@@ -20,6 +20,8 @@ class ChunkManager;
 class Level 
 {
 protected:
+	std::vector<u8t> m_Blocks;
+	std::vector<u8t> m_HeightMap;
 	std::vector<AABB> m_cubes;
 	std::unique_ptr<ChunkManager> m_ChunkManager;
 private:
@@ -29,17 +31,15 @@ private:
 	size_t m_Volume;
 	ivec3 m_Size;
 	mc_str m_LevelFile;
-	u8t *m_Blocks;
-	u8t *m_HeightMap;
 public:
 	Level(const ivec3& size);
 	~Level();
 public:
 	/* check if level file exists */
 	bool Levelcheck();
-	void Save();
-	void Load();
-	void BuildMap();
+	bool Save();
+	bool Load();
+	bool BuildMap();
 public:
 	void UpdateHeightMap(int x, int z);
 	bool IsSolidTile(const ivec3& pos);

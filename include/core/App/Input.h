@@ -12,7 +12,6 @@ namespace MC
 {
 	namespace App 
 	{
-		
 		class MC_API Input 
 		{
 		private:
@@ -20,9 +19,15 @@ namespace MC
 			static bool m_Buttons[MC_MAX_BUTTONS];
 			static double m_X;
 			static double m_Y;
+
+			/* event destroy handling TODO: improve this! */
+			static u32t m_KeyID;
+			static u32t m_ButtonID;
+			static u32t m_CursorID;
 		public:
 			static void Init();
-			static void ProcessEvent(const Events::Event &ev);
+			static void Finish();
+			static void ProcessEvent(Events::Event &ev);
 			static bool IsKeyPressed(int key);
 			static bool IsMouseButtonPressed(int button);
 		public:

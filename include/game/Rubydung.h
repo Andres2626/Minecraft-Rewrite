@@ -44,11 +44,13 @@ public:
 	Rubydung();
 	~Rubydung();
 public:
-	void Init() override;
+	bool Init() override;
 	void OnUpdate(Timestep& ts) override;
-	void OnKeyPressed(int key);
+	void OnEvent(Event& ev);
+	void OnKey(KeyboardButtonEvent &ev);
+	void OnResize(WindowResizeEvent &ev);
+	void OnCursorMove(CursorPositionEvent &ev);
 	void OnCursorMoved(int& x, int& y);
-	void OnEvent(Event& ev) override;
 	void OnRender(float alpha) override;
 	void OnTick() override;
 	void OnSuspended() override;

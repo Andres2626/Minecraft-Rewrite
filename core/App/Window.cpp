@@ -2,7 +2,13 @@
 #include "App/Window.h"
 
 #include "App/Input.h"
-#include "Events/Event.h"
+#include "Events/EventManager.h"
+#include "Events/WindowEvent.h"
+#include "Events/FrameBufferEvent.h"
+#include "Events/MouseEvent.h"
+#include "Events/KeyboardEvent.h"
+#include "Events/MonitorEvent.h"
+#include "Events/JoystickEvent.h"
 #include "Graphics/Renderer.h"
 #include "Graphics/GL/GLError.h"
 #include "Graphics/GL/GLContext.h"
@@ -95,9 +101,69 @@ namespace MC
 				return false;
 			}
 
-			/* Initialze event system */
-			gleqInit();
-			gleqTrackWindow(m_Win);
+			glfwSetWindowPosCallback(m_Win, [](GLFWwindow* native, int x, int y) {
+				QUEUE_EVENT(Events::WindowMovedEvent, x, y);
+				});
+
+			glfwSetWindowSizeCallback(m_Win, [](GLFWwindow* native, int width, int height) {
+				QUEUE_EVENT(Events::WindowResizeEvent, width, height);
+				});
+
+			glfwSetWindowCloseCallback(m_Win, [](GLFWwindow* native) {
+				QUEUE_EVENT(Events::WindowCloseEvent);
+				});
+
+			glfwSetWindowRefreshCallback(m_Win, [](GLFWwindow* native) {
+				QUEUE_EVENT(Events::WindowRefreshEvent);
+				});
+
+			glfwSetWindowFocusCallback(m_Win, [](GLFWwindow* native, int focus) {
+				QUEUE_EVENT(Events::WindowFocusEvent, focus);
+				});
+
+			glfwSetWindowIconifyCallback(m_Win, [](GLFWwindow* native, int icon) {
+				QUEUE_EVENT(Events::WindowIconifyEvent, icon);
+				});
+
+			glfwSetWindowMaximizeCallback(m_Win, [](GLFWwindow* native, int maximized) {
+				QUEUE_EVENT(Events::WindowMaximizeEvent, maximized);
+				});
+
+			glfwSetWindowContentScaleCallback(m_Win, [](GLFWwindow* native, float x, float y) {
+				QUEUE_EVENT(Events::WindowScaledEvent, x, y);
+				});
+				
+			glfwSetFramebufferSizeCallback(m_Win, [](GLFWwindow* native, int width, int height) {
+				QUEUE_EVENT(Events::FrameBufferResizeEvent, width, height);
+				});
+
+			glfwSetMouseButtonCallback(m_Win, [](GLFWwindow* native, int button, int action, int mods) {
+				QUEUE_EVENT(Events::MouseButtonEvent, button, (Events::ButtonAction)action, mods);
+				});
+
+			glfwSetCursorPosCallback(m_Win, [](GLFWwindow* native, double x, double y) {
+				QUEUE_EVENT(Events::CursorPositionEvent, x, y);
+				});
+
+			glfwSetCursorEnterCallback(m_Win, [](GLFWwindow* native, int entered) {
+				QUEUE_EVENT(Events::CursorEnterEvent, entered);
+				});
+
+			glfwSetScrollCallback(m_Win, [](GLFWwindow* native, double x, double y) {
+				QUEUE_EVENT(Events::MouseScrollEvent, x, y);
+				});
+
+			glfwSetKeyCallback(m_Win, [](GLFWwindow* native, int key, int scancode, int action, int mods) {
+				QUEUE_EVENT(Events::KeyboardButtonEvent, key, scancode, (Events::ButtonAction)action, mods);
+			});
+
+			glfwSetMonitorCallback([](GLFWmonitor* monitor, int event) {
+				QUEUE_EVENT(Events::MonitorEvent, event);
+				});
+
+			glfwSetJoystickCallback([](int id, int event) {
+				QUEUE_EVENT(Events::JoystickEvent, id, event);
+				});
 
 			if (!m_Pr.cursor.enable)
 				glfwSetInputMode(m_Win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -145,16 +211,6 @@ namespace MC
 		{
 			glfwPollEvents();
 			glfwSwapBuffers(m_Win);
-		}
-
-		int Window::GetEvent(Events::Event &ev)
-		{
-			return gleqNextEvent(&ev);
-		}
-
-		void Window::FreeEvent(Events::Event &ev)
-		{
-			gleqFreeEvent(&ev);
 		}
 
 		void Window::SetIcon(const Graphics::Image &img)

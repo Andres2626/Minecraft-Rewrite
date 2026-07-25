@@ -14,9 +14,8 @@ namespace MC
 		private:
 			bool m_Visible;
 		public:
-			virtual void Init() = 0;
+			virtual bool Init() = 0;
 			virtual void OnUpdate(Utils::Timestep &ts) = 0;
-			virtual void OnEvent(Events::Event &ev) = 0;
 			virtual void OnRender(float alpha) = 0;
 			virtual void OnTick() = 0;
 			virtual void OnSuspended() = 0;

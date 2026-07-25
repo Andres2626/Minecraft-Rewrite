@@ -12,12 +12,16 @@ namespace MC
 			float m_Delta;
 			float m_LastTime;
 		public:
-			inline Timestep(float initial) 
+			Timestep()
+				: m_Delta(0.0f), m_LastTime(0.0f)
+			{ }
+
+			Timestep(float initial) 
 				: m_Delta(0.0f), m_LastTime(initial)
 			{  }
 
 			/* update delta time */
-			inline void Update(float current) 
+			void Update(float current) 
 			{
 				m_Delta = current - this->m_LastTime;
 				m_LastTime = current;

@@ -1,6 +1,5 @@
 set(GLFWREPO https://github.com/glfw/glfw.git)
 set(ZLIBREPO https://github.com/madler/zlib.git)
-set(GLEQREPO https://github.com/glfw/gleq.git)
 set(GLMREPO https://github.com/g-truc/glm.git)
 set(STBREPO https://github.com/nothings/stb.git)
 set(SPDLOGREPO https://github.com/gabime/spdlog.git)
@@ -34,10 +33,6 @@ if(MC_AUTODEP)
     FetchContent_Declare(zlib GIT_REPOSITORY ${ZLIBREPO} GIT_TAG master)
     FetchContent_MakeAvailable(zlib)
 
-    # GLEQ
-    FetchContent_Declare(gleq GIT_REPOSITORY ${GLEQREPO} GIT_TAG master)
-    FetchContent_MakeAvailable(gleq)
-
     add_library(gleq INTERFACE)
     target_include_directories(gleq INTERFACE ${gleq_SOURCE_DIR})
 
@@ -57,12 +52,10 @@ if(MC_AUTODEP)
     FetchContent_MakeAvailable(spdlog)
 
 else()
-    add_library(gleq INTERFACE)
     add_library(stb INTERFACE)
     add_subdirectory(GLFW)
     add_subdirectory(glm)
     add_subdirectory(zlib)
     add_subdirectory(spdlog)
-    target_include_directories(gleq INTERFACE gleq/)
     target_include_directories(stb INTERFACE stb/)
 endif()

@@ -14,9 +14,8 @@ namespace MC
 			Default();
 			~Default();
 		public:
-			virtual void Init() override;
+			virtual bool Init() override;
 			virtual void OnUpdate(Utils::Timestep &ts) override;
-			virtual void OnEvent(Events::Event &ev) override;
 			virtual void OnRender(float alpha) override;
 			virtual void OnTick() override;
 			virtual void OnSuspended() override;

@@ -2,6 +2,22 @@
 
 2026-07-22 rd-160052
     
+    Fix workflow bug caused by CMakeLists.txt
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-22  Andres26  andrescamorao9@gmail.com
+
+2026-07-22 rd-160052
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-22  Andres26  andrescamorao9@gmail.com
+
+2026-07-22 rd-160052
+    
     - Character
     
       Fix rotation bug in character.shader

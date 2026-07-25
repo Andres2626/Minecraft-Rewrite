@@ -19,12 +19,25 @@ namespace MC
 			m_Layers.push_back(layer);
 		}
 
-		void Stack::Init()
+		bool Stack::Init()
 		{
 			for (u32t i = 0; i < m_Layers.size(); i++) {
-				if (m_Layers[i]->IsVisible())
-					m_Layers[i]->Init();
+				if(!m_Layers[i]->IsVisible())
+					continue;
+
+				if (!m_Layers[i]->Init())
+					return false;
 			}
+
+			return true;
+		}
+
+		void Stack::Finish()
+		{
+			for (Layer *layer : m_Layers)
+				delete layer;
+
+			m_Layers.clear();
 		}
 
 		void Stack::OnUpdate(Utils::Timestep &ts)
@@ -32,14 +45,6 @@ namespace MC
 			for (u32t i = 0; i < m_Layers.size(); i++) {
 				if (m_Layers[i]->IsVisible())
 					m_Layers[i]->OnUpdate(ts);
-			}
-		}
-
-		void Stack::OnEvent(Events::Event &ev)
-		{
-			for (u32t i = 0; i < m_Layers.size(); i++) {
-				if (m_Layers[i]->IsVisible())
-					m_Layers[i]->OnEvent(ev);
 			}
 		}
 

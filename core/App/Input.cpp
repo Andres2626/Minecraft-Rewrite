@@ -1,5 +1,10 @@
 #include "App/Input.h"
 
+#include "Log/Log.h"
+#include "Events/EventManager.h"
+#include "Events/KeyboardEvent.h"
+#include "Events/MouseEvent.h"
+
 #define CHECK_KEY(x, max) x >= 0 && x <= max
 
 namespace MC 
@@ -10,6 +15,10 @@ namespace MC
 		bool Input::m_Buttons[MC_MAX_BUTTONS];
 		double Input::m_X = 0.0;
 		double Input::m_Y = 0.0;
+
+		u32t Input::m_KeyID;
+		u32t Input::m_ButtonID;
+		u32t Input::m_CursorID;
 
 		void Input::Init()
 		{
@@ -22,30 +31,49 @@ namespace MC
 			for (int i = 0; i < MC_MAX_BUTTONS; i++) {
 				m_Buttons[i] = 0;
 			}
+
+			m_KeyID = REGISTER_EVENT(Events::EventType::KeyBoardButton, Input::ProcessEvent);
+			m_ButtonID = REGISTER_EVENT(Events::EventType::MouseButton, Input::ProcessEvent);
+			m_CursorID = REGISTER_EVENT(Events::EventType::CursorMoved, Input::ProcessEvent);
 		}
 
-		void Input::ProcessEvent(const Events::Event &ev)
+		void Input::Finish()
 		{
-			switch (ev.type) {
-			case GLEQ_KEY_PRESSED:
-				if (CHECK_KEY(ev.keyboard.key, MC_MAX_KEYS))
-					m_Keys[ev.keyboard.key] = true;
+			UNREGISTER_EVENT(Events::EventType::KeyBoardButton, m_KeyID);
+			UNREGISTER_EVENT(Events::EventType::MouseButton, m_ButtonID);
+			UNREGISTER_EVENT(Events::EventType::CursorMoved, m_CursorID);
+			mc_info("input system finished");
+		}
+
+		void Input::ProcessEvent(Events::Event &ev)
+		{
+			Events::EventType type = static_cast<Events::EventType>(ev.type);
+			switch (type) {
+			case Events::EventType::KeyBoardButton:
+			{
+				auto& e = static_cast<Events::KeyboardButtonEvent&>(ev);
+				if (CHECK_KEY(e.key, MC_MAX_KEYS))
+					m_Keys[e.key] = (e.action != Events::ButtonAction::Release);
+
 				break;
-			case GLEQ_KEY_RELEASED:
-				if (CHECK_KEY(ev.keyboard.key, MC_MAX_KEYS))
-					m_Keys[ev.keyboard.key] = false;
+			}
+			case Events::EventType::MouseButton:
+			{
+				auto& e = static_cast<Events::MouseButtonEvent&>(ev);
+				if (CHECK_KEY(e.button, MC_MAX_KEYS))
+					m_Buttons[e.button] = (e.action != Events::ButtonAction::Release);
+
 				break;
-			case GLEQ_BUTTON_PRESSED:
-				if (CHECK_KEY(ev.mouse.button, MC_MAX_BUTTONS))
-					m_Buttons[ev.mouse.button] = true;
+			}
+				
+			case Events::EventType::CursorMoved:
+			{
+				auto& e = static_cast<Events::CursorPositionEvent&>(ev);
+				m_X = e.x;
+				m_Y = e.y;
 				break;
-			case GLEQ_BUTTON_RELEASED:
-				if (CHECK_KEY(ev.mouse.button, MC_MAX_BUTTONS))
-					m_Buttons[ev.mouse.button] = false;
-				break;
-			case GLEQ_CURSOR_MOVED:
-				m_X = ev.pos.x;
-				m_Y = ev.pos.y;
+			}
+			default:
 				break;
 			}
 		}

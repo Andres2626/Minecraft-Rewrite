@@ -50,9 +50,9 @@ namespace MC
         return 0;
 	}
 
-	int Log::Fini()
+	int Log::Finish()
 	{
-        mc_info("finished");
+        mc_info("Log system finished");
 		return 0;
 	}
 
