@@ -1,3 +1,56 @@
+2026-07-26  Andres26  andrescamorao9@gmail.com
+
+2026-07-26 rd-161348
+    
+    - Game
+    
+      Add IModel class.
+      Add ModelManager class.
+      Add BushModel class.
+      Add StaticBlockRender class for instanced rendering blocks.
+      All renderer and model files were moved to separate folders.
+      Add instanced rendering for bushes.
+      Change Chunk rendering process for render instanced blocks.
+      Change camera attributes in gui.
+      Add binary block flags.
+      Add bushes.
+      Change crosshair thickness.
+    
+    - Engine
+    
+      Add bind()/unbind() functions in mesh.
+      Delete GLEQ library from 'core/CMakeLists.txt'
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-25  Andres26  andrescamorao9@gmail.com
+
+2026-07-25 Add event system to core
+    
+    - Event
+    
+      Add event system from scratch.
+      Add Event and EventManager class.
+      Add one class was added for each event.
+      Delete GLEQ dependency from repository
+    
+    - Engine
+    
+      Add Filesystem class.
+      Improve Application Init and shutdown process.
+    
+    - Game
+    
+      Improve error handling.
+    
+    - Documentation
+    
+      Improve documentation.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
 2026-07-22  Andres26  andrescamorao9@gmail.com
 
 2026-07-22 rd-160052

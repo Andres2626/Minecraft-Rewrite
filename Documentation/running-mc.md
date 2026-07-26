@@ -30,7 +30,8 @@ This avoids copying the assets directly to the directory where the executable is
 - '1' Select stone.
 - '2' Select dirt.
 - '3' Select stone brick.
-- '3' Select wood.
+- '4' Select wood.
+- '6' Select bush.
 - 'WASD' Player move.
 - 'SPACE' Jump.
 - 'R' Restore the player's position to an arbitrary position in the level.
