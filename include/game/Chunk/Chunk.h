@@ -57,5 +57,5 @@ public:
 	inline u32t GetDirtyTick() { return m_DirtyTick; }
 	inline ivec3 &GetPosition() { return m_Pos; }
 	inline AABB &GetBox() { return m_Box; }
-	inline std::vector<StaticBlockInstance> GetBushInstances() { return m_BushInstances; }
+	inline std::vector<StaticBlockInstance>& GetBushInstances() { return m_BushInstances; }
 };

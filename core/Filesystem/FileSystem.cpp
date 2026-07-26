@@ -4,7 +4,7 @@ namespace MC
 {
 	namespace File 
 	{
-		u64t FileSystem::FileSize(const mc_str& path)
+		size_t FileSystem::FileSize(const mc_str& path)
 		{
 			std::ifstream file(path, std::ios::binary);
 
