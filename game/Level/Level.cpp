@@ -349,7 +349,7 @@ std::vector<AABB> &Level::GetCubes(const AABB &aabb)
 					continue;
 
 				Block& blk = BlockManager::GetBlockType(GetBlockType({ x3, y3, z3 }));
-				AABB &box = blk.GetAABB({x3, y3, z3});
+				AABB box = blk.GetAABB({x3, y3, z3});
 				m_cubes.push_back(box);
 			}
 		}
