@@ -1,5 +1,6 @@
-#include "Particle/ParticleRenderer.h"
+#include "Renderer/ParticleRenderer.h"
 
+#include "Model/ModelManager.h"
 #include "Entity/EntityManager.h"
 
 ParticleRenderer::ParticleRenderer()
@@ -28,12 +29,14 @@ void ParticleRenderer::Render(Player &player, float alpha)
     if (m_Instances.empty())
         return;
 
-    ParticleModel::Get().UpdateInstances(m_Instances);
-    ParticleModel::Get().Bind();
+    ParticleModel& model = static_cast<ParticleModel&>(ModelManager::GetModelType(ModelType::PARTICLE));
 
+    model.GetInstanceBuffer().Bind();
+    model.GetInstanceBuffer().Update(0, m_Instances.size() * sizeof(ParticleInstance), m_Instances.data());
+
+    model.Bind();
     Renderer::DrawElementsInstanced(GL_TRIANGLES, 6, nullptr, m_Instances.size());
-
-    ParticleModel::Get().Unbind();
+    model.Unbind();
 }
 
 void ParticleRenderer::SetEntityManager(EntityManager* em)

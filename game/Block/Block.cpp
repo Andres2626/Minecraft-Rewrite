@@ -3,8 +3,9 @@
 #include "Entity/EntityManager.h"
 
 Block::Block(const BlockType& id, u32t texid)
-	: m_ID(id), m_UpdateFlag(0), m_TexID(texid)
+	: m_ID(id), m_TexID(texid)
 {
+	m_Flags = { 0 };
 }
 
 Block::~Block()
@@ -39,4 +40,9 @@ void Block::OnDestroy(Level *lev, const ivec3 &pos, EntityManager &entities)
 			}
 		}
 	}
+}
+
+AABB Block::GetAABB(const ivec3& pos)
+{
+	return AABB(pos, pos + ivec3(1, 1, 1));
 }

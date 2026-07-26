@@ -1,10 +1,9 @@
 #pragma once
 
-#include "Zombie.h"
-#include "ZombieModel.h"
-
-#include "Player/Player.h"
+#include "Character/Zombie.h"
 #include "Graphics/Shader/ShaderManager.h"
+#include "Model/ZombieModel.h"
+#include "Player/Player.h"
 
 class EntityManager;
 

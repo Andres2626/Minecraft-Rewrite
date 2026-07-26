@@ -39,6 +39,9 @@ namespace MC
 		public:
 			void Build();
 			void Render() const;
+		public:
+			void Bind() const;
+			void Unbind() const;
 		};
 	}
 }

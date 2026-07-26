@@ -2,6 +2,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+#define SET_BIT(x, bit) ((x) |= (bit))
 #define BIT_CHK(x, bit) (((x) & (bit)) != 0)
 #define BIT_L(x) (1 << (x))
 #define BIT_R(x) (1 >> (x))

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ZombieModel.h"
+#include "Model/ZombieModel.h"
 
 #include <Level/Level.h>
 #include <Entity/Entity.h>

@@ -1,7 +1,10 @@
 #pragma once
 
-#include "Cube.h"
+#include "IModel.h"
 
+#include "Character/Cube.h"
+
+#include <Graphics/Mesh.h>
 #include <Graphics/Shader/ShaderManager.h>
 #include <Graphics/Buffers/IndexBuffer.h>
 #include <Graphics/Buffers/VertexArray.h>
@@ -25,10 +28,11 @@ struct ZombiePart
 	vec3 rot;
 };
 
-class ZombieModel
+class ZombieModel : public IModel
 {
 protected:
 	u32t m_partOffset;
+	u32t m_IndexSize;
 	std::unique_ptr<VertexArray> m_VAO;
 	std::unique_ptr<VertexBuffer> m_VBO;
 	std::unique_ptr<VertexBuffer> m_InstanceBuffer;
@@ -38,14 +42,13 @@ public:
 	ZombieModel();
 	~ZombieModel();
 public:
-	static ZombieModel& Get();
-public:
-	void Build();
+	void Build() override;
 	void PushPart(const Cube& cube);
-	void UpdateInstances(const std::vector<ZombieInstance>& instances);
 public:
-	void Bind() const;
-	void Unbind() const;
+	void Bind() const override;
+	void Unbind() const override;
 public:
-	std::vector<ZombiePart>& GetParts() { return m_Parts; };
+	VertexBuffer &GetInstanceBuffer() override;
+	u32t GetIndexCount() const override;
+	std::vector<ZombiePart> &GetParts() { return m_Parts; };
 };

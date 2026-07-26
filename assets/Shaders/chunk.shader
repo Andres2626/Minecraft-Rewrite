@@ -6,6 +6,10 @@ layout (location = 1) in vec3 aColor;
 layout (location = 2) in vec2 aUV;
 layout (location = 3) in float aBrig;
 
+/* instances (for bushes at the moment)*/
+layout(location = 5) in vec3 iPos;
+layout(location = 6) in float iBrig;
+
 out VS_OUT
 {
 	vec3 pos;
@@ -15,18 +19,25 @@ out VS_OUT
 	vec3 worldPos;
 }vs_out;
 
+uniform bool s_RenderBush;
 uniform mat4 s_VP;
 uniform mat4 s_M;
 
 void main() 
 {
-	vec4 world = s_M * vec4(aPos, 1.0f);
+    vec3 pos = aPos;
+    if (s_RenderBush) {
+        pos += iPos;
+        vs_out.brightness = iBrig;
+    }
+    else
+        vs_out.brightness = aBrig;
+        
+    vec4 world = s_M * vec4(pos, 1.0f);
 	vs_out.pos = aPos;
     vs_out.color = aColor;
 	vs_out.uv = aUV;
-	vs_out.brightness = aBrig;
 	vs_out.worldPos = world.xyz;
-
 	gl_Position = s_VP * world;
 }
 
@@ -54,7 +65,11 @@ uniform sampler2D s_t1;
 
 void main() 
 {
-	vec4 result = texture(s_t1, fs_in.uv) * fs_in.brightness;
+	vec4 tex = texture(s_t1, fs_in.uv);
+    if (tex.a < 0.1)
+        discard;
+    
+    vec4 result = tex * fs_in.brightness;
 	float dist = length(fs_in.worldPos - s_cpos);
     
     vec3 final;

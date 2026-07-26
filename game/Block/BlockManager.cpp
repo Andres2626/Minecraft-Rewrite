@@ -12,6 +12,7 @@ void BlockManager::Init()
 	Register(std::make_unique<GrassBlock>());
 	Register(std::make_unique<StoneBrickBlock>());
 	Register(std::make_unique<WoodBlock>());
+	Register(std::make_unique<BushBlock>());
 }
 
 void BlockManager::Register(std::unique_ptr<Block> block)

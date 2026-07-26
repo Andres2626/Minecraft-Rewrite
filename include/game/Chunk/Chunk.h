@@ -2,6 +2,8 @@
 #include "ChunkDef.h"
 
 #include "Block/BlockManager.h"
+#include "Model/BushModel.h"
+#include "Renderer/StaticModelRenderer.h"
 
 #include <Physics/AABB.h>
 #include <Graphics/Mesh.h>
@@ -21,6 +23,7 @@ class Level;
 class Chunk 
 {
 protected:
+	std::vector<StaticBlockInstance> m_BushInstances;
 	std::unique_ptr<Mesh> m_Mesh;
 	Level *m_Level;
 	MeshData m_MeshData;
@@ -42,6 +45,7 @@ public:
 private:
 	void AddFace(const ivec3 &fpos, Face f, Block &t);
 	void AddQuad(const vec2& uv, const ivec3& pos, const ivec3* quad, const float brightness);
+	void AddModelInstance(BlockType ty, const ivec3 &pos, const float brightness);
 public:
 	inline void SetDirty(bool dirty) { m_Dirty = dirty; }
 	inline bool GetDirty() { return m_Dirty; }
@@ -53,4 +57,5 @@ public:
 	inline u32t GetDirtyTick() { return m_DirtyTick; }
 	inline ivec3 &GetPosition() { return m_Pos; }
 	inline AABB &GetBox() { return m_Box; }
+	inline std::vector<StaticBlockInstance> GetBushInstances() { return m_BushInstances; }
 };

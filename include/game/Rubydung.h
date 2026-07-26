@@ -6,9 +6,10 @@
 #include "Level/Level.h"
 #include "Chunk/Chunk.h"
 #include "Character/Zombie.h"
-#include "Character/ZombieRenderer.h"
+#include "Renderer/ZombieRenderer.h"
+#include "Model/ModelManager.h"
 #include "Entity/EntityManager.h"
-#include "Particle/ParticleRenderer.h"
+#include "Renderer/ParticleRenderer.h"
 #include "gui/gui.h"
 
 #include <core.h>

@@ -88,7 +88,8 @@ bool Level::IsSolidTile(const ivec3 &pos)
 	if (IsOutOfBounds(pos))
 		return false; 
 
-	return m_Blocks[GetBlockIndex(pos)];
+	Block& blk = BlockManager::GetBlockType(GetBlockType(pos));
+	return blk.GetBlockFlags().Collision ? 1 : 0;
 }
 
 bool Level::IsLightBlocker(const ivec3 &pos)
@@ -146,6 +147,7 @@ bool Level::Save()
 	}
 
 	free(raw);
+	return true;
 }
 
 bool Level::Load() 
@@ -263,7 +265,12 @@ void Level::Render(Player *player)
 	m_Shader->SetFloat("s_fdensity0", GlobalGP.fg0.density);
 	m_Shader->SetVec4("s_fcolor1", GlobalGP.fg1.color);
 	m_Shader->SetFloat("s_fdensity1", GlobalGP.fg1.density);
-	m_ChunkManager->Render(player);
+	m_Shader->SetBool("s_RenderBush", false);
+	m_ChunkManager->Render(0, player);
+
+	/* render all chunk model instances */
+	m_Shader->SetBool("s_RenderBush", true);
+	m_ChunkManager->Render(1, player);
 }
 
 void Level::Update()
@@ -274,7 +281,7 @@ void Level::Update()
 	for (int i = 0; i < ticks; ++i) {
 		ivec3 pos = { m_Random.NextInt(m_Size.x), m_Random.NextInt(m_Size.y) , m_Random.NextInt(m_Size.z) };
 		Block& blk = BlockManager::GetBlockType(GetBlockType(pos));
-		if (!blk.IsUpdatable())
+		if (!blk.GetBlockFlags().Update)
 			continue; /* avoid call update() many times */
 
 		if (blk.GetID() != (BlockType)0)
@@ -300,7 +307,7 @@ void Level::SetTile(const ivec3& blockpos, BlockType type)
 		return;
 
 	m_Blocks[index] = (int)type;
-
+	
 	UpdateHeightMap(blockpos.x, blockpos.z);
 	m_ChunkManager->MarkDirty(blockpos);
 }
@@ -337,8 +344,13 @@ std::vector<AABB> &Level::GetCubes(const AABB &aabb)
 	for (int x3 = (int)p0.x; x3 < p1.x; ++x3) {
 		for (int y3 = (int)p0.y; y3 < p1.y; ++y3) {
 			for (int z3 = (int)p0.z; z3 < p1.z; ++z3) {
-				if (IsSolidTile({ x3, y3, z3 }))
-					m_cubes.push_back(AABB({ (float)x3, (float)y3, (float)z3 }, { (float)(x3 + 1), (float)(y3 + 1), (float)(z3 + 1) }));
+
+				if (!IsSolidTile({x3, y3, z3}))
+					continue;
+
+				Block& blk = BlockManager::GetBlockType(GetBlockType({ x3, y3, z3 }));
+				AABB &box = blk.GetAABB({x3, y3, z3});
+				m_cubes.push_back(box);
 			}
 		}
 	}

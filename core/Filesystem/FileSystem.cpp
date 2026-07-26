@@ -1,4 +1,4 @@
-#include "Filesystem/Filesystem.h"
+#include "Filesystem/FileSystem.h"
 
 namespace MC 
 {
@@ -21,7 +21,7 @@ namespace MC
 			return file.good();
 		}
 
-		void *FileSystem::ReadBinary(const mc_str &path, u64t &size)
+		void *FileSystem::ReadBinary(const mc_str &path, size_t &size)
 		{
 			std::ifstream file(path, std::ios::binary);
 
@@ -57,7 +57,7 @@ namespace MC
 							   std::istreambuf_iterator<char>());
 		}
 
-		bool FileSystem::WriteBinary(const mc_str &path, const void *data, u64t size)
+		bool FileSystem::WriteBinary(const mc_str &path, const void *data, size_t size)
 		{
 			std::ofstream file(path, std::ios::binary);
 

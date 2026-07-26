@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Particle.h"
-#include "ParticleModel.h"
+#include "Particle/Particle.h"
+#include "Model/ParticleModel.h"
 
 #include "Player/Player.h"
 

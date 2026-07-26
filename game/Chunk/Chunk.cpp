@@ -86,6 +86,8 @@ void Chunk::Build()
 	if (!m_Dirty)
 		return; /* advoid chunk rebuilding */
 
+	std::vector<StaticBlockInstance>().swap(m_BushInstances);
+
 	for (int cx = 0; cx < CHUNK_XYZ; cx++) {
 		for (int cy = 0; cy < CHUNK_XYZ; cy++) {
 			for (int cz = 0;cz < CHUNK_XYZ; cz++) {
@@ -109,12 +111,16 @@ void Chunk::Build()
 						if (!m_Level->IsSolidTile(p + FaceNormals[i]))
 							AddFace(p, (Face)i, blk);
 					}
-				}
+				} 
+				else if (blk.GetBlockFlags().RenderInstance)
+					AddModelInstance(ty, p, m_Level->GetBrigthness(p));
 			}
 		}
 	}
 
+	m_Mesh->Bind();
 	m_Mesh->Build();
+	m_Mesh->Unbind();
 	m_Dirty = false;
 }
 
@@ -192,5 +198,15 @@ void Chunk::AddQuad(const vec2 &uv, const ivec3 &pos, const ivec3 *quad, const f
 	for (int i = 0; i < 4; i++)
 	{
 		m_MeshData.vertices.push_back({quad[i] + pos, color, uvs[i], brightness});
+	}
+}
+
+void Chunk::AddModelInstance(BlockType ty, const ivec3& pos, const float brightness)
+{
+	switch (ty)
+	{
+	case BlockType::BUSH:
+		m_BushInstances.push_back({ pos, brightness });
+		break;
 	}
 }

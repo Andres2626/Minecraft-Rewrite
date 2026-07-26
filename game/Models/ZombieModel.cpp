@@ -1,4 +1,4 @@
-#include "Character/ZombieModel.h"
+#include "Model/ZombieModel.h"
 
 ZombieModel::ZombieModel()
     : m_partOffset(0)
@@ -12,12 +12,6 @@ ZombieModel::ZombieModel()
 
 ZombieModel::~ZombieModel()
 {
-}
-
-ZombieModel& ZombieModel::Get()
-{
-    static ZombieModel instance;
-    return instance;
 }
 
 void ZombieModel::Build()
@@ -69,21 +63,14 @@ void ZombieModel::Build()
     m_InstanceBuffer->SetVertexLayout(IVL);
     m_InstanceBuffer->Unbind();
     m_VAO->Unbind();
+
+    m_IndexSize = indices.size();
 }
 
 void ZombieModel::PushPart(const Cube& cube)
 {
     m_Parts.push_back({ m_partOffset, 36, cube.pos });
     m_partOffset += 36;
-}
-
-void ZombieModel::UpdateInstances(const std::vector<ZombieInstance> &instances)
-{
-    if (instances.empty())
-        return;
-
-    m_InstanceBuffer->Bind();
-    m_InstanceBuffer->Update(0, instances.size() * sizeof(ZombieInstance), instances.data());
 }
 
 void ZombieModel::Bind() const
@@ -94,4 +81,14 @@ void ZombieModel::Bind() const
 void ZombieModel::Unbind() const
 {
     m_VAO->Unbind();
+}
+
+VertexBuffer& ZombieModel::GetInstanceBuffer()
+{
+    return *m_InstanceBuffer;
+}
+
+u32t ZombieModel::GetIndexCount() const
+{
+    return m_IndexSize;
 }

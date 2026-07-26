@@ -28,7 +28,7 @@ target_include_directories(${MCVER} PRIVATE ${LIBINCDIR})
 target_include_directories(${MCVER} PRIVATE ${GLADINCDIR})
 
 # link all used libraries
-target_link_libraries(${MCVER} PRIVATE mccore glfw gleq zlib glm stb gfx spdlog)
+target_link_libraries(${MCVER} PRIVATE mccore glfw zlib glm stb gfx spdlog)
 
 # copy .dll files to .exe directory
 add_custom_command(TARGET ${MCVER} POST_BUILD

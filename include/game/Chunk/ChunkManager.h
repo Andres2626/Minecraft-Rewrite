@@ -2,6 +2,8 @@
 #include "ChunkDef.h"
 #include "Chunk/Chunk.h"
 
+#include "Renderer/StaticModelRenderer.h"
+
 #include <queue>
 
 class Level;
@@ -13,6 +15,7 @@ protected:
 	Shader *m_Shader;
 	Level *m_Level;
 private:
+	StaticModelRenderer m_ModelRender;
 	std::queue<int> m_DirtyChunks;
 	std::unordered_map<int, Chunk> m_Chunks;
 	int m_ChunkUpdates;
@@ -22,7 +25,7 @@ public:
 	~ChunkManager();
 public:
 	void Create();
-	void Render(Player *player);
+	void Render(int layer, Player *player);
 	void Update();
 	void Tick();
 	void MarkDirty(const ivec3 &blockpos);

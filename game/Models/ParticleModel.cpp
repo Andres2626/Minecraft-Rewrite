@@ -1,4 +1,4 @@
-#include "Particle/ParticleModel.h"
+#include "Model/ParticleModel.h"
 
 ParticleModel::ParticleModel()
 {
@@ -12,12 +12,6 @@ ParticleModel::ParticleModel()
 ParticleModel::~ParticleModel()
 {
 
-}
-
-ParticleModel &ParticleModel::Get()
-{
-	static ParticleModel instance;
-	return instance;
 }
 
 void ParticleModel::Build()
@@ -56,15 +50,8 @@ void ParticleModel::Build()
 	m_InstanceBuffer->SetVertexLayout(IVL);
 	m_InstanceBuffer->Unbind();
 	m_VAO->Unbind();
-}
 
-void ParticleModel::UpdateInstances(const std::vector<ParticleInstance>& instances)
-{
-	if (instances.empty())
-		return;
-
-	m_InstanceBuffer->Bind();
-	m_InstanceBuffer->Update(0, instances.size() * sizeof(ParticleInstance), instances.data());
+	m_IndexSize = indices.size();
 }
 
 void ParticleModel::Bind() const
@@ -75,4 +62,14 @@ void ParticleModel::Bind() const
 void ParticleModel::Unbind() const
 {
 	m_VAO->Unbind();
+}
+
+VertexBuffer& ParticleModel::GetInstanceBuffer()
+{
+	return *m_InstanceBuffer;
+}
+
+u32t ParticleModel::GetIndexCount() const
+{
+	return m_IndexSize;
 }

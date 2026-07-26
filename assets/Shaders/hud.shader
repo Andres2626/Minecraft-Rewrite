@@ -6,6 +6,7 @@ layout (location = 1) in vec3 aColor;
 layout (location = 2) in vec2 aUV;
 layout (location = 3) in float aBrig;
 
+uniform vec3 s_BlockPos;
 uniform mat4 s_VP;
 uniform mat4 s_M;
 
@@ -18,7 +19,7 @@ void main()
     uv = aUV;
     brig = aBrig;
     color = aColor;
-	gl_Position = s_VP * s_M * vec4(aPos, 1.0f);
+	gl_Position = s_VP * s_M * vec4(aPos + s_BlockPos, 1.0f);
 }
 
 #shader fragment

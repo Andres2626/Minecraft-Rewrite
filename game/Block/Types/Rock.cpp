@@ -10,7 +10,8 @@ RockBlock::RockBlock()
 	bottom = front;
 	top = front;
 
-	m_UpdateFlag = 0;
+	m_Flags.Collision = 1;
+	m_ModelType = ModelType::BLOCK;
 }
 
 RockBlock::~RockBlock()

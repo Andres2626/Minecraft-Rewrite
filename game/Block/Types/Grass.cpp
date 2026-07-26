@@ -12,7 +12,9 @@ GrassBlock::GrassBlock()
 	bottom = vec2(2 * UV_COORD, 0);
 	top = vec2(0, 0);
 
-    m_UpdateFlag = 1;
+    m_Flags.Update = 1;
+    m_Flags.Collision = 1;
+    m_ModelType = ModelType::BLOCK;
 }
 
 GrassBlock::~GrassBlock()

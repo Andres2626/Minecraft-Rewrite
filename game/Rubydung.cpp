@@ -53,6 +53,8 @@ bool Rubydung::Init()
 	ShaderManager::Register("particle", "assets/Shaders/particle.shader");
 
 	m_Level = std::make_unique<Level>(GlobalGP.LevelSize);
+	ModelManager::Init();
+
 	m_Player = std::make_unique<Player>(*m_Level);
 	m_EntityManager = std::make_unique<EntityManager>();
 	m_ZombieRenderer = std::make_unique<ZombieRenderer>();
@@ -131,6 +133,10 @@ void Rubydung::OnKey(KeyboardButtonEvent &ev)
 		break;
 	case MC_KEY_4:
 		m_Player->SetSelectedBlock(BlockType::WOOD);
+		m_GUI->Build();
+		break;
+	case MC_KEY_6:
+		m_Player->SetSelectedBlock(BlockType::BUSH);
 		m_GUI->Build();
 		break;
 	default:

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Model/IModel.h"
+
+#include "Physics/AABB.h"
 #include "Math/Math.h"
 #include "Utils/Random.h"
 
@@ -11,6 +14,7 @@
 
 using namespace MC;
 using namespace Math;
+using namespace Physics;
 
 class Level;
 class EntityManager;
@@ -22,7 +26,8 @@ enum class BlockType
 	GRASS = 2,
 	DIRT = 3,
 	STONEBRICK = 4,
-	WOOD = 5
+	WOOD = 5,
+	BUSH = 6
 };
 
 enum class Face
@@ -35,18 +40,32 @@ enum class Face
 	TOP
 };
 
+struct BlockFlag
+{
+	/*
+	 * In general, blocks do not have logic for updating themselves, with a few
+	 * exceptions. What this flag does is skip the update to avoid unnecessarily
+	 * calling `block->Update()` every time `level->Update()` is executed.
+	 */
+	u32t Update : 1;
+
+	/* 
+	 * Describe whether the block has collision; many blocks (e.g. bush) 
+	 * should not have an AABB. 
+	 */
+	u32t Collision : 1;
+
+	/* Describe whether the block should render using instancing. */
+	u32t RenderInstance : 1;
+};
+
 class Block
 {
 protected:
 	BlockType m_ID;
 	u32t m_TexID;
-
-	/* 
-	 * In general, blocks do not have logic for updating themselves, with a few 
-	 * exceptions. What this flag does is skip the update to avoid unnecessarily 
-	 * calling `block->Update()` every time `level->Update()` is executed.
-	 */
-	int m_UpdateFlag;
+	BlockFlag m_Flags;
+	ModelType m_ModelType;
 public:
 	vec2 front;
 	vec2 back;
@@ -60,7 +79,10 @@ public:
 public:
 	virtual void Update(Level *lev, const ivec3 &pos, Random &random);
 	virtual void OnDestroy(Level *lev, const ivec3 &pos, EntityManager &entities);
+	AABB GetAABB(const ivec3 &pos);
 public:
 	BlockType GetID() const { return m_ID; }
-	int IsUpdatable() { return m_UpdateFlag; };
+	u32t GetTexID() const { return m_TexID; };
+	BlockFlag GetBlockFlags() const { return m_Flags; };
+	ModelType GetModelType() const { return m_ModelType; }
 };

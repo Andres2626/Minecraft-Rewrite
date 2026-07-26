@@ -20,13 +20,14 @@ using namespace Math;
 class gui
 {
 protected:
+	Block *m_SelectedBlock;
 	Player *m_Player;
 	Renderer2D m_Renderer;
 	Shader *m_Shader;
 	std::unique_ptr<Mesh> m_Mesh;
 	MeshData m_MeshData;
 private:
-	vec2 m_WinSize;
+	vec2 m_GUISize;
 	std::unique_ptr<OrthographicCamera> m_Cam;
 public:
 	std::vector<float> vertices;
@@ -41,6 +42,6 @@ public:
 public:
 	void OnWindowResize(const vec2 &winsize);
 public:
-	void AddFace(const ivec3 &fpos, Face f, Block &t);
-	void AddQuad(const vec2 &uv, const ivec3 &pos, const ivec3 *quad);
+	void AddFace(Face f, Block &t);
+	void AddQuad(const vec2 &uv, const ivec3 *quad);
 };

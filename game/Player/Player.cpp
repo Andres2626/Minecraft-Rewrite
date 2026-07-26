@@ -77,7 +77,7 @@ bool Player::Raycast(const vec3 &org, const vec3 &dir, Hitresult &ret)
 		/* impact block */
 		ivec3 blockpos = floor(equation);
 
-		if (blockpos != lblock && m_Level.IsSolidTile(blockpos)) {
+		if (blockpos != lblock && (m_Level.GetBlockType(blockpos) != BlockType::AIR)) {
 			ivec3 normal = lblock - blockpos;
 
 			/* obtain block face normal */

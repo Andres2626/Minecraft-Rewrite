@@ -37,14 +37,25 @@ void ChunkManager::Create()
 	}
 }
 
-void ChunkManager::Render(Player *player)
+void ChunkManager::Render(int layer, Player *player)
 {
-	/* check if chunk is in camera frustum */
+	if (layer == 1)
+		m_ModelRender.Begin();
+
 	for (auto& n : m_Chunks) {
-		float ply = player->attr.pos.y / 16;
+		/* check if chunk is in camera frustum */
 		bool isInFrustum = player->Cam.InFrustum(n.second.GetBox());
-		if (isInFrustum)
+		if (isInFrustum) 
+		if (layer == 0 && isInFrustum)
 			n.second.Render();
+		else if (layer == 1 && isInFrustum)
+			m_ModelRender.Sumbit(ModelType::BUSH, n.second.GetBushInstances());
+	}
+
+	if (layer == 1) {
+		Renderer::Enable(GL_BLEND);
+		m_ModelRender.End();
+		Renderer::Disable(GL_BLEND);
 	}
 }
 

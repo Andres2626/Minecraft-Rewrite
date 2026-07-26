@@ -1,5 +1,6 @@
-#include "Character/ZombieRenderer.h"
+#include "Renderer/ZombieRenderer.h"
 
+#include "Model/ModelManager.h"
 #include "Entity/EntityManager.h"
 #include "Level/Level.h"
 #include "GameProperties.h"
@@ -39,10 +40,14 @@ void ZombieRenderer::Render(Level &lev, Player &player, float alpha, float secon
 	if (m_Instances.empty())
 		return;
 
-	ZombieModel::Get().UpdateInstances(m_Instances);
-	ZombieModel::Get().Bind();
+	ZombieModel& model = static_cast<ZombieModel&>(ModelManager::GetModelType(ModelType::ZOMBIE));
 
-	const auto& parts = ZombieModel::Get().GetParts();
+	model.GetInstanceBuffer().Bind();
+	model.GetInstanceBuffer().Update(0, m_Instances.size() * sizeof(ZombieInstance), m_Instances.data());
+
+	model.Bind();
+
+	const auto& parts = model.GetParts();
 
 	for (size_t i = 0; i < parts.size(); i++) {
 		m_Shader->SetInt("s_partindex", (int)i);
@@ -51,7 +56,7 @@ void ZombieRenderer::Render(Level &lev, Player &player, float alpha, float secon
 		Renderer::DrawElementsInstanced(GL_TRIANGLES, parts[i].size, (void*)(parts[i].offset * sizeof(u32t)), (GLsizei)m_Instances.size());
 	}
 
-	ZombieModel::Get().Unbind();
+	model.Unbind();
 }
 
 void ZombieRenderer::SetEntityManager(EntityManager* em)

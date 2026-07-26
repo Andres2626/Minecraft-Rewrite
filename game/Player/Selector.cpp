@@ -11,7 +11,9 @@ Selector::Selector()
 	m_MeshData.vertices.push_back({ { 0.0f, 0.0f, 1.0f } });
 	MeshFactory::AddIndices(m_MeshData, count);
 
+	m_Mesh->Bind();
 	m_Mesh->Build();
+	m_Mesh->Unbind();
 }
 
 Selector::~Selector() 

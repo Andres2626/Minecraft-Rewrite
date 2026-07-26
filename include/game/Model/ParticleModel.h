@@ -1,5 +1,7 @@
 #pragma once
 
+#include "IModel.h"
+
 #include <Graphics/MeshFactory.h>
 #include <Graphics/Shader/ShaderManager.h>
 #include <Graphics/Buffers/IndexBuffer.h>
@@ -17,9 +19,10 @@ struct ParticleInstance
 	vec2 texOffset;
 };
 
-class ParticleModel
+class ParticleModel : public IModel
 {
 private:
+	u32t m_IndexSize;
 	std::unique_ptr<VertexArray> m_VAO;
 	std::unique_ptr<VertexBuffer> m_VBO;
 	std::unique_ptr<VertexBuffer> m_InstanceBuffer;
@@ -28,11 +31,11 @@ public:
 	ParticleModel();
 	~ParticleModel();
 public:
-	static ParticleModel &Get();
-public:
 	void Build();
-	void UpdateInstances(const std::vector<ParticleInstance>& instances);
 public:
 	void Bind() const;
 	void Unbind() const;
+public:
+	VertexBuffer &GetInstanceBuffer() override;
+	u32t GetIndexCount() const override;
 };
