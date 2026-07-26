@@ -75,10 +75,10 @@
 
 /* semver is used for versioning. */
 #define MC_VERSION_MAJOR     0
-#define MC_VERSION_MINOR     5
+#define MC_VERSION_MINOR     6
 #define MC_VERSION_PATCH     0
 #define MC_VERSION_NUMBER    ((MC_VERSION_MAJOR * 10000) + (MC_VERSION_MINOR * 100) + MC_VERSION_PATCH)
-#define MC_VERSION_STRING    "0.5.0"
+#define MC_VERSION_STRING    "0.6.0"
 
 /* C includes */
 #define _USE_MATH_DEFINES 1

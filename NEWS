@@ -1,9 +1,22 @@
 NEWS - list of all major game and engine changes
 
+New in rd-161348
+* Rewrite version: rd-132328.
+* Engine version 0.0.6.
+* libgfx version: 0.0.2.
+* Add event system from scratch.
+* Delete GLEQ from dependencies.
+* Add filesystem class.
+* Improve Application Init and Shutdown process.
+* Add StaticBlockRender class for instanced rendering blocks.
+* Change Chunk rendering process for render instanced blocks
+* Add bushes.
+* Change crosshair thickness
+
 New in rd-160052
 * Rewrite version: rd-132328.
-* Engine version 0.05.
-* libgfx version: 0.02.
+* Engine version 0.0.5.
+* libgfx version: 0.0.2.
 * Fix rotation bug in character.shader.
 * Delete EntityRenderer class.
 * Add ZombieRenderer and ParticleRenderer
@@ -23,8 +36,8 @@ New in rd-160052
 
 New in rd-20090515
 * Recreated version: rd-132328.
-* Engine version 0.04.
-* libgfx version: 0.02.
+* Engine version 0.0.4.
+* libgfx version: 0.0.2.
 * Add Simple Renderer2D.
 * Change 60 TPS logic to 20 TPS logic (as is in the original game).
 * Add Mesh and MeshFactory.
@@ -50,8 +63,8 @@ New in rd-20090515
 
 New in rd-132328
 * Rewrite version: rd-132328.
-* Engine version 0.03.
-* libgfx version: 0.02.
+* Engine version 0.0.3.
+* libgfx version: 0.0.2.
 * Enable selector and player pick from code.
 * Delete cave generation.
 * Add interpolation factor in OnRender().
@@ -69,8 +82,8 @@ New in rd-132328
 
 New in rd-131655 (Cave game tech)
 * Recreated version: rd-131655 from https://github.com/thecodeofnotch/rd-131655
-* Engine version: 0.02
-* libgfx version: 0.02
+* Engine version: 0.0.2
+* libgfx version: 0.0.2
 * Disable selector and player pick from code.
 * Change log system to spdlog bassed log system.
 * Add random cave generator from code https://github.com/thecodeofnotch/rd-131655/blob/master/src/main/java/com/mojang/rubydung/level/Level.java.
@@ -134,7 +147,7 @@ New in rd-132211-3 - 14-08-25:
 
 New in rd132211-2 - 14-08-25:
 * Rewrite version: rd-132211.
-* Engine version 0.01-prealpha.
+* Engine version 0.0.1-prealpha.
 * All original game assets belonging to Mojang A.B are removed from the main repository.
 * Final refractoring.
 * Deleted patch 0 and patch 1.
@@ -154,7 +167,7 @@ New in rd132211-2 - 14-08-25:
 New in rd132211-1 - 31-07-25:
 * MISSING PATCH.
 * Rewrite version: rd-132211.
-* Engine version pre-0.01 (MISSING).
+* Engine version pre-0.0.1 (MISSING).
 * Main engine independent of game.
 * Simple Application class.
 * Layer implementation.
