@@ -1,6 +1,6 @@
 #include "Graphics/Buffers/VertexBuffer.h"
 
-#include <gfx/glad.h>
+#include "Graphics/GL/GL.h"
 
 namespace MC 
 {

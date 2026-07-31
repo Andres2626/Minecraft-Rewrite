@@ -17,8 +17,8 @@ namespace MC
 		private:
 			static bool m_Keys[MC_MAX_KEYS];
 			static bool m_Buttons[MC_MAX_BUTTONS];
-			static double m_X;
-			static double m_Y;
+			static double m_dx;
+			static double m_dy;
 
 			/* event destroy handling TODO: improve this! */
 			static u32t m_KeyID;

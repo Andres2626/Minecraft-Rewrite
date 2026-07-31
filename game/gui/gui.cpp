@@ -139,8 +139,8 @@ void gui::OnWindowResize(const vec2 &winsize)
 {
 	m_GUISize.x = winsize.x * 240 / winsize.y;
 	m_GUISize.y = winsize.y * 240 / winsize.y;
-	m_Cam->zright = winsize.x;
-	m_Cam->ztop = winsize.y;
+	m_Cam->zright = m_GUISize.x;
+	m_Cam->ztop = m_GUISize.y;
 	BuildCrossHair();
 }
 

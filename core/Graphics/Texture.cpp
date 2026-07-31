@@ -1,18 +1,19 @@
 #include "Graphics/Texture.h"
 
-#include <Log/Log.h>
+#include "Graphics/GL/GL.h"
+
+#include "Log/Log.h"
 
 #include <stb_image.h>
-#include <gfx/glad.h>
 
 namespace MC 
 {
 	namespace Graphics 
 	{
-		bool Texture::LoadFromFile(const char *file, u32t mode) 
+		bool Texture::LoadFromFile(const char *virtpath, u32t mode) 
 		{
 			const char *errmsg = {};
-			if (!Image::LoadFromFile(file, errmsg)) {
+			if (!Image::LoadFromFile(virtpath, &errmsg)) {
 				err.SetError(ErrorType::AssetLoad);
 				mc_error("error loading image. internal error {}", errmsg);
 				return false;

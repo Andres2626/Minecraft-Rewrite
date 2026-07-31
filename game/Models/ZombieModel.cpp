@@ -64,7 +64,7 @@ void ZombieModel::Build()
     m_InstanceBuffer->Unbind();
     m_VAO->Unbind();
 
-    m_IndexSize = indices.size();
+    m_IndexSize = (u32t)indices.size();
 }
 
 void ZombieModel::PushPart(const Cube& cube)

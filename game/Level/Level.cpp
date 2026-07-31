@@ -6,7 +6,7 @@
 #include "GameProperties.h"
 #include "Block/BlockManager.h"
 
-#include <Filesystem/FileSystem.h>
+#include <Filesystem/VirtualFileSystem.h>
 #include <Utils/Util.h>
 #include <Utils/gzip.h>
 
@@ -16,7 +16,7 @@
 using namespace File;
 
 Level::Level(const ivec3 &size)
-	: m_Size(size), m_LevelFile("level.dat")
+	: m_Size(size), m_LevelFile("/save/level.dat")
 {
 	m_Volume = (size_t)(size.x * size.z * size.y);
 	if (!m_Volume)
@@ -58,7 +58,7 @@ Level::Level(const ivec3 &size)
 	m_ChunkManager = std::make_unique<ChunkManager>(this);
 	m_ChunkManager->Create();
 
-	mc_info("save_file=./{} x={} y={} z={} size={} renderer_size={}", m_LevelFile, size.x, 
+	mc_info("save_file={} x={} y={} z={} size={} renderer_size={}", m_LevelFile, size.x, 
 		    size.z, size.y, m_Volume, m_ChunkManager->GetChunksCount());
 }
 
@@ -124,12 +124,12 @@ bool Level::IsOutOfBounds(const ivec3 &pos)
 
 bool Level::Levelcheck() 
 {
-	return FileSystem::Exists(m_LevelFile);
+	return VirtualFileSystem::Exists(m_LevelFile.c_str());
 }
 
 bool Level::Save() 
 {
-	mc_info("saving file=./{}", m_LevelFile);
+	mc_info("saving file={}", m_LevelFile);
 
 	size_t outSize = 0;
 
@@ -140,12 +140,21 @@ bool Level::Save()
 		return false;
 	}
 
-	if (!FileSystem::WriteBinary(m_LevelFile, raw, outSize)) {
+	FileHandle fp = VirtualFileSystem::Open(m_LevelFile.c_str(), FileMode::Write);
+	if (fp.handle == MC_FILE_INVALID) {
+		free(raw);
+		mc_fatal("failed to open level file: \"{}\"", m_LevelFile);
+		return false;
+	}
+
+	if (!VirtualFileSystem::Write(fp, raw, outSize)) {
+		VirtualFileSystem::Close(fp);
 		free(raw);
 		mc_fatal("failed to write level file: \"{}\"", m_LevelFile);
 		return false;
 	}
 
+	VirtualFileSystem::Close(fp);
 	free(raw);
 	return true;
 }
@@ -156,8 +165,29 @@ bool Level::Load()
 
 	size_t outSize = 0, inSize = 0;
 
-	char *filbuff = (char*)FileSystem::ReadBinary(m_LevelFile, inSize);
+	FileHandle fp = VirtualFileSystem::Open(m_LevelFile.c_str(), FileMode::ReadWrite);
+	if (fp.handle == MC_FILE_INVALID) {
+		mc_fatal("failed to open level file: \"{}\"", m_LevelFile);
+		return false;
+	}
+
+	inSize = VirtualFileSystem::Size(fp);
+	if (inSize == 0) {
+		VirtualFileSystem::Close(fp);
+		mc_fatal("invalid level size");
+		return false;
+	}
+
+	char *filbuff = (char*)malloc(inSize);
 	if (!filbuff) {
+		VirtualFileSystem::Close(fp);
+		mc_fatal("error allocating level file buffer");
+		return false;
+	}
+
+	if (VirtualFileSystem::Read(fp, filbuff, inSize) == 0) {
+		VirtualFileSystem::Close(fp);
+		free(filbuff);
 		mc_fatal("failed to read level file: \"{}\"", m_LevelFile);
 		return false;
 	}
@@ -166,17 +196,19 @@ bool Level::Load()
 	unsigned char* raw = Utils::decompress(filbuff, inSize, &outSize);
 	free(filbuff);
 	if (!raw) {
+		VirtualFileSystem::Close(fp);
 		mc_fatal("error decompressing level");
 		return false;
 	}
 
 	if (outSize != m_Volume) {
-		mc_fatal("invalid decompressed file size");
-		memcpy(m_Blocks.data(), raw, outSize);
+		VirtualFileSystem::Close(fp);
 		free(raw);
+		mc_fatal("invalid decompressed file size");
 		return false;
 	}
 
+	VirtualFileSystem::Close(fp);
 	memcpy(m_Blocks.data(), raw, outSize);
 	free(raw);
 	return true;
@@ -275,7 +307,7 @@ void Level::Render(Player *player)
 
 void Level::Update()
 {
-	int totalTiles = m_Volume;
+	int totalTiles = (int)m_Volume;
 	int ticks = totalTiles / 400;
 
 	for (int i = 0; i < ticks; ++i) {

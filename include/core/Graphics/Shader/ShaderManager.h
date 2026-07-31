@@ -14,7 +14,7 @@ namespace MC
 			static std::unordered_map<mc_str, std::unique_ptr<Shader>> m_Shaders;
 		public:
 			static Shader &Get(const mc_str &name);
-			static void Register(const mc_str &name, const mc_str &path);
+			static void Register(const mc_str &name, const mc_str &virtpath);
 		public:
 			static void Bind(const mc_str &name);
 			static void Unbind();

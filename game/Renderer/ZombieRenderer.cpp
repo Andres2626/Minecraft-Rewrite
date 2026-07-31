@@ -25,7 +25,7 @@ void ZombieRenderer::Render(Level &lev, Player &player, float alpha, float secon
 	m_Shader->SetFloat("s_fdensity0", GlobalGP.fg0.density);
 	m_Shader->SetVec4("s_fcolor1", GlobalGP.fg1.color);
 	m_Shader->SetFloat("s_fdensity1", GlobalGP.fg1.density);
-	m_Shader->SetFloat("s_seconds", fmod(seconds, 2 * M_PI));
+	m_Shader->SetFloat("s_seconds", (float)fmod(seconds, 2 * M_PI));
 	m_Shader->SetFloat("s_scale", 0.058333334f);
 
 	std::vector<ZombieInstance>().swap(m_Instances);

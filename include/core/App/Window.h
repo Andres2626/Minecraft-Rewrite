@@ -1,7 +1,9 @@
 #pragma once
 #include "common.h"
+
 #include "Graphics/Image.h"
 #include "Utils/Error.h"
+#include "Math/Math.h"
 
 #include <GLFW/glfw3.h>
 
@@ -47,6 +49,10 @@ namespace MC
 			const char* m_Title;
 			WindowProperties m_Pr;
 			GLFWwindow* m_Win; /* OpenGL window */
+        private:
+            /* mouse motion */
+            bool m_MouseFirst;
+            Math::vec2 m_MouseLast;
 		public:
 			/* Initializes and create window */
 			Window(const char *title, const WindowProperties &properties);
@@ -65,9 +71,13 @@ namespace MC
 		public:
 			void SetIcon(const Graphics::Image &img);
 			bool SetFullScreen(bool fullscreen);
+            void SetMouseFirst(bool first);
+            void SetMouseLast(const Math::vec2& last);
 		public:
 			inline WindowProperties& GetProps() { return m_Pr; }
-			inline GLFWwindow* GetWindow() { return m_Win; };
+			inline GLFWwindow* GetWindow() { return m_Win; }
+            inline bool GetMouseFirst() { return m_MouseFirst; }
+            inline Math::vec2 GetMouseLast() { return m_MouseLast; }
 		public:
 			Error &GetError() { return err.GetError(); }
 		};

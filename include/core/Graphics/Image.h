@@ -19,7 +19,7 @@ namespace MC
 			~Image();
 		public:
 			void SetFlip(bool flip);
-			bool LoadFromFile(const char *path, const char *errmsg);
+			bool LoadFromFile(const char *virtpath, const char **errmsg);
 			void Free();
 		};
 

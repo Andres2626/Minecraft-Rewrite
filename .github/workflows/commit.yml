@@ -12,29 +12,63 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [ ubuntu-22.04, windows-2025-vs2026 ]       
+              include:
+                  - os: ubuntu-22.04
+                    platform: linux
+                  - os: ubuntu-22.04
+                    platform: web
+                  - os: windows-2025-vs2026
+                    platform: win32
+                  - os: windows-2025-vs2026
+                    platform: win64
         runs-on: ${{ matrix.os }}
         steps:
             - uses: actions/checkout@v4
             - name: setup_lnx
-              if: runner.os == 'Linux'
+              if: matrix.platform == 'linux'
               run: |
                 sudo apt-get update
                 sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libgl1-mesa-dev
                 sudo apt-get install -y curl git build-essential cmake
             - name: build_lnx
-              if: runner.os == 'Linux'
+              if: matrix.platform == 'linux'
               run: |
                 cmake -B build_lnx -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
                 cd ./build_lnx && make -j4
+            - name: cache_web
+              if: matrix.platform == 'web'
+              uses: actions/cache@v4
+              with:
+                path: emsdk
+                key: emsdk-6.0.4
+            - name: setup_web
+              if: matrix.platform == 'web'
+              shell: bash
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libgl1-mesa-dev
+                sudo apt-get install -y curl git build-essential cmake      
+                if [ ! -d emsdk ]; then
+                  git clone --branch 6.0.4 https://github.com/emscripten-core/emsdk.git
+                fi
+                cd emsdk
+                ./emsdk install 6.0.4
+                ./emsdk activate 6.0.4             
+            - name: build_web
+              if: matrix.platform == 'web'
+              shell: bash
+              run: |
+                source emsdk/emsdk_env.sh
+                emcmake cmake -B build_web -S . -DCMAKE_INSTALL_PREFIX=install_web -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -DGLFW_BUILD_WAYLAND=OFF -DGLFW_BUILD_X11=OFF -G "Unix Makefiles" 
+                cmake --build build_web -j4
             - name: build_win64
-              if: runner.os == 'Windows'
+              if: matrix.platform == 'win64'
               shell: cmd
               run: |
                 cmake -B build_win64 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A x64
                 cmake --build build_win64 --config Debug -j4
             - name: build_win32
-              if: runner.os == 'Windows'
+              if: matrix.platform == 'win32'
               shell: cmd
               run: |
                 cmake -B build_win32 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A Win32

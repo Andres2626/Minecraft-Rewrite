@@ -3,10 +3,12 @@
 #include "Math/Math.h"
 #include "Physics/AABB.h"
 
-namespace MC {
-	namespace Graphics {
-
-		class MC_API Frustum {
+namespace MC 
+{
+	namespace Graphics 
+    {
+		class MC_API Frustum 
+        {
 		protected:
 			/* the frustum array */
 			float ft[6][4];

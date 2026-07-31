@@ -208,5 +208,7 @@ void Chunk::AddModelInstance(BlockType ty, const ivec3& pos, const float brightn
 	case BlockType::BUSH:
 		m_BushInstances.push_back({ pos, brightness });
 		break;
+    default:
+        break;
 	}
 }

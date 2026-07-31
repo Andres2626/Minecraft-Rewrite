@@ -50,6 +50,7 @@ It is not intended to add/arrive at the following:
 
 ## 📌 Currently available versions
 
+- ***FULL (RECREATED)*** mc-161607
 - ***FULL*** rd-161348
 - ***FULL*** rd-160052
 - ***FULL (RECREATED)*** rd-20090515 (Cave game tech) from: https://github.com/thecodeofnotch/rd-20090515 thanks to thecodeofnotch for this.

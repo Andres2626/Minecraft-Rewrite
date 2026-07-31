@@ -1,6 +1,7 @@
+
 #include "Graphics/GL/GLError.h"
 
-#include <gfx/glad.h>
+#include "Graphics/GL/GL.h"
 
 namespace MC 
 {
@@ -26,12 +27,14 @@ namespace MC
 				case GL_INVALID_OPERATION:             
 					ret = "Invalid operation"; 
 					break;
+#ifndef MC_PLATFORM_WEB
 				case GL_STACK_OVERFLOW:                
 					ret = "Stack overflow"; 
 					break;
 				case GL_STACK_UNDERFLOW:               
 					ret = "Stack underflow"; 
 					break;
+#endif /* MC_PLATFORM_WEB */
 				case GL_OUT_OF_MEMORY:                 
 					ret = "Out of memory"; 
 					break;

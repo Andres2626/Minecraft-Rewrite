@@ -1,6 +1,5 @@
 set(INCDIR ${CMAKE_SOURCE_DIR}/include)
 set(LIBINCDIR ${INCDIR}/lib)
-set(GLADINCDIR ${LIBINCDIR}/gfx)
 set(COREINCDIR ${INCDIR}/core)
 set(GAMEINCDIR ${INCDIR}/game)
 
@@ -25,16 +24,27 @@ target_include_directories(${MCVER} PRIVATE ${INCDIR})
 target_include_directories(${MCVER} PRIVATE ${COREINCDIR})
 target_include_directories(${MCVER} PRIVATE ${GAMEINCDIR})
 target_include_directories(${MCVER} PRIVATE ${LIBINCDIR})
-target_include_directories(${MCVER} PRIVATE ${GLADINCDIR})
 
 # link all used libraries
-target_link_libraries(${MCVER} PRIVATE mccore glfw zlib glm stb gfx spdlog)
+if(EMSCRIPTEN)
+    target_link_options(${MCVER} PRIVATE "-sASYNCIFY" "-sASYNCIFY_IMPORTS=WebFS_Mount,WebFS_Sync,WebFS_Download" "--use-port=contrib.glfw3" "-sMAX_WEBGL_VERSION=2" "-sMIN_WEBGL_VERSION=2")
+    target_link_libraries(${MCVER} PRIVATE zlibstatic)
+    set_target_properties(${MCVER} PROPERTIES SUFFIX ".html")
+else()
+    set(GLADINCDIR ${LIBINCDIR}/gfx)
+    target_include_directories(${MCVER} PRIVATE ${GLADINCDIR})
+    target_link_libraries(${MCVER} PRIVATE zlib glfw gfx)
+endif()
+
+target_link_libraries(${MCVER} PRIVATE mccore glm stb spdlog::spdlog)
 
 # copy .dll files to .exe directory
-add_custom_command(TARGET ${MCVER} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:mccore> $<TARGET_FILE_DIR:${MCVER}>
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:zlib> $<TARGET_FILE_DIR:${MCVER}>
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:glfw> $<TARGET_FILE_DIR:${MCVER}>)
-    
+if(WIN32 AND NOT EMSCRIPTEN)
+    add_custom_command(TARGET ${MCVER} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:mccore> $<TARGET_FILE_DIR:${MCVER}>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:zlib> $<TARGET_FILE_DIR:${MCVER}>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:glfw> $<TARGET_FILE_DIR:${MCVER}>)
+endif()
+
 install(TARGETS ${MCVER} RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
    

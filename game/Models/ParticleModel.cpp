@@ -51,7 +51,7 @@ void ParticleModel::Build()
 	m_InstanceBuffer->Unbind();
 	m_VAO->Unbind();
 
-	m_IndexSize = indices.size();
+	m_IndexSize = (u32t)indices.size();
 }
 
 void ParticleModel::Bind() const

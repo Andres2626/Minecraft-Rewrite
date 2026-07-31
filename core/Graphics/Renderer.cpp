@@ -1,12 +1,23 @@
-#include "Graphics/Renderer.h"
-#include "Graphics/BlendValue.h"
 
-#include <gfx/glad.h>
+#include "Graphics/Renderer.h"
+
+#include "Graphics/BlendValue.h"
+#include "Graphics/GL/GL.h"
+
+#include "Log/Log.h"
 
 namespace MC 
 {
 	namespace Graphics 
 	{
+        void Renderer::Init()
+        {
+            mc_warn("graphic driver version: {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+			mc_warn("driver vendor: {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
+			mc_warn("driver name: {}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
+            mc_warn("shader version: {}", reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION)));
+        }
+        
 		void Renderer::Enable(u32t func)
 		{
 			glEnable(func);
@@ -47,24 +58,24 @@ namespace MC
 			glFrontFace(mode);
 		}
 
-		void Renderer::DrawArrays(u32t mode, i32t size)
+		void Renderer::DrawArrays(u32t mode, size_t size)
 		{
-			glDrawArrays(mode, 0, size);
+			glDrawArrays(mode, 0, (GLsizei)size);
 		}
 
-		void Renderer::DrawElements(u32t mode, i32t size)
+		void Renderer::DrawElements(u32t mode, size_t size)
 		{
-			glDrawElements(mode, size, GL_UNSIGNED_INT, NULL);
+			glDrawElements(mode, (GLsizei)size, GL_UNSIGNED_INT, NULL);
 		}
 
-		void Renderer::DrawElements(u32t mode, i32t size, const void *indices)
+		void Renderer::DrawElements(u32t mode, size_t size, const void *indices)
 		{
-			glDrawElements(mode, size, GL_UNSIGNED_INT, indices);
+			glDrawElements(mode, (GLsizei)size, GL_UNSIGNED_INT, indices);
 		}
 
-		void Renderer::DrawElementsInstanced(u32t mode, i32t count, const void* indices, i32t icount)
+		void Renderer::DrawElementsInstanced(u32t mode, size_t count, const void* indices, size_t icount)
 		{
-			glDrawElementsInstanced(mode, count, GL_UNSIGNED_INT, indices, icount);
+			glDrawElementsInstanced(mode, (GLsizei)count, GL_UNSIGNED_INT, indices, (GLsizei)icount);
 		}
 
 		void Renderer::Clear(u32t mask)

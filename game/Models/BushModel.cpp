@@ -48,7 +48,7 @@ void BushModel::Build()
 		MeshFactory::AddIndices(m_MeshData, count);
 	}
 
-	m_IndexCount = m_MeshData.indices.size();
+	m_IndexCount = (u32t)m_MeshData.indices.size();
 
 	m_Mesh->Bind();
 	m_Mesh->Build();

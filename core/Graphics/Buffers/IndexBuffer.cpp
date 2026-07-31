@@ -1,6 +1,7 @@
+
 #include "Graphics/Buffers/IndexBuffer.h"
 
-#include <gfx/glad.h>
+#include "Graphics/GL/GL.h"
 
 namespace MC 
 {

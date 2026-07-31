@@ -1,5 +1,9 @@
 #shader vertex
-#version 330 core
+#version 300 es
+
+precision highp float;
+precision highp int;
+precision highp sampler2D;
 
 layout (location = 0) in vec3 aPos; 
 layout (location = 1) in vec3 aColor; 
@@ -10,14 +14,11 @@ layout (location = 3) in float aBrig;
 layout(location = 5) in vec3 iPos;
 layout(location = 6) in float iBrig;
 
-out VS_OUT
-{
-	vec3 pos;
-    vec3 color;
-	vec2 uv;
-	float brightness;
-	vec3 worldPos;
-}vs_out;
+out vec3 pos;
+out vec3 color;
+out vec2 uv;
+out float brightness;
+out vec3 worldPos;
 
 uniform bool s_RenderBush;
 uniform mat4 s_VP;
@@ -28,32 +29,33 @@ void main()
     vec3 pos = aPos;
     if (s_RenderBush) {
         pos += iPos;
-        vs_out.brightness = iBrig;
+        brightness = iBrig;
     }
     else
-        vs_out.brightness = aBrig;
+        brightness = aBrig;
         
     vec4 world = s_M * vec4(pos, 1.0f);
-	vs_out.pos = aPos;
-    vs_out.color = aColor;
-	vs_out.uv = aUV;
-	vs_out.worldPos = world.xyz;
+	pos = aPos;
+    color = aColor;
+	uv = aUV;
+	worldPos = world.xyz;
 	gl_Position = s_VP * world;
 }
 
 #shader fragment
-#version 330 core
+#version 300 es
+
+precision highp float;
+precision highp int;
+precision highp sampler2D;
 
 out vec4 FragColor;
 
-in VS_OUT
-{
-	vec3 pos;
-    vec3 color;
-	vec2 uv;
-	float brightness;
-	vec3 worldPos;
-} fs_in;
+in vec3 pos;
+in vec3 color;
+in vec2 uv;
+in float brightness;
+in vec3 worldPos;
 
 uniform vec3 s_cpos;
 uniform vec4 s_fcolor0;
@@ -65,15 +67,15 @@ uniform sampler2D s_t1;
 
 void main() 
 {
-	vec4 tex = texture(s_t1, fs_in.uv);
+	vec4 tex = texture(s_t1, uv);
     if (tex.a < 0.1)
         discard;
     
-    vec4 result = tex * fs_in.brightness;
-	float dist = length(fs_in.worldPos - s_cpos);
+    vec4 result = tex * brightness;
+	float dist = length(worldPos - s_cpos);
     
     vec3 final;
-	if (fs_in.brightness < 0.6f) {
+	if (brightness < 0.6) {
 		float fogFactor = exp(-s_fdensity1 * dist);
 		final = mix(s_fcolor0.rgb, result.rgb, fogFactor);
 	}

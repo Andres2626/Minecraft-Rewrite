@@ -13,6 +13,8 @@ namespace MC
 
 		class MC_API Renderer 
 		{
+        public:
+            static void Init();
 		public:
 			static void Enable(u32t func);
 			static void Disable(u32t func);
@@ -26,10 +28,10 @@ namespace MC
 			static void CullFace(u32t mode);
 			static void FrontFace(u32t mode);
 		public:
-			static void DrawArrays(u32t mode, i32t size);
-			static void DrawElements(u32t mode, i32t size);
-			static void DrawElements(u32t mode, i32t size, const void* indices);
-			static void DrawElementsInstanced(u32t mode, i32t count, const void *indices, i32t icount);
+			static void DrawArrays(u32t mode, size_t size);
+			static void DrawElements(u32t mode, size_t size);
+			static void DrawElements(u32t mode, size_t size, const void* indices);
+			static void DrawElementsInstanced(u32t mode, size_t count, const void *indices, size_t icount);
 		public:
 			static void Clear(u32t mode);
 		};

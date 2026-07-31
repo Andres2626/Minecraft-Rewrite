@@ -4,6 +4,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+#include <Filesystem/VirtualFileSystem.h>
+
 namespace MC 
 {
 	namespace Graphics
@@ -25,16 +27,25 @@ namespace MC
 			stbi_set_flip_vertically_on_load(flip);
 		}
 
-		bool Image::LoadFromFile(const char* path, const char* errmsg)
+		bool Image::LoadFromFile(const char *virtpath, const char **errmsg)
 		{
-			this->path = path;
-			pixels = stbi_load(path, &x, &y, &nr_channels, 0);
-			if (!pixels) {
-				errmsg = stbi_failure_reason();
+			this->path = virtpath;
+
+			File::FileHandle fp = File::VirtualFileSystem::Open(virtpath, File::FileMode::Read);
+			if (fp.handle == MC_FILE_INVALID) {
+				*errmsg = "error opening image file";
 				return false;
 			}
 
-			errmsg = NULL;
+			pixels = stbi_load_from_file(reinterpret_cast<FILE*>(fp.handle), &x, &y, &nr_channels, 0);
+			File::VirtualFileSystem::Close(fp);
+
+			if (!pixels) {
+				*errmsg = stbi_failure_reason();
+				return false;
+			}
+
+			*errmsg = NULL;
 			return true;
 		}
 

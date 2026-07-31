@@ -13,8 +13,8 @@ namespace MC
 	{
 		bool Input::m_Keys[MC_MAX_KEYS];
 		bool Input::m_Buttons[MC_MAX_BUTTONS];
-		double Input::m_X = 0.0;
-		double Input::m_Y = 0.0;
+		double Input::m_dx = 0.0;
+		double Input::m_dy = 0.0;
 
 		u32t Input::m_KeyID;
 		u32t Input::m_ButtonID;
@@ -68,9 +68,9 @@ namespace MC
 				
 			case Events::EventType::CursorMoved:
 			{
-				auto& e = static_cast<Events::CursorPositionEvent&>(ev);
-				m_X = e.x;
-				m_Y = e.y;
+				auto& e = static_cast<Events::CursorMotionEvent&>(ev);
+				m_dx = e.dx;
+				m_dy = e.dy;
 				break;
 			}
 			default:
@@ -90,12 +90,12 @@ namespace MC
 
 		double Input::GetMouseX()
 		{
-			return m_X;
+			return m_dx;
 		}
 
 		double Input::GetMouseY()
 		{
-			return m_Y;
+			return m_dy;
 		}
 
 	}

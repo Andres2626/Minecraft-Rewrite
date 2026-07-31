@@ -1,19 +1,21 @@
 
 #include "Graphics/Shader/Shader.h"
 
+#include "Graphics/GL/GL.h"
+
 #define MC_LOG_PREFIX "Shader"
 #include "Log/Log.h"
 
-#include <gfx/glad.h>
+#include "Filesystem/VirtualFileSystem.h"
 
 namespace MC 
 {
 	namespace Graphics 
 	{
-		Shader::Shader(const mc_str &filepath)
-			: m_Path(filepath) 
+		Shader::Shader(const mc_str &virtpath)
+			: m_Path(virtpath)
 		{
-			ShaderSources shaders = ParseFromFile(filepath);
+			ShaderSources shaders = ParseFromFile(virtpath);
 			m_ShaderID = Create(shaders.Vertex, shaders.Fragment);
 			mc_info("path={}", m_Path);
 		}
@@ -96,23 +98,33 @@ namespace MC
 				glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)&value);
 		}
 
-		ShaderSources Shader::ParseFromFile(const mc_str &path)
+		ShaderSources Shader::ParseFromFile(const mc_str &virtpath)
 		{
+			std::string out;
 			mc_str line;
 			std::stringstream ss[2];
-			std::ifstream stream(path);
 
-			if (!stream) {
+			File::FileHandle fp = File::VirtualFileSystem::Open(virtpath.c_str(), File::FileMode::Read);
+			if (fp.handle == MC_FILE_INVALID) {
 				err.SetError(ErrorType::FileNotFound);
-				mc_fatal("failed to open shader file \"{}\"\n", path);
+				mc_fatal("failed to open shader file \"{}\"\n", virtpath);
+				return {};
 			}
 
-			enum class ShaderType 
-			{
-				UNKNOUN = -1, VERTEX = 0, FRAGMENT = 1
-			};
+			size_t sz = File::VirtualFileSystem::Size(fp);
+			out.resize(sz);
 
-			ShaderType type = ShaderType::UNKNOUN;
+			if (!File::VirtualFileSystem::Read(fp, out.data(), sz)) {
+				File::VirtualFileSystem::Close(fp);
+				err.SetError(ErrorType::AssetLoad);
+				mc_fatal("failed to read shader file \"{}\"\n", virtpath);
+				return {};
+			}
+
+			File::VirtualFileSystem::Close(fp);
+
+			std::stringstream stream(out);
+			ShaderType type = ShaderType::UNKNOWN;
 
 			while (getline(stream, line)) {
 				if (line.find("#shader") != mc_str::npos) {

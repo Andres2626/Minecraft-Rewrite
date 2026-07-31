@@ -45,27 +45,30 @@ in cmake initial configuration.
 | GNU Binutils[^2]  | 13.4.0            | ld --version                 |
 | GNU Make[^2]      | 4.4.1             | make --version               |
 | bash[^2]          | 5.2.21            | bash --version               |
+| python[^5]        | 3.12.12           | python --version             |
+| emscripten[^5]    | 6.0.4             | emcc --version               |
 | VS[^3]            | 2019              |                              |
 
 | Dependencies      | Tested with   |
 | ---------------   | -----------   |                     
-| gleq              | master        |
 | glfw              | 3.4           |
 | spdlog            | 1.17.0        |
-| glm               | master        |
+| glm               | 1.0.3         |
 | stb               | master        |
-| zlib              | master        |
+| zlib              | 1.3.2         |
 
 [^1]: For running MC
 [^2]: For UNIX users (linux, cygwin, msys2 and WSL)
 [^3]: For Windows users.
+[^5]: For Web building.
 [^4]: Note for Windows users: It is recommended to install dependencies manually if git is not available.
 
 - **MC repository cloned** see [Cloning repository](#-cloning-repository) for more info.
 
 ## 1️⃣  Prepare assets
 
-1. Obtain the required '.jar' file for the version being rewritten. 
+1. Obtain the required '.jar' file for the version being rewritten.
+   * *NOTE*: If the '.jar' does not exist, assets from a later version can be used.
 2. Verify the file with **SHA-256** and compare with used '.jar'. 
    Check [used files](used-jar-files.txt) for more info.
 3. Extract the JE resources in '$(PROJECT_ROOT)/assets'.
@@ -94,7 +97,7 @@ $ git submodule init
 $ git submodule update
 ```
 
-⚠️ Important Note: If you use git submodules set MC_AUTODEP=OFF in CMake.
+⚠️ IMPORTANT NOTE: If you use git submodules set MC_AUTODEP=OFF in CMake.
 
 ## 3️⃣  Building MC Project
 
@@ -111,14 +114,22 @@ $ cmake -S ./ -B ./build
 $ cmake --build ./build
 ```
 
-Or using 'cmake-gui' configured with your IDE.
+## Web users
 
-ℹ️ Note: If you installed dependencies in respective directory, you must turn 
+```
+$ emcmake cmake -S ./ -B ./build
+$ cmake --build ./build
+```
+
+Once the web build is complete, the assets folder must be copied to the directory 
+where the '.html' file was generated. *MC does not use '--preload-file' to load assets*
+
+ℹ️ *NOTE*: If you installed dependencies in respective directory, you must turn 
 off MC_AUTODEP in cmake.
 
 ## 🚫 Cleaning dependencies
 
-ℹ️ Note: This **ONLY** works if MC_AUTODEP is off in cmake.
+ℹ️ *NOTE*: This **ONLY** works if MC_AUTODEP is off in cmake.
 
 ### Unix users:
 

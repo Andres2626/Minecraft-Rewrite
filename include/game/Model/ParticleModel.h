@@ -31,10 +31,10 @@ public:
 	ParticleModel();
 	~ParticleModel();
 public:
-	void Build();
+	void Build() override;
 public:
-	void Bind() const;
-	void Unbind() const;
+	void Bind() const override;
+	void Unbind() const override;
 public:
 	VertexBuffer &GetInstanceBuffer() override;
 	u32t GetIndexCount() const override;

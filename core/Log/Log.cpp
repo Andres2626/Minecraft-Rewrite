@@ -18,8 +18,11 @@ namespace MC
         get_time_buff("%Y-%m-%d_%H-%M-%S.log", t_buff, 32);
 
         bool sout = BIT_CHK(flags, MC_LOG_STDOUT);
+#ifndef MC_PLATFORM_WEB
         bool fout = BIT_CHK(flags, MC_LOG_FILE);
-
+#else
+        bool fout = false;
+#endif
         try {
             std::vector<spdlog::sink_ptr> sinks;
 

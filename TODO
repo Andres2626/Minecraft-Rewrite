@@ -50,7 +50,7 @@ to the project, submit a pull request to:
     - [ ] Wii.
 ## Graphics Support
     - [ ] OpenGL ES.
-    - [ ] WebGL (via Emscripten).
+    - [x] WebGL (via Emscripten).
     - [ ] DirectX.
     - [ ] Vulkan.
 ## Architecture / Engine

@@ -22,12 +22,12 @@ using namespace App;
 using namespace Events;
 using namespace Layers;
 using namespace Math;
+using namespace File;
 
-class Rubydung : public Default 
+class Minecraft : public Default 
 {
 private:
 	vec2 m_WinSize;
-	vec2 m_Last;
 	std::unique_ptr<gui> m_GUI;
 	std::unique_ptr<Level> m_Level;
 	std::unique_ptr<Player> m_Player;
@@ -42,15 +42,15 @@ private:
 	bool m_MouseLeft;
 	bool m_MouseRight;
 public:
-	Rubydung();
-	~Rubydung();
+	Minecraft();
+	~Minecraft();
 public:
 	bool Init() override;
 	void OnUpdate(Timestep& ts) override;
 	void OnEvent(Event& ev);
 	void OnKey(KeyboardButtonEvent &ev);
 	void OnResize(WindowResizeEvent &ev);
-	void OnCursorMove(CursorPositionEvent &ev);
+	void OnCursorMove(CursorMotionEvent &ev);
 	void OnCursorMoved(int& x, int& y);
 	void OnRender(float alpha) override;
 	void OnTick() override;

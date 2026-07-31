@@ -1,9 +1,10 @@
+
 #include "Graphics/Shader/ShaderManager.h"
+
+#include "Graphics/GL/GL.h"
 
 #define MC_LOG_PREFIX "ShaderManager"
 #include "Log/Log.h"
-
-#include <gfx/glad.h>
 
 namespace MC 
 {
@@ -24,7 +25,7 @@ namespace MC
 			return *it->second;
 		}
 
-		void ShaderManager::Register(const mc_str &name, const mc_str &path)
+		void ShaderManager::Register(const mc_str &name, const mc_str &virtpath)
 		{
 			auto it = m_Shaders.find(name);
 
@@ -34,7 +35,7 @@ namespace MC
 			}
 
 			std::unique_ptr<Shader> shader;
-			shader = std::make_unique<Shader>(path);
+			shader = std::make_unique<Shader>(virtpath);
 			const Error &err = shader->GetError();
 			if (err.num != ErrorType::NoError) {
 				mc_error("error {}: {}", (u32t)err.num, err.str);

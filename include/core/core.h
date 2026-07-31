@@ -13,7 +13,10 @@
 #include "Events/WindowEvent.h"
 #include "Events/MouseEvent.h"
 
-#include "Filesystem/FileSystem.h"
+#include "Filesystem/IFileSystem.h"
+#include "Filesystem/NativeFileSystem.h"
+#include "Filesystem/VirtualFileSystem.h"
+#include "Filesystem/WebFileSystem.h"
 
 #include "Graphics/Buffers/IndexBuffer.h"
 #include "Graphics/Buffers/VertexArray.h"

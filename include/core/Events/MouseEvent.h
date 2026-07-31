@@ -17,13 +17,13 @@ namespace MC
 			{ }
 		};
 
-		struct CursorPositionEvent : public Event
+		struct CursorMotionEvent : public Event
 		{
-			double x;
-			double y;
+			double dx;
+			double dy;
 
-			CursorPositionEvent(double posx, double posxy)
-				: Event((u32t)EventType::CursorMoved), x(posx), y(posxy)
+			CursorMotionEvent(double x, double y)
+				: Event((u32t)EventType::CursorMoved), dx(x), dy(y)
 			{ }
 		};
 

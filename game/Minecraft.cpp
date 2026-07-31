@@ -1,11 +1,25 @@
-#include "Rubydung.h"
+#include "Minecraft.h"
 
 static float rendertime = 0.0f;
 static float updatetime = 0.0f;
 
 GameProperties GlobalGP;
 
-Rubydung::Rubydung()
+void DownloadAssets()
+{
+	WebFileSystem::Init("assets/", "/assets/");
+	WebFileSystem::CheckAndDownload("Internal/win_icon.png");
+	WebFileSystem::CheckAndDownload("Shaders/gles/chunk.shader");
+	WebFileSystem::CheckAndDownload("Shaders/gles/selector.shader");
+	WebFileSystem::CheckAndDownload("Shaders/gles/character.shader");
+	WebFileSystem::CheckAndDownload("Shaders/gles/hud.shader");
+	WebFileSystem::CheckAndDownload("Shaders/gles/particle.shader");
+	WebFileSystem::CheckAndDownload("terrain.png");
+	WebFileSystem::CheckAndDownload("char.png");
+	WebFileSystem::Sync();
+}
+
+Minecraft::Minecraft()
 	: m_InternalWindow(Application::Get().GetWindow()),
 	  m_Props(m_InternalWindow.GetProps())
 {
@@ -15,14 +29,16 @@ Rubydung::Rubydung()
 	REGISTER_EVENT(EventType::WindowResized, [this](Event& e) { OnEvent(e); });
 	REGISTER_EVENT(EventType::CursorMoved, [this](Event& e) { OnEvent(e); });
 
+	/* Web: download all assets from localhost without using --preload-file */
+	DownloadAssets();
+
 	m_Timer = std::make_unique<Timer>();
 	m_WinSize = { m_Props.x, m_Props.y };
-	m_Last = { m_Props.x / 2, m_Props.y / 2 };
-
+    
 	/* Set window icon */
 	const char *errmsg = {};
 	Image wico;
-	bool load = wico.LoadFromFile("assets/Internal/win_icon.png", errmsg);
+	bool load = wico.LoadFromFile("/Internal/win_icon.png", &errmsg);
 	if (!load) {
 		mc_error("error loading image. internal error {}", errmsg);
 		mc_fatal("failed to open window icon: \"{}\"", wico.path);
@@ -36,21 +52,21 @@ Rubydung::Rubydung()
 	Renderer::ClearColor(GlobalGP.SkyColor);
 }
 
-Rubydung::~Rubydung() 
+Minecraft::~Minecraft() 
 {
 
 }
 
-bool Rubydung::Init()
+bool Minecraft::Init()
 {
 	Default::Init();
 
 	/* load shaders */
-	ShaderManager::Register("chunk", "assets/Shaders/chunk.shader");
-	ShaderManager::Register("selector", "assets/Shaders/selector.shader");
-	ShaderManager::Register("character", "assets/Shaders/character.shader");
-	ShaderManager::Register("hud", "assets/Shaders/hud.shader");
-	ShaderManager::Register("particle", "assets/Shaders/particle.shader");
+	ShaderManager::Register("chunk", "/Shaders/chunk.shader");
+	ShaderManager::Register("selector", "/Shaders/selector.shader");
+	ShaderManager::Register("character", "/Shaders/character.shader");
+	ShaderManager::Register("hud", "/Shaders/hud.shader");
+	ShaderManager::Register("particle", "/Shaders/particle.shader");
 
 	m_Level = std::make_unique<Level>(GlobalGP.LevelSize);
 	ModelManager::Init();
@@ -74,12 +90,12 @@ bool Rubydung::Init()
 	m_ParticleRenderer->SetEntityManager(m_EntityManager.get());
 
 	/* load texture */
-	if (!m_TerrainAtlas.LoadFromFile("assets/terrain.png", GL_NEAREST)) {
+	if (!m_TerrainAtlas.LoadFromFile("/terrain.png", GL_NEAREST)) {
 		mc_fatal("failed to open texture file: \"{}\"", m_TerrainAtlas.path);
 		return false;
 	}
 
-	if (!m_CharAtlas.LoadFromFile("assets/char.png", GL_NEAREST)) {
+	if (!m_CharAtlas.LoadFromFile("/char.png", GL_NEAREST)) {
 		mc_fatal("failed to open char file: \"{}\"", m_CharAtlas.path);
 		return false;
 	}
@@ -92,7 +108,7 @@ bool Rubydung::Init()
 	return true;
 }
 
-void Rubydung::OnUpdate(Timestep &ts) 
+void Minecraft::OnUpdate(Timestep &ts) 
 {
 	Default::OnUpdate(ts);
 	
@@ -103,7 +119,7 @@ void Rubydung::OnUpdate(Timestep &ts)
 	m_Level->Update();
 }
 
-void Rubydung::OnKey(KeyboardButtonEvent &ev) 
+void Minecraft::OnKey(KeyboardButtonEvent &ev) 
 {
 	if (ev.action != ButtonAction::Press)
 		return; /* at the moment ignore released and repeated actions */
@@ -144,7 +160,7 @@ void Rubydung::OnKey(KeyboardButtonEvent &ev)
 	}
 }
 
-void Rubydung::OnResize(WindowResizeEvent &ev)
+void Minecraft::OnResize(WindowResizeEvent &ev)
 {
 	m_WinSize = { ev.width, ev.height };
 	Renderer::Viewport({ 0, 0 }, m_WinSize);
@@ -152,14 +168,12 @@ void Rubydung::OnResize(WindowResizeEvent &ev)
 	m_GUI->OnWindowResize(m_WinSize);
 }
 
-void Rubydung::OnCursorMove(CursorPositionEvent &ev)
+void Minecraft::OnCursorMove(CursorMotionEvent &ev)
 {
-	vec2 offset(ev.x - m_Last.x, m_Last.y - ev.y);
-	m_Last = vec2(ev.x, ev.y);
-	m_Player->MouseMove(offset);
+	m_Player->MouseMove({ ev.dx, ev.dy });
 }
 
-void Rubydung::OnEvent(Event& ev)
+void Minecraft::OnEvent(Event& ev)
 {
 	EventType type = static_cast<EventType>(ev.type);
 	switch (type) {
@@ -170,8 +184,10 @@ void Rubydung::OnEvent(Event& ev)
 		OnResize(static_cast<WindowResizeEvent&>(ev));
 		break;
 	case EventType::CursorMoved:
-		OnCursorMove(static_cast<CursorPositionEvent&>(ev));
+		OnCursorMove(static_cast<CursorMotionEvent&>(ev));
 		break;
+    default:
+        break;
 	}
 }
 
@@ -180,7 +196,7 @@ void Rubydung::OnEvent(Event& ev)
 *	- Improve rendering process
 *	- Move fog effect to postfx shader.
 */
-void Rubydung::OnRender(float alpha)
+void Minecraft::OnRender(float alpha)
 {
 	Default::OnRender(alpha);
 
@@ -214,7 +230,7 @@ void Rubydung::OnRender(float alpha)
 	m_GUI->Render(&m_TerrainAtlas);
 }
 
-void Rubydung::OnTick() 
+void Minecraft::OnTick() 
 {
 	Default::OnTick();
 
@@ -234,7 +250,7 @@ void Rubydung::OnTick()
 	m_Level->Tick();
 }
 
-void Rubydung::OnSuspended() 
+void Minecraft::OnSuspended() 
 {
 	Default::OnSuspended();
 }

@@ -32,7 +32,7 @@ namespace MC
 			Application(const char *name, const WindowProperties &pr);
 			~Application();
 		public:
-			virtual bool Init();
+			virtual bool Init() override;
 		public:
 			void PushLayer(Layers::Layer *layer);
 		public:
@@ -40,10 +40,10 @@ namespace MC
 			void Suspend();
 			void Resume();
 			void Stop();
+            void Frame();
 		private:
 			void Run();
 			void Shutdown();
-			void Frame();
 			void OnUpdate(Utils::Timestep &ts) override;
 			void OnRender(float alpha) override;
 			void OnTick() override;
@@ -56,6 +56,7 @@ namespace MC
 			static Application &Get();
 			static inline WindowProperties &GetProperties() { return Get().m_Pr; };
 			inline Window &GetWindow() { return *m_Win; };
+            inline bool IsRunning() { return m_Running; }
 		};
 
 	}

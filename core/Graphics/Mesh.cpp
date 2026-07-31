@@ -1,6 +1,7 @@
+
 #include "Graphics/Mesh.h"
 
-#include <gfx/glad.h>
+#include "Graphics/GL/GL.h"
 #include "Graphics/Shader/Shaderflags.h"
 #include "Graphics/Buffers/VertexBuffer.h"
 

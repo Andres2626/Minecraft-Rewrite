@@ -6,6 +6,19 @@
 #include "Utils/Util.h"
 #include "Log/Log.h"
 
+#ifdef MC_PLATFORM_WEB
+#include <emscripten.h>
+
+static void WebLoop()
+{
+    auto &app = MC::App::Application::Get();
+    if (!app.IsRunning())
+        return;
+    app.Frame();
+}
+
+#endif /* MC_PLATFORM_WEB */
+
 namespace MC 
 {
 	namespace App 
@@ -57,7 +70,6 @@ namespace MC
 			m_Suspended = false;
 			
 			Run();
-			Shutdown();
 		}
 
 		void Application::Suspend()
@@ -73,6 +85,9 @@ namespace MC
 		void Application::Stop()
 		{
 			this->m_Running = false;
+#ifdef MC_PLATFORM_WEB
+            emscripten_cancel_main_loop();
+#endif /* MC_PLATFORM_WEB */
 		}
 
 		void Application::Run()
@@ -81,8 +96,15 @@ namespace MC
 			m_UpdateTimer = m_Timer.ElapsedMillis();
 			m_UpdateTick = 1000.0f / 20.0f;
 			m_Step = Utils::Timestep(m_UpdateTimer);
+            
+#ifndef MC_PLATFORM_WEB
 			while (m_Running)
 				Frame();
+#else
+            emscripten_set_main_loop(WebLoop, 0, true);
+#endif /* !MC_PLATFORM_WEB */
+
+            Stop();
 		}
 
 		void Application::Shutdown()
@@ -95,7 +117,12 @@ namespace MC
 		void Application::Frame()
 		{
 			Utils::Timer frametime;
-
+            
+            if (m_Suspended) {
+                OnSuspended();
+                return;
+            }
+            
 			DISPATCH_EVENTS();
 
 			m_Win->Clear();
@@ -119,11 +146,6 @@ namespace MC
 				OnTick();
 				m_FPS = 0;
 				m_UPS = 0;
-			}
-
-			while (m_Suspended) {
-				/* reload timer */
-				OnSuspended();
 			}
 
 			if (m_Win->Close())

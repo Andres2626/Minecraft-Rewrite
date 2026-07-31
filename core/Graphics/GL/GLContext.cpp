@@ -1,6 +1,8 @@
+
 #include "Graphics/GL/GLContext.h"
 
-#include <gfx/glad.h>
+#include "Graphics/GL/GL.h"
+
 #include <GLFW/glfw3.h>
 
 namespace MC 
@@ -13,9 +15,11 @@ namespace MC
 			{
 				glfwMakeContextCurrent((GLFWwindow*)win);
 
+#ifndef MC_PLATFORM_WEB
 				bool glad = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 				if (!glad)
 					return false;
+#endif /* !MC_PLATFORM_WEB */
 
 				return true;
 			}

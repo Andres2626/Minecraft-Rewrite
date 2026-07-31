@@ -5,12 +5,18 @@
 #include "Math/Math.h"
 #include "Utils/Error.h"
 
-#include <gfx/glad.h>
+#include "Graphics/GL/GL.h"
 
 namespace MC 
 {
 	namespace Graphics 
 	{
+		enum class ShaderType
+		{
+			UNKNOWN = -1,
+			VERTEX, 
+			FRAGMENT
+		};
 
 		struct MC_API ShaderSources 
 		{
@@ -26,7 +32,7 @@ namespace MC
 			ErrorHandler err;
 		public:
 			/* load shader from file */
-			Shader(const mc_str& filepath);
+			Shader(const mc_str &virtpath);
 			~Shader();
 		public:
 			/* enable program */
@@ -45,7 +51,7 @@ namespace MC
 			void Set3x3(const mc_str &name, const Math::mat3 &value);
 			void Set4x4(const mc_str &name, const Math::mat4 &value);
 		private:
-			ShaderSources ParseFromFile(const mc_str &path);
+			ShaderSources ParseFromFile(const mc_str &virtpath);
 			u32t Load(u32t type, const mc_str &source);
 			u32t Create(const mc_str &vertex_source, const mc_str &fragmement_source);
 		private:

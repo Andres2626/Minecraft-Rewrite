@@ -36,13 +36,13 @@ public:
 	void Render(float alpha, float seconds);
 	void Update() override;
 private:
-	void Move(const vec3& pos);
-	void MoveRelative(vec2 a, float speed);
+	void Move(const vec3& pos) override;
+	void MoveRelative(vec2 a, float speed) override;
 	bool Raycast(const vec3& org, const vec3& dir, Hitresult& ret);
 public:
 	void MouseMove(vec2 pos);
-	void ResetPos();
-	void SetPos(const vec3& newPos);
+	void ResetPos() override;
+	void SetPos(const vec3& newPos) override;
 public:
 	void UpdateRayCast();
 	void RenderPick(float time);

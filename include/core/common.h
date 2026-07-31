@@ -23,7 +23,6 @@
 /* TODO: Compilation is not guaranteed in other compilers. */
 #define MC_USE_UNKNOWN_COMPILER
 
-
 #endif /* __GNUC__ */
 
 #ifdef __CYGWIN__
@@ -38,10 +37,12 @@
 # endif /* _WIN64 */
 #elif defined (__linux__)
 # define MC_PLATFORM_LINUX
-#else /* !__CYGWIN__ / !_WIN32 / !__linux__ */
+#elif defined (__EMSCRIPTEN__)
+# define MC_PLATFORM_WEB
+#else /* !__CYGWIN__ / !_WIN32 / !__linux__ / !__EMSCRIPTEN__*/
 # define MC_PLATFORM_UNSUPPORTED
 # error "platform is not supported"
-#endif /* __CYGWIN__ / _WIN32 / __linux__ */
+#endif /* __CYGWIN__ / _WIN32 / __linux__ / __EMSCRIPTEN__*/
 
 #ifdef MC_PLATFORM_WINDOWS
 # if defined(MC_EXPORT_DLL)
@@ -75,10 +76,10 @@
 
 /* semver is used for versioning. */
 #define MC_VERSION_MAJOR     0
-#define MC_VERSION_MINOR     6
+#define MC_VERSION_MINOR     7
 #define MC_VERSION_PATCH     0
 #define MC_VERSION_NUMBER    ((MC_VERSION_MAJOR * 10000) + (MC_VERSION_MINOR * 100) + MC_VERSION_PATCH)
-#define MC_VERSION_STRING    "0.6.0"
+#define MC_VERSION_STRING    "v0.7.0"
 
 /* C includes */
 #define _USE_MATH_DEFINES 1

@@ -10,6 +10,8 @@ using namespace Graphics;
 class IModel
 {
 public:
+    virtual ~IModel() = default;
+public:
 	virtual void Build() = 0;
 	virtual void Bind() const = 0;
 	virtual void Unbind() const = 0;

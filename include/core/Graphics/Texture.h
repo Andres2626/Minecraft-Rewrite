@@ -20,7 +20,7 @@ namespace MC
 			Texture() = default;
 			~Texture() = default;
 		public:
-			bool LoadFromFile(const char *file, u32t mode);
+			bool LoadFromFile(const char *virtpath, u32t mode);
 			void Bind(u32t id);
 			void Unbind();
 		public:

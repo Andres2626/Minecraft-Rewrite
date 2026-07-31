@@ -1,8 +1,8 @@
+
 #include "Graphics/Renderer2D.h"
 
 #include "Graphics/Shader/Shaderflags.h"
-
-#include "gfx/glad.h"
+#include "Graphics/GL/GL.h"
 
 #define RENDERER2D_INITIAL_VERTICES 1000
 #define RENDERER2D_INITIAL_INDICES 6000

@@ -1,8 +1,7 @@
 #include "Graphics/Buffers/VertexLayout.h"
 
 #include "Graphics/Shader/Shaderflags.h"
-
-#include <gfx/glad.h>
+#include "Graphics/GL/GL.h"
 
 namespace MC 
 {

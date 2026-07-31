@@ -8,7 +8,6 @@ namespace MC
 {
 	namespace Graphics 
 	{
-
 		class MC_API Camera
 		{
 		protected:

@@ -1,4 +1,7 @@
 # set all variables
+
+if (NOT EMSCRIPTEN)
+
 set(INCDIR ${CMAKE_SOURCE_DIR}/include)
 set(LIBINCDIR ${INCDIR}/lib)
 set(GLADINCDIR ${LIBINCDIR}/gfx)
@@ -15,3 +18,5 @@ target_include_directories(gfx PRIVATE ${LIBINCDIR})
 target_include_directories(gfx PRIVATE ${GLADINCDIR})
 
 install(TARGETS gfx RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+
+endif()

@@ -1,9 +1,11 @@
-#include "Rubydung.h"
+#include "Minecraft.h"
 
 #include <spdlog/spdlog.h>
 
 #include <Log/Log.h>
 #include <App/Application.h>
+#include <Filesystem/NativeFileSystem.h>
+#include <Filesystem/VirtualFileSystem.h>
 
 #define COUNTER_INTERFACE     1
 #define TPS                   60.0f
@@ -13,6 +15,7 @@
 
 using namespace MC;
 using namespace App;
+using namespace File;
 
 class Game : public Application 
 {
@@ -31,7 +34,16 @@ public:
 	bool Init() override
 	{
 		Application::Init();
-		PushLayer(new Rubydung());
+		VirtualFileSystem::Mount("/", std::make_unique<NativeFileSystem>("assets/"));
+		VirtualFileSystem::Mount("/save", std::make_unique<NativeFileSystem>("./"));
+
+#ifdef MC_PLATFORM_WEB
+        VirtualFileSystem::Mount("/Shaders", std::make_unique<NativeFileSystem>("assets/Shaders/gles"));
+#else /* !MC_PLATFORM_WEB */
+        VirtualFileSystem::Mount("/Shaders", std::make_unique<NativeFileSystem>("assets/Shaders/core"));
+#endif /* MC_PLATFORM_WEB */
+
+		PushLayer(new Minecraft());
 		return true;
 	}
 };

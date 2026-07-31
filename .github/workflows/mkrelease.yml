@@ -17,74 +17,129 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-22.04, windows-2025-vs2026 ]
+        include:
+          - os: ubuntu-22.04
+            platform: linux
+          - os: ubuntu-22.04
+            platform: web
+          - os: windows-2025-vs2026
+            platform: win32
+          - os: windows-2025-vs2026
+            platform: win64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
 
       - name: setup_lnx
-        if: runner.os == 'Linux'
+        if: matrix.platform == 'linux'
+        shell: bash
         run: |
           sudo apt-get update
           sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libgl1-mesa-dev
           sudo apt-get install -y curl git build-essential cmake
 
       - name: build_lnx
-        if: runner.os == 'Linux'
+        if: matrix.platform == 'linux'
+        shell: bash
         run: |
           cmake -B build_lnx -S . -DCMAKE_INSTALL_PREFIX=install_lnx -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
-          cd ./build_lnx && make -j4
+          cmake --build build_lnx -j4
 
       - name: install_lnx
-        if: runner.os == 'Linux'
+        if: matrix.platform == 'linux'
+        shell: bash
         run: |
           cmake --install build_lnx
           tar -czvf mcrw-${{ inputs.version }}-linux-x64.tar.gz -C install_lnx bin include lib man share ChangeLog LICENSE NEWS README.md TODO 
-
+      
       - name: upload_lnx
-        if: runner.os == 'Linux'
+        if: matrix.platform == 'linux'
         uses: actions/upload-artifact@v4
         with:
           name: mcrw-linux-x64
           path: mcrw-${{ inputs.version }}-linux-x64.tar.gz
 
+      - name: cache_web
+        if: matrix.platform == 'web'
+        uses: actions/cache@v4
+        with:
+          path: emsdk
+          key: emsdk-6.0.4
+    
+      - name: setup_web
+        if: matrix.platform == 'web'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libgl1-mesa-dev
+          sudo apt-get install -y curl git build-essential cmake      
+          if [ ! -d emsdk ]; then
+            git clone --branch 6.0.4 https://github.com/emscripten-core/emsdk.git
+          fi
+          cd emsdk
+          ./emsdk install 6.0.4
+          ./emsdk activate 6.0.4
+      
+      - name: build_web
+        if: matrix.platform == 'web'
+        shell: bash
+        run: |
+          source emsdk/emsdk_env.sh
+          emcmake cmake -B build_web -S . -DCMAKE_INSTALL_PREFIX=install_web -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -DGLFW_BUILD_WAYLAND=OFF -DGLFW_BUILD_X11=OFF -G "Unix Makefiles" 
+          cmake --build build_web -j4
+       
+      - name: install_web
+        if: matrix.platform == 'web'
+        shell: bash
+        run: |
+          source emsdk/emsdk_env.sh
+          cmake --install build_web
+          tar -czvf mcrw-${{ inputs.version }}-web.tar.gz -C install_web bin include lib man share ChangeLog LICENSE NEWS README.md TODO 
+          
+      - name: upload_web
+        if: matrix.platform == 'web'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcrw-web
+          path: mcrw-${{ inputs.version }}-web.tar.gz
+        
       - name: build_win64
-        if: runner.os == 'Windows'
+        if: matrix.platform == 'win64'
         shell: cmd
         run: |
           cmake -B build_win64 -S . -DCMAKE_INSTALL_PREFIX=install_win64 -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A x64
           cmake --build build_win64 --config Release -j4
 
       - name: install_win64
-        if: runner.os == 'Windows'
+        if: matrix.platform == 'win64'
         shell: cmd
         run: |
           cmake --install build_win64 --config Release
           tar -czvf mcrw-${{ inputs.version }}-win-x64.tar.gz -C install_win64 bin include lib man share ChangeLog LICENSE NEWS README.md TODO 
 
       - name: upload_win64
-        if: runner.os == 'Windows'
+        if: matrix.platform == 'win64'
         uses: actions/upload-artifact@v4
         with:
           name: mcrw-win-x64
           path: mcrw-${{ inputs.version }}-win-x64.tar.gz
 
       - name: build_win32
-        if: runner.os == 'Windows'
+        if: matrix.platform == 'win32'
         shell: cmd
         run: |
           cmake -B build_win32 -S . -DCMAKE_INSTALL_PREFIX=install_win32 -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A Win32
           cmake --build build_win32 --config Release -j4
 
       - name: install_win32
-        if: runner.os == 'Windows'
+        if: matrix.platform == 'win32'
         shell: cmd
         run: |
           cmake --install build_win32 --config Release
           tar -czvf mcrw-${{ inputs.version }}-win-x86.tar.gz -C install_win32 bin include lib man share ChangeLog LICENSE NEWS README.md TODO 
 
       - name: upload_win32
-        if: runner.os == 'Windows'
+        if: matrix.platform == 'win32'
         uses: actions/upload-artifact@v4
         with:
           name: mcrw-win-x86
@@ -109,5 +164,6 @@ jobs:
           prerelease: ${{ inputs.prerelease }}
           files: |
             artifacts/mcrw-linux-x64/*.tar.gz
+            artifacts/mcrw-web/*.tar.gz
             artifacts/mcrw-win-x64/*.tar.gz
             artifacts/mcrw-win-x86/*.tar.gz
