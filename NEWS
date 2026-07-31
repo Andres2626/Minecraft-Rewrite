@@ -1,5 +1,20 @@
 NEWS - list of all major game and engine changes
 
+New in mc-161607
+
+* Rewrite version: mc-161607.
+* Engine version 0.0.7.
+* libgfx version: 0.0.2.
+* Add support for web (via Emscripten)
+* Add VirtualFileSystem and NativeFileSystem class.
+* Add support for WebFileSystem.
+* Fix finish bug in Application.
+* Change mouse input code. Register  mouse movement instead of the mouse
+* position.
+* Add lgfx includes replaced by 'Graphics/GL/GL.h'
+* All classes that open files go through the VirtualFileSystem.
+* Improve documentation.
+
 New in rd-161348
 * Rewrite version: rd-132328.
 * Engine version 0.0.6.

@@ -1,3 +1,64 @@
+2026-07-31  Andres26  andrescamorao9@gmail.com
+
+2026-07-31 mc-161607
+    
+    - Engine
+    
+      Add support for web (via Emscripten)
+      Add VirtualFileSystem and NativeFileSystem class.
+      Add support for WebFileSystem.
+      Fix finish bug in Application.
+      Change mouse input code. Register  mouse movement instead of the mouse
+      position.
+      Add lgfx includes replaced by 'Graphics/GL/GL.h'
+      All classes that open files go through the VirtualFileSystem.
+    
+    - Game
+    
+      Mount filesystems on init.
+      All classes that open files go through the VirtualFileSystem.
+      Change Rubydung.cpp to Minecraft.cpp.
+      Add download assets at init (for web systems)
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-26  Andres26  andrescamorao9@gmail.com
+
+2026-07-26 rd-161348
+    
+    Update NEWS and engine version.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-26  Andres26  andrescamorao9@gmail.com
+
+2026-07-26 rd-161348
+    
+    Fix workflow compiler error.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-26  Andres26  andrescamorao9@gmail.com
+
+2026-07-26 rd-161318
+    
+    Fix compiler workflow error.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-26  Andres26  andrescamorao9@gmail.com
+
+2026-07-26 rd-161348
+    
+    Update ChangeLog and Documentation.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
 2026-07-26  Andres26  andrescamorao9@gmail.com
 
 2026-07-26 rd-161348
