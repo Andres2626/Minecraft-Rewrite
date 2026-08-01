@@ -23,6 +23,7 @@ private:
 	BlockType m_SelectedBlock;
 	std::unique_ptr<Selector> m_Sel;
 	Shader *m_Shader;
+	bool m_MouseSwap;
 	bool m_MouseLeft;
 	bool m_MouseRight;
 	bool m_RayState;
@@ -52,4 +53,5 @@ public:
 	inline BlockType GetSelectedBlock() { return m_SelectedBlock; }
 public:
 	inline void SetSelectedBlock(BlockType selectedBlock) { m_SelectedBlock = selectedBlock; };
+	inline void SetMouseSwap(bool swap) { m_MouseSwap = swap; };
 };

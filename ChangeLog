@@ -2,6 +2,45 @@
 
 2026-07-31 mc-161607
     
+    The application shutdown issue has been resolved; the `shutdown()`
+    function was not being called correctly. Additionally, file system
+    functions were improved to avoid creating copies of the `FileHandle`
+    every time an FS function is called.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-31  Andres26  andrescamorao9@gmail.com
+
+2026-07-31 mc-161607
+    
+    Add .js and .wasm to installation.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-31  Andres26  andrescamorao9@gmail.com
+
+2026-07-31 rd-161607
+    
+    Fix workflow bug in CMakeLists.txt
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-31  Andres26  andrescamorao9@gmail.com
+
+2026-07-31 mc-161607
+    
+    Fix ChangeLog and NEWS.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-07-31  Andres26  andrescamorao9@gmail.com
+
+2026-07-31 mc-161607
+    
     - Engine
     
       Add support for web (via Emscripten)

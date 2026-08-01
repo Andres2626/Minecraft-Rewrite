@@ -20,8 +20,10 @@ to the project, submit a pull request to:
     - [ ] Separate some parts of the game into a separate library.
     - [ ] Move fog effect to postfx shader.
     - [ ] Improve rendering process.
+    - [ ] Add BlockModel class.
 ## Build
-    - [ ] Compiler warnings.
+    - [x] Compiler warnings.
+          - [x] Fix all type conversions.
     - [x] C4251 warning (exporting classes with DLL members) in MSVC.
     - [ ] Compiler detection (core/common.h)
         - [x] MSVC.
@@ -30,7 +32,8 @@ to the project, submit a pull request to:
     - [ ] Stabilize ABI.
 ## Engine
     - [ ] Some Application functions are not used by engine (stop and suspended)
-    - [ ] Improve finish process
+    - [ ] Improve finish process.
+    - [ ] Improve Event destruction.
 ## Directories
     - [x] Separate dependencies and third-party libraries.
     - [x] Create third-party directory
@@ -42,8 +45,8 @@ to the project, submit a pull request to:
     - [ ] Hybrid system: DL + Lua.
 ## Platform Support
     - [ ] Windows (older versions, from Windows 2000).
-    - [ ] Linux (untested).
-    - [ ] Web (via Emscripten)
+    - [x] Linux.
+    - [x] Web (via Emscripten)
     - [ ] Android (high priority).
     - [ ] Apple (macOS/iOS).
     - [ ] Xbox.
@@ -51,7 +54,7 @@ to the project, submit a pull request to:
 ## Graphics Support
     - [ ] OpenGL ES.
     - [x] WebGL (via Emscripten).
-    - [ ] DirectX.
+    - [ ] DirectX (from dxd9c).
     - [ ] Vulkan.
 ## Architecture / Engine
     - [x] Separate the engine from the main project.
@@ -63,7 +66,7 @@ to the project, submit a pull request to:
     - [ ] ECS in the future.
     - [ ] Add Scene3D, Renderer3D and RenderCommand classes.
     - [x] Improve EntityRenderer process.
-    - [ ] Refractor RubyDung class.
+    - [ ] Refractor Minecraft class.
 ## Tools and Utilities
     - [ ] Implement an argument parser in the engine (getopt).
     - [x] Cross-compilation support.

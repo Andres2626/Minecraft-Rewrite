@@ -12,7 +12,7 @@ using namespace MC;
 using namespace App;
 
 Player::Player(Level &level)
-	: Entity(level), Cam({ 0.0f, 0.0f, 0.0f }), m_SelectedBlock(BlockType::ROCK)
+	: Entity(level), Cam({ 0.0f, 0.0f, 0.0f }), m_SelectedBlock(BlockType::ROCK), m_MouseSwap(false)
 {
 	float x = (float)App::Application::GetProperties().x;
 	float y = (float)App::Application::GetProperties().y;
@@ -56,11 +56,13 @@ void Player::MouseMove(vec2 pos)
 {
 	/* set mouse sensibility */
 	pos *= 0.2f;
-	Cam.rot += vec2(pos.x, pos.y);
-	attr.rot += vec2(pos.x, pos.y);
+	float y = m_MouseSwap ? -pos.y : pos.y;
+	Cam.rot += vec2(pos.x, y);
+	attr.rot += vec2(pos.x, y);
 
 	/* Block camera rotation */
 	Cam.rot.y= std::clamp(Cam.rot.y, -89.0f, 89.0f);
+	attr.rot.y = std::clamp(Cam.rot.y, -89.0f, 89.0f);
 }
 
 bool Player::Raycast(const vec3 &org, const vec3 &dir, Hitresult &ret)

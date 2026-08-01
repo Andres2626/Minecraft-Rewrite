@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(MCRewrite LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
-set(MCVER mc-161607)
+set(MCVER mc-161616)
 
 # Options
 option(MC_DEBUG_MODE "Enable debug mode" OFF)
@@ -43,4 +43,4 @@ add_subdirectory(game)
 install(DIRECTORY assets/Shaders DESTINATION bin/assets)
 install(DIRECTORY include DESTINATION include)
 install(DIRECTORY Documentation DESTINATION man)
-install(FILES LICENSE NEWS REWRITE_VER_MC161607 TODO ChangeLog README.md DESTINATION .)
+install(FILES LICENSE NEWS REWRITE_VER_MC161616 TODO ChangeLog README.md DESTINATION .)

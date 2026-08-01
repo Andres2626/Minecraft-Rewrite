@@ -43,6 +43,7 @@ namespace MC
 			return FileHandle(reinterpret_cast<uintptr_t>(fp), this);
 		}
 
+
 		size_t NativeFileSystem::Read(const FileHandle &file, void* buffer, size_t size)
 		{
 			FILE *fp = reinterpret_cast<FILE*>(file.handle);

@@ -1,7 +1,11 @@
 #include "Minecraft.h"
 
+#ifndef MC_USE_RELEASE
 static float rendertime = 0.0f;
 static float updatetime = 0.0f;
+#endif
+
+static bool mouseswap = 0.0f;
 
 GameProperties GlobalGP;
 
@@ -128,6 +132,10 @@ void Minecraft::OnKey(KeyboardButtonEvent &ev)
 	case MC_KEY_G:
 		m_EntityManager->Register<Zombie>(std::make_unique<Zombie>(*m_Level, m_Player->attr.pos));
 		break;
+	case MC_KEY_Y:
+		mouseswap = !mouseswap;
+		m_Player->SetMouseSwap(mouseswap);
+		break;
 	case MC_KEY_ESCAPE:
 		m_Level->Save();
 		Application::Get().Stop();
@@ -240,12 +248,12 @@ void Minecraft::OnTick()
 	mc_info("Render time: {:.2f} ms update time {:.2f} ms other: {:.2f}", rendertime, updatetime, 1000 - abs(rendertime - updatetime));
 	mc_info("fps: {}, ups: {}, cups: {}, ms/f: {}", Application::Get().GetFPS(), Application::Get().GetUPS(), cm->GetChunkUpdates(), 1000.0f / Application::Get().GetFPS());
 	mc_info("Rendered chunks: {} / total chunks: {}", cm->GetDrawCalls(), cm->GetChunksCount());
-#else
-	mc_info("{} fps, {}", Application::Get().GetFPS(), cm->GetChunkUpdates());
-#endif
 
 	rendertime = 0.0f;
 	updatetime = 0.0f;
+#else
+	mc_info("{} fps, {}", Application::Get().GetFPS(), cm->GetChunkUpdates());
+#endif
 
 	m_Level->Tick();
 }

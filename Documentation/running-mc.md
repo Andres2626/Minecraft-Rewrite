@@ -50,5 +50,6 @@ $ cd $(CMAKE_BUILD_DIR)/game && python -m http.server 8000
 - 'ESC' Exit.
 - 'ENTER' Save level.
 - 'G' Spawn human.
+- 'Y' Swap mouse Y-axis.
 - 'Left Click' Push block.
 - 'Right Click' Break block.
