@@ -46,5 +46,12 @@ if(WIN32 AND NOT EMSCRIPTEN)
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:glfw> $<TARGET_FILE_DIR:${MCVER}>)
 endif()
 
+# installation
+
 install(TARGETS ${MCVER} RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-   
+
+if(EMSCRIPTEN)
+    install(FILES  $<TARGET_FILE_DIR:${MCVER}>/${MCVER}.js
+                   $<TARGET_FILE_DIR:${MCVER}>/${MCVER}.wasm
+                   DESTINATION bin)
+endif()
