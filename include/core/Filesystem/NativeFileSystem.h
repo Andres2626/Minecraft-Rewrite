@@ -17,12 +17,12 @@ namespace MC
 			~NativeFileSystem();
 		public:
 			FileHandle Open(const char* file, FileMode mode) override;
-			size_t Read(FileHandle file, void* buffer, size_t size) override;
-			size_t Write(FileHandle file, const void* buffer, size_t size) override;
-			void Close(FileHandle file) override;
-			bool Seek(FileHandle file, size_t pos) override;
-			size_t Size(FileHandle file) override;
-			bool Flush(FileHandle file) override;
+			size_t Read(const FileHandle &file, void* buffer, size_t size) override;
+			size_t Write(const FileHandle &file, const void* buffer, size_t size) override;
+			void Close(const FileHandle &file) override;
+			bool Seek(const FileHandle &file, size_t pos) override;
+			size_t Size(const FileHandle &file) override;
+			bool Flush(const FileHandle &file) override;
 		};
 	}
 }

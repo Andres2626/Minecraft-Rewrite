@@ -43,7 +43,7 @@ namespace MC
 			return FileHandle(reinterpret_cast<uintptr_t>(fp), this);
 		}
 
-		size_t NativeFileSystem::Read(FileHandle file, void* buffer, size_t size)
+		size_t NativeFileSystem::Read(const FileHandle &file, void* buffer, size_t size)
 		{
 			FILE *fp = reinterpret_cast<FILE*>(file.handle);
 			if (!fp)
@@ -51,7 +51,7 @@ namespace MC
 			return fread(buffer, 1, size, fp);
 		}
 
-		size_t NativeFileSystem::Write(FileHandle file, const void* buffer, size_t size)
+		size_t NativeFileSystem::Write(const FileHandle &file, const void* buffer, size_t size)
 		{
 			FILE *fp = reinterpret_cast<FILE*>(file.handle);
 			if (!fp)
@@ -59,7 +59,7 @@ namespace MC
 			return fwrite(buffer, 1, size, fp);
 		}
 
-		void NativeFileSystem::Close(FileHandle file)
+		void NativeFileSystem::Close(const FileHandle &file)
 		{
 			FILE* fp = reinterpret_cast<FILE*>(file.handle);
 			if (!fp)
@@ -67,7 +67,7 @@ namespace MC
 			fclose(fp);
 		}
 
-		bool NativeFileSystem::Seek(FileHandle file, size_t pos)
+		bool NativeFileSystem::Seek(const FileHandle &file, size_t pos)
 		{
 			FILE* fp = reinterpret_cast<FILE*>(file.handle);
 			if (!fp)
@@ -75,7 +75,7 @@ namespace MC
 			return fseek(fp, (long)pos, SEEK_SET) == 0;
 		}
 
-		size_t NativeFileSystem::Size(FileHandle file)
+		size_t NativeFileSystem::Size(const FileHandle &file)
 		{
 			FILE* fp = reinterpret_cast<FILE*>(file.handle);
 			if (!fp)
@@ -88,7 +88,7 @@ namespace MC
 			return size;
 		}
 
-		bool NativeFileSystem::Flush(FileHandle file)
+		bool NativeFileSystem::Flush(const FileHandle &file)
 		{
 			FILE* fp = reinterpret_cast<FILE*>(file.handle);
 			if (!fp)

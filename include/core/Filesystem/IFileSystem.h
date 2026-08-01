@@ -34,12 +34,12 @@ namespace MC
 			virtual ~IFileSystem() = default;
 		public:
 			virtual FileHandle Open(const char *file, FileMode mode) = 0;
-			virtual size_t Read(FileHandle file, void *buffer, size_t size) = 0;
-			virtual size_t Write(FileHandle file, const void* buffer, size_t size) = 0;
-			virtual void Close(FileHandle file) = 0;
-			virtual bool Seek(FileHandle file, size_t pos) = 0;
-			virtual size_t Size(FileHandle file) = 0;
-			virtual bool Flush(FileHandle file) = 0;
+			virtual size_t Read(const FileHandle &file, void *buffer, size_t size) = 0;
+			virtual size_t Write(const FileHandle &file, const void* buffer, size_t size) = 0;
+			virtual void Close(const FileHandle &file) = 0;
+			virtual bool Seek(const FileHandle &file, size_t pos) = 0;
+			virtual size_t Size(const FileHandle &file) = 0;
+			virtual bool Flush(const FileHandle &file) = 0;
 		};
 	}
 }

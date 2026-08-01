@@ -70,6 +70,7 @@ namespace MC
 			m_Suspended = false;
 			
 			Run();
+			Shutdown();
 		}
 
 		void Application::Suspend()
@@ -85,9 +86,6 @@ namespace MC
 		void Application::Stop()
 		{
 			this->m_Running = false;
-#ifdef MC_PLATFORM_WEB
-            emscripten_cancel_main_loop();
-#endif /* MC_PLATFORM_WEB */
 		}
 
 		void Application::Run()
@@ -109,6 +107,10 @@ namespace MC
 
 		void Application::Shutdown()
 		{
+#ifdef MC_PLATFORM_WEB
+			emscripten_cancel_main_loop();
+#endif /* MC_PLATFORM_WEB */
+
 			m_LayerStack.Finish();
 			Input::Finish();
 			Log::Finish();
