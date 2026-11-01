@@ -6,9 +6,9 @@
 
 #include <Graphics/Mesh.h>
 #include <Graphics/Shader/ShaderManager.h>
-#include <Graphics/Buffers/IndexBuffer.h>
-#include <Graphics/Buffers/VertexArray.h>
-#include <Graphics/Buffers/VertexBuffer.h>
+
+#include <memory>
+#include <vector>
 
 #define MAX_INSTANCES 1000
 
@@ -28,19 +28,17 @@ struct ZombiePart
 	vec3 rot;
 };
 
-class ZombieModel : public IModel
+class ZombieModel : public IInstancedModel
 {
 protected:
 	u32t m_partOffset;
 	u32t m_IndexSize;
-	std::unique_ptr<VertexArray> m_VAO;
-	std::unique_ptr<VertexBuffer> m_VBO;
-	std::unique_ptr<VertexBuffer> m_InstanceBuffer;
-	std::unique_ptr<IndexBuffer> m_IBO;
+	std::unique_ptr<Mesh> m_Mesh;
+	std::unique_ptr<InstancedMesh> m_InsMesh;
 	std::vector<ZombiePart> m_Parts;
 public:
 	ZombieModel();
-	~ZombieModel();
+	~ZombieModel() override;
 public:
 	void Build() override;
 	void PushPart(const Cube& cube);
@@ -48,7 +46,7 @@ public:
 	void Bind() const override;
 	void Unbind() const override;
 public:
-	VertexBuffer &GetInstanceBuffer() override;
 	u32t GetIndexCount() const override;
-	std::vector<ZombiePart> &GetParts() { return m_Parts; };
+	InstancedMesh &GetInstancedMesh() const override;
+	std::vector<ZombiePart> &GetParts();
 };

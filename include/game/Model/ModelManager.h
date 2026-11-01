@@ -2,6 +2,8 @@
 
 #include <Model/IModel.h>
 
+#include <vector>
+
 class ModelManager
 {
 private:
@@ -9,5 +11,5 @@ private:
 public:
 	static void Init();
 	static void Register(ModelType type, std::unique_ptr<IModel> model);
-	static IModel &GetModelType(ModelType type) { return *m_Models[(int)type]; };
+	static IModel &GetModelType(ModelType type);
 };

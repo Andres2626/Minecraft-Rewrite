@@ -4,9 +4,8 @@
 
 #include <Graphics/MeshFactory.h>
 #include <Graphics/Shader/ShaderManager.h>
-#include <Graphics/Buffers/IndexBuffer.h>
-#include <Graphics/Buffers/VertexArray.h>
-#include <Graphics/Buffers/VertexBuffer.h>
+
+#include <memory>
 
 using namespace MC;
 using namespace Math;
@@ -19,23 +18,21 @@ struct ParticleInstance
 	vec2 texOffset;
 };
 
-class ParticleModel : public IModel
+class ParticleModel : public IInstancedModel
 {
 private:
 	u32t m_IndexSize;
-	std::unique_ptr<VertexArray> m_VAO;
-	std::unique_ptr<VertexBuffer> m_VBO;
-	std::unique_ptr<VertexBuffer> m_InstanceBuffer;
-	std::unique_ptr<IndexBuffer> m_IBO;
+	std::unique_ptr<Mesh> m_Mesh;
+	std::unique_ptr<InstancedMesh> m_InsMesh;
 public:
 	ParticleModel();
-	~ParticleModel();
+	~ParticleModel() override;
 public:
 	void Build() override;
 public:
 	void Bind() const override;
 	void Unbind() const override;
 public:
-	VertexBuffer &GetInstanceBuffer() override;
 	u32t GetIndexCount() const override;
+	InstancedMesh &GetInstancedMesh() const override;
 };
