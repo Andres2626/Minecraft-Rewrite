@@ -1,21 +1,24 @@
 #pragma once
 #include "common.h"
 
+#include "Shader/Shader.h"
+#include "Texture.h"
 #include "Mesh.h"
+
+#include "Utils/Util.h"
 
 namespace MC 
 {
 	namespace Graphics 
 	{
+		struct Glyph;
+		class IFont;
+
 		class MC_API Renderer2D
 		{
 		private:
-			/* quads */
-			std::unique_ptr<VertexArray> m_VAO;
-			std::unique_ptr<VertexBuffer> m_VBO;
-			std::unique_ptr<IndexBuffer> m_IBO;
-			std::vector<Vertex> m_quadvert;
-			std::vector<unsigned int> m_quadind;
+			struct PImpl;
+			PImpl *m_Impl;
 		public:
 			Renderer2D();
 			~Renderer2D();
@@ -28,10 +31,17 @@ namespace MC
 			void DrawLine(Math::vec2 start, Math::vec2 end, Math::vec3 color, float thickness = 0.3f);
 			void DrawRect(Math::vec2 start, Math::vec2 size, Math::vec3 color, float thickness = 0.3f);
 			void FillRect(Math::vec2 start, Math::vec2 size, Math::vec3 color);
+			void DrawTextWS(IFont *font, Math::vec2 pos, Math::vec3 color, const char *str);
+			void DrawText(IFont *font, Math::vec2 pos, Math::vec3 color, const char *str);
+			void DrawText(IFont *font, Math::vec2 pos, Math::vec3 color, bool dark, const char *str);
+			int DrawFormatedText(IFont* font, Math::vec2 pos, Math::vec3 color, bool dark, const char* fmt, ...);
+			int DrawFormatedTextWS(IFont* font, Math::vec2 pos, Math::vec3 color, const char* fmt, ...);
 		public:
 			void Render();
 		public:
 			void PushIndices(int count);
+		private:
+			float SubmitTexture(Texture *tex);
 		};
 	}
 }
