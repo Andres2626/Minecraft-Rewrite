@@ -1,3 +1,5 @@
+#include "mc.h"
+
 #include "Graphics/Camera/Frustum.h"
 
 namespace MC {

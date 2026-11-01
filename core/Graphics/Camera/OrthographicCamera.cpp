@@ -1,3 +1,5 @@
+#include "mc.h"
+
 #include "Graphics/Camera/OrthographicCamera.h"
 
 namespace MC

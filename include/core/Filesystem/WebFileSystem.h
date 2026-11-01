@@ -8,9 +8,6 @@ namespace MC
 	{
 		class MC_API WebFileSystem
 		{
-		private:
-			static mc_str m_Remote;
-			static mc_str m_Local;
 		public:
 			static void Init(const char *remote, const char *local);
 			static bool Mount(const char *path);

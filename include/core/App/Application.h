@@ -9,54 +9,120 @@ namespace MC
 {
 	namespace App 
 	{
-		class MC_API Application : public Layers::Layer 
+        struct ApplicationContext
+        {
+            Window *Window;
+            WindowProperties WinProps;
+            Utils::Timestep TimerStep;
+            const char *name;
+            float TimerAcum;
+            float UpdateTimer;
+            float UpdateTick;
+            float FrameTime;
+            bool Running;
+            bool Suspended;
+            int FPS;
+            int UPS;
+        };
+
+        /**
+         * \brief Main application of MC engine.
+         * 
+         * \note Use Application class as the base class for the game.
+         *
+         * @deprecated Application as a class inherited from Layer.
+         */
+		class MC_API Application : public NonCopyable, public NonMovable
 		{
-		protected:
-			std::unique_ptr<Window> m_Win;
-			WindowProperties m_Pr;
-		private:
-			float m_TimeAcumulator;
-			float m_UpdateTimer;
-			float m_UpdateTick;
-			Utils::Timestep m_Step;
-			bool m_Running;
-			bool m_Suspended;
-			int m_FPS;
-			int m_UPS;
-			float m_FrameTime;
-			const char *m_Name;
-		private:
-			Utils::Timer m_Timer;
-			Layers::Stack m_LayerStack;
+        protected:
+            ApplicationContext ctx;	
 		public:
+             /**
+              * \brief Application constructor.
+              * 
+              * \param name Application name.
+              * \param pr Window properties.
+              *
+              * \see WindowProperties
+              */
 			Application(const char *name, const WindowProperties &pr);
-			~Application();
+			virtual ~Application();
 		public:
-			virtual bool Init() override;
+            /**
+             * \brief Initialize application.
+             * 
+             * Initialize all MC engine subsystems.
+             * 
+             * \note This function should not be called directly, as \ref Start() 
+             * calls it. It is public so that the Game class inherits Init() from 
+             * Application.
+             *
+             * \see WindowProperties
+             */
+			virtual ErrorType Init();
 		public:
+            /**
+             * \brief Inserts a new main game layer into the layer stack. 
+             *
+             * \param layer Game layer.
+             */
 			void PushLayer(Layers::Layer *layer);
 		public:
+            /**
+             * \brief Starts the application cycle
+             * 
+             * \note This controls the internal state of the application cycle.
+             */
 			void Start();
+            
+            /**
+             * \brief Suspend the application cycle
+             *
+             * \note This controls the internal state of the application cycle.
+             */
 			void Suspend();
+            
+            /**
+             * \brief Resume the application cycle
+             * 
+             * \note This controls the internal state of the application cycle.
+             */
 			void Resume();
+            
+            /**
+             * \brief Stop the application cycle
+             * 
+             * \note This controls the internal state of the application cycle.
+             */
 			void Stop();
-            void Frame();
 		private:
 			void Run();
 			void Shutdown();
-			void OnUpdate(Utils::Timestep &ts) override;
-			void OnRender(float alpha) override;
-			void OnTick() override;
-			void OnSuspended() override;
+        public:
+            void Frame();
+        private:
+			void OnUpdate(Utils::Timestep &ts);
+			void OnRender(float alpha);
+			void OnTick();
+			void OnSuspended();      
 		public:
-			inline int GetFPS() { return m_FPS; }
-			inline int GetUPS() { return m_UPS; }
-			inline float GetFrameTime() { return m_FrameTime; }
-		public:
+            /**
+             * \brief Get current application instance.
+             *
+             * \pre The application must be initialized.
+             * 
+             * \return Pointer of current application instance.
+             */
 			static Application &Get();
-			static inline WindowProperties &GetProperties() { return Get().m_Pr; };
-			inline Window &GetWindow() { return *m_Win; };
-            inline bool IsRunning() { return m_Running; }
+
+            /**
+             * \brief Get application context
+             *
+             * \pre The application must be initialized.
+             * 
+             * \return Struct of application context.
+             */
+            static ApplicationContext &GetContext();
 		};
 
 	}

@@ -20,7 +20,7 @@ to the project, submit a pull request to:
     - [ ] Separate some parts of the game into a separate library.
     - [ ] Move fog effect to postfx shader.
     - [ ] Improve rendering process.
-    - [ ] Add BlockModel class.
+    - [x] Add BlockModel class.
 ## Build
     - [x] Compiler warnings.
           - [x] Fix all type conversions.
@@ -62,11 +62,14 @@ to the project, submit a pull request to:
     - [x] Implement an event subsystem from scratch.
     - [ ] Support for geometry shaders.
     - [x] Implement ShaderManager.
-    - [ ] Generate zombie mesh with MeshFactory.
+    - [x] Generate zombie mesh with MeshFactory.
     - [ ] ECS in the future.
     - [ ] Add Scene3D, Renderer3D and RenderCommand classes.
     - [x] Improve EntityRenderer process.
     - [ ] Refractor Minecraft class.
+    - [ ] Integrate 'hud.shader' with the Renderer2D class and the engine,
+          decoupling it completely from the game.
+    - [ ] Change 'hud.shader' to Renderer2D.shader.
 ## Tools and Utilities
     - [ ] Implement an argument parser in the engine (getopt).
     - [x] Cross-compilation support.

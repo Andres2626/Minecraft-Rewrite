@@ -1,3 +1,5 @@
+#include "mc.h"
+
 #include "Filesystem/WebFileSystem.h"
 
 #include <sys/stat.h>
@@ -80,13 +82,13 @@ namespace MC
 
 #endif /* MC_PLATFORM_WEB */  
 
-        mc_str WebFileSystem::m_Remote;
-        mc_str WebFileSystem::m_Local;
+        static std::string s_Remote;
+        static std::string s_Local;
 
         void WebFileSystem::Init(const char* remote, const char* local)
         {
-            m_Remote = remote;
-            m_Local = local;
+            s_Remote = remote;
+            s_Local = local;
         }
 
         bool WebFileSystem::Mount(const char *path)
@@ -110,8 +112,8 @@ namespace MC
         bool WebFileSystem::Download(const char *relpath)
         {
 #ifdef MC_PLATFORM_WEB
-            std::string remote = m_Remote + relpath;
-            std::string local = m_Local + relpath;
+            std::string remote = s_Remote + relpath;
+            std::string local = s_Local + relpath;
             return WebFS_Download(remote.c_str(), local.c_str()) != 0;
 #else
             return false;
@@ -122,7 +124,7 @@ namespace MC
         {
         /* TODO: Implement this with VFS */
 #ifdef MC_PLATFORM_WEB
-            mc_str path = m_Local + relpath;
+            std::string path = s_Local + relpath;
             struct stat buffer;
             if (stat(path.c_str(), &buffer) != 0)
                 return Download(relpath);

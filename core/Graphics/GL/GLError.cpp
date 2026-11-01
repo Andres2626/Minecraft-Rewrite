@@ -1,3 +1,4 @@
+#include "mc.h"
 
 #include "Graphics/GL/GLError.h"
 
@@ -14,9 +15,9 @@ namespace MC
 				return glGetError();
 			}
 
-			mc_str Error::GetErrorStr(u32t num)
+			const char *Error::GetErrorStr(u32t num)
 			{
-				mc_str ret;
+				const char *ret;
 				switch (num) {
 				case GL_INVALID_ENUM:                  
 					ret = "Invalid enum"; 

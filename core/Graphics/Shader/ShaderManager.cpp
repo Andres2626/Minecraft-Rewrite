@@ -1,3 +1,4 @@
+#include "mc.h"
 
 #include "Graphics/Shader/ShaderManager.h"
 
@@ -10,42 +11,46 @@ namespace MC
 {
 	namespace Graphics 
 	{
-		std::unordered_map<mc_str, std::unique_ptr<Shader>> ShaderManager::m_Shaders;
-		ErrorHandler ShaderManager::err;
+		static std::unordered_map<std::string, std::unique_ptr<Shader>> s_Shaders;
 
-		Shader &ShaderManager::Get(const mc_str &name)
+		Shader &ShaderManager::Get(const char *name)
 		{
-			auto it = m_Shaders.find(name);
+			auto it = s_Shaders.find(name);
 
-			if (it == m_Shaders.end()) {
+#if 0
+			if (it == s_Shaders.end()) {
 				mc_fatal("{} not registered.", name);
 				err.SetError(ErrorType::ShaderRegisterError);
 			}
+#endif 
 
 			return *it->second;
 		}
 
-		void ShaderManager::Register(const mc_str &name, const mc_str &virtpath)
+		void ShaderManager::Register(const char *name, const char *virtpath)
 		{
-			auto it = m_Shaders.find(name);
+			auto it = s_Shaders.find(name);
 
-			if (it != m_Shaders.end()) {
+			if (it != s_Shaders.end()) {
 				mc_warn("{} already registered.", name);
 				return;
 			}
 
 			std::unique_ptr<Shader> shader;
 			shader = std::make_unique<Shader>(virtpath);
+
+#if 0
 			const Error &err = shader->GetError();
 			if (err.num != ErrorType::NoError) {
 				mc_error("error {}: {}", (u32t)err.num, err.str);
 				return;
 			}
+#endif
 
-			m_Shaders.insert({ name, std::move(shader) });
+			s_Shaders.insert({ name, std::move(shader) });
 		}
 
-		void ShaderManager::Bind(const mc_str &name)
+		void ShaderManager::Bind(const char *name)
 		{
 			Get(name).Bind();
 		}

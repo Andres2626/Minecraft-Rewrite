@@ -1,20 +1,24 @@
 #pragma once
 #include "common.h"
 
-#include <chrono>
+#include "NonCopyable.h"
+#include "NonMovable.h"
 
 namespace MC 
 {
+	struct PImpl;
+
 	namespace Utils 
 	{
 
-		class MC_API Timer 
+		class MC_API Timer : public NonCopyable, public NonMovable
 		{
 		protected:
-			std::chrono::high_resolution_clock::time_point m_Start;
+			struct PImpl;
+			PImpl *m_Impl;
 		public:
 			Timer();
-
+			~Timer();
 			/* reset timer */
 			void Reset();
 
@@ -25,5 +29,15 @@ namespace MC
 			float ElapsedSeconds();
 		};
 
+
+		class MC_API ScopedTimer : public NonCopyable, public NonMovable
+		{
+		protected:
+			Timer m_Timer;
+			const char *m_Name;
+		public:
+			ScopedTimer(const char *name);
+			virtual ~ScopedTimer();
+		};
 	}
 };

@@ -1,31 +1,39 @@
+#include "mc.h"
+
 #include "Layers/Stack.h"
 
 namespace MC 
 {
 	namespace Layers
 	{
+		struct Stack::PImpl
+		{
+			std::vector<Layer*> Layers;
+		};
+
 		Stack::Stack()
 		{ 
-		
+			m_Impl = new PImpl();
 		}
 
 		Stack::~Stack()
 		{
-
+			if (m_Impl)
+				delete m_Impl;
 		}
 
 		void Stack::PushLayer(Layer *layer)
 		{
-			m_Layers.push_back(layer);
+			m_Impl->Layers.push_back(layer);
 		}
 
 		bool Stack::Init()
 		{
-			for (u32t i = 0; i < m_Layers.size(); i++) {
-				if(!m_Layers[i]->IsVisible())
+			for (u32t i = 0; i < m_Impl->Layers.size(); i++) {
+				if(!m_Impl->Layers[i]->IsVisible())
 					continue;
 
-				if (!m_Layers[i]->Init())
+				if (!m_Impl->Layers[i]->Init())
 					return false;
 			}
 
@@ -34,41 +42,41 @@ namespace MC
 
 		void Stack::Finish()
 		{
-			for (Layer *layer : m_Layers)
+			for (Layer *layer : m_Impl->Layers)
 				delete layer;
 
-			m_Layers.clear();
+			m_Impl->Layers.clear();
 		}
 
 		void Stack::OnUpdate(Utils::Timestep &ts)
 		{
-			for (u32t i = 0; i < m_Layers.size(); i++) {
-				if (m_Layers[i]->IsVisible())
-					m_Layers[i]->OnUpdate(ts);
+			for (u32t i = 0; i < m_Impl->Layers.size(); i++) {
+				if (m_Impl->Layers[i]->IsVisible())
+					m_Impl->Layers[i]->OnUpdate(ts);
 			}
 		}
 
 		void Stack::OnRender(float alpha)
 		{
-			for (u32t i = 0; i < m_Layers.size(); i++) {
-				if (m_Layers[i]->IsVisible())
-					m_Layers[i]->OnRender(alpha);
+			for (u32t i = 0; i < m_Impl->Layers.size(); i++) {
+				if (m_Impl->Layers[i]->IsVisible())
+					m_Impl->Layers[i]->OnRender(alpha);
 			}
 		}
 
 		void Stack::OnTick()
 		{
-			for (u32t i = 0; i < m_Layers.size(); i++) {
-				if (m_Layers[i]->IsVisible())
-					m_Layers[i]->OnTick();
+			for (u32t i = 0; i < m_Impl->Layers.size(); i++) {
+				if (m_Impl->Layers[i]->IsVisible())
+					m_Impl->Layers[i]->OnTick();
 			}
 		}
 
 		void Stack::OnSuspended()
 		{
-			for (u32t i = 0; i < m_Layers.size(); i++) {
-				if (m_Layers[i]->IsVisible())
-					m_Layers[i]->OnSuspended();
+			for (u32t i = 0; i < m_Impl->Layers.size(); i++) {
+				if (m_Impl->Layers[i]->IsVisible())
+					m_Impl->Layers[i]->OnSuspended();
 			}
 		}
 

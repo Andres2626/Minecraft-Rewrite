@@ -7,7 +7,7 @@ namespace MC
 	{
 		namespace GL 
 		{
-			class MC_API Context 
+			struct MC_API Context 
 			{
 			public:
 				static bool Init(void *win);

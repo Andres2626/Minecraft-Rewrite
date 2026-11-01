@@ -1,3 +1,5 @@
+#include "mc.h"
+
 #include "Graphics/Image.h"
 #include "Utils/Util.h"
 
@@ -33,7 +35,7 @@ namespace MC
 
 			File::FileHandle fp = File::VirtualFileSystem::Open(virtpath, File::FileMode::Read);
 			if (fp.handle == MC_FILE_INVALID) {
-				*errmsg = "error opening image file";
+				*errmsg = "open image file";
 				return false;
 			}
 

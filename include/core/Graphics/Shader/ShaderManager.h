@@ -9,14 +9,11 @@ namespace MC
 	{
 		class MC_API ShaderManager
 		{
-		private:
-			static ErrorHandler err;
-			static std::unordered_map<mc_str, std::unique_ptr<Shader>> m_Shaders;
 		public:
-			static Shader &Get(const mc_str &name);
-			static void Register(const mc_str &name, const mc_str &virtpath);
+			static Shader &Get(const char *name);
+			static void Register(const char *name, const char *virtpath);
 		public:
-			static void Bind(const mc_str &name);
+			static void Bind(const char *name);
 			static void Unbind();
 		};
 	}

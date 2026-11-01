@@ -28,6 +28,8 @@ target_include_directories(mccore PRIVATE ${stb_SOURCE_DIR} ${gleq_SOURCE_DIR})
 target_include_directories(mccore PRIVATE ${INCDIR} ${COREINCDIR} ${LIBINCDIR})
 target_include_directories(mccore PRIVATE ${stb_SOURCE_DIR} ${zlib_SOURCE_DIR})
 
+target_precompile_headers(mccore PRIVATE "${COREINCDIR}/mc.h")
+
 target_link_libraries(mccore PRIVATE glm stb spdlog::spdlog)
 
 install(TARGETS mccore RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)

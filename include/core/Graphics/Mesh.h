@@ -7,6 +7,10 @@
 #include "Buffers/VertexArray.h"
 
 #include "Math/Math.h"
+#include "Utils/Util.h"
+
+#include <memory>
+#include <vector>
 
 namespace MC 
 {
@@ -18,30 +22,36 @@ namespace MC
 			Math::vec3 color;
 			Math::vec2 uv;
 			float brig;
+			float tid; /* texture index */
 		};
 
-		struct MeshData 
+		struct MC_API MeshData
 		{
 			std::vector<Vertex> vertices;
 			std::vector<unsigned int> indices;
-		};
 
+			void Clear();
+			void Release();
+		};
+		
 		class MC_API Mesh
 		{
 		private:
-			MeshData *m_MeshData;
+			VertexLayout m_VL;
 			std::unique_ptr<VertexArray> m_VAO;
 			std::unique_ptr<VertexBuffer> m_VBO;
 			std::unique_ptr<IndexBuffer> m_IBO;
 		public:
-			Mesh(MeshData *mesh);
+			Mesh(VertexLayout &VL);
 			~Mesh();
 		public:
-			void Build();
+			void Build(MeshData *mesh);
 			void Render() const;
 		public:
 			void Bind() const;
 			void Unbind() const;
+		public:
+			u32t GetIndexCount() const;
 		};
 	}
 }

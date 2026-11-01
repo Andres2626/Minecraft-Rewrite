@@ -23,7 +23,7 @@ namespace MC
 			~Camera() = default;
 		public:
 			Math::mat4 GetView() const;
-			bool InFrustum(Physics::AABB& box);
+			bool InFrustum(Physics::AABB &box);
 		};
 	}
 }

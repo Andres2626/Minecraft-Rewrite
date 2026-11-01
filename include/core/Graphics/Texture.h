@@ -4,27 +4,25 @@
 #include "Image.h"
 
 #include "Utils/Error.h"
+#include "Utils/NonCopyable.h"
+#include "Math/Math.h"
 
 namespace MC 
 {
 	namespace Graphics 
 	{
 
-		class MC_API Texture : public Image 
+		class MC_API Texture : public Image, public NonCopyable
 		{
-		private:
-			ErrorHandler err;
 		public:		
 			u32t m_ID;
 		public:
-			Texture() = default;
-			~Texture() = default;
+			Texture();
+			~Texture();
 		public:
 			bool LoadFromFile(const char *virtpath, u32t mode);
 			void Bind(u32t id);
 			void Unbind();
-		public:
-			Error &GetError() { return err.GetError(); }
 		};
 
 	}

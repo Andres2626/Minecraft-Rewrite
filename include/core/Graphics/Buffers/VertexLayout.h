@@ -16,7 +16,7 @@ namespace MC
 			i32t size;
 			u32t type;
 			i32t stride;
-			const void* offset;
+			const void *offset;
 			u8t normalized;
 
 			/* OpenGL >3.3 instancing */

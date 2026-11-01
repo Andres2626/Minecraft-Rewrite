@@ -1,10 +1,13 @@
+#include "mc.h"
 
 #define MC_LOG_PREFIX "Log"
 #include "Log/Log.h"
 
+#include <spdlog/async.h>
+
 namespace MC 
 {
-    static std::shared_ptr<spdlog::logger> m_logger;
+    static std::shared_ptr<spdlog::logger> s_logger;
 
 	static void get_time_buff(const char *fmt, char *buffer, size_t size)
 	{
@@ -14,37 +17,39 @@ namespace MC
 
 	int Log::Init(u32t flags, level_enum lv)
 	{
-        char t_buff[32];
+        char t_buff[64];
         get_time_buff("%Y-%m-%d_%H-%M-%S.log", t_buff, 32);
+        std::vector<spdlog::sink_ptr> sinks;
 
         bool sout = BIT_CHK(flags, MC_LOG_STDOUT);
 #ifndef MC_PLATFORM_WEB
         bool fout = BIT_CHK(flags, MC_LOG_FILE);
-#else
+#else /* MC_PLATFORM_WEB */
         bool fout = false;
 #endif
         try {
-            std::vector<spdlog::sink_ptr> sinks;
 
             if (sout) {
                 auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
                 console->set_level(lv);
                 sinks.push_back(console);
             }
+            
             if (fout) {
                 auto file = std::make_shared<spdlog::sinks::basic_file_sink_mt>(t_buff, true);
                 file->set_level(lv);
                 sinks.push_back(file);
             }
 
-            m_logger = std::make_shared<spdlog::logger>("log", sinks.begin(), sinks.end());
-            m_logger->set_level(lv);
-            m_logger->flush_on(spdlog::level::warn);
-            m_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] %^%l%$: %v");
-            spdlog::set_default_logger(m_logger);
+            s_logger = std::make_shared<spdlog::logger>("log", sinks.begin(), sinks.end()); 
+
+            /* init logger */
+            s_logger->set_level(lv);
+            s_logger->flush_on(spdlog::level::warn);
+            s_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] %^%l%$: %v");
+            spdlog::set_default_logger(s_logger);
         }
-        catch (const spdlog::spdlog_ex& ex)
-        {
+        catch (const std::exception &ex) {
             fprintf(stderr, "Error initializing log %s\n", ex.what());
             return 1;
         }
@@ -55,12 +60,13 @@ namespace MC
 
 	int Log::Finish()
 	{
+        spdlog::shutdown();
         mc_info("Log system finished");
 		return 0;
 	}
 
-    std::shared_ptr<spdlog::logger>& Log::GetInstance()
+    spdlog::logger &Log::Get()
     { 
-        return m_logger; 
+        return *s_logger; 
     };
 }

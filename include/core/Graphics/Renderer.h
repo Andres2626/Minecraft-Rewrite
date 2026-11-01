@@ -11,6 +11,20 @@ namespace MC
 	namespace Graphics 
 	{
 
+		struct RendererCapabilities
+		{
+			const char *version;
+			const char *vendor;
+			const char *renderer;
+			const char *shaderVer;
+
+			bool supportVFShader;
+			bool supportVBO;
+			bool supportVAO;
+			bool supportInstancedDraw;
+			bool supportInstancedAttribs;
+		};
+
 		class MC_API Renderer 
 		{
         public:
@@ -34,6 +48,8 @@ namespace MC
 			static void DrawElementsInstanced(u32t mode, size_t count, const void *indices, size_t icount);
 		public:
 			static void Clear(u32t mode);
+		public:
+			static RendererCapabilities &GetCapabilities();
 		};
 
 	}

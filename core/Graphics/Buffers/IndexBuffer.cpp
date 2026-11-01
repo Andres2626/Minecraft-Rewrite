@@ -1,7 +1,11 @@
+#include "mc.h"
 
 #include "Graphics/Buffers/IndexBuffer.h"
 
 #include "Graphics/GL/GL.h"
+
+#define MC_LOG_PREFIX "IndexBuffer"
+#include "Log/Log.h"
 
 namespace MC 
 {
@@ -21,8 +25,12 @@ namespace MC
 
 		void IndexBuffer::Build(uintptr_t size, const void *data)
 		{
+			if (!size || !data) {
+				mc_warn("Build() Invalid size or data");
+				return;
+			}
+
 			m_Size = size;
-			Bind();
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(unsigned int), data, GL_STATIC_DRAW);
 		}
 

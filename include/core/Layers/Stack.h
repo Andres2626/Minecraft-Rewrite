@@ -3,6 +3,8 @@
 
 #include "Default.h"
 
+#include "Utils/Util.h"
+
 namespace MC 
 {
 	namespace Layers 
@@ -11,7 +13,8 @@ namespace MC
 		class MC_API Stack : public Layer 
 		{
 		private:
-			std::vector<Layer*> m_Layers;
+			struct PImpl;
+			PImpl *m_Impl;
 		public:
 			Stack();
 			~Stack();

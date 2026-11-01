@@ -1,8 +1,11 @@
+#include "mc.h"
+
 #include "Utils/Random.h"
 
 namespace MC 
 {
-	std::atomic<u64t> Random::m_seedUniquifier = { 8682522807148012ULL };
+	static u64t s_Seed;
+	static std::atomic<u64t> s_seedUniquifier = { 8682522807148012ULL };
 
 	Random::Random()
 		: Random(Random::SeedUniquifier() ^ std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count())
@@ -10,9 +13,8 @@ namespace MC
 	}
 
 	Random::Random(u64t seed)
-		: m_Seed(InitialScramble(seed))
 	{
-
+		SetSeed(seed);
 	}
 
 	Random::~Random()
@@ -22,16 +24,16 @@ namespace MC
 	u64t Random::SeedUniquifier()
 	{
 		for (;;) {
-			u64t current = Random::m_seedUniquifier.load();
+			u64t current = s_seedUniquifier.load();
 			u64t next = current * 1181783497276652981ULL;
-			if (m_seedUniquifier.compare_exchange_weak(current, next))
+			if (s_seedUniquifier.compare_exchange_weak(current, next))
 				return next;
 		}
 	}
 
 	void Random::SetSeed(u64t seed)
 	{
-		m_Seed = InitialScramble(seed);
+		s_Seed = InitialScramble(seed);
 	}
 
 	u64t Random::InitialScramble(u64t seed)
@@ -71,8 +73,8 @@ namespace MC
 
 	int Random::Next(int bits)
 	{
-		m_Seed = (m_Seed * 0x5DEECE66DULL + 0xBULL)& ((1ULL << 48) - 1);
-		return (int)(m_Seed >> (48 - bits));
+		s_Seed = (s_Seed * 0x5DEECE66DULL + 0xBULL)& ((1ULL << 48) - 1);
+		return (int)(s_Seed >> (48 - bits));
 	}
 
 	float Random::NextFloat()

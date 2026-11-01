@@ -18,20 +18,20 @@
 #define mc_fmt(fmt) fmt
 #endif
 
-#define mc_info(fmt, ...) MC::Log::GetInstance()->info(mc_fmt(fmt), ##__VA_ARGS__)
-#define mc_warn(fmt, ...)  MC::Log::GetInstance()->warn(mc_fmt(fmt), ##__VA_ARGS__)
-#define mc_error(fmt, ...) MC::Log::GetInstance()->error(mc_fmt(fmt), ##__VA_ARGS__)
-#define mc_fatal(fmt, ...) MC::Log::GetInstance()->critical(mc_fmt(fmt), ##__VA_ARGS__)
-#define mc_trace(fmt, ...) MC::Log::GetInstance()->trace(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_info(fmt, ...) MC::Log::Get().info(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_warn(fmt, ...)  MC::Log::Get().warn(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_error(fmt, ...) MC::Log::Get().error(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_fatal(fmt, ...) MC::Log::Get().critical(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_trace(fmt, ...) MC::Log::Get().trace(mc_fmt(fmt), ##__VA_ARGS__)
 
-#define mc_info_cond(x, fmt, ...) if (!(x)) MC::Log::GetInstance()->info(mc_fmt(fmt), ##__VA_ARGS__)
-#define mc_warn_cond(x, fmt, ...)  if (!(x)) MC::Log::GetInstance()->warn(mc_fmt(fmt), ##__VA_ARGS__)
-#define mc_error_cond(x, fmt, ...) if (!(x)) MC::Log::GetInstance()->error(mc_fmt(fmt), ##__VA_ARGS__)
-#define mc_fatal_cond(x, fmt, ...) if (!(x)) MC::Log::GetInstance()->critical(mc_fmt(fmt), ##__VA_ARGS__)
-#define mc_trace_cond(x, fmt, ...) if (!(x)) MC::Log::GetInstance()->trace(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_info_cond(x, fmt, ...) if (!(x)) MC::Log::Get().info(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_warn_cond(x, fmt, ...)  if (!(x)) MC::Log::Get().warn(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_error_cond(x, fmt, ...) if (!(x)) MC::Log::Get().error(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_fatal_cond(x, fmt, ...) if (!(x)) MC::Log::Get().critical(mc_fmt(fmt), ##__VA_ARGS__)
+#define mc_trace_cond(x, fmt, ...) if (!(x)) MC::Log::Get().trace(mc_fmt(fmt), ##__VA_ARGS__)
 
-#if defined(MC_USE_DEBUG)
-#define mc_debug(fmt, ...) MC::Log::GetInstance()->debug(mc_fmt(fmt), ##__VA_ARGS__)
+#if defined(_DEBUG)
+#define mc_debug(fmt, ...) MC::Log::Get().debug(mc_fmt(fmt), ##__VA_ARGS__)
 #else
 #define mc_debug(fmt, ...) 
 #endif
@@ -47,7 +47,7 @@ namespace MC
 		static int Init(u32t flags, level_enum lv);
 		static int Finish();
 	public:
-		static std::shared_ptr<spdlog::logger>& GetInstance();
+		static spdlog::logger &Get();
 	};
 }
 

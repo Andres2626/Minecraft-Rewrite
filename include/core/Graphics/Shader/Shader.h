@@ -3,7 +3,9 @@
 
 #include "common.h"
 #include "Math/Math.h"
+#include "Utils/Util.h"
 #include "Utils/Error.h"
+#include "Utils/NonCopyable.h"
 
 #include "Graphics/GL/GL.h"
 
@@ -18,21 +20,27 @@ namespace MC
 			FRAGMENT
 		};
 
-		struct MC_API ShaderSources 
+		enum class ShaderUniformType
 		{
-			mc_str Vertex;
-			mc_str Fragment;
+			BOOL,
+			INT,
+			FLOAT,
+			VEC2,
+			VEC3,
+			VEC4,
+			MAT2,
+			MAT3,
+			MAT4,
 		};
 
-		class MC_API Shader 
+		class MC_API Shader : public NonCopyable
 		{
 		private:
-			u32t m_ShaderID;
-			mc_str m_Path;
-			ErrorHandler err;
+			struct PImpl;
+			PImpl *m_Impl;
 		public:
 			/* load shader from file */
-			Shader(const mc_str &virtpath);
+			Shader(const char *virtpath);
 			~Shader();
 		public:
 			/* enable program */
@@ -41,23 +49,57 @@ namespace MC
 			/* disable program */
 			void Unbind() const;
 		public:
-			void SetBool(const mc_str &name, bool value);
-			void SetInt(const mc_str &name, int value);
-			void SetFloat(const mc_str &name, float value);
-			void SetVec2(const mc_str &name, const Math::vec2 &value);
-			void SetVec3(const mc_str &name, const Math::vec3 &value);
-			void SetVec4(const mc_str &name, const Math::vec4 &value);
-			void Set2x2(const mc_str &name, const Math::mat2 &value);
-			void Set3x3(const mc_str &name, const Math::mat3 &value);
-			void Set4x4(const mc_str &name, const Math::mat4 &value);
+			template <typename T>
+			void SetUniform(const char *name, const T &value)
+			{
+				SetUniformInternal(name, (void*)&value, 1, GetUniformType<T>());
+			}
+
+			template <typename T>
+			void SetUniformArray(const char *name, u32t count, const T *value)
+			{
+				SetUniformInternal(name, (void*)value, count, GetUniformType<T>());
+			}
 		private:
-			ShaderSources ParseFromFile(const mc_str &virtpath);
-			u32t Load(u32t type, const mc_str &source);
-			u32t Create(const mc_str &vertex_source, const mc_str &fragmement_source);
+			u32t Load(u32t type, const char *source);
+			u32t Create(const char *vertex_source, const char *fragmement_source);
 		private:
-			i32t GetUniformLocation(mc_str name);
-		public:
-			Error &GetError() { return err.GetError(); }
+			template <typename T>
+			static ShaderUniformType GetUniformType()
+			{
+				mc_assert(false, "not implemented uniform type");
+				return ShaderUniformType::INT;
+			}
+		private:
+			void SetUniformInternal(const char *name, void *data, u32t count, ShaderUniformType type);
+			int GetUniformLocation(const char *name);
 		};
+
+		template<>
+		ShaderUniformType MC_API Shader::GetUniformType<bool>();
+
+		template<>
+		ShaderUniformType MC_API Shader::GetUniformType<int>();
+
+		template<>
+		ShaderUniformType MC_API Shader::GetUniformType<float>();
+
+		template<>
+		ShaderUniformType MC_API Shader::GetUniformType<Math::vec2>();
+
+		template<>
+		ShaderUniformType MC_API Shader::GetUniformType<Math::vec3>();
+
+		template<>
+		ShaderUniformType MC_API Shader::GetUniformType<Math::vec4>();
+
+		template<>
+		ShaderUniformType MC_API Shader::GetUniformType<Math::mat2>();
+
+		template<>
+		ShaderUniformType MC_API Shader::GetUniformType<Math::mat3>();
+
+		template<>
+		ShaderUniformType MC_API Shader::GetUniformType<Math::mat4>();
 	}
 }

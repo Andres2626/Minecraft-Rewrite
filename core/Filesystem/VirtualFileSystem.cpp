@@ -1,12 +1,22 @@
+#include "mc.h"
+
 #include "Filesystem/VirtualFileSystem.h"
 
 namespace MC
 {
     namespace File
     {
-        std::unordered_map<mc_str, MountPoint> VirtualFileSystem::m_MountPoints;
-        bool VirtualFileSystem::Mount(const char* mount, std::unique_ptr<IFileSystem> filesystem)
+        struct MountPoint
         {
+            std::unique_ptr<IFileSystem> fs;
+        };
+
+        static std::unordered_map<std::string, MountPoint> s_MountPoints;
+
+        bool VirtualFileSystem::Mount(const char* mount, IFileSystem *filesystem)
+        {
+            std::unique_ptr<IFileSystem> fs(filesystem);
+
             std::string vp = mount;
             /* Normalize path separator */
             std::replace(vp.begin(), vp.end(), '\\', '/');
@@ -14,29 +24,29 @@ namespace MC
             if (vp.empty() || vp.back() != '/')
                 vp += '/';
 
-            auto [it, inserted] = m_MountPoints.try_emplace(vp, MountPoint{ std::move(filesystem) });
+            auto [it, inserted] = s_MountPoints.try_emplace(vp, MountPoint{ std::move(fs) });
             return inserted;
         }
 
         bool VirtualFileSystem::Unmount(const char* mount)
         {
-            return m_MountPoints.erase(mount) != 0;
+            return s_MountPoints.erase(mount) != 0;
         }
 
         FileHandle VirtualFileSystem::Open(const char* virpath, FileMode mode)
         {
-            mc_str vp = virpath;
+            std::string substr;
+            std::string vp = virpath;
             /* Normalize path separator */
             std::replace(vp.begin(), vp.end(), '\\', '/');
             FileHandle ret(MC_FILE_INVALID, nullptr);
             IFileSystem* fs = nullptr;
             char target = '/';
             size_t pos = 0, mountEnd = 0;
-            mc_str substr;
             while ((pos = vp.find(target, pos)) != std::string::npos) {
-                mc_str prefix = vp.substr(0, pos + 1);
-                auto it = m_MountPoints.find(prefix);
-                if (it != m_MountPoints.end()) {
+                std::string prefix = vp.substr(0, pos + 1);
+                auto it = s_MountPoints.find(prefix);
+                if (it != s_MountPoints.end()) {
                     fs = it->second.fs.get();
                     mountEnd = pos + 1;
                 }
@@ -44,7 +54,7 @@ namespace MC
             }
             if (!fs)
                 return ret;
-            mc_str relpath = vp.substr(mountEnd);
+            std::string relpath = vp.substr(mountEnd);
             ret = fs->Open(relpath.c_str(), mode);
             return ret;
         }

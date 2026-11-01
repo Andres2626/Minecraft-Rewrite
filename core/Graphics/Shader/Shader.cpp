@@ -1,3 +1,4 @@
+#include "mc.h"
 
 #include "Graphics/Shader/Shader.h"
 
@@ -7,106 +8,88 @@
 #include "Log/Log.h"
 
 #include "Filesystem/VirtualFileSystem.h"
+#include "Utils/Util.h"
 
 namespace MC 
 {
 	namespace Graphics 
 	{
-		Shader::Shader(const mc_str &virtpath)
-			: m_Path(virtpath)
+		struct Shader::PImpl
 		{
-			ShaderSources shaders = ParseFromFile(virtpath);
-			m_ShaderID = Create(shaders.Vertex, shaders.Fragment);
-			mc_info("path={}", m_Path);
+			u32t ID;
+			const char* Path;
+			std::unordered_map<std::string, int> UniformLocations;
+		};
+
+		template<>
+		ShaderUniformType Shader::GetUniformType<bool>()
+		{
+			return ShaderUniformType::BOOL;
 		}
 
-		Shader::~Shader() 
+		template<>
+		ShaderUniformType Shader::GetUniformType<int>()
 		{
-			glDeleteShader(m_ShaderID);
+			return ShaderUniformType::INT;
 		}
 
-		void Shader::Bind() const 
+		template<>
+		ShaderUniformType Shader::GetUniformType<float>()
 		{
-			glUseProgram(m_ShaderID);
+			return ShaderUniformType::FLOAT;
 		}
 
-		void Shader::Unbind() const 
+		template<>
+		ShaderUniformType Shader::GetUniformType<Math::vec2>()
 		{
-			glUseProgram(0);
+			return ShaderUniformType::VEC2;
 		}
 
-		void Shader::SetBool(const mc_str &name, bool value)
+		template<>
+		ShaderUniformType Shader::GetUniformType<Math::vec3>()
 		{
-			i32t location = GetUniformLocation(name);
-			if (location != -1)
-				glUniform1i(location, value);
+			return ShaderUniformType::VEC3;
 		}
 
-		void Shader::SetInt(const mc_str &name, int value)
+		template<>
+		ShaderUniformType Shader::GetUniformType<Math::vec4>()
 		{
-			i32t location = GetUniformLocation(name);
-			if (location != -1)
-				glUniform1i(location, value);
+			return ShaderUniformType::VEC4;
 		}
 
-		void Shader::SetFloat(const mc_str &name, float value)
+		template<>
+		ShaderUniformType Shader::GetUniformType<Math::mat2>()
 		{
-			i32t location = GetUniformLocation(name);
-			if (location != -1) 
-				glUniform1f(location, value);
+			return ShaderUniformType::MAT2;
 		}
 
-		void Shader::SetVec2(const mc_str &name, const Math::vec2 &value)
+		template<>
+		ShaderUniformType Shader::GetUniformType<Math::mat3>()
 		{
-			i32t location = GetUniformLocation(name);
-			if (location != -1)
-				glUniform2f(location, value.x, value.y);
+			return ShaderUniformType::MAT3;
 		}
 
-		void Shader::SetVec3(const mc_str &name, const Math::vec3 &value)
+		template<>
+		ShaderUniformType Shader::GetUniformType<Math::mat4>()
 		{
-			i32t location = GetUniformLocation(name);
-			if (location != -1)
-				glUniform3f(location, value.x, value.y, value.z);
+			return ShaderUniformType::MAT4;
 		}
 
-		void Shader::SetVec4(const mc_str &name, const Math::vec4 &value)
+		struct MC_API ShaderSources
 		{
-			i32t location = GetUniformLocation(name);
-			if (location != -1) 
-				glUniform4f(location, value.x, value.y, value.z, value.w);
-		}
+			std::string Vertex;
+			std::string Fragment;
+		};
 
-		void Shader::Set2x2(const mc_str &name, const Math::mat2 &value)
-		{
-			i32t location = GetUniformLocation(name);
-			if (location != -1)
-				glUniformMatrix2fv(location, 1, GL_FALSE, (const float*)&value);
-		}
-
-		void Shader::Set3x3(const mc_str &name, const Math::mat3 &value)
-		{
-			i32t location = GetUniformLocation(name);
-			if (location != -1)
-				glUniformMatrix3fv(location, 1, GL_FALSE, (const float*)&value);
-		}
-
-		void Shader::Set4x4(const mc_str &name, const Math::mat4 &value)
-		{
-			i32t location = GetUniformLocation(name);
-			if (location != -1)
-				glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)&value);
-		}
-
-		ShaderSources Shader::ParseFromFile(const mc_str &virtpath)
+		ShaderSources ParseFromFile(const char* virtpath)
 		{
 			std::string out;
-			mc_str line;
+			std::string line;
 			std::stringstream ss[2];
 
-			File::FileHandle fp = File::VirtualFileSystem::Open(virtpath.c_str(), File::FileMode::Read);
+			File::FileHandle fp = File::VirtualFileSystem::Open(virtpath, File::FileMode::Read);
 			if (fp.handle == MC_FILE_INVALID) {
-				err.SetError(ErrorType::FileNotFound);
+				//err.SetError(ErrorType::FileNotFound);
 				mc_fatal("failed to open shader file \"{}\"\n", virtpath);
 				return {};
 			}
@@ -116,7 +99,7 @@ namespace MC
 
 			if (!File::VirtualFileSystem::Read(fp, out.data(), sz)) {
 				File::VirtualFileSystem::Close(fp);
-				err.SetError(ErrorType::AssetLoad);
+				//err.SetError(ErrorType::AssetLoad);
 				mc_fatal("failed to read shader file \"{}\"\n", virtpath);
 				return {};
 			}
@@ -126,14 +109,28 @@ namespace MC
 			std::stringstream stream(out);
 			ShaderType type = ShaderType::UNKNOWN;
 
+			size_t offset = 0;
 			while (getline(stream, line)) {
-				if (line.find("#shader") != mc_str::npos) {
-					if (line.find("vertex") != mc_str::npos)
+				/* detele spaces at the begin line */
+				size_t start = line.find_first_not_of(" \t\r\n");
+				if (start == std::string::npos)
+					continue;
+
+				/* ignore comments */
+				std::string st = line.substr(start);
+				if (st.rfind("//", 0) == 0)
+					continue;
+
+				/* parse #shader directive */
+				if (st.find("#shader") != std::string::npos) {
+					if (st.find("vertex") != std::string::npos)
 						type = ShaderType::VERTEX;
-					else if (line.find("fragment") != mc_str::npos)
+					else if (st.find("fragment") != std::string::npos)
 						type = ShaderType::FRAGMENT;
+					continue;
 				}
-				else
+
+				if (type != ShaderType::UNKNOWN)
 					ss[(int)type] << line << "\n";
 			}
 
@@ -143,14 +140,43 @@ namespace MC
 			};
 		}
 
-		u32t Shader::Load(u32t type, const mc_str &source)
+		Shader::Shader(const char *virtpath)
+		{
+			m_Impl = new PImpl();
+			m_Impl->Path = virtpath;
+
+			ShaderSources shaders = ParseFromFile(virtpath);
+			m_Impl->ID = Create(shaders.Vertex.c_str(), shaders.Fragment.c_str());
+
+			mc_info("path={}", m_Impl->Path);
+		}
+
+		Shader::~Shader() 
+		{
+			if (m_Impl->ID != 0)
+				glDeleteProgram(m_Impl->ID);
+
+			if (m_Impl)
+				delete m_Impl;
+		}
+
+		void Shader::Bind() const 
+		{
+			glUseProgram(m_Impl->ID);
+		}
+
+		void Shader::Unbind() const 
+		{
+			glUseProgram(0);
+		}
+
+		u32t Shader::Load(u32t type, const char *source)
 		{
 			int result = GL_FALSE;
 			unsigned int id = glCreateShader(type);
-			const char *sourceStr = source.c_str();
-			int len;
+			int len = 0;
 
-			glShaderSource(id, 1, &sourceStr, nullptr);
+			glShaderSource(id, 1, &source, nullptr);
 			glCompileShader(id);
 			glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 			if (result == GL_FALSE) {
@@ -158,8 +184,8 @@ namespace MC
 				std::vector<char> error(len);
 				glGetShaderInfoLog(id, len, &len, &error[0]);
 
-				if (type)
-					err.SetError(ErrorType::ShaderCompileError);
+				//if (type)
+					//err.SetError(ErrorType::ShaderCompileError);
 
 				switch (type) {
 				case GL_VERTEX_SHADER:
@@ -182,11 +208,14 @@ namespace MC
 			return id;
 		}
 
-		u32t Shader::Create(const mc_str &vertex_source, const mc_str &fragmement_source)
+		u32t Shader::Create(const char *vertex_source, const char *fragmement_source)
 		{
 			u32t program = glCreateProgram();
 			u32t vs = Load(GL_VERTEX_SHADER, vertex_source);
 			u32t fs = Load(GL_FRAGMENT_SHADER, fragmement_source);
+
+			if (!vs || !fs)
+				return 0;
 
 			glAttachShader(program, vs);
 			glAttachShader(program, fs);
@@ -198,13 +227,71 @@ namespace MC
 			return program;
 		}
 
-		i32t Shader::GetUniformLocation(mc_str name)
+		void Shader::SetUniformInternal(const char *name, void *data, u32t count, ShaderUniformType type)
 		{
-			int location = glGetUniformLocation(m_ShaderID, name.c_str());
+			int location = GetUniformLocation(name);
+			if (location == -1 || !data || !count)
+				return; 
+
+			switch (type) {
+			case ShaderUniformType::BOOL: {
+				glUniform1i(location, *static_cast<const bool*>(data) ? 1 : 0);
+				break;
+			}
+			case ShaderUniformType::INT: {
+				glUniform1i(location, *static_cast<const int*>(data));
+				break;
+			}
+			case ShaderUniformType::FLOAT: {
+				glUniform1f(location, *static_cast<const float*>(data));
+				break;
+			}
+			case ShaderUniformType::VEC2: {
+				const float *vec = static_cast<const float*>(data);
+				glUniform2fv(location, count, vec);
+				break;
+			}
+			case ShaderUniformType::VEC3: {
+				const float *vec = static_cast<const float*>(data);
+				glUniform3fv(location, count, vec);
+				break;
+			}
+			case ShaderUniformType::VEC4: {
+				const float *vec = static_cast<const float*>(data);
+				glUniform4fv(location, count, vec);
+				break;
+			}
+			case ShaderUniformType::MAT2: {
+				const float *mat = static_cast<const float*>(data);
+				glUniformMatrix2fv(location, count, GL_FALSE, mat);
+				break;
+			}
+			case ShaderUniformType::MAT3: {
+				const float *mat = static_cast<const float*>(data);
+				glUniformMatrix3fv(location, count, GL_FALSE, mat);
+				break;
+			}
+			case ShaderUniformType::MAT4: {
+				const float *mat = static_cast<const float*>(data);
+				glUniformMatrix4fv(location, count, GL_FALSE, mat);
+				break;
+			}
+			default:
+				mc_assert(false, "not implemented uniform type");
+			}
+		}
+		
+		int Shader::GetUniformLocation(const char *name)
+		{
+			if (m_Impl->UniformLocations.find(name) != m_Impl->UniformLocations.end())
+				return m_Impl->UniformLocations[name];
+
+			int location = glGetUniformLocation(m_Impl->ID, name);
 #if defined (MC_USE_DEBUG)
 			if (location == -1)
-				mc_debug("shader location of \"{}\" not found", name.c_str());
+				mc_debug("shader uniform name \"{}\" does not exist", name);
 #endif
+			m_Impl->UniformLocations[name] = location;
 			return location;
 		}
 

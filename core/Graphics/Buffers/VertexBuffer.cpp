@@ -1,6 +1,11 @@
+#include "mc.h"
+
 #include "Graphics/Buffers/VertexBuffer.h"
 
 #include "Graphics/GL/GL.h"
+
+#define MC_LOG_PREFIX "VertexBuffer"
+#include "Log/Log.h"
 
 namespace MC 
 {
@@ -20,22 +25,38 @@ namespace MC
 
 		void VertexBuffer::Build(uintptr_t size, const void *data)
 		{
-			m_Size = size;
+			if (!size || !data) {
+				mc_warn("Build() Invalid size or data");
+				return;
+			}
 
-			Bind();
+			m_Size = size;
 			glBufferData(GL_ARRAY_BUFFER, size, data, m_Mode);
 		}
 
 		void VertexBuffer::Resize(uintptr_t size)
 		{
+			if (!size) {
+				mc_warn("Resize() Invalid size");
+				return;
+			}
+
 			m_Size = size;
-			Bind();
 			glBufferData(GL_ARRAY_BUFFER, size, NULL, m_Mode);
 		}
 
 		void VertexBuffer::Update(uintptr_t offset, uintptr_t size, const void* data)
 		{
-			Bind();
+			if (!size || !data) {
+				mc_warn("Update() Invalid size or data");
+				return;
+			}
+
+			if (offset > m_Size || size > m_Size - offset) {
+				mc_warn("Update() offset out of bounds");
+				return;
+			}
+
 			glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 		}
 
@@ -49,7 +70,7 @@ namespace MC
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
-		void VertexBuffer::SetVertexLayout(const VertexLayout& layout)
+		void VertexBuffer::SetVertexLayout(const VertexLayout &layout)
 		{
 			const auto& attr = layout.GetAttribs();
 			for (int i = 0; i < attr.size(); i++) {

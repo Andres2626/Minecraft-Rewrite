@@ -1,22 +1,21 @@
 #pragma once
 #include "common.h"
 
-#ifndef MC_USE_RELEASE
-#define mc_assert(x, ...) \
-	if (!(x)) { \
-		printf("An assertion has ocurred in %s:%i\n", __FILE__, __LINE__); \
-		printf("%s\n", #x); \
-		printf(__VA_ARGS__); \
- 		MC_INTERNAL_BREAK_POINT; \
+#include "Profiler.h"
+
+#if defined(_DEBUG)
+#define mc_assert(cond, msg) \
+	if (!(cond)) { \
+		MC::Internal::debug_assert(#cond, __func__, msg, __FILE__, __LINE__); \
 	}
 #else
-#define mc_assert(...)
+#define mc_assert(...) ((void)0)
 #endif
 
 namespace MC 
 {
 	namespace Internal 
 	{
-
+		void MC_API debug_assert(const char *cond, const char *func, const char *msg, const char *file, int line);
 	}
 }

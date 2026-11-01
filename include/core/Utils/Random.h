@@ -9,9 +9,6 @@ namespace MC
 	class MC_API Random 
 	{
 	public:
-		u64t m_Seed;
-		static std::atomic<u64t> m_seedUniquifier;
-	public:
 		Random();
 		Random(u64t seed);
 		~Random();

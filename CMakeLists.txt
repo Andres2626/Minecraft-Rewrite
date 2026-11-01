@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.8)
 project(MCRewrite LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
-set(MCVER mc-161616)
+set(MCVER c0.0.2a)
 
 # Options
-option(MC_DEBUG_MODE "Enable debug mode" OFF)
+option(MC_ENABLE_PROFILER "Enable profiler mode" OFF)
 option(MC_COMP_WARNS "Enable all/extra warnings and -Werror option (GCC) or /W4 in MSVC" OFF)
 option(MC_AUTODEP "Installs dependencies via FetchContent" ON)
 
@@ -18,11 +18,8 @@ if (MC_COMP_WARNS)
 	endif()
 endif()
 
-# debug option
-if(MC_DEBUG_MODE)
-	add_compile_definitions(DEBUG)
-else()
-	add_compile_definitions(NDEBUG)
+if (MC_ENABLE_PROFILER)
+    add_compile_definitions(MC_ENABLE_PROFILER)
 endif()
 
 # for WIN32 systems avoid GLFW compilation errors
@@ -35,7 +32,6 @@ endif()
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_subdirectory(dependencies)
-add_subdirectory(dl)
 add_subdirectory(lib)
 add_subdirectory(core)
 add_subdirectory(game)

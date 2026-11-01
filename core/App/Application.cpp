@@ -1,3 +1,5 @@
+#include "mc.h"
+
 #include "App/Application.h"
 
 #include "App/Input.h"
@@ -6,97 +8,131 @@
 #include "Utils/Util.h"
 #include "Log/Log.h"
 
+#include <GLFW/glfw3.h>
+
 #ifdef MC_PLATFORM_WEB
 #include <emscripten.h>
 
 static void WebLoop()
 {
     auto &app = MC::App::Application::Get();
-    if (!app.IsRunning())
+    if (!app.GetContext().Running)
         return;
     app.Frame();
 }
 
 #endif /* MC_PLATFORM_WEB */
 
+static void ErrorCallback(int error, const char* msg)
+{
+	mc_error("glfw error {}: {}\n", error, msg);
+}
+
 namespace MC 
 {
 	namespace App 
 	{
 		static Application* s_Instance = nullptr;
+		static Utils::Timer s_Timer;
+		static Layers::Stack s_LayerStack;
 
 		Application::Application(const char *name, const WindowProperties &pr)
-			: m_FPS(0), m_UPS(0), m_FrameTime(0.0f), m_Name(name), m_Pr(pr), m_Running(false), m_Suspended(false)
 		{
+			ctx.FPS = 0;
+			ctx.UPS = 0;
+			ctx.FrameTime = 0.0f;
+			ctx.name = name;
+			ctx.WinProps = pr;
+			ctx.Running = false;
+			ctx.Suspended = false;
 			s_Instance = this;
 		} 
 
 		Application::~Application()
 		{
-
+			if (s_Instance)
+				s_Instance = nullptr;
 		}
 
-		bool Application::Init()
+		ErrorType Application::Init()
 		{
-			Log::Init(MC_LOG_STDOUT | MC_LOG_FILE, level_enum::info);
+			Log::Init(MC_LOG_STDOUT | MC_LOG_FILE, level_enum::trace);
 			mc_info("Minecraft rewrite engine version {}", MC_VERSION_STRING);
 
-			m_Win = std::make_unique<Window>(m_Name, m_Pr);
-			const Error &err = m_Win->GetError();
-			if (err.num != ErrorType::NoError) {
-				mc_error("Application error {}: {}", (u32t)err.num, err.str);
-				return false;
+			glfwSetErrorCallback(ErrorCallback);
+
+			if (!glfwInit()) {
+				mc_error("error initializing window library");
+				return ErrorType::WindowLibrary;
+			}
+
+			ctx.Window = new Window(ctx.name, ctx.WinProps);
+
+			ErrorType err = ctx.Window->Create();
+			if (err != ErrorType::NoError) {
+                ctx.Window->Finish();
+				mc_error("error building window");
+				return err;
 			}
 
 			Input::Init();
 
-			return true;
+			return ErrorType::NoError;
 		}
 
 		void Application::PushLayer(Layers::Layer *layer)
 		{
-			this->m_LayerStack.PushLayer(layer);
+			s_LayerStack.PushLayer(layer);
 		}
 
 		void Application::Start()
 		{
-			if (!Init())
-				return;
+			ErrorType err;
+			err = Init();
+			if (err != ErrorType::NoError) {
+				mc_fatal("engine error {}", (u32t)err);
+				goto app_end;
+			}
 
-			if (!m_LayerStack.Init())
-				return;
+			
+			if (!s_LayerStack.Init()) {
+				mc_error("error initializing layer stack");
+				goto app_end;
+			}
 
-			m_Running = true;
-			m_Suspended = false;
+			ctx.Running = true;
+			ctx.Suspended = false;
 			
 			Run();
+		app_end:
 			Shutdown();
+			return;
 		}
 
 		void Application::Suspend()
 		{
-			this->m_Suspended = true;
+			ctx.Suspended = true;
 		}
 
 		void Application::Resume()
 		{
-			this->m_Suspended = false;
+			ctx.Suspended = false;
 		}
 
 		void Application::Stop()
 		{
-			this->m_Running = false;
+			ctx.Running = false;
 		}
 
 		void Application::Run()
 		{
-			m_TimeAcumulator = 0.0f;
-			m_UpdateTimer = m_Timer.ElapsedMillis();
-			m_UpdateTick = 1000.0f / 20.0f;
-			m_Step = Utils::Timestep(m_UpdateTimer);
+			ctx.TimerAcum = 0.0f;
+			ctx.UpdateTimer = s_Timer.ElapsedMillis();
+			ctx.UpdateTick = 1000.0f / 20.0f;
+			ctx.TimerStep = Utils::Timestep(ctx.UpdateTimer);
             
 #ifndef MC_PLATFORM_WEB
-			while (m_Running)
+			while (ctx.Running)
 				Frame();
 #else
             emscripten_set_main_loop(WebLoop, 0, true);
@@ -111,8 +147,15 @@ namespace MC
 			emscripten_cancel_main_loop();
 #endif /* MC_PLATFORM_WEB */
 
-			m_LayerStack.Finish();
+			s_LayerStack.Finish();
 			Input::Finish();
+
+			if (ctx.Window) {
+				delete ctx.Window;
+				ctx.Window = nullptr;
+			}
+
+			glfwTerminate();
 			Log::Finish();
 		}
 
@@ -120,66 +163,71 @@ namespace MC
 		{
 			Utils::Timer frametime;
             
-            if (m_Suspended) {
+            if (ctx.Suspended) {
                 OnSuspended();
                 return;
             }
             
 			DISPATCH_EVENTS();
 
-			m_Win->Clear();
-			float now = m_Timer.ElapsedMillis();
-			while (now - m_UpdateTimer >= m_UpdateTick) {
-				m_Step.Update(now);
-				OnUpdate(m_Step);
-				m_UPS++;
-				m_UpdateTimer += m_UpdateTick;
+			ctx.Window->Clear();
+			float now = s_Timer.ElapsedMillis();
+			while (now - ctx.UpdateTimer >= ctx.UpdateTick) {
+				ctx.TimerStep.Update(now);
+				OnUpdate(ctx.TimerStep);
+				ctx.UPS++;
+				ctx.UpdateTimer += ctx.UpdateTick;
 			}
 
-			float alpha = (now - m_UpdateTimer) / m_UpdateTick;
-
+			float alpha = (now - ctx.UpdateTimer) / ctx.UpdateTick;
 			OnRender(alpha);
-			m_Win->Update();
-			m_FPS++;
-			m_FrameTime = frametime.ElapsedMillis();
 
-			if (now - m_TimeAcumulator > 1000.0f) {
-				m_TimeAcumulator += 1000.0f;
+			ctx.Window->Update();
+			ctx.FPS++;
+			ctx.FrameTime = frametime.ElapsedMillis();
+
+			if (now - ctx.TimerAcum > 1000.0f) {
+				ctx.TimerAcum += 1000.0f;
 				OnTick();
-				m_FPS = 0;
-				m_UPS = 0;
+				ctx.FPS = 0;
+				ctx.UPS = 0;
 			}
 
-			if (m_Win->Close())
-				m_Running = false;
+			if (ctx.Window->IsClosed())
+				ctx.Running = false;
 		}
 
 		void Application::OnUpdate(Utils::Timestep &ts)
 		{
-			m_LayerStack.OnUpdate(ts);
+			s_LayerStack.OnUpdate(ts);
 		}
 
 		void Application::OnRender(float alpha)
 		{
-			m_LayerStack.OnRender(alpha);
+			s_LayerStack.OnRender(alpha);
 		}
 
 		void Application::OnTick()
 		{
-			m_Win->OnTick();
+			ctx.Window->OnTick();
 
-			m_LayerStack.OnTick();
+			s_LayerStack.OnTick();
 		}
 
 		void Application::OnSuspended()
 		{
-			m_LayerStack.OnSuspended();
+			s_LayerStack.OnSuspended();
 		}
 
-		Application &Application::Get() 
+		Application &Application::Get()
 		{
 			mc_assert(s_Instance, "application instance is null pointer\n");
 			return *s_Instance;
+		}
+
+		ApplicationContext &Application::GetContext()
+		{
+			return Application::Get().ctx;
 		}
 	}
 }

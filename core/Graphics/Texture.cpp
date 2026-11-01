@@ -1,3 +1,5 @@
+#include "mc.h"
+
 #include "Graphics/Texture.h"
 
 #include "Graphics/GL/GL.h"
@@ -10,12 +12,23 @@ namespace MC
 {
 	namespace Graphics 
 	{
+		Texture::Texture()
+			: m_ID(0)
+		{
+
+		}
+
+		Texture::~Texture()
+		{
+			if (m_ID != 0)
+				glDeleteTextures(1, &m_ID);
+		}
+
 		bool Texture::LoadFromFile(const char *virtpath, u32t mode) 
 		{
 			const char *errmsg = {};
 			if (!Image::LoadFromFile(virtpath, &errmsg)) {
-				err.SetError(ErrorType::AssetLoad);
-				mc_error("error loading image. internal error {}", errmsg);
+				mc_error("error loading image. error {}", errmsg);
 				return false;
 			}
 				
@@ -32,12 +45,13 @@ namespace MC
 				format = GL_RGBA; 
 				break;
 			default:
-				mc_fatal("unsupported image channel format: {}", nr_channels);
-				err.SetError(ErrorType::Noimp);
+				mc_error("unsupported image channel format: {}", nr_channels);
 				return false;
 			}
 
-			glGenTextures(1, &m_ID);
+			if (m_ID == 0)
+				glGenTextures(1, &m_ID);
+
 			glBindTexture(GL_TEXTURE_2D, m_ID);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -46,8 +60,6 @@ namespace MC
 
 			glTexImage2D(GL_TEXTURE_2D, 0, format, x, y, 0, format, GL_UNSIGNED_BYTE, pixels);
 			glGenerateMipmap(GL_TEXTURE_2D);
-
-			Free();
 
 			mc_info("texture loaded: path={} x={} y={} mode={:x} format={:x}", path, x, y, static_cast<unsigned>(mode), static_cast<unsigned>(format));
 
