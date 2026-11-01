@@ -2,7 +2,9 @@
 
 #include "Log/Log.h"
 
+#define _USE_MATH_DEFINES
 #include <chrono>
+#include <math.h>
 
 static float NormRand()
 {

@@ -14,8 +14,9 @@ using namespace App;
 Player::Player(Level &level)
 	: Entity(level), Cam({ 0.0f, 0.0f, 0.0f }), m_SelectedBlock(BlockType::ROCK), m_MouseSwap(false)
 {
-	float x = (float)App::Application::GetProperties().x;
-	float y = (float)App::Application::GetProperties().y;
+	WindowProperties &pr = Application::Get().GetContext().WinProps;
+	float x = (float)pr.width;
+	float y = (float)pr.height;
 
 	Cam.aspect = x / y;
 	Cam.fov = 70.0f;
@@ -35,11 +36,14 @@ Player::~Player()
 
 }
 
-void Player::Render(float alpha, float seconds)
+void Player::UpdateCamera(float alpha, float seconds)
 {
+	PROFILE_FUNCTION();
 	vec3 p1 = mix(attr.oldPos, attr.pos, alpha);
 	Cam.pos = p1;
 	Cam.Update();
+
+	m_VP = Cam.GetProjection() * Cam.GetView();
 }
 
 void Player::Move(const vec3 &pos) 
@@ -182,8 +186,9 @@ void Player::UpdateRayCast()
 
 void Player::RenderPick(float time)
 {
+	PROFILE_FUNCTION();
 	m_Shader->Bind();
-	m_Shader->Set4x4("s_VP", Cam.GetProjection() * Cam.GetView());
+	m_Shader->SetUniform("s_VP", Cam.GetProjection() * Cam.GetView());
 
 	if (!m_RayState)
 		return;
@@ -212,4 +217,9 @@ void Player::Pick()
 	/* Update mouse state */
 	m_MouseLeft = left;
 	m_MouseRight = right;
+}
+
+mat4 Player::GetVP()
+{
+	return m_VP;
 }

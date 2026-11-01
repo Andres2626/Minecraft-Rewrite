@@ -1,9 +1,6 @@
 #include "Minecraft.h"
 
-#ifndef MC_USE_RELEASE
-static float rendertime = 0.0f;
-static float updatetime = 0.0f;
-#endif
+#include <Utils/Profiler.h>
 
 static bool mouseswap = 0.0f;
 
@@ -17,27 +14,30 @@ void DownloadAssets()
 	WebFileSystem::CheckAndDownload("Shaders/gles/selector.shader");
 	WebFileSystem::CheckAndDownload("Shaders/gles/character.shader");
 	WebFileSystem::CheckAndDownload("Shaders/gles/hud.shader");
+	WebFileSystem::CheckAndDownload("Shaders/gles/hud2.shader");
 	WebFileSystem::CheckAndDownload("Shaders/gles/particle.shader");
 	WebFileSystem::CheckAndDownload("terrain.png");
 	WebFileSystem::CheckAndDownload("char.png");
+    WebFileSystem::CheckAndDownload("default.gif");
 	WebFileSystem::Sync();
 }
 
 Minecraft::Minecraft()
-	: m_InternalWindow(Application::Get().GetWindow()),
-	  m_Props(m_InternalWindow.GetProps())
+	: m_InternalWindow(Application::GetContext().Window),
+	  m_Props(m_InternalWindow->GetProperties())
 {
+	PROFILE_FUNCTION();
 	srand((unsigned int)time(NULL));
 
-	REGISTER_EVENT(EventType::KeyBoardButton, [this](Event& e) { OnEvent(e); });
-	REGISTER_EVENT(EventType::WindowResized, [this](Event& e) { OnEvent(e); });
-	REGISTER_EVENT(EventType::CursorMoved, [this](Event& e) { OnEvent(e); });
+	REGISTER_EVENT(EventType::KeyBoardButton, this);
+	REGISTER_EVENT(EventType::WindowResized, this);
+	REGISTER_EVENT(EventType::CursorMoved, this);
 
 	/* Web: download all assets from localhost without using --preload-file */
 	DownloadAssets();
 
 	m_Timer = std::make_unique<Timer>();
-	m_WinSize = { m_Props.x, m_Props.y };
+	m_WinSize = { m_Props.width, m_Props.height };
     
 	/* Set window icon */
 	const char *errmsg = {};
@@ -47,7 +47,9 @@ Minecraft::Minecraft()
 		mc_error("error loading image. internal error {}", errmsg);
 		mc_fatal("failed to open window icon: \"{}\"", wico.path);
 	}
-	m_InternalWindow.SetIcon(wico);
+	m_InternalWindow->SetIcon(wico);
+
+	Input::SetCursorState(m_InternalWindow->GetHandle(), MC_CURSOR_DISABLED);
 
 	wico.Free();
 
@@ -63,6 +65,8 @@ Minecraft::~Minecraft()
 
 bool Minecraft::Init()
 {
+	PROFILE_FUNCTION();
+
 	Default::Init();
 
 	/* load shaders */
@@ -70,20 +74,21 @@ bool Minecraft::Init()
 	ShaderManager::Register("selector", "/Shaders/selector.shader");
 	ShaderManager::Register("character", "/Shaders/character.shader");
 	ShaderManager::Register("hud", "/Shaders/hud.shader");
+	ShaderManager::Register("hud2", "/Shaders/hud2.shader");
 	ShaderManager::Register("particle", "/Shaders/particle.shader");
 
-	m_Level = std::make_unique<Level>(GlobalGP.LevelSize);
+	BlockManager::Init();
 	ModelManager::Init();
+	ChunkMesh::Init();
 
+	m_Level = std::make_unique<Level>(GlobalGP.LevelSize);
 	m_Player = std::make_unique<Player>(*m_Level);
 	m_EntityManager = std::make_unique<EntityManager>();
 	m_ZombieRenderer = std::make_unique<ZombieRenderer>();
 	m_ParticleRenderer = std::make_unique<ParticleRenderer>();
 	m_Level->SetEntityManager(m_EntityManager.get());
 	m_GUI = std::make_unique<gui>(m_Player.get(), m_WinSize);
-	m_GUI->Build();
-	m_GUI->BuildCrossHair();
-	
+
 	for (int i = 0; i < 10; i++) {
 		auto zm = std::make_unique<Zombie>(*m_Level, vec3(128.0f, 0.0f, 128.0f));
 		zm->ResetPos();
@@ -93,29 +98,20 @@ bool Minecraft::Init()
 	m_ZombieRenderer->SetEntityManager(m_EntityManager.get());
 	m_ParticleRenderer->SetEntityManager(m_EntityManager.get());
 
-	/* load texture */
-	if (!m_TerrainAtlas.LoadFromFile("/terrain.png", GL_NEAREST)) {
-		mc_fatal("failed to open texture file: \"{}\"", m_TerrainAtlas.path);
-		return false;
-	}
-
+	/* load textures */
 	if (!m_CharAtlas.LoadFromFile("/char.png", GL_NEAREST)) {
 		mc_fatal("failed to open char file: \"{}\"", m_CharAtlas.path);
 		return false;
 	}
 
-	ShaderManager::Get("chunk").SetInt("s_t1", 0);
-	ShaderManager::Get("character").SetInt("s_t1", 0);
-	ShaderManager::Get("hud").SetInt("s_t1", 0);
-	ShaderManager::Get("particle").SetInt("s_t1", 0);
-
+	m_CharAtlas.Free();
 	return true;
 }
 
 void Minecraft::OnUpdate(Timestep &ts) 
 {
+	PROFILE_FUNCTION();
 	Default::OnUpdate(ts);
-	
 	m_Player->UpdateRayCast();
 	m_EntityManager->Update();
 	m_Player->Update();
@@ -170,19 +166,21 @@ void Minecraft::OnKey(KeyboardButtonEvent &ev)
 
 void Minecraft::OnResize(WindowResizeEvent &ev)
 {
+	PROFILE_FUNCTION();
 	m_WinSize = { ev.width, ev.height };
 	Renderer::Viewport({ 0, 0 }, m_WinSize);
 	m_Player->Cam.aspect = (float)m_WinSize.x / (float)m_WinSize.y;
-	m_GUI->OnWindowResize(m_WinSize);
 }
 
 void Minecraft::OnCursorMove(CursorMotionEvent &ev)
 {
+	PROFILE_FUNCTION();
 	m_Player->MouseMove({ ev.dx, ev.dy });
 }
 
 void Minecraft::OnEvent(Event& ev)
 {
+	PROFILE_FUNCTION();
 	EventType type = static_cast<EventType>(ev.type);
 	switch (type) {
 	case EventType::KeyBoardButton:
@@ -206,53 +204,32 @@ void Minecraft::OnEvent(Event& ev)
 */
 void Minecraft::OnRender(float alpha)
 {
+	PROFILE_FUNCTION();
 	Default::OnRender(alpha);
-
-	Shader &schunk = ShaderManager::Get("chunk");
-	Shader &schar = ShaderManager::Get("character");
-	Shader &sparticle = ShaderManager::Get("particle");
-	mat4 VP = m_Player->Cam.GetProjection() * m_Player->Cam.GetView();
-
-	/* world rendering */
-	schunk.Bind();
-	m_TerrainAtlas.Bind(0);
-	schunk.Set4x4("s_VP", VP);
+	m_Player->UpdateCamera(alpha, m_Timer->ElapsedSeconds());
 	m_Level->Render(m_Player.get());
-	m_Player->Render(alpha, m_Timer->ElapsedSeconds());
-
-	/* selector shader */
 	m_Player->RenderPick(m_Timer->ElapsedMillis());
-
-	/* particle rendering */
-	sparticle.Bind();
-	sparticle.Set4x4("s_VP", VP);
 	m_ParticleRenderer->Render(*m_Player, alpha);
-
-	/* character rendering */
-	schar.Bind();
-	m_CharAtlas.Bind(0);
-	schar.Set4x4("s_VP", VP);
-	m_ZombieRenderer->Render(*m_Level, *m_Player, alpha, m_Timer->ElapsedSeconds());
-
-	/* GUI rendering */
-	m_GUI->Render(&m_TerrainAtlas);
+	m_ZombieRenderer->Render(*m_Level, m_CharAtlas, *m_Player, alpha, m_Timer->ElapsedSeconds());
+	m_GUI->Render(&m_Level->GetTerrainAtlas());
 }
 
 void Minecraft::OnTick() 
 {
 	Default::OnTick();
-
+	ApplicationContext &ctx = Application::Get().GetContext();
 	ChunkManager *cm = m_Level->GetChunkManager();
+	m_GUI->OnTick(ctx.FPS, cm->GetChunkUpdates());
+	
 
-#ifndef MC_USE_RELEASE
-	mc_info("Render time: {:.2f} ms update time {:.2f} ms other: {:.2f}", rendertime, updatetime, 1000 - abs(rendertime - updatetime));
-	mc_info("fps: {}, ups: {}, cups: {}, ms/f: {}", Application::Get().GetFPS(), Application::Get().GetUPS(), cm->GetChunkUpdates(), 1000.0f / Application::Get().GetFPS());
-	mc_info("Rendered chunks: {} / total chunks: {}", cm->GetDrawCalls(), cm->GetChunksCount());
-
-	rendertime = 0.0f;
-	updatetime = 0.0f;
-#else
-	mc_info("{} fps, {}", Application::Get().GetFPS(), cm->GetChunkUpdates());
+#if defined(MC_ENABLE_PROFILER)
+	mc_trace("====================PROFILER RESUTLS====================");
+	mc_trace("FPS: {}  UPS: {}  ms per frame: {}", ctx.FPS, ctx.UPS, 1000.0f / ctx.FPS);
+	mc_trace("Chunk Updates: {}", cm->GetChunkUpdates());
+	mc_trace("Chunk Draws: {} Total Chunks: {}", cm->GetDrawCalls(), cm->GetChunksCount());
+	mc_trace("--------------------------------------------------------");
+	ProfilerManager::Get().OnTick();
+	mc_trace("========================================================");
 #endif
 
 	m_Level->Tick();

@@ -7,6 +7,8 @@
 
 #include "Graphics/Shader/ShaderManager.h"
 
+#include <vector>
+
 using namespace MC;
 using namespace Graphics;
 
@@ -15,7 +17,7 @@ class EntityManager;
 class ParticleRenderer
 {
 private:
-	EntityManager* m_Entities;
+	EntityManager *m_Entities;
 	std::vector<ParticleInstance> m_Instances;
 	Shader *m_Shader;
 public:

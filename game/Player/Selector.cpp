@@ -2,17 +2,21 @@
 
 Selector::Selector() 
 {
-	m_Mesh = std::make_unique<Mesh>(&m_MeshData);
+	VertexLayout VL;
+	MeshData buff;
 
-	int count = (int)m_MeshData.vertices.size();
-	m_MeshData.vertices.push_back({ { 0.0f, 0.0f, 0.0f } });
-	m_MeshData.vertices.push_back({ { 1.0f, 0.0f, 0.0f } });
-	m_MeshData.vertices.push_back({ { 1.0f, 0.0f, 1.0f } });
-	m_MeshData.vertices.push_back({ { 0.0f, 0.0f, 1.0f } });
-	MeshFactory::AddIndices(m_MeshData, count);
+	VL.AddAttribute<Math::vec3>(SHADER_VERTEX_BIT, sizeof(Vertex), (void*)offsetof(Vertex, pos));
+	m_Mesh = std::make_unique<Mesh>(VL);
+
+	int count = (int)buff.vertices.size();
+	buff.vertices.push_back({ { 0.0f, 0.0f, 0.0f } });
+	buff.vertices.push_back({ { 1.0f, 0.0f, 0.0f } });
+	buff.vertices.push_back({ { 1.0f, 0.0f, 1.0f } });
+	buff.vertices.push_back({ { 0.0f, 0.0f, 1.0f } });
+	MeshFactory::AddIndices(buff, count);
 
 	m_Mesh->Bind();
-	m_Mesh->Build();
+	m_Mesh->Build(&buff);
 	m_Mesh->Unbind();
 }
 
@@ -59,15 +63,13 @@ void Selector::Render(Camera& cam, Shader* shader, float millis)
 		rot = rotate(rot, radians(90.0f), vec3(0.0f, 0.0f, 1.0f));
 		model = translate(model, vec3(m_Hit.block) + vec3(m_Hit.face) + s) * rot;
 	}
-	else if (this->m_Hit.face == ivec3(0, 1, 0)) {
+	else if (this->m_Hit.face == ivec3(0, 1, 0))
 		model = translate(model, vec3(m_Hit.block) + vec3(m_Hit.face) + s) * rot;
-	}
-	else {
+	else
 		model = translate(model, vec3(m_Hit.block) - s) * rot;
-	}
 
-	shader->Set4x4("s_M", model);
-	shader->SetFloat("s_Timer", millis);
+	shader->SetUniform("s_M", model);
+	shader->SetUniform("s_Timer", millis);
 
 	Renderer::Enable(GL_BLEND);
 	Renderer::BlendFunc(BlendValue::SRC_ALPHA, BlendValue::ONE_MINUS_SRC_ALPHA);

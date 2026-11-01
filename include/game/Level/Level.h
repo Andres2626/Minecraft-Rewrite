@@ -9,6 +9,11 @@
 #include <Physics/AABB.h>
 #include <Graphics/Shader/ShaderManager.h>
 #include <Utils/Random.h>
+#include <Graphics/Texture.h>
+
+#include <vector>
+#include <memory>
+#include <string>
 
 using namespace MC;
 using namespace Math;
@@ -30,7 +35,8 @@ private:
 	EntityManager *m_EntityManager;
 	size_t m_Volume;
 	ivec3 m_Size;
-	mc_str m_LevelFile;
+	std::string m_LevelFile;
+	Texture m_TerrainAtlas;
 public:
 	Level(const ivec3& size);
 	~Level();
@@ -48,7 +54,7 @@ public:
 	bool IsOutOfBounds(const ivec3 &pos);
 	float GetBrigthness(const ivec3& pos);
 public:
-	void Render(Player* player);
+	void Render(Player *player);
 	void Update();
 	void Tick();
 public:
@@ -62,4 +68,5 @@ public:
 	int GetBlockIndex(const ivec3& block);
 	inline ivec3 GetSize() const { return m_Size; }
 	ChunkManager *GetChunkManager() const;
+	Texture &GetTerrainAtlas() { return m_TerrainAtlas; }
 };

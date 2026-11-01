@@ -10,6 +10,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <memory>
+
 using namespace MC;
 using namespace Graphics;
 using namespace Math;
@@ -28,13 +30,14 @@ private:
 	bool m_MouseRight;
 	bool m_RayState;
 	Hitresult m_HitResult;
+	mat4 m_VP;
 public:
 	PerspectiveCamera Cam;
 public:
 	Player(Level& level);
 	~Player();
 public:
-	void Render(float alpha, float seconds);
+	void UpdateCamera(float alpha, float seconds);
 	void Update() override;
 private:
 	void Move(const vec3& pos) override;
@@ -51,6 +54,7 @@ public:
 public:
 	inline bool GetGround() { return attr.isGround; }
 	inline BlockType GetSelectedBlock() { return m_SelectedBlock; }
+	mat4 GetVP();
 public:
 	inline void SetSelectedBlock(BlockType selectedBlock) { m_SelectedBlock = selectedBlock; };
 	inline void SetMouseSwap(bool swap) { m_MouseSwap = swap; };

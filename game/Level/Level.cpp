@@ -19,10 +19,16 @@ Level::Level(const ivec3 &size)
 	: m_Size(size), m_LevelFile("/save/level.dat")
 {
 	m_Volume = (size_t)(size.x * size.z * size.y);
-	if (!m_Volume)
+	if (!m_Volume) {
 		mc_fatal("invalid size x={} y={} z={}", size.x, size.z, size.y);
-	
-	BlockManager::Init();
+		return;
+	}
+
+	if (!m_TerrainAtlas.LoadFromFile("/terrain.png", GL_NEAREST)) {
+		mc_fatal("failed to open texture file: \"{}\"", m_TerrainAtlas.path);
+		return;
+	}
+	m_TerrainAtlas.Free();
 
 	/* create level array */
 	m_Blocks.resize(size.x * size.y * size.z);
@@ -58,6 +64,13 @@ Level::Level(const ivec3 &size)
 	m_ChunkManager = std::make_unique<ChunkManager>(this);
 	m_ChunkManager->Create();
 
+	m_Shader->Bind();
+	m_Shader->SetUniform("s_t1", 0);
+	m_Shader->SetUniform("s_fcolor0", GlobalGP.fg0.color);
+	m_Shader->SetUniform("s_fdensity0", GlobalGP.fg0.density);
+	m_Shader->SetUniform("s_fcolor1", GlobalGP.fg1.color);
+	m_Shader->SetUniform("s_fdensity1", GlobalGP.fg1.density);
+
 	mc_info("save_file={} x={} y={} z={} size={} renderer_size={}", m_LevelFile, size.x, 
 		    size.z, size.y, m_Volume, m_ChunkManager->GetChunksCount());
 }
@@ -68,7 +81,6 @@ Level::~Level()
 	m_HeightMap.clear();
 	mc_info("finished");
 }
-
 
 void Level::UpdateHeightMap(int x, int z)
 {
@@ -288,25 +300,28 @@ bool Level::BuildMap()
 
 void Level::Render(Player *player) 
 {
+	PROFILE_FUNCTION();
 	/*
 	 * Actually, this shouldn't go here.
 	 * TODO: Create the Render3D, Scene3D and RenderCommand classes.
 	 */
-	m_Shader->SetVec3("s_cpos", player->Cam.pos);
-	m_Shader->SetVec4("s_fcolor0", GlobalGP.fg0.color);
-	m_Shader->SetFloat("s_fdensity0", GlobalGP.fg0.density);
-	m_Shader->SetVec4("s_fcolor1", GlobalGP.fg1.color);
-	m_Shader->SetFloat("s_fdensity1", GlobalGP.fg1.density);
-	m_Shader->SetBool("s_RenderBush", false);
-	m_ChunkManager->Render(0, player);
+	m_Shader->Bind();
+	m_Shader->SetUniform("s_VP", player->GetVP());
+	m_Shader->SetUniform("s_cpos", player->Cam.pos);
+
+	m_TerrainAtlas.Bind(0);
 
 	/* render all chunk model instances */
-	m_Shader->SetBool("s_RenderBush", true);
+	m_Shader->SetUniform("s_RenderBush", true);
 	m_ChunkManager->Render(1, player);
+
+	m_Shader->SetUniform("s_RenderBush", false);
+	m_ChunkManager->Render(0, player);
 }
 
 void Level::Update()
 {
+	PROFILE_FUNCTION();
 	int totalTiles = (int)m_Volume;
 	int ticks = totalTiles / 400;
 

@@ -3,6 +3,7 @@
 #include "Block.h"
 
 #include <memory>
+#include <unordered_map>
 #include <array>
 
 class BlockManager

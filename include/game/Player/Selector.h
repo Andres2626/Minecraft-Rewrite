@@ -14,7 +14,6 @@ using namespace Math;
 class Selector 
 {
 private:
-	MeshData m_MeshData;
 	std::unique_ptr<Mesh> m_Mesh;
 	Hitresult m_Hit;
 public:

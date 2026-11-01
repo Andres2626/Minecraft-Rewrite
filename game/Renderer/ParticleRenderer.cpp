@@ -7,6 +7,9 @@ ParticleRenderer::ParticleRenderer()
 {
     m_Instances.reserve(1000);
 	m_Shader = &ShaderManager::Get("particle");
+    m_Shader->Bind();
+    m_Shader->SetUniform("s_t1", 0);
+    m_Shader->SetUniform("s_color", vec3(0.8f, 0.8f, 0.8f));
 }
 
 ParticleRenderer::~ParticleRenderer()
@@ -15,11 +18,13 @@ ParticleRenderer::~ParticleRenderer()
 
 void ParticleRenderer::Render(Player &player, float alpha)
 {
-    m_Shader->SetVec3("s_color", { 0.8f, 0.8f, 0.8f });
-    m_Shader->SetVec3("s_camUp", player.Cam.up);
-    m_Shader->SetVec3("s_camRight", player.Cam.right);
+    PROFILE_FUNCTION();
+    m_Shader->Bind();
+    m_Shader->SetUniform("s_VP", player.GetVP());
+    m_Shader->SetUniform("s_camUp", player.Cam.up);
+    m_Shader->SetUniform("s_camRight", player.Cam.right);
 
-    std::vector<ParticleInstance>().swap(m_Instances);
+    m_Instances.clear();
 
     for (auto& z : m_Entities->Get<Particle>()) {
         vec3 p1 = mix(z->attr.oldPos, z->attr.pos, alpha);
@@ -29,14 +34,9 @@ void ParticleRenderer::Render(Player &player, float alpha)
     if (m_Instances.empty())
         return;
 
-    ParticleModel& model = static_cast<ParticleModel&>(ModelManager::GetModelType(ModelType::PARTICLE));
-
-    model.GetInstanceBuffer().Bind();
-    model.GetInstanceBuffer().Update(0, m_Instances.size() * sizeof(ParticleInstance), m_Instances.data());
-
-    model.Bind();
-    Renderer::DrawElementsInstanced(GL_TRIANGLES, 6, nullptr, m_Instances.size());
-    model.Unbind();
+    ParticleModel &model = static_cast<ParticleModel&>(ModelManager::GetModelType(ModelType::PARTICLE));
+    model.GetInstancedMesh().UpdateInstances(m_Instances.size(), m_Instances.data());
+    model.GetInstancedMesh().Render();
 }
 
 void ParticleRenderer::SetEntityManager(EntityManager* em)

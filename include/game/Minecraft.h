@@ -11,6 +11,7 @@
 #include "Entity/EntityManager.h"
 #include "Renderer/ParticleRenderer.h"
 #include "gui/gui.h"
+#include "Font/DefaultFont.h"
 
 #include <core.h>
 
@@ -24,7 +25,7 @@ using namespace Layers;
 using namespace Math;
 using namespace File;
 
-class Minecraft : public Default 
+class Minecraft : public Default, public IEventListener
 {
 private:
 	vec2 m_WinSize;
@@ -35,10 +36,10 @@ private:
 	std::unique_ptr<ZombieRenderer> m_ZombieRenderer;
 	std::unique_ptr<ParticleRenderer> m_ParticleRenderer;
 	std::unique_ptr<EntityManager> m_EntityManager;
-	Texture m_TerrainAtlas;
 	Texture m_CharAtlas;
-	Window m_InternalWindow;
+	Window *m_InternalWindow;
 	WindowProperties m_Props;
+	Renderer2D m_TextRenderer;
 	bool m_MouseLeft;
 	bool m_MouseRight;
 public:
@@ -47,11 +48,10 @@ public:
 public:
 	bool Init() override;
 	void OnUpdate(Timestep& ts) override;
-	void OnEvent(Event& ev);
+	void OnEvent(Event& ev) override;
 	void OnKey(KeyboardButtonEvent &ev);
 	void OnResize(WindowResizeEvent &ev);
 	void OnCursorMove(CursorMotionEvent &ev);
-	void OnCursorMoved(int& x, int& y);
 	void OnRender(float alpha) override;
 	void OnTick() override;
 	void OnSuspended() override;

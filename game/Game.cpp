@@ -21,7 +21,7 @@ class Game : public Application
 {
 public:
 	Game()
-		: Application(WIN_TITLE, { WIN_X, WIN_Y, false, { false }, { CONTEXT_COMPAT_PROFILE, 3, 3, false } })
+		: Application(WIN_TITLE, { WIN_X, WIN_Y, false })
 	{ 
 	
 	}
@@ -31,20 +31,20 @@ public:
 
 	}
 
-	bool Init() override
+	ErrorType Init() override
 	{
 		Application::Init();
-		VirtualFileSystem::Mount("/", std::make_unique<NativeFileSystem>("assets/"));
-		VirtualFileSystem::Mount("/save", std::make_unique<NativeFileSystem>("./"));
+		VirtualFileSystem::Mount("/", new NativeFileSystem("assets/"));
+		VirtualFileSystem::Mount("/save", new NativeFileSystem("./"));
 
 #ifdef MC_PLATFORM_WEB
-        VirtualFileSystem::Mount("/Shaders", std::make_unique<NativeFileSystem>("assets/Shaders/gles"));
+        VirtualFileSystem::Mount("/Shaders", new NativeFileSystem("assets/Shaders/gles"));
 #else /* !MC_PLATFORM_WEB */
-        VirtualFileSystem::Mount("/Shaders", std::make_unique<NativeFileSystem>("assets/Shaders/core"));
+        VirtualFileSystem::Mount("/Shaders", new NativeFileSystem("assets/Shaders/core"));
 #endif /* MC_PLATFORM_WEB */
 
 		PushLayer(new Minecraft());
-		return true;
+		return ErrorType::NoError;
 	}
 };
 

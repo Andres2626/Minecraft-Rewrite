@@ -2,6 +2,8 @@
 
 #include <Utils/Random.h>
 
+#include <stdlib.h>
+
 #define FUZZINESS 16
 
 /* code from: https://github.com/thecodeofnotch/rd-20090515/blob/master/src/main/java/com/mojang/rubydung/level/PerlinNoiseFilter.java */

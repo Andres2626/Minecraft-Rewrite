@@ -5,6 +5,8 @@
 #include "Model/ZombieModel.h"
 #include "Player/Player.h"
 
+#include <vector>
+
 class EntityManager;
 
 class ZombieRenderer
@@ -17,6 +19,6 @@ public:
 	ZombieRenderer();
 	~ZombieRenderer();
 public:
-	void Render(Level &lev, Player &player, float alpha, float seconds);
+	void Render(Level &lev, Texture &tex, Player &player, float alpha, float seconds);
 	void SetEntityManager(EntityManager *em);
 };
