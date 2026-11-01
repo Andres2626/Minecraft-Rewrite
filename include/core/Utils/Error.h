@@ -5,19 +5,21 @@
 
 namespace MC 
 {
-	enum class ErrorType
+	enum class ErrorType : u32t
 	{
 		NoError = 0,
+		NoImplemented,
+		NoMemory,
 		WindowLibrary,
 		WindowBuild,
 		ContextInit,
-		Noimp,
 		AssetLoad = 0x100,
 		FileNotFound,
 		ShaderCompileError,
 		ShaderRegisterError
 	};
 
+#if 0
 	struct Error
 	{
 		ErrorType num;
@@ -35,4 +37,6 @@ namespace MC
 		void SetError(const ErrorType& n);
 		Error &GetError();
 	};
+#endif /* deprecated */
+
 }

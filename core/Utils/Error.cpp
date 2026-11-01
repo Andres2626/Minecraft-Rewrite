@@ -1,3 +1,7 @@
+#include "mc.h"
+
+#if 0
+
 #include "Utils/Error.h"
 
 namespace MC 
@@ -31,7 +35,7 @@ namespace MC
 		case ErrorType::AssetLoad:
 			err.str = "Resource loading error";
 			break;
-		case ErrorType::Noimp:
+		case ErrorType::NoImplemented:
 			err.str = "Not implemented";
 			break;
 		case ErrorType::FileNotFound:
@@ -51,4 +55,4 @@ namespace MC
 	}
 }
 
-
+#endif /* deprecated */
