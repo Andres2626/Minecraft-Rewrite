@@ -13,7 +13,7 @@ aiming for:
 > Currently, the engine and game use newer versions of OpenGL (>3.3).
 > See [Limitation of liability](#-limitation-of-liability) for more info
 
-![demo](./Documentation/resources/rd-161348.png)
+![demo](./Documentation/resources/c0.0.2a.png)
 
 ## 📋 Table of Contents
 1. [Goals of this project](#-goals-of-this-project)
@@ -52,6 +52,7 @@ It is not intended to add/arrive at the following:
 
 ### Pre-classic May 10-May 16, 2009 (FULL)
 
+- ***FULL (RECREATED)*** c0.0.2a
 - ***FULL (RECREATED)*** mc-161616
 - ***FULL (RECREATED)*** mc-161607
 - ***FULL*** rd-161348

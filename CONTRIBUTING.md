@@ -73,83 +73,22 @@ or
 
 ## 5️⃣  Commit standards
 
-Your confirmation message should look like this:
+The commit MUST follow the rules described in [conventional commits](https://www.conventionalcommits.org)
+with a few exceptions
 
-Example 1 (tiny commit): 
-
-```
-14-08-25 Updated .gitignore
-
-Signed-off-by: Andres26  <andrescamorao9@gmail.com>
-```
-
-Example 2 (tiny patch):
+1. The commit must be following structure
 
 ```
-14-08-25 [PATCH 3] Fix shader bug
-The fog procedure was being done incorrectly, so it was changed back
-to how it was before.
+[scope]: [type] [brief description]
 
- commit: 6291f9e
-Signed-off-by: Andres26  <andrescamorao9@gmail.com>
+[optional body]
+
+[optional footer(s)]
 ```
 
-Example 3 (long patch): 
-
-```
-2026-06-16 rd-131655-1
-- Application
-
-  Added interpolation factor for the 'OnRender()' call
-
-- Type confussion
-
-  Fix type definitions in 'include/types.h'
-
-- Camera and frustum
-
-  Optimize CubeInside function in 'include/core/Graphics/camera/frustum.h'
-
-- Renderer
-
-  Add 'CullFace()' and 'FrontFace()' functions.
-
-- Texture loader
-
-  Due to the 'Zombie' texture (char.png), support was added
-  for different channels reported by the 'stb_image' library.
-  The call to the 'glTexImage2D()' function supports GL_RED,
-  GL_RGB, and GL_RGBA texture types.
-
-- Chunk
-
-  Fix chunk border detect intervals.
-
-- Level
-
-  Delete cave generation.
-
-- Entity
-
-  Add class entity for 'Zombie' and 'Player' class.
-
-- Player
-
-  Some functions were passed to the 'Entity' class.
-  Invert mouse input.
-  The 'pick()' function is separated into several functions
-  to render the selector, update the raycast and level.
-
-- Game
-
-  Add 'char.png' for texturize 'Zombie'.
-  Add character shader and renderer.
-  Enable selector and his shader.
-  Enable block pick.
-
-Signed-off-by: Andres26 <andrescamorao9@gmail.com>
-
-```
+2. You may use *add* keyword instead of *feat* for introducing new features or assets.
+3. All commits MUST include a Signed-off-by line at the end of commit message. (you can use 
+   *git commit -s* to add it automatically)
 
 ## 6️⃣  Submitting a PR
 
