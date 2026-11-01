@@ -2,9 +2,11 @@
 
 #include "Level/Level.h"
 
+#include <Utils/Profiler.h>
+
 
 ChunkManager::ChunkManager(Level *lev)
-	: m_Level(lev), m_ChunkUpdates(0), m_DrawCalls(true)
+	: m_Level(lev), m_ChunkUpdates(0), m_DrawCalls(0)
 {
 	m_Shader = &ShaderManager::Get("chunk");
 }
@@ -17,12 +19,12 @@ void ChunkManager::Create()
 {
 	/* avoid set model matrix every frame */
 	m_Shader->Bind();
-	m_Shader->Set4x4("s_M", mat4(1.0f));
+	m_Shader->SetUniform("s_M", mat4(1.0f));
 
 	auto ab = m_Level->GetSize();
-	for (int cx = 0; cx < m_Level->GetSize().x / CHUNK_XYZ; cx++) {
-		for (int cy = 0; cy < m_Level->GetSize().y / CHUNK_XYZ; cy++) {
-			for (int cz = 0; cz < m_Level->GetSize().z / CHUNK_XYZ; cz++) {
+	for (int cx = 0; cx < ab.x / CHUNK_XYZ; cx++) {
+		for (int cy = 0; cy < ab.y / CHUNK_XYZ; cy++) {
+			for (int cz = 0; cz < ab.z / CHUNK_XYZ; cz++) {
 				int index = GetChunkIndex({ cx, cy, cz });
 
 				/*
@@ -39,18 +41,28 @@ void ChunkManager::Create()
 
 void ChunkManager::Render(int layer, Player *player)
 {
-	if (layer == 1)
+	PROFILE_FUNCTION();
+
+	if (layer == 1)	
 		m_ModelRender.Begin();
 
+	Renderer::Enable(GL_CULL_FACE);
+
 	for (auto& n : m_Chunks) {
-		/* check if chunk is in camera frustum */
+		Chunk &chunk = n.second;
 		bool isInFrustum = player->Cam.InFrustum(n.second.GetBox());
-		if (isInFrustum) 
-		if (layer == 0 && isInFrustum)
-			n.second.Render();
-		else if (layer == 1 && isInFrustum)
-			m_ModelRender.Sumbit(ModelType::BUSH, n.second.GetBushInstances());
+		if (!isInFrustum)
+			continue;
+
+		if (layer == 0) {
+			m_DrawCalls++;
+			chunk.Render();
+		}
+		else if (layer == 1)
+			m_ModelRender.Sumbit(ModelType::BUSH, chunk.GetBushInstances());
 	}
+
+	Renderer::Disable(GL_CULL_FACE);
 
 	if (layer == 1) {
 		Renderer::Enable(GL_BLEND);
@@ -62,23 +74,23 @@ void ChunkManager::Render(int layer, Player *player)
 void ChunkManager::Update()
 {
 	int builds = 0;
-
-	while (!m_DirtyChunks.empty() && builds < 2)
+	while (!m_DirtyChunks.empty() && builds < 4)
 	{
 		int index = m_DirtyChunks.front();
 		m_DirtyChunks.pop();
 
 		auto it = m_Chunks.find(index);
+		if (it == m_Chunks.end())
+			continue;
 
-		if (it != m_Chunks.end()) {
-			it->second.Build();
-			it->second.SetDirty(false);
+		it->second.Build();
+		it->second.SetDirty(false);
 
-			m_ChunkUpdates++;
-		}
-
+		m_ChunkUpdates++;
 		builds++;
 	}
+
+	builds = 0;
 }
 
 void ChunkManager::Tick()
@@ -93,9 +105,9 @@ void ChunkManager::MarkDirty(const ivec3 &blockpos)
 
 	AddDirtyChunk(chunk);
 
-	int lx = blockpos.x & (CHUNK_XYZ - 1);
-	int ly = blockpos.y & (CHUNK_XYZ - 1);
-	int lz = blockpos.z & (CHUNK_XYZ - 1);
+	int lx = blockpos.x % CHUNK_XYZ;
+	int ly = blockpos.y % CHUNK_XYZ;
+	int lz = blockpos.z % CHUNK_XYZ;
 
 	/* add adjacent chunks if block is a border  */
 	if (lx == 0)
@@ -122,7 +134,7 @@ void ChunkManager::AddDirtyChunk(const ivec3& chunkpos)
 	if (it == m_Chunks.end())
 		return;
 
-	Chunk& chunk = it->second;
+	Chunk &chunk = it->second;
 
 	if (!chunk.GetDirty()) {
 		chunk.SetDirty(true);

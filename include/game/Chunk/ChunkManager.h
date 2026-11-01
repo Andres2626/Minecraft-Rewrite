@@ -5,6 +5,7 @@
 #include "Renderer/StaticModelRenderer.h"
 
 #include <queue>
+#include <unordered_map>
 
 class Level;
 class Player;
@@ -31,8 +32,6 @@ public:
 	void MarkDirty(const ivec3 &blockpos);
 	void AddDirtyChunk(const ivec3 &chunkpos);
 public:
-	inline void IncrementDrawCalls() { m_DrawCalls++; }
-	inline void RestartDrawCalls() { m_DrawCalls = 0; }
 	inline int GetChunkUpdates() { return m_ChunkUpdates; }
 	inline int GetDrawCalls() { return m_DrawCalls; }
 	inline size_t GetChunksCount() { return m_Chunks.size(); }
