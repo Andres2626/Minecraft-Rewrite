@@ -42,7 +42,7 @@ jobs:
         if: matrix.platform == 'linux'
         shell: bash
         run: |
-          cmake -B build_lnx -S . -DCMAKE_INSTALL_PREFIX=install_lnx -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
+          cmake -B build_lnx -S . -DCMAKE_INSTALL_PREFIX=install_lnx -DCMAKE_BUILD_TYPE=MinSizeRel -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
           cmake --build build_lnx -j4
 
       - name: install_lnx
@@ -85,7 +85,7 @@ jobs:
         shell: bash
         run: |
           source emsdk/emsdk_env.sh
-          emcmake cmake -B build_web -S . -DCMAKE_INSTALL_PREFIX=install_web -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -DGLFW_BUILD_WAYLAND=OFF -DGLFW_BUILD_X11=OFF -G "Unix Makefiles" 
+          emcmake cmake -B build_web -S . -DCMAKE_INSTALL_PREFIX=install_web -DCMAKE_BUILD_TYPE=MinSizeRel -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -DGLFW_BUILD_WAYLAND=OFF -DGLFW_BUILD_X11=OFF -G "Unix Makefiles" 
           cmake --build build_web -j4
        
       - name: install_web
@@ -107,7 +107,7 @@ jobs:
         if: matrix.platform == 'win64'
         shell: cmd
         run: |
-          cmake -B build_win64 -S . -DCMAKE_INSTALL_PREFIX=install_win64 -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A x64
+          cmake -B build_win64 -S . -DCMAKE_INSTALL_PREFIX=install_win64 -DCMAKE_BUILD_TYPE=MinSizeRel -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A x64
           cmake --build build_win64 --config Release -j4
 
       - name: install_win64
@@ -128,7 +128,7 @@ jobs:
         if: matrix.platform == 'win32'
         shell: cmd
         run: |
-          cmake -B build_win32 -S . -DCMAKE_INSTALL_PREFIX=install_win32 -DCMAKE_BUILD_TYPE=Release -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A Win32
+          cmake -B build_win32 -S . -DCMAKE_INSTALL_PREFIX=install_win32 -DCMAKE_BUILD_TYPE=MinSizeRel -DMC_DEBUG_MODE=OFF -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A Win32
           cmake --build build_win32 --config Release -j4
 
       - name: install_win32

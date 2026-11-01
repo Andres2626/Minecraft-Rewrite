@@ -33,7 +33,7 @@ jobs:
             - name: build_lnx
               if: matrix.platform == 'linux'
               run: |
-                cmake -B build_lnx -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
+                cmake -B build_lnx -S . -DCMAKE_BUILD_TYPE=Debug -DGLFW_INSTALL=OFF -G "Unix Makefiles" -DGLFW_BUILD_WAYLAND=OFF
                 cd ./build_lnx && make -j4
             - name: cache_web
               if: matrix.platform == 'web'
@@ -65,13 +65,13 @@ jobs:
               if: matrix.platform == 'win64'
               shell: cmd
               run: |
-                cmake -B build_win64 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A x64
+                cmake -B build_win64 -S . -DCMAKE_BUILD_TYPE=Debug -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A x64
                 cmake --build build_win64 --config Debug -j4
             - name: build_win32
               if: matrix.platform == 'win32'
               shell: cmd
               run: |
-                cmake -B build_win32 -S . -DCMAKE_BUILD_TYPE=Debug -DMC_DEBUG_MODE=ON -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A Win32
+                cmake -B build_win32 -S . -DCMAKE_BUILD_TYPE=Debug -DGLFW_INSTALL=OFF -G "Visual Studio 18 2026" -A Win32
                 cmake --build build_win32 --config Debug -j4
              
                 
