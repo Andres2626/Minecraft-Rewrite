@@ -5,21 +5,23 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aColor; 
 layout (location = 2) in vec2 aUV;
 layout (location = 3) in float aBrig;
+layout (location = 4) in float aTid;
 
-uniform vec3 s_BlockPos;
 uniform mat4 s_VP;
 uniform mat4 s_M;
 
 out vec2 uv; 
 out float brig; 
 out vec3 color; 
+out float tid;
 
 void main() 
 {
     uv = aUV;
     brig = aBrig;
     color = aColor;
-	gl_Position = s_VP * s_M * vec4(aPos + s_BlockPos, 1.0f);
+    tid = aTid;
+	gl_Position = s_VP * s_M * vec4(aPos, 1.0f);
 }
 
 #shader fragment
@@ -28,28 +30,19 @@ void main()
 in vec2 uv;
 in float brig;
 in vec3 color;
+in float tid;
 out vec4 FragColor;
 
-uniform int s_RenderFlags;
-uniform sampler2D s_t1;
+uniform sampler2D s_Textures[32];
 
-/* render flags defines */
-#define SHADER_COLOR_FLAG    (1 << 1)
-#define SHADER_TEXTURE_FLAG  (1 << 2)
-#define SHADER_BRIG_FLAG     (1 << 3)
-
-void main() 
+void main()
 {
-    vec4 result = vec4(1.0f);
+    vec4 result = vec4(1.0);
 
-    if ((s_RenderFlags & SHADER_COLOR_FLAG) != 0)
-        result *= vec4(color, 1.0);
+    if (tid > 0.0)
+        result *= texture(s_Textures[int(tid - 1.0)], uv);
 
-    if ((s_RenderFlags & SHADER_TEXTURE_FLAG) != 0)
-        result *= texture(s_t1, uv);
+    result *= brig;
 
-    if ((s_RenderFlags & SHADER_BRIG_FLAG) != 0)
-        result.rgb *= brig;
-
-    FragColor = result;
+    FragColor = vec4(color, 1.0) * result;
 }
