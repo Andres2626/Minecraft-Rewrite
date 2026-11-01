@@ -27,6 +27,7 @@
 #include "Graphics/Camera/OrthographicCamera.h"
 #include "Graphics/Camera/PerspectiveCamera.h"
 #include "Graphics/Camera/Ray.h"
+#include "Graphics/Font/IFont.h"
 #include "Graphics/Shader/Shader.h"
 #include "Graphics/Shader/Shaderflags.h"
 #include "Graphics/Shader/ShaderManager.h"
@@ -51,6 +52,7 @@
 
 #include "Utils/gzip.h"
 #include "Utils/Random.h"
+#include "Utils/Profiler.h"
 #include "Utils/Timer.h"
 #include "Utils/Timestep.h"
 #include "Utils/Util.h"

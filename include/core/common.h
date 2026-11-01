@@ -7,14 +7,13 @@
 #define BIT_L(x) (1 << (x))
 #define BIT_R(x) (1 >> (x))
 
-/* DEBUG is defined by cmake automatically */
-#ifdef DEBUG
+#if defined(_DEBUG) || defined(DEBUG)
 # define MC_USE_DEBUG
 #else
 # define MC_USE_RELEASE
 #endif /* DEBUG */
 
-#ifdef __GNUC__
+#if defined(__GNUC__)
 # define MC_USE_GNU_COMPILER
 #elif defined (_MSC_VER)
 # define MC_USE_VS_COMPILER
@@ -25,7 +24,7 @@
 
 #endif /* __GNUC__ */
 
-#ifdef __CYGWIN__
+#if defined(__CYGWIN__)
 # define MC_PLATFORM_WINDOWS
 # define MC_USE_CYGWIN
 #elif defined(_WIN32)
@@ -44,7 +43,7 @@
 # error "platform is not supported"
 #endif /* __CYGWIN__ / _WIN32 / __linux__ / __EMSCRIPTEN__*/
 
-#ifdef MC_PLATFORM_WINDOWS
+#if defined(MC_PLATFORM_WINDOWS)
 # if defined(MC_EXPORT_DLL)
 #  define MC_API __declspec(dllexport)
 # elif defined(MC_IMPORT_DLL)
@@ -67,55 +66,27 @@
 #endif /* MC_PLATFORM_WINDOWS */
 
 /* debug break macro */
-#ifdef MC_PLATFORM_WINDOWS
+#if defined(MC_PLATFORM_WINDOWS)
 # define MC_INTERNAL_BREAK_POINT __debugbreak()
 #elif defined (MC_PLATFORM_LINUX)
 # include <signal.h>
 # define MC_INTERNAL_BREAK_POINT raise(SIGTRAP)
+#else
+# define MC_INTERNAL_BREAK_POINT
 #endif /* MC_PLATFORM_WINDOWS */
 
 /* semver is used for versioning. */
 #define MC_VERSION_MAJOR     0
-#define MC_VERSION_MINOR     7
+#define MC_VERSION_MINOR     8
 #define MC_VERSION_PATCH     0
 #define MC_VERSION_NUMBER    ((MC_VERSION_MAJOR * 10000) + (MC_VERSION_MINOR * 100) + MC_VERSION_PATCH)
-#define MC_VERSION_STRING    "v0.7.0"
+#define MC_VERSION_STRING    "v0.8.0"
 
-/* C includes */
-#define _USE_MATH_DEFINES 1
-#include <assert.h>
-#include <math.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-
-/* C++ includes */
-#include <atomic>
-#include <chrono>
-#include <fstream>
-#include <iostream>
-#include <limits>
-#include <locale>
-#include <memory>
-#include <map>
-#include <sstream>
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
-#include <algorithm>
-#include <random>
-
-/* Other includes */
 #include "types.h"
 
 #ifdef MC_USE_VS_COMPILER
 #pragma warning(disable:4251)
 #pragma warning(disable:4996) /* _CRT_SECURE_NO_WARNINGS */
 #endif
-
-typedef std::string mc_str;
 
 #endif /* _COMMON_H_ */
