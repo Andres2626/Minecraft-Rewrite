@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(MCRewrite LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
-set(MCVER c0.0.2a)
+set(MCVER c0.0.3a)
 
 # Options
 option(MC_ENABLE_PROFILER "Enable profiler mode" OFF)
