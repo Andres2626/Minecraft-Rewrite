@@ -23,7 +23,7 @@ void DownloadAssets()
 }
 
 Minecraft::Minecraft()
-	: m_InternalWindow(Application::GetContext().Window),
+	: m_InternalWindow(Application::GetContext().Win),
 	  m_Props(m_InternalWindow->GetProperties())
 {
 	PROFILE_FUNCTION();

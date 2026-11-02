@@ -18,9 +18,9 @@ namespace MC
 	{
 		struct Renderer2D::PImpl
 		{
-			MeshData MeshData;
+			MeshData MData;
 			std::vector<Texture*> Textures;
-			std::unique_ptr<Mesh> Mesh;
+			std::unique_ptr<Mesh> mesh;
 		};
 
 		Renderer2D::Renderer2D()
@@ -33,10 +33,10 @@ namespace MC
 			VL.AddAttribute<Math::vec2>(SHADER_TEX_BIT, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 			VL.AddAttribute<float>(SHADER_BRIG_BIT, sizeof(Vertex), (void*)offsetof(Vertex, brig));
 			VL.AddAttribute<float>(SHADER_TEXID_BIT, sizeof(Vertex), (void*)offsetof(Vertex, tid));
-			m_Impl->Mesh = std::make_unique<Mesh>(VL);
+			m_Impl->mesh = std::make_unique<Mesh>(VL);
 
-			m_Impl->MeshData.vertices.reserve(RENDERER2D_INITIAL_VERTICES);
-			m_Impl->MeshData.indices.reserve(RENDERER2D_INITIAL_INDICES);
+			m_Impl->MData.vertices.reserve(RENDERER2D_INITIAL_VERTICES);
+			m_Impl->MData.indices.reserve(RENDERER2D_INITIAL_INDICES);
 		}
 
 		Renderer2D::~Renderer2D()
@@ -47,24 +47,24 @@ namespace MC
 
 		void Renderer2D::Begin()
 		{
-			m_Impl->MeshData.Clear();
+			m_Impl->MData.Clear();
 		}
 
 		void Renderer2D::End()
 		{
-			m_Impl->Mesh->Bind();
-			m_Impl->Mesh->Build(&m_Impl->MeshData);
-			m_Impl->Mesh->Unbind();
+			m_Impl->mesh->Bind();
+			m_Impl->mesh->Build(&m_Impl->MData);
+			m_Impl->mesh->Unbind();
 		}
 
 		void Renderer2D::AddVertex(const Vertex& vert)
 		{
-			m_Impl->MeshData.vertices.push_back(vert);
+			m_Impl->MData.vertices.push_back(vert);
 		}
 
 		void Renderer2D::AddQuad(const Vertex& v1, const Vertex& v2, const Vertex& v3, const Vertex& v4)
 		{
-			int count = (int)m_Impl->MeshData.vertices.size();
+			int count = (int)m_Impl->MData.vertices.size();
 			AddVertex(v1);
 			AddVertex(v2);
 			AddVertex(v3);
@@ -180,14 +180,14 @@ namespace MC
 
 		void Renderer2D::Render()
 		{
-			if (!m_Impl->Mesh->GetIndexCount())
+			if (!m_Impl->mesh->GetIndexCount())
 				return;
 
 			for (size_t i = 0; i < m_Impl->Textures.size(); i++)
 				m_Impl->Textures[i]->Bind((u32t)i);
 
 			Renderer::Disable(GL_DEPTH_TEST);
-			m_Impl->Mesh->Render();
+			m_Impl->mesh->Render();
 			Renderer::Enable(GL_DEPTH_TEST);
 
 			for (size_t i = 0; i < m_Impl->Textures.size(); i++)
@@ -204,7 +204,7 @@ namespace MC
 			};
 
 			for (int i = 0; i < 6; i++) {
-				m_Impl->MeshData.indices.push_back(count + indices[i]);
+				m_Impl->MData.indices.push_back(count + indices[i]);
 			}
 		}
 
