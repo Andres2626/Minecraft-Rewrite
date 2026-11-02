@@ -11,7 +11,7 @@ namespace MC
 	{
         struct ApplicationContext
         {
-            Window *Window;
+            Window *Win;
             WindowProperties WinProps;
             Utils::Timestep TimerStep;
             const char *name;

@@ -66,11 +66,11 @@ namespace MC
 				return ErrorType::WindowLibrary;
 			}
 
-			ctx.Window = new Window(ctx.name, ctx.WinProps);
+			ctx.Win = new Window(ctx.name, ctx.WinProps);
 
-			ErrorType err = ctx.Window->Create();
+			ErrorType err = ctx.Win->Create();
 			if (err != ErrorType::NoError) {
-                ctx.Window->Finish();
+                ctx.Win->Finish();
 				mc_error("error building window");
 				return err;
 			}
@@ -150,9 +150,9 @@ namespace MC
 			s_LayerStack.Finish();
 			Input::Finish();
 
-			if (ctx.Window) {
-				delete ctx.Window;
-				ctx.Window = nullptr;
+			if (ctx.Win) {
+				delete ctx.Win;
+				ctx.Win = nullptr;
 			}
 
 			glfwTerminate();
@@ -170,7 +170,7 @@ namespace MC
             
 			DISPATCH_EVENTS();
 
-			ctx.Window->Clear();
+			ctx.Win->Clear();
 			float now = s_Timer.ElapsedMillis();
 			while (now - ctx.UpdateTimer >= ctx.UpdateTick) {
 				ctx.TimerStep.Update(now);
@@ -182,7 +182,7 @@ namespace MC
 			float alpha = (now - ctx.UpdateTimer) / ctx.UpdateTick;
 			OnRender(alpha);
 
-			ctx.Window->Update();
+			ctx.Win->Update();
 			ctx.FPS++;
 			ctx.FrameTime = frametime.ElapsedMillis();
 
@@ -193,7 +193,7 @@ namespace MC
 				ctx.UPS = 0;
 			}
 
-			if (ctx.Window->IsClosed())
+			if (ctx.Win->IsClosed())
 				ctx.Running = false;
 		}
 
@@ -209,7 +209,7 @@ namespace MC
 
 		void Application::OnTick()
 		{
-			ctx.Window->OnTick();
+			ctx.Win->OnTick();
 
 			s_LayerStack.OnTick();
 		}

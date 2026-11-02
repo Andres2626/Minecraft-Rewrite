@@ -7,7 +7,7 @@
 #include "Events/KeyboardEvent.h"
 #include "Events/MouseEvent.h"
 
-#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 
 #define CHECK_KEY(x, max) x >= 0 && x <= max
 

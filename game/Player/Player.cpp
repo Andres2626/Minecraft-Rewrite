@@ -8,6 +8,8 @@
 #include <Graphics/Camera/Ray.h>
 #include <Utils/Util.h>
 
+#include <algorithm> // std::clamp
+
 using namespace MC;
 using namespace App;
 
