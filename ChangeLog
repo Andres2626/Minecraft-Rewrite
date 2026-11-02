@@ -1,3 +1,227 @@
+2026-11-02  Andres26  andrescamorao9@gmail.com
+    workflow: fix compilation errors
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-02  Andres26  andrescamorao9@gmail.com
+    workflow: fix compilation errors
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    workflow: fix compilation errors
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    mc c0.0.2a
+    
+    - Integrate Zombie and Selector mesh generation with 'MeshFactory'.
+    - Improve level code.
+    - Improve game rendering process.
+    - Integrate instanced renderers with 'InstancedMesh'
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    code: Engine v0.8.0
+    
+    - Include PCH header in all '.cpp' files.
+    - Delete all STL includes and references from '.h' files. (via PImpl)
+    - Improve debug info.
+    - Improve Buffers process.
+    - Improve code documentation (via Doxygen)
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    core: refractor include structure
+    
+    A PCH header has been added for C/C++ includes.
+    All includes from 'common.h' have been moved to 'mc.h';
+    consequently, none of the core '.h' files now include
+    the STL, which helps reduce compilation times.
+    
+    Additionally, the use of the `mc_str` type has been removed.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    graphics: refractor Renderer2D class
+    
+    Improve BatchRendering, and add support for more
+    than 32 textures.
+    
+    Add font rendering via 'Font/IFont.h'.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    model: refractor *Model classes
+    
+    Add 'BlockModel' class for improve 'GUI' and 'ChunkMesh'
+    processes. And Integrate it 'InstancedModels' with
+    'InstancedMesh' class
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    chunk: refractor Chunk and ChunkManager class
+    
+    Separe Mesh generating and rendering from `Chunk` class.
+    And improve ChunkManager process.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    gui: refractor GUI class
+    
+    The GUI class was split into two parts: GUI, for general
+    rendering (crosshair, text, blocks), and BlockPreview,
+    for rendering the block itself (using an orthographic camera).
+    This was done to prevent the GUI class from having to handle
+    two shaders simultaneously.
+    
+    Additionally, text rendering was implemented by loading a
+    texture (assets/default.gif), and this functionality was
+    integrated into Renderer2D.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    utils: refractor error handling system
+    
+    Deleted ErrorHandler struct.
+    
+    TODO: Improve error handling for engine classes.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    model: refractor models
+    
+    Code for instanced-rendered models has been integrated
+    into the `InstancedMesh` class, simplifying the rendering
+    process for these meshes.
+    
+    Model source directory name was changed from 'game/Models' to
+    'game/Model'to make it match 'include/Models'.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    workflows: change build type from Release to MinSizeRel
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    utils: add copy and move control classes.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    graphics: refractor hud shader.
+    
+    To support font rendering, the decision was made to split
+    the HUD shader into two: one dedicated to rendering the block
+    (using an orthographic camera) and another dedicated exclusively
+    to `Renderer2D` functions (drawing rectangles and text).
+    
+    The previous method for determining whether to render a
+    vertex with a texture or color (which relied on bitflags)
+    was removed and replaced with vertex attributes (vertex.tid).
+    
+    Additionally, the original HUD shader supports 32 texture slots.
+    
+    **TODO**:
+     - Integrate 'hud.shader' with the Renderer2D class and the engine,
+       decoupling it completely from the game.
+     - Change 'hud.shader' to Renderer2D.shader.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    graphics: add InstancedMesh Class
+    
+    The handling of instances was changed from a manual
+    approach (due to attribute differences between instanced
+    meshes) to a more general one that can be used for any
+    instance (consistent with how meshes are typically handled).
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    memory: Add custom memory manager
+    
+    For dynamic memory allocation, the decision was made to
+    globally overload the `new` and `delete` operators.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    utils: add function profiling
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    docs: update documentation files
+    
+    - Delete files of rd-161616 version.
+    - Update README.
+    - Update CONTRIBUTING and commit standards.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    font: add font rendering support in engine and game
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    docs: add DoxyFile for generate code documentation
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-11-01  Andres26  andrescamorao9@gmail.com
+    dl: remove unused dynamic loader subsystem
+    
+    dl subsystem and all its associated files have been completely
+    removed as they were not being used by the engine.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
+2026-08-01  Andres26  andrescamorao9@gmail.com
+
+2026-08-01 mc-161616
+    
+    Final version of Pre-classic.
+    Update Readme and ChangeLog.
+    
+    Signed-off-by: Andres26 <andrescamorao9@gmail.com>
+    
+
 2026-08-01  Andres26  andrescamorao9@gmail.com
 
 2027-08-01 mc-161616

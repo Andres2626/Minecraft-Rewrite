@@ -1,15 +1,41 @@
 NEWS - list of all major game and engine changes
 
+New in c0.0.2a
+* Recreated version: c0.0.2a.
+* Engine version: 0.8.0.
+* libgfx version: 0.0.2.
+* Refractor Zombie, Cube and Selector.
+* Add support for instanced meshes.
+* Add custom memory allocator.
+* Refractor hud shader.
+* Refractor game models.
+* Improve rendering process.
+* Add PCH header to engine.
+* Integrate instanced renderers with 'InstancedMesh'.
+* Improve include structure.
+* Delete all STL includes and references from '.h' files. (via PImpl).
+* Add code documentation (via Doxygen).
+* Improve debug info.
+* Remove use of mc_str.
+* Add support for font rendering in Renderer2D.
+* Add DefaultFont class in game.
+* Refractor Renderer2D code.
+* Refractor GUI code.
+* Remove ErrorHandler class.
+* Add function profiler.
+* Add ChunkMesh class.
+* First version of classic.
+
 New in mc-161616
 * Rewrite version: mc-161616.
-* Engine version 0.0.7.
+* Engine version 0.7.0.
 * libgfx version: 0.0.2.
 * Add mouse swap Y-axis when pressing key 'Y'
 
 New in mc-161607
 
 * Rewrite version: mc-161607.
-* Engine version 0.0.7.
+* Engine version 0.7.0.
 * libgfx version: 0.0.2.
 * Add support for web (via Emscripten)
 * Add VirtualFileSystem and NativeFileSystem class.
@@ -23,7 +49,7 @@ New in mc-161607
 
 New in rd-161348
 * Rewrite version: rd-132328.
-* Engine version 0.0.6.
+* Engine version 0.6.0.
 * libgfx version: 0.0.2.
 * Add event system from scratch.
 * Delete GLEQ from dependencies.
@@ -36,7 +62,7 @@ New in rd-161348
 
 New in rd-160052
 * Rewrite version: rd-132328.
-* Engine version 0.0.5.
+* Engine version 0.5.0.
 * libgfx version: 0.0.2.
 * Fix rotation bug in character.shader.
 * Delete EntityRenderer class.
@@ -57,7 +83,7 @@ New in rd-160052
 
 New in rd-20090515
 * Recreated version: rd-132328.
-* Engine version 0.0.4.
+* Engine version 0.4.0.
 * libgfx version: 0.0.2.
 * Add Simple Renderer2D.
 * Change 60 TPS logic to 20 TPS logic (as is in the original game).
@@ -84,7 +110,7 @@ New in rd-20090515
 
 New in rd-132328
 * Rewrite version: rd-132328.
-* Engine version 0.0.3.
+* Engine version 0.3.0.
 * libgfx version: 0.0.2.
 * Enable selector and player pick from code.
 * Delete cave generation.
@@ -103,7 +129,7 @@ New in rd-132328
 
 New in rd-131655 (Cave game tech)
 * Recreated version: rd-131655 from https://github.com/thecodeofnotch/rd-131655
-* Engine version: 0.0.2
+* Engine version: 0.2.0
 * libgfx version: 0.0.2
 * Disable selector and player pick from code.
 * Change log system to spdlog bassed log system.
